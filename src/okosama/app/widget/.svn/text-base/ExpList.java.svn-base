@@ -1,0 +1,32 @@
+package okosama.app.widget;
+
+import android.app.Activity;
+import android.view.View;
+import okosama.app.tab.*;
+
+public class ExpList extends TabLeaf {
+	
+	public static String LISTNAME_ARTIST = "ArtistList";
+	
+	/**
+	 * ŽÀ‘•ƒNƒ‰ƒX
+	 */
+	private ExpListImpl impl;
+
+	public ExpList( Activity activity )
+	{
+		super( activity );
+		create();
+	}
+
+	@Override
+	public int create() {
+		impl = new ExpListImpl(activity);
+		return 0;
+	}
+
+	@Override
+	public View getView() {
+		return impl;
+	}
+}

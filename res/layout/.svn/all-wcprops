@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/OkosamaMediaPlayer/!svn/ver/3/OkosamaMediaPlayer/res/layout
+END
+main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/OkosamaMediaPlayer/!svn/ver/3/OkosamaMediaPlayer/res/layout/main.xml
+END
+track_list_item_common.xml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/layout/track_list_item_common.xml
+END
+edit_track_list_item.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/OkosamaMediaPlayer/!svn/ver/8/OkosamaMediaPlayer/res/layout/edit_track_list_item.xml
+END
+track_list_item_child.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/8/OkosamaMediaPlayer/res/layout/track_list_item_child.xml
+END
+track_list_item.xml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/layout/track_list_item.xml
+END
+track_list_item_group.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/8/OkosamaMediaPlayer/res/layout/track_list_item_group.xml
+END
+statusbar.xml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/OkosamaMediaPlayer/!svn/ver/3/OkosamaMediaPlayer/res/layout/statusbar.xml
+END
+album_appwidget.xml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/OkosamaMediaPlayer/!svn/ver/3/OkosamaMediaPlayer/res/layout/album_appwidget.xml
+END

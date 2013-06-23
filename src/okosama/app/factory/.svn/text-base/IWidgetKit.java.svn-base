@@ -1,0 +1,15 @@
+
+package okosama.app.factory;
+
+import okosama.app.widget.*;
+
+/**
+ * @author 
+ *
+ */
+public interface IWidgetKit {
+	Button MakeButton();
+	List MakeList();
+	ExpList MakeExpList();
+	ToggleButton MakeToggleButton();
+}

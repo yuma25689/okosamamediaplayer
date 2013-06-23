@@ -1,0 +1,761 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable
+END
+play_button_disable.png
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/play_button_disable.png
+END
+stop_press.png
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/stop_press.png
+END
+appwidget_button_left.xml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/appwidget_button_left.xml
+END
+ic_mp_move.png
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_move.png
+END
+play_button_normal.png
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/play_button_normal.png
+END
+playlist_disabled.png
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/playlist_disabled.png
+END
+list_selector.xml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/list_selector.xml
+END
+external_press.png
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/external_press.png
+END
+albumabbtn_press.png
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/albumabbtn_press.png
+END
+btn_play_focus.png
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/btn_play_focus.png
+END
+ic_mp_repeat_all_btn.png
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_repeat_all_btn.png
+END
+tab_1_list_bk.png
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/tab_1_list_bk.png
+END
+tab_2_list_bk.png
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/tab_2_list_bk.png
+END
+ic_mp_playlist_list.png
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_playlist_list.png
+END
+tab_3_list_bk.png
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/tab_3_list_bk.png
+END
+tab1_btn_select_2.png
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/tab1_btn_select_2.png
+END
+tab_4_list_bk.png
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/tab_4_list_bk.png
+END
+appwidget_button_center.xml
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/appwidget_button_center.xml
+END
+stop_focus.png
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/stop_focus.png
+END
+external_normal.png
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/external_normal.png
+END
+ic_appwidget_music_pause.png
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/ic_appwidget_music_pause.png
+END
+num1_1.png
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/num1_1.png
+END
+internal_selected.png
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/internal_selected.png
+END
+num3_1.png
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/num3_1.png
+END
+time_background.png
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/time_background.png
+END
+btn_play_disable.png
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/btn_play_disable.png
+END
+num5_1.png
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/num5_1.png
+END
+background_3.png
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/background_3.png
+END
+background_4.png
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/background_4.png
+END
+num7_1.png
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/num7_1.png
+END
+albumtabbtn_selected.png
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/albumtabbtn_selected.png
+END
+albumart_mp_unknown_list.png
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/albumart_mp_unknown_list.png
+END
+num9_1.png
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/num9_1.png
+END
+tab3_btn_not_select_left_shadow.png
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/tab3_btn_not_select_left_shadow.png
+END
+tab1_btn_not_select_no_shadow2.png
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/tab1_btn_not_select_no_shadow2.png
+END
+tab_1_select_2.png
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/tab_1_select_2.png
+END
+ic_mp_sd_card.png
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_sd_card.png
+END
+tab3_btn_not_select_no_shadow2.png
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/tab3_btn_not_select_no_shadow2.png
+END
+playlist_selected.png
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/playlist_selected.png
+END
+ic_mp_repeat_once_btn.png
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_repeat_once_btn.png
+END
+ic_mp_current_playlist_btn.png
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_current_playlist_btn.png
+END
+ic_appwidget_music_play.png
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/ic_appwidget_music_play.png
+END
+playlisttabbtn_normal.png
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/playlisttabbtn_normal.png
+END
+ic_mp_song_playback.png
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_song_playback.png
+END
+ic_mp_shuffle_off_btn.png
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_shuffle_off_btn.png
+END
+btn_play_normal.png
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/btn_play_normal.png
+END
+albumtabbtn_normal.png
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/albumtabbtn_normal.png
+END
+external_disabled.png
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/external_disabled.png
+END
+brat_main_normal.png
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/brat_main_normal.png
+END
+ic_mp_song_list.png
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_song_list.png
+END
+artisttabbtn_press.png
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/artisttabbtn_press.png
+END
+tab2_btn_select_2.png
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/tab2_btn_select_2.png
+END
+playlist_normal.png
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/playlist_normal.png
+END
+brat_main.png
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/brat_main.png
+END
+appwidget_inner_press_l.9.png
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/appwidget_inner_press_l.9.png
+END
+brat_main_press.png
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/brat_main_press.png
+END
+playlisttabbtn_press.png
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/playlisttabbtn_press.png
+END
+appwidget_inner_press_r.9.png
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/appwidget_inner_press_r.9.png
+END
+songtabbtn_selected.png
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/songtabbtn_selected.png
+END
+ic_mp_playlist_recently_added_list.png
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_playlist_recently_added_list.png
+END
+music_choice_press.png
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/music_choice_press.png
+END
+play_button_pressed.png
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/play_button_pressed.png
+END
+tab_2_select_2.png
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/tab_2_select_2.png
+END
+appwidget_divider.9.png
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/appwidget_divider.9.png
+END
+songtabbtn_normal.png
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/songtabbtn_normal.png
+END
+tab4_btn_not_select_both_shadow.png
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/tab4_btn_not_select_both_shadow.png
+END
+artisttabbtn_selected.png
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/artisttabbtn_selected.png
+END
+play_button_playing.png
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/play_button_playing.png
+END
+appwidget_inner_focus_l.9.png
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/appwidget_inner_focus_l.9.png
+END
+external_selected.png
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/external_selected.png
+END
+music_select_album_image.xml
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/music_select_album_image.xml
+END
+ic_mp_partyshuffle_on_btn.png
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_partyshuffle_on_btn.png
+END
+appwidget_inner_focus_r.9.png
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/appwidget_inner_focus_r.9.png
+END
+tab_2_select.png
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/tab_2_select.png
+END
+tab3_btn_select_2.png
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/tab3_btn_select_2.png
+END
+music_choice_focus.png
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/music_choice_focus.png
+END
+playlist_press.png
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/playlist_press.png
+END
+appwidget_button_right.xml
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/appwidget_button_right.xml
+END
+artisttabbtn_normal.png
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/artisttabbtn_normal.png
+END
+stop_button_image.xml
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/stop_button_image.xml
+END
+music_select_artist_image.xml
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/music_select_artist_image.xml
+END
+stat_notify_musicplayer.png
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/stat_notify_musicplayer.png
+END
+brat_main_disable.png
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/brat_main_disable.png
+END
+num2_1.png
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/num2_1.png
+END
+ic_mp_repeat_off_btn.png
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_repeat_off_btn.png
+END
+num4_1.png
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/num4_1.png
+END
+now_playlist_button_image.xml
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/now_playlist_button_image.xml
+END
+playlisttabbtn_selected.png
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/playlisttabbtn_selected.png
+END
+num6_1.png
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/num6_1.png
+END
+ic_mp_album_playback.png
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_album_playback.png
+END
+music_choice_disable.png
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/music_choice_disable.png
+END
+num8_1.png
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/num8_1.png
+END
+internal_btn_image.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/internal_btn_image.xml
+END
+music_select_playlist_image.xml
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/music_select_playlist_image.xml
+END
+tab_3_select_2.png
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/tab_3_select_2.png
+END
+tab2_btn_not_select_no_shadow2.png
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/tab2_btn_not_select_no_shadow2.png
+END
+play_button_image.xml
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/play_button_image.xml
+END
+music_select_song_image.xml
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/music_select_song_image.xml
+END
+tab4_btn_not_select_no_shadow2.png
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/tab4_btn_not_select_no_shadow2.png
+END
+internal_normal.png
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/internal_normal.png
+END
+appwidget_bg.9.png
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/appwidget_bg.9.png
+END
+music_choice_normal.png
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/music_choice_normal.png
+END
+stop_disable.png
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/stop_disable.png
+END
+tab3_btn_not_select_both_shadow.png
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/tab3_btn_not_select_both_shadow.png
+END
+ic_appwidget_music_next.png
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/ic_appwidget_music_next.png
+END
+appwidget_inner_press_c.9.png
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/appwidget_inner_press_c.9.png
+END
+tab4_btn_select_2.png
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/OkosamaMediaPlayer/!svn/ver/7/OkosamaMediaPlayer/res/drawable/tab4_btn_select_2.png
+END
+external_btn_image.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/external_btn_image.xml
+END
+tab1_btn_not_select_right_shadow.png
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/tab1_btn_not_select_right_shadow.png
+END
+tab_1_select.png
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/tab_1_select.png
+END
+play_button_focus.png
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/play_button_focus.png
+END
+indicator_ic_mp_playing_list.png
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/indicator_ic_mp_playing_list.png
+END
+albumart_mp_unknown.png
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/albumart_mp_unknown.png
+END
+ic_mp_shuffle_on_btn.png
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_shuffle_on_btn.png
+END
+btn_play_press.png
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/btn_play_press.png
+END
+ic_mp_artist_playback.png
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_artist_playback.png
+END
+internal_disabled.png
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/internal_disabled.png
+END
+ic_mp_artist_list.png
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/res/drawable/ic_mp_artist_list.png
+END
+music_choice_button_image.xml
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/music_choice_button_image.xml
+END
+music_tab_button_image.xml
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/music_tab_button_image.xml
+END
+songtabbtn_press.png
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/songtabbtn_press.png
+END
+btn_play_image.xml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/btn_play_image.xml
+END
+internal_press.png
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/res/drawable/internal_press.png
+END
+appwidget_inner_focus_c.9.png
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/appwidget_inner_focus_c.9.png
+END
+stop_normal.png
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/stop_normal.png
+END
+tab_4_select_2.png
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/OkosamaMediaPlayer/!svn/ver/4/OkosamaMediaPlayer/res/drawable/tab_4_select_2.png
+END

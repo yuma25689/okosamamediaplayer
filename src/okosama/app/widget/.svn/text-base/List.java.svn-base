@@ -1,0 +1,43 @@
+package okosama.app.widget;
+
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+import android.widget.ListAdapter;
+import okosama.app.tab.*;
+
+public class List extends TabLeaf {
+
+	// このアプリケーションで利用するリストの名称
+	public static String LISTNAME_ALBUM = "AlbumList";
+	public static String LISTNAME_SONG = "SongList";
+	public static String LISTNAME_PLAYLIST = "PlaylistList";
+
+	/**
+	 * 実装クラス
+	 */
+	private ListImpl impl;
+
+	public List( Activity activity )
+	{
+		super( activity );
+		create();
+	}
+
+	@Override
+	public int create() {
+		impl = new ListImpl(activity);
+		return 0;
+	}
+
+	@Override
+	public View getView() {
+		return impl;
+	}
+	
+	public void setAdapter(ListAdapter a)
+	{
+		impl.setAdapter(a);
+	}
+
+}

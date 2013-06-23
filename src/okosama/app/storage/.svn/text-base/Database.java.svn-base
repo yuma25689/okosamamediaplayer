@@ -1,0 +1,749 @@
+package okosama.app.storage;
+
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.R;
+import okosama.app.service.IMediaPlaybackService;
+import okosama.app.service.MediaPlayer;
+import okosama.app.tab.TabPage;
+
+import android.content.AsyncQueryHandler;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.AbstractCursor;
+import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.database.MergeCursor;
+import android.net.Uri;
+import android.os.RemoteException;
+import android.provider.MediaStore;
+import android.util.Log;
+
+/**
+ * データベースクラス
+ * 今のところ、データベースリソース用のメンバやstatic関数を適当に突っ込んであるだけ
+ * いろんな関数を突っ込んだただの便利クラスになってしまっているので、Singletonにしておく
+ * @author 25689
+ *
+ */
+public class Database {
+	private static Database inst = new Database();
+    private static String mPlaylist;
+    private static boolean get_external = true;
+	private Database()
+	{
+	}
+	public static void setActivity(OkosamaMediaPlayerActivity c )
+	{
+		ctx = c;
+	}
+	/**
+	 * シングルトンのインスタンス取得
+	 * 同時に、必ずContextを設定させるために、引数にContextを取らせる
+	 * @param _ctx
+	 * @return
+	 */
+	public static Database getInstance(OkosamaMediaPlayerActivity _ctx)
+	{
+		ctx = _ctx;
+		return inst;
+	}
+	public static Database getInstance(boolean external)
+	{
+		get_external = external;
+		return inst;
+	}	
+	// Context
+	static OkosamaMediaPlayerActivity ctx = null;
+	
+	// Cursors保存用
+	public static final String AlbumCursorName ="AlbumCursor";
+	public static final String ArtistCursorName ="ArtistCursor";
+	public static final String SongCursorName ="SongCursor";
+	public static final String PlaylistCursorName ="PlaylistCursor";
+	HashMap<String,Cursor> CursorMap = new HashMap<String,Cursor>();
+
+	/**
+	 * 指定された名前のカーソルを返却する
+	 * @param cursorName
+	 * @return
+	 */
+	public Cursor getCursor(String cursorName)
+	{
+		if( CursorMap.containsKey(cursorName) == false)
+		{
+			return null;
+		}
+		return CursorMap.get(cursorName);
+	}
+	/**
+	 * 指定された名前のカーソルを設定する
+	 * @param cursorName
+	 * @param cursor
+	 */
+	public void setCursor(String cursorName, Cursor cursor )
+	{
+		if( CursorMap.containsKey(cursorName) == true )
+		{
+			if( cursor == CursorMap.get(cursorName) )
+			{
+				return;
+			}
+			if( false == CursorMap.get(cursorName).isClosed() )
+			{
+				CursorMap.get(cursorName).close();
+			}
+		}		
+		CursorMap.put( cursorName, cursor );
+	}
+	/**
+	 * 全てのカーソルをクリアする
+	 */
+	public void clearCursor()
+	{
+		for( Map.Entry<String, Cursor> e : CursorMap.entrySet() )
+		{
+			if( false == e.getValue().isClosed() )
+			{
+				e.getValue().close();
+			}
+		}
+		CursorMap.clear();
+	}
+	
+    public Cursor query(Context context, Uri uri, String[] projection,
+            String selection, String[] selectionArgs, String sortOrder, int limit) {
+        try {
+        	ContentResolver resolver = context.getContentResolver();
+            if (resolver == null) {
+                return null;
+            }
+            if (limit > 0) {
+                uri = uri.buildUpon().appendQueryParameter("limit", "" + limit).build();
+            }
+            Log.d("query uri", "uri :" +uri);
+            return resolver.query(uri, projection, selection, selectionArgs, sortOrder);
+         } catch (UnsupportedOperationException ex) {
+        	String msg = ex.getMessage();
+        	Log.e("queryerror",msg);
+            return null;
+        }
+        
+    }
+    public Cursor query(Context context, Uri uri, String[] projection,
+            String selection, String[] selectionArgs, String sortOrder) {
+        return query(context, uri, projection, selection, selectionArgs, sortOrder, 0);
+    }	
+
+    
+    ///////// ここから汎用性のない関数 //////////////////////////////
+    /**
+     * アーティストカーソルの作成
+     * @param async
+     * @param filter
+     * @return
+     */
+    public Cursor createArtistCursor(AsyncQueryHandler async, String filter) {
+
+        StringBuilder where = new StringBuilder();
+        where.append(MediaStore.Audio.Artists.ARTIST + " != ''");
+        
+        Uri uri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
+        //String external_string;
+        if( get_external == false )
+        {
+        	uri = MediaStore.Audio.Artists.INTERNAL_CONTENT_URI;
+        }
+        
+        
+        // Add in the filtering constraints
+        String [] keywords = null;
+        if (filter != null) {
+            String [] searchWords = filter.split(" ");
+            keywords = new String[searchWords.length];
+            Collator col = Collator.getInstance();
+            col.setStrength(Collator.PRIMARY);
+            for (int i = 0; i < searchWords.length; i++) {
+                String key = MediaStore.Audio.keyFor(searchWords[i]);
+                key = key.replace("\\", "\\\\");
+                key = key.replace("%", "\\%");
+                key = key.replace("_", "\\_");
+                keywords[i] = '%' + key + '%';
+            }
+            for (int i = 0; i < searchWords.length; i++) {
+                where.append(" AND ");
+                where.append(MediaStore.Audio.Media.ARTIST_KEY + " LIKE ? ESCAPE '\\'");
+            }
+        }
+
+        String whereclause = where.toString();  
+        String[] cols = new String[] {
+                MediaStore.Audio.Artists._ID,
+                MediaStore.Audio.Artists.ARTIST,
+                MediaStore.Audio.Artists.NUMBER_OF_ALBUMS,
+                MediaStore.Audio.Artists.NUMBER_OF_TRACKS
+        };
+        Cursor ret = null;
+        if (async != null) {
+        	Log.d("query uri", "uri :" + uri);
+            async.startQuery(TabPage.TABPAGE_ID_ARTIST, null, uri,
+                    cols, whereclause , keywords, MediaStore.Audio.Artists.ARTIST_KEY);
+        } else {
+            ret = query(ctx, uri,
+                    cols, whereclause , keywords, MediaStore.Audio.Artists.ARTIST_KEY);
+        }
+        return ret;	
+    }
+    
+    /**
+     * アルバムカーソルの作成
+     * @param async
+     * @param filter
+     * @param artistId
+     * @return
+     */
+    public Cursor createAlbumCursor(AsyncQueryHandler async, String filter, String artistId) {
+        StringBuilder where = new StringBuilder();
+        where.append(MediaStore.Audio.Albums.ALBUM + "!=''");
+        
+        Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
+        String external_string = "external";
+        if( get_external == false )
+        {
+        	uri = MediaStore.Audio.Albums.INTERNAL_CONTENT_URI;
+        	external_string = "internal";
+        }        
+        // Add in the filtering constraints
+        String [] keywords = null;
+        if (filter != null) {
+            String [] searchWords = filter.split(" ");
+            keywords = new String[searchWords.length];
+            Collator col = Collator.getInstance();
+            col.setStrength(Collator.PRIMARY);
+            for (int i = 0; i < searchWords.length; i++) {
+                String key = MediaStore.Audio.keyFor(searchWords[i]);
+                key = key.replace("\\", "\\\\");
+                key = key.replace("%", "\\%");
+                key = key.replace("_", "\\_");
+                keywords[i] = '%' + key + '%';
+            }
+            for (int i = 0; i < searchWords.length; i++) {
+                where.append(" AND ");
+                where.append(MediaStore.Audio.Media.ARTIST_KEY + "||");
+                where.append(MediaStore.Audio.Media.ALBUM_KEY + " LIKE ? ESCAPE '\\'");
+            }
+        }
+
+        String whereclause = null;//where.toString();  
+            
+        String[] cols = null;
+        /*new String[] {
+                MediaStore.Audio.Albums._ID,
+                MediaStore.Audio.Albums.ARTIST,
+                MediaStore.Audio.Albums.ALBUM,
+                MediaStore.Audio.Albums.ALBUM_ART
+        };*/
+        Cursor ret = null;
+        if (artistId != null) {
+            if (async != null) {
+                async.startQuery(TabPage.TABPAGE_ID_ALBUM, null,
+                        MediaStore.Audio.Artists.Albums.getContentUri(external_string,//"external",
+                                Long.valueOf(artistId)),
+                        cols, whereclause, keywords, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
+            } else {
+                ret = query(ctx,
+                        MediaStore.Audio.Artists.Albums.getContentUri(external_string,//"external",
+                                Long.valueOf(artistId)),
+                        cols, whereclause, keywords, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
+            }
+        } else {
+            if (async != null) {
+            	Log.i("uri:", uri.toString());
+            	async.startQuery(TabPage.TABPAGE_ID_ALBUM, null, uri, null, null, null, null );
+//                async.startQuery(0, null,
+//                        MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+//                        cols, whereclause, keywords, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
+            } else {
+                ret = query(ctx, uri,
+                        cols, whereclause, keywords, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
+            }
+        }
+        return ret;
+    }
+    // プレイリストカーソル作成用の定数
+    private static final String[] playlistCols = new String[] {
+            MediaStore.Audio.Playlists._ID,
+            MediaStore.Audio.Playlists.NAME
+    };    	
+    private static final long RECENTLY_ADDED_PLAYLIST = -1;
+    private static final long ALL_SONGS_PLAYLIST = -2;
+    private static final long PODCASTS_PLAYLIST = -3;
+    
+    /**
+     * カーソルのラッパーを作成？
+     * @param c
+     * @param createShortCut
+     * @return
+     */
+    public Cursor mergedCursor(Cursor c, boolean createShortCut) {
+        if (c == null) {
+            return null;
+        }
+        if (c instanceof MergeCursor) {
+            // this shouldn't happen, but fail gracefully
+            Log.d("PlaylistBrowserActivity", "Already wrapped");
+            return c;
+        }
+        MatrixCursor autoplaylistscursor = new MatrixCursor(playlistCols);
+        if (createShortCut) {
+            ArrayList<Object> all = new ArrayList<Object>(2);
+            all.add(ALL_SONGS_PLAYLIST);
+            all.add(ctx.getString(R.string.play_all));
+            autoplaylistscursor.addRow(all);
+        }
+        ArrayList<Object> recent = new ArrayList<Object>(2);
+        recent.add(RECENTLY_ADDED_PLAYLIST);
+        recent.add(ctx.getString(R.string.recentlyadded));
+        autoplaylistscursor.addRow(recent);
+        Uri uri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
+        //String external_string;
+        if( get_external == false )
+        {
+        	uri = MediaStore.Audio.Artists.INTERNAL_CONTENT_URI;
+        }        
+        // check if there are any podcasts
+        Cursor counter = query(ctx, uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                new String[] {"count(*)"}, "is_podcast=1", null, null);
+        if (counter != null) {
+            counter.moveToFirst();
+            int numpodcasts = counter.getInt(0);
+            counter.close();
+            if (numpodcasts > 0) {
+                ArrayList<Object> podcasts = new ArrayList<Object>(2);
+                podcasts.add(PODCASTS_PLAYLIST);
+                podcasts.add(ctx.getString(R.string.podcasts_listitem));
+                autoplaylistscursor.addRow(podcasts);
+            }
+        }
+
+        Cursor cc = new MergeCursor(new Cursor [] {autoplaylistscursor, c});
+        return cc;
+    }
+    
+    /**
+     * プレイリストのカーソルを作成
+     * @param async
+     * @param filterstring
+     * @return
+     */
+    public Cursor createPlaylistCursor(AsyncQueryHandler async, String filterstring, boolean createShortCut) {
+
+        StringBuilder where = new StringBuilder();
+        where.append(MediaStore.Audio.Playlists.NAME + " != ''");
+        
+        // Add in the filtering constraints
+        String [] keywords = null;
+        if (filterstring != null) {
+            String [] searchWords = filterstring.split(" ");
+            keywords = new String[searchWords.length];
+            Collator col = Collator.getInstance();
+            col.setStrength(Collator.PRIMARY);
+            for (int i = 0; i < searchWords.length; i++) {
+                keywords[i] = '%' + searchWords[i] + '%';
+            }
+            for (int i = 0; i < searchWords.length; i++) {
+                where.append(" AND ");
+                where.append(MediaStore.Audio.Playlists.NAME + " LIKE ?");
+            }
+        }
+        
+        String whereclause = where.toString();
+        Uri uri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI;
+        //String external_string;
+        if( get_external == false )
+        {
+        	uri = MediaStore.Audio.Playlists.INTERNAL_CONTENT_URI;
+        }         
+        
+        if (async != null) {
+            async.startQuery(TabPage.TABPAGE_ID_PLAYLIST, null, uri,//MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI,
+            		playlistCols, whereclause, keywords, MediaStore.Audio.Playlists.NAME);
+            return null;
+        }
+        Cursor c = null;
+        c = query(ctx, uri,//MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI,
+        		playlistCols, whereclause, keywords, MediaStore.Audio.Playlists.NAME);
+        
+        return mergedCursor(c, createShortCut);
+    }
+    
+    // トラックカーソル用メンバ変数
+    private static String mSortOrder;
+    private static final String mPlaylistCols[] = new String[] {
+            MediaStore.Audio.Media._ID,
+            MediaStore.Audio.Media.TITLE,
+            MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.ALBUM,
+            MediaStore.Audio.Media.ARTIST,
+            MediaStore.Audio.Media.ARTIST_ID,
+            MediaStore.Audio.Media.DURATION
+    };    
+    static final String mPlaylistMemberCols[] = new String[] {
+            MediaStore.Audio.Playlists.Members._ID,
+            MediaStore.Audio.Media.TITLE,
+            MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.ALBUM,
+            MediaStore.Audio.Media.ARTIST,
+            MediaStore.Audio.Media.ARTIST_ID,
+            MediaStore.Audio.Media.DURATION,
+            MediaStore.Audio.Playlists.Members.PLAY_ORDER,
+            MediaStore.Audio.Playlists.Members.AUDIO_ID,
+            MediaStore.Audio.Media.IS_MUSIC
+    };    
+    //private Cursor createTrackCursor(TrackListAdapter.TrackQueryHandler queryhandler, String filter,
+    /**
+     * トラックカーソルの作成
+     * @param queryhandler
+     * @param filter
+     * @param async
+     * @return
+     */
+    public Cursor createTrackCursor(TrackQueryHandler queryhandler, String filter,
+            boolean async, String genre, String albumId, String artistId) {
+
+        if (queryhandler == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Cursor ret = null;
+        mSortOrder = MediaStore.Audio.Media.TITLE_KEY;
+        StringBuilder where = new StringBuilder();
+        where.append(MediaStore.Audio.Media.TITLE + " != ''");
+
+        // Add in the filtering constraints
+        String [] keywords = null;
+        if (filter != null) {
+            String [] searchWords = filter.split(" ");
+            keywords = new String[searchWords.length];
+            Collator col = Collator.getInstance();
+            col.setStrength(Collator.PRIMARY);
+            for (int i = 0; i < searchWords.length; i++) {
+                String key = MediaStore.Audio.keyFor(searchWords[i]);
+                key = key.replace("\\", "\\\\");
+                key = key.replace("%", "\\%");
+                key = key.replace("_", "\\_");
+                keywords[i] = '%' + key + '%';
+            }
+            for (int i = 0; i < searchWords.length; i++) {
+                where.append(" AND ");
+                where.append(MediaStore.Audio.Media.ARTIST_KEY + "||");
+                where.append(MediaStore.Audio.Media.TITLE_KEY + " LIKE ? ESCAPE '\\'");
+            }
+        }
+    	Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+    	String strExOrIn = "external";
+        if( get_external == false )
+        {
+        	uri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
+        }        	
+        
+        if (genre != null) {
+            mSortOrder = MediaStore.Audio.Genres.Members.DEFAULT_SORT_ORDER;
+            ret = queryhandler.doQuery(ctx,MediaStore.Audio.Genres.Members.getContentUri(strExOrIn,
+                    Integer.valueOf(genre)),
+                    mPlaylistCols, where.toString(), keywords, mSortOrder, async);
+        } else if (mPlaylist != null) {
+            if (mPlaylist.equals("nowplaying")) {
+                if (MediaPlayer.sService != null) {
+                    ret = new NowPlayingCursor(MediaPlayer.sService, mPlaylistCols);
+                    if (ret.getCount() == 0) {
+                    	// TODO: 実装
+                        // finish();
+                    	return null;
+                    }
+                } else {
+                    // Nothing is playing.
+                }
+            } else if (mPlaylist.equals("podcasts")) {
+                where.append(" AND " + MediaStore.Audio.Media.IS_PODCAST + "=1");
+                ret = queryhandler.doQuery(ctx, uri,
+                		mPlaylistCols, where.toString(), keywords,
+                        MediaStore.Audio.Media.DEFAULT_SORT_ORDER, async);
+            } else if (mPlaylist.equals("recentlyadded")) {
+                // do a query for all songs added in the last X weeks
+                int X = OkosamaMediaPlayerActivity.getResourceAccessor().getIntPref("numweeks", 2) * (3600 * 24 * 7);
+                where.append(" AND " + MediaStore.MediaColumns.DATE_ADDED + ">");
+                where.append(System.currentTimeMillis() / 1000 - X);
+                ret = queryhandler.doQuery(ctx,uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                		mPlaylistCols, where.toString(), keywords,
+                        MediaStore.Audio.Media.DEFAULT_SORT_ORDER, async);
+            } else {
+                mSortOrder = MediaStore.Audio.Playlists.Members.DEFAULT_SORT_ORDER;
+                ret = queryhandler.doQuery(ctx,MediaStore.Audio.Playlists.Members.getContentUri(strExOrIn,
+                        Long.valueOf(mPlaylist)), mPlaylistMemberCols,
+                        where.toString(), keywords, mSortOrder, async);
+            }
+        } else {
+            if (albumId != null) {
+                where.append(" AND " + MediaStore.Audio.Media.ALBUM_ID + "=" + albumId);
+                mSortOrder = MediaStore.Audio.Media.TRACK + ", " + mSortOrder;
+            }
+            if (artistId != null) {
+                where.append(" AND " + MediaStore.Audio.Media.ARTIST_ID + "=" + artistId);
+            }
+            where.append(" AND " + MediaStore.Audio.Media.IS_MUSIC + "=1");
+            ret = queryhandler.doQuery(ctx, uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            		mPlaylistCols, where.toString() , keywords, mSortOrder, async);
+        }
+        
+        // This special case is for the "nowplaying" cursor, which cannot be handled
+        // asynchronously using AsyncQueryHandler, so we do some extra initialization here.
+        if (ret != null && false == async) {
+        	// TODO:実装
+            ctx.initAdapter(TabPage.TABPAGE_ID_SONG,ret);
+            //setTitle();
+        }
+        return ret;
+    }
+    private class NowPlayingCursor extends AbstractCursor
+    {
+        public NowPlayingCursor(IMediaPlaybackService service, String [] cols)
+        {
+            mCols = cols;
+            mService  = service;
+            makeNowPlayingCursor();
+        }
+        private void makeNowPlayingCursor() {
+            mCurrentPlaylistCursor = null;
+            try {
+                mNowPlaying = mService.getQueue();
+            } catch (RemoteException ex) {
+                mNowPlaying = new long[0];
+            }
+            mSize = mNowPlaying.length;
+            if (mSize == 0) {
+                return;
+            }
+
+            StringBuilder where = new StringBuilder();
+            where.append(MediaStore.Audio.Media._ID + " IN (");
+            for (int i = 0; i < mSize; i++) {
+                where.append(mNowPlaying[i]);
+                if (i < mSize - 1) {
+                    where.append(",");
+                }
+            }
+            where.append(")");
+
+            Uri uri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
+            //String external_string;
+            if( get_external == false )
+            {
+            	uri = MediaStore.Audio.Artists.INTERNAL_CONTENT_URI;
+            }             
+            mCurrentPlaylistCursor = query(ctx,
+                    uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    mCols, where.toString(), null, MediaStore.Audio.Media._ID);
+
+            if (mCurrentPlaylistCursor == null) {
+                mSize = 0;
+                return;
+            }
+            
+            int size = mCurrentPlaylistCursor.getCount();
+            mCursorIdxs = new long[size];
+            mCurrentPlaylistCursor.moveToFirst();
+            int colidx = mCurrentPlaylistCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID);
+            for (int i = 0; i < size; i++) {
+                mCursorIdxs[i] = mCurrentPlaylistCursor.getLong(colidx);
+                mCurrentPlaylistCursor.moveToNext();
+            }
+            mCurrentPlaylistCursor.moveToFirst();
+            mCurPos = -1;
+            
+            // At this point we can verify the 'now playing' list we got
+            // earlier to make sure that all the items in there still exist
+            // in the database, and remove those that aren't. This way we
+            // don't get any blank items in the list.
+            try {
+                int removed = 0;
+                for (int i = mNowPlaying.length - 1; i >= 0; i--) {
+                    long trackid = mNowPlaying[i];
+                    int crsridx = Arrays.binarySearch(mCursorIdxs, trackid);
+                    if (crsridx < 0) {
+                        //Log.i("@@@@@", "item no longer exists in db: " + trackid);
+                        removed += mService.removeTrack(trackid);
+                    }
+                }
+                if (removed > 0) {
+                    mNowPlaying = mService.getQueue();
+                    mSize = mNowPlaying.length;
+                    if (mSize == 0) {
+                        mCursorIdxs = null;
+                        return;
+                    }
+                }
+            } catch (RemoteException ex) {
+                mNowPlaying = new long[0];
+            }
+        }
+
+        @Override
+        public int getCount()
+        {
+            return mSize;
+        }
+
+        @Override
+        public boolean onMove(int oldPosition, int newPosition)
+        {
+            if (oldPosition == newPosition)
+                return true;
+            
+            if (mNowPlaying == null || mCursorIdxs == null || newPosition >= mNowPlaying.length) {
+                return false;
+            }
+
+            // The cursor doesn't have any duplicates in it, and is not ordered
+            // in queue-order, so we need to figure out where in the cursor we
+            // should be.
+           
+            long newid = mNowPlaying[newPosition];
+            int crsridx = Arrays.binarySearch(mCursorIdxs, newid);
+            mCurrentPlaylistCursor.moveToPosition(crsridx);
+            mCurPos = newPosition;
+            
+            return true;
+        }
+
+        public boolean removeItem(int which)
+        {
+            try {
+                if (mService.removeTracks(which, which) == 0) {
+                    return false; // delete failed
+                }
+                int i = (int) which;
+                mSize--;
+                while (i < mSize) {
+                    mNowPlaying[i] = mNowPlaying[i+1];
+                    i++;
+                }
+                onMove(-1, (int) mCurPos);
+            } catch (RemoteException ex) {
+            }
+            return true;
+        }
+        
+        public void moveItem(int from, int to) {
+            try {
+                mService.moveQueueItem(from, to);
+                mNowPlaying = mService.getQueue();
+                onMove(-1, mCurPos); // update the underlying cursor
+            } catch (RemoteException ex) {
+            }
+        }
+
+        private void dump() {
+            String where = "(";
+            for (int i = 0; i < mSize; i++) {
+                where += mNowPlaying[i];
+                if (i < mSize - 1) {
+                    where += ",";
+                }
+            }
+            where += ")";
+            Log.i("NowPlayingCursor: ", where);
+        }
+
+        @Override
+        public String getString(int column)
+        {
+            try {
+                return mCurrentPlaylistCursor.getString(column);
+            } catch (Exception ex) {
+                onChange(true);
+                return "";
+            }
+        }
+
+        @Override
+        public short getShort(int column)
+        {
+            return mCurrentPlaylistCursor.getShort(column);
+        }
+
+        @Override
+        public int getInt(int column)
+        {
+            try {
+                return mCurrentPlaylistCursor.getInt(column);
+            } catch (Exception ex) {
+                onChange(true);
+                return 0;
+            }
+        }
+
+        @Override
+        public long getLong(int column)
+        {
+            try {
+                return mCurrentPlaylistCursor.getLong(column);
+            } catch (Exception ex) {
+                onChange(true);
+                return 0;
+            }
+        }
+
+        @Override
+        public float getFloat(int column)
+        {
+            return mCurrentPlaylistCursor.getFloat(column);
+        }
+
+        @Override
+        public double getDouble(int column)
+        {
+            return mCurrentPlaylistCursor.getDouble(column);
+        }
+
+        @Override
+        public boolean isNull(int column)
+        {
+            return mCurrentPlaylistCursor.isNull(column);
+        }
+
+        @Override
+        public String[] getColumnNames()
+        {
+            return mCols;
+        }
+        
+        @Override
+        public void deactivate()
+        {
+            if (mCurrentPlaylistCursor != null)
+                mCurrentPlaylistCursor.deactivate();
+        }
+
+        @Override
+        public boolean requery()
+        {
+            makeNowPlayingCursor();
+            return true;
+        }
+
+        private String [] mCols;
+        private Cursor mCurrentPlaylistCursor;     // updated in onMove
+        private int mSize;          // size of the queue
+        private long[] mNowPlaying;
+        private long[] mCursorIdxs;
+        private int mCurPos;
+        private IMediaPlaybackService mService;
+    }
+    
+}

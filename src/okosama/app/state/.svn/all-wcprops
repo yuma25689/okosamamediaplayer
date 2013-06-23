@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/src/okosama/app/state
+END
+DisplayStateAlbum.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/OkosamaMediaPlayer/!svn/ver/9/OkosamaMediaPlayer/src/okosama/app/state/DisplayStateAlbum.java
+END
+DisplayStateFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/src/okosama/app/state/DisplayStateFactory.java
+END
+IDisplayState.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/OkosamaMediaPlayer/!svn/ver/6/OkosamaMediaPlayer/src/okosama/app/state/IDisplayState.java
+END
+DisplayStateNone.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/OkosamaMediaPlayer/!svn/ver/6/OkosamaMediaPlayer/src/okosama/app/state/DisplayStateNone.java
+END
+DisplayStateArtist.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/OkosamaMediaPlayer/!svn/ver/6/OkosamaMediaPlayer/src/okosama/app/state/DisplayStateArtist.java
+END
+DisplayStateMedia.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/OkosamaMediaPlayer/!svn/ver/6/OkosamaMediaPlayer/src/okosama/app/state/DisplayStateMedia.java
+END
+DisplayStateSong.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/OkosamaMediaPlayer/!svn/ver/6/OkosamaMediaPlayer/src/okosama/app/state/DisplayStateSong.java
+END
+DisplayStatePlay.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/OkosamaMediaPlayer/!svn/ver/6/OkosamaMediaPlayer/src/okosama/app/state/DisplayStatePlay.java
+END
+DisplayStatePlaylist.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/OkosamaMediaPlayer/!svn/ver/6/OkosamaMediaPlayer/src/okosama/app/state/DisplayStatePlaylist.java
+END
+absDisplayState.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/OkosamaMediaPlayer/!svn/ver/6/OkosamaMediaPlayer/src/okosama/app/state/absDisplayState.java
+END

@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/OkosamaMediaPlayer/!svn/ver/2/OkosamaMediaPlayer/src/okosama/app/service
+END
+StorageInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/OkosamaMediaPlayer/!svn/ver/2/OkosamaMediaPlayer/src/okosama/app/service/StorageInfo.java
+END
+MediaPlaybackService.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/OkosamaMediaPlayer/!svn/ver/2/OkosamaMediaPlayer/src/okosama/app/service/MediaPlaybackService.java
+END
+MediaPlayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/OkosamaMediaPlayer/!svn/ver/6/OkosamaMediaPlayer/src/okosama/app/service/MediaPlayer.java
+END
+MediaAppWidgetProvider.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/OkosamaMediaPlayer/!svn/ver/2/OkosamaMediaPlayer/src/okosama/app/service/MediaAppWidgetProvider.java
+END
+MediaButtonIntentReceiver.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/OkosamaMediaPlayer/!svn/ver/2/OkosamaMediaPlayer/src/okosama/app/service/MediaButtonIntentReceiver.java
+END
+IMediaPlaybackService.aidl
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/OkosamaMediaPlayer/!svn/ver/2/OkosamaMediaPlayer/src/okosama/app/service/IMediaPlaybackService.aidl
+END

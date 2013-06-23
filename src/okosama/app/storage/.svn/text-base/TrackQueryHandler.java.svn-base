@@ -1,0 +1,56 @@
+package okosama.app.storage;
+
+import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.tab.TabPage;
+import android.content.AsyncQueryHandler;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+
+public class TrackQueryHandler extends AsyncQueryHandler {
+
+    class QueryArgs {
+        public Uri uri;
+        public String [] projection;
+        public String selection;
+        public String [] selectionArgs;
+        public String orderBy;
+    }
+
+    public TrackQueryHandler(ContentResolver res) {
+        super(res);
+    }
+    
+    public Cursor doQuery(OkosamaMediaPlayerActivity ctx, Uri uri, String[] projection,
+            String selection, String[] selectionArgs,
+            String orderBy, boolean async) {
+        if (async) {
+            // Get 100 results first, which is enough to allow the user to start scrolling,
+            // while still being very fast.
+            Uri limituri = uri.buildUpon().appendQueryParameter("limit", "100").build();
+            QueryArgs args = new QueryArgs();
+            args.uri = uri;
+            args.projection = projection;
+            args.selection = selection;
+            args.selectionArgs = selectionArgs;
+            args.orderBy = orderBy;
+
+            startQuery(TabPage.TABPAGE_ID_SONG, args, limituri, projection, selection, selectionArgs, orderBy);
+            return null;
+        }
+        return Database.getInstance(ctx).query(ctx,
+                uri, projection, selection, selectionArgs, orderBy);
+    }
+
+    @Override
+    protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+        //Log.i("@@@", "query complete: " + cursor.getCount() + "   " + mActivity);
+        // mActivity.init(cursor, cookie != null);
+        if (token == 0 && cookie != null && cursor != null && cursor.getCount() >= 100) {
+            QueryArgs args = (QueryArgs) cookie;
+            startQuery(1, null, args.uri, args.projection, args.selection,
+                    args.selectionArgs, args.orderBy);
+        }
+    }
+}

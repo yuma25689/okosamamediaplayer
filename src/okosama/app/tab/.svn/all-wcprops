@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/OkosamaMediaPlayer/!svn/ver/2/OkosamaMediaPlayer/src/okosama/app/tab
+END
+TabPageMedia.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/src/okosama/app/tab/TabPageMedia.java
+END
+TabComponentActionSetter.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/OkosamaMediaPlayer/!svn/ver/2/OkosamaMediaPlayer/src/okosama/app/tab/TabComponentActionSetter.java
+END
+TabComponentPropertySetter.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/src/okosama/app/tab/TabComponentPropertySetter.java
+END
+TabPagePlay.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/src/okosama/app/tab/TabPagePlay.java
+END
+ITabComponentConfigurator.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/OkosamaMediaPlayer/!svn/ver/2/OkosamaMediaPlayer/src/okosama/app/tab/ITabComponentConfigurator.java
+END
+Tab.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/src/okosama/app/tab/Tab.java
+END
+TabPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/src/okosama/app/tab/TabPage.java
+END
+TabPageNowPlaylist.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/src/okosama/app/tab/TabPageNowPlaylist.java
+END
+TabLeaf.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/OkosamaMediaPlayer/!svn/ver/6/OkosamaMediaPlayer/src/okosama/app/tab/TabLeaf.java
+END
+TabComponentParent.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/src/okosama/app/tab/TabComponentParent.java
+END
+ITabComponent.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/OkosamaMediaPlayer/!svn/ver/2/OkosamaMediaPlayer/src/okosama/app/tab/ITabComponent.java
+END

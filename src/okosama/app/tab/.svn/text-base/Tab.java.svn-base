@@ -1,0 +1,92 @@
+package okosama.app.tab;
+
+import java.util.HashMap;
+
+import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.R;
+import okosama.app.action.IViewAction;
+import okosama.app.action.TabSelectAction;
+import okosama.app.factory.DroidWidgetKit;
+import okosama.app.tab.TabComponentPropertySetter.ComponentType;
+import okosama.app.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ImageView.ScaleType;
+
+/**
+ * タブを模倣したクラス。このクラスは表示を持たない。
+ * タブというよりは、Mediatorに近い。
+ * タブの作成および、タブ上のコンポーネントの有効/無効、表示/非表示のみを制御する
+ * @author 25689
+ *
+ */
+public class Tab extends TabComponentParent {
+
+	String tabName;
+	Button playButton;
+	
+	public Tab( String name, LinearLayout ll, RelativeLayout rl )
+	{
+		tabName = name;
+		pageContainer = ll;
+		componentContainer = rl;
+	}
+	
+	/**
+	 * タブ全体の作成
+	 * @return 0:正常 0以外:異常
+	 */
+	public int create() {
+		int errCode = 0;
+
+		// Playボタンは、どんな時でもアクセス可能な位置におく
+		playButton = DroidWidgetKit.getInstance().MakeButton();
+		// TAB_BUTTON
+		TabComponentPropertySetter playBtnCreationData
+		= new TabComponentPropertySetter(
+			"playBtn", ComponentType.BUTTON,
+			400, 40, 80, 80,
+			null, R.drawable.btn_play_image,
+			"", ScaleType.FIT_XY
+		);
+		playButton.acceptConfigurator(playBtnCreationData);
+		// MediaTabボタンのアクション
+		HashMap< Integer, IViewAction > actMapTemp
+			= new HashMap< Integer, IViewAction >();
+		// TODO:再生ボタン押下時のアクションを設定
+		// actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, tabId ) );
+		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );	
+		playButton.acceptConfigurator(actionSetter);
+		componentContainer.addView(playButton.getView());
+								
+		// タブの追加
+		addChild( new TabPagePlay( this, pageContainer, componentContainer ) );
+		addChild( new TabPageMedia( this, pageContainer, componentContainer ) );
+		addChild( new TabPageNowPlaylist( this, pageContainer, componentContainer ));
+		// タブページは、setCurrentTabを読んだ時、アクティブなものだけが作られる。
+		// なぜかタブページのcreateは呼んではいけないことになってしまった。
+		// また、create時のタブIDは不明なので、setCurrentTabはここでは呼ばず、上位に呼ばせる。
+		
+		return errCode;
+	}
+	
+	/**
+	 * 現在のタブを設定する
+	 * @param tabId
+	 */
+	public void setCurrentTab(int tabId,boolean save)
+	{
+        for( ITabComponent c : children ) {
+        	if( c instanceof TabPage ) { // できたら使いたくなかった・・・。
+        		c.setActivate( ((TabPage) c).IsEqualTabId(tabId) );
+        	}
+        }
+		// アプリケーションに選択されたタブの画面IDを設定する
+		// この場所だけでいいかどうかは不明
+        if( save == true )
+        {
+        	OkosamaMediaPlayerActivity.setCurrentDisplayId(tabName,tabId);
+        }
+	}
+
+}

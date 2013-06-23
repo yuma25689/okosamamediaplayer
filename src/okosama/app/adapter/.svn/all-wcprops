@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/OkosamaMediaPlayer/!svn/ver/5/OkosamaMediaPlayer/src/okosama/app/adapter
+END
+PlaylistListAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/src/okosama/app/adapter/PlaylistListAdapter.java
+END
+ArtistAlbumListAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/src/okosama/app/adapter/ArtistAlbumListAdapter.java
+END
+MusicAlphabetIndexer.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/OkosamaMediaPlayer/!svn/ver/9/OkosamaMediaPlayer/src/okosama/app/adapter/MusicAlphabetIndexer.java
+END
+TrackListAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/src/okosama/app/adapter/TrackListAdapter.java
+END
+AlbumListAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/OkosamaMediaPlayer/!svn/ver/11/OkosamaMediaPlayer/src/okosama/app/adapter/AlbumListAdapter.java
+END

@@ -1,0 +1,121 @@
+package okosama.app.tab;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import okosama.app.action.IViewAction;
+
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
+/**
+ * タブ上の項目の親となることができるクラスの抽象クラス
+ * @author 25689
+ *
+ */
+public abstract class TabComponentParent implements ITabComponent {
+
+	protected boolean active = false;
+	public boolean isActive() {
+		return active;
+	}
+	public void setActiveFlg( boolean b ) {
+		active = b;
+	}
+
+	// 子項目のリスト
+	// 本当は最初にaddする時に作った方が無駄がないはずだが、こちらの方が安全ではある
+	protected ArrayList<ITabComponent> children 
+		= new ArrayList<ITabComponent>();
+	
+	// ここにコンテナを持つのは、作りが雑かもしれない。
+	// 結果的にこのクラスはタブとタブページにしか継承されていないが、
+	// 子でこれを使わないクラスもいつかできるのかも
+	// 設計としてはよくない
+	protected LinearLayout pageContainer;
+	protected RelativeLayout componentContainer;
+
+	protected Tab parent;
+	protected HashMap< Integer, IViewAction > actionMap;
+	public void setActionMap(HashMap<Integer, IViewAction> actionMap) {
+		this.actionMap = actionMap;
+	}
+	
+	/**
+	 * Viewの取得
+	 * @return view
+	 */
+	public View getView() {
+		return null;
+	}
+	/**
+	 * Activeかどうかを設定。子の同関数もコールする
+	 * @param b
+	 */	
+	public void setActivate( boolean b )
+	{
+		active = b;
+        for( ITabComponent c : children ) {
+        	c.setActivate( b );
+        }
+	}
+	/**
+	 * Visibleかどうかを設定。子の同関数もコールする
+	 * @param b
+	 */	
+	public void setVisible( boolean b )
+	{
+        for( ITabComponent c : children ) {
+        	c.setVisible( b );
+        }	
+	}
+	/**
+	 * 表示の更新。子の同関数もコールする
+	 */
+	public void updateDisplay() {
+        for( ITabComponent c : children ) {
+        	c.updateDisplay();
+        }
+	}
+
+	/**
+	 * 子項目の追加
+	 * @param child
+	 */
+	public void addChild( ITabComponent child) {
+		children.add(child);
+	}
+
+	/**
+	 * 外部オブジェクトに設定を委譲する
+	 * 子のオブジェクトには適用しない
+	 * @param conf
+	 */
+	public void acceptConfigurator( ITabComponentConfigurator conf )
+	{
+		conf.configure(this);
+	}
+	/**
+	 * @param pageContainer the pageContainer to set
+	 */
+	public void setPageContainer(LinearLayout pageContainer) {
+		this.pageContainer = pageContainer;
+	}	
+	public void setComponentContainer(RelativeLayout componentContainer) {
+		this.componentContainer = componentContainer;
+	}
+	/**
+	 * 設定されたアクションの内容を、コンポーネントに設定する
+	 */
+	public void configureAction()
+	{
+	}
+	
+	/**
+	 * 子項目のクリア
+	 */
+//	public void clearChild() {
+//		children.clear();
+//	}	
+}
