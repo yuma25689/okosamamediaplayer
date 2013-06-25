@@ -6,8 +6,12 @@ package okosama.app;
 //import java.util.HashMap;
 //import java.util.Map;
 
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Locale;
+
+import okosama.app.factory.DroidWidgetKit;
+import okosama.app.widget.Button;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -28,7 +32,10 @@ import android.graphics.drawable.Drawable;
  */
 public final class ResourceAccessor {
 	
-	
+	// ここに、アプリケーションの状態を格納する
+	public AppStatus appStatus = new AppStatus();
+
+	public ArrayList<Button> commonBtns = null;
 	
 //	// 解放のために、Drawableを保持するマップ
 //	// マップのキーには、画像を利用するTabpageのIDを利用する
@@ -59,6 +66,7 @@ public final class ResourceAccessor {
 	private ResourceAccessor(OkosamaMediaPlayerActivity activity) 
 	{
 		this.activity = activity;
+		commonBtns = new ArrayList<Button>();
 	}
 	public static void CreateInstance( OkosamaMediaPlayerActivity activity )
 	{

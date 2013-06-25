@@ -144,7 +144,7 @@ public class MediaPlayer {
      * @param token
      */
     public static void unbindFromService(ServiceToken token) {
-    	Toast.makeText(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(), "unbind", Toast.LENGTH_LONG).show();
+    	// Toast.makeText(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(), "unbind", Toast.LENGTH_LONG).show();
             	
         if (token == null) {
         	// トークンがnullであれば、ログをはいて終了
@@ -551,5 +551,33 @@ public class MediaPlayer {
             sService.removeTracks(0, Integer.MAX_VALUE);
         } catch (RemoteException ex) {
         }
-    }    
+    }
+    
+    /**
+     *  次の曲へ
+     */
+    public static void next()
+    {
+        if (sService == null) return;
+        try {
+            sService.next();
+        } catch (RemoteException ex) {
+        }    	
+    }
+    /**
+     *  前の曲へ
+     */
+    public static void prev()
+    {
+        if (sService == null) return;
+        try {
+            if (sService.position() < 2000) {
+                sService.prev();
+            } else {
+                sService.seek(0);
+                sService.play();
+            }
+        } catch (RemoteException ex) {
+        }    	
+    }
 }

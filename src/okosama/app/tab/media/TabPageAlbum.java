@@ -2,6 +2,7 @@ package okosama.app.tab.media;
 
 import java.util.HashMap;
 
+import okosama.app.AppStatus;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
@@ -53,7 +54,7 @@ public class TabPageAlbum extends TabPage {
 			//90 + 5, 859 - 150 + 2, 90, 70,
 			0, 859 - 70, 90, 70,
 			R.drawable.music_select_album_image,
-			R.drawable.tab1_btn_not_select_no_shadow2, 
+			null, // R.drawable.tab1_btn_not_select_no_shadow2, 
 			"", ScaleType.FIT_XY 
 		);
 		tabButton.acceptConfigurator(tabBtnCreationData);
@@ -71,7 +72,8 @@ public class TabPageAlbum extends TabPage {
 			new TabComponentPropertySetter(
 				List.LISTNAME_ALBUM, ComponentType.LIST_ALBUM, 
 				//0, 260, 480, 599
-				0, 150 + 2 + 90, 480, 637 - 90 //599
+				0, 0//150 + 2 // + 90
+				, 480, AppStatus.LIST_HEIGHT_1//637 + 70//- 90 //599
 				, null, null,//R.drawable.tab_1_list_bk, 
 				"", ScaleType.FIT_XY
 			)
@@ -120,6 +122,7 @@ public class TabPageAlbum extends TabPage {
 			// タブがアクティブ化された場合
 			// タブボタンを「無」効な時の表示にする
 			tabButton.setEnabled( false );
+			
 			// 背景イメージを消す？
 //			if( pageContainer.getBackground() != null )
 //			{
@@ -141,7 +144,7 @@ public class TabPageAlbum extends TabPage {
 			if( activity != null)
 			{
 				// TODO: 検索条件を、メインから取得
-				Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).createAlbumCursor(activity.getAlbumAdp().getQueryHandler(), null, null);
+				Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).createAlbumCursor(activity.getAlbumAdp().getQueryHandler(), null ); //, null);
 			}
 			//}
 		}

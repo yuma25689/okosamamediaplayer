@@ -300,12 +300,16 @@ public class TrackListAdapter extends SimpleCursorAdapter implements SectionInde
         	// フィルタが変わっていなければ、現在のカーソルを取得
             return getCursor();
         }
-        String playlist = null;
+        //String playlist = null;
         if( mIsNowPlaying )
         {
-        	playlist = Database.PlaylistName_NowPlaying;
+        	OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
         }
-        Cursor c = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).createTrackCursor(mQueryHandler, playlist, s, false,genre, albumId, artistId );
+        else
+        {
+        	OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
+        }
+        Cursor c = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).createTrackCursor(mQueryHandler, s, false );//,genre, albumId, artistId );
         mConstraint = s;
         mConstraintIsValid = true;
         return c;

@@ -6,6 +6,8 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
 import okosama.app.action.MediaPlayAction;
+import okosama.app.action.NextAction;
+import okosama.app.action.PrevAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.Button;
@@ -43,29 +45,72 @@ public class Tab extends TabComponentParent {
 	 */
 	public int create() {
 		int errCode = 0;
-
-		// Playボタンは、どんな時でもアクセス可能な位置におく
-		playButton = DroidWidgetKit.getInstance().MakeButton();
-		// TAB_BUTTON
-		TabComponentPropertySetter playBtnCreationData
-		= new TabComponentPropertySetter(
-			"playBtn", ComponentType.BUTTON,
-			400, 40, 80, 80,
-			null, R.drawable.btn_play_image,
-			"", ScaleType.FIT_XY
-		);
-		playButton.acceptConfigurator(playBtnCreationData);
-		// MediaTabボタンのアクション
-		HashMap< Integer, IViewAction > actMapTemp
-			= new HashMap< Integer, IViewAction >();
-		// 再生ボタン押下時のアクションを設定
+		TabComponentPropertySetter creationData[] = {
+			// --------------------- PLAY
+			new TabComponentPropertySetter(
+				"playbutton", ComponentType.BUTTON, 
+				140, 155 + 2
+				, 90, 90
+				, null, R.drawable.play_button_image, "", ScaleType.FIT_XY
+			),
+			// --------------------- NEXT
+			new TabComponentPropertySetter(
+				"nextbutton", ComponentType.BUTTON, 
+				270, 155 + 2, 90, 90
+				, null, R.drawable.next_button_image, "", ScaleType.FIT_XY
+			),
+			// --------------------- PREV
+			new TabComponentPropertySetter(
+				"prevbutton", ComponentType.BUTTON, 
+				10, 155 + 2, 90, 90
+				, null, R.drawable.back_button_image, "", ScaleType.FIT_XY
+			)
+		};
+				
+		// TODO:おそらく、クラスに持った方がいい
+		// 画像を書き換え必要になるかもしれない
+		Button btns[] = {
+			DroidWidgetKit.getInstance().MakeButton()
+			,DroidWidgetKit.getInstance().MakeButton()
+			,DroidWidgetKit.getInstance().MakeButton()
+		};
+		
+		// Playボタン
 		HashMap< Integer, IViewAction > actMapPlay 
 		= new HashMap< Integer, IViewAction >();
-		actMapPlay.put( IViewAction.ACTION_ID_ONCLICK, new MediaPlayAction() );		
-		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapPlay );	
-		playButton.acceptConfigurator(actionSetter);
-		componentContainer.addView(playButton.getView());
-								
+		actMapPlay.put( IViewAction.ACTION_ID_ONCLICK, new MediaPlayAction() );
+		// nextボタン
+		HashMap< Integer, IViewAction > actMapNext
+			= new HashMap< Integer, IViewAction >();
+		actMapNext.put( IViewAction.ACTION_ID_ONCLICK, new NextAction() );
+		// backボタン
+		HashMap< Integer, IViewAction > actMapBack
+			= new HashMap< Integer, IViewAction >();
+		actMapBack.put( IViewAction.ACTION_ID_ONCLICK, new PrevAction() );
+
+		TabComponentActionSetter actionSetterCont[] = {
+			new TabComponentActionSetter( actMapPlay )
+			,new TabComponentActionSetter( actMapNext )
+			,new TabComponentActionSetter( actMapBack )
+		};
+		
+		int i=0;
+		for( Button btn : btns )
+		{
+			OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns.add(btn);
+			btn.acceptConfigurator(creationData[i]);
+			// ボタンのアクションを設定
+			if( actionSetterCont[i] != null )
+			{
+				btn.acceptConfigurator(actionSetterCont[i]);
+			}
+			// ボタンをこのタブ子項目として追加
+			addChild( btn );
+			// ボタンを配置
+			componentContainer.addView( btn.getView() );
+			i++;
+		}
+		
 		// タブの追加
 		addChild( new TabPagePlay( this, pageContainer, componentContainer ) );
 		tabPageMedia = new TabPageMedia( this, pageContainer, componentContainer );

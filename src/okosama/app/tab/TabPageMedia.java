@@ -45,6 +45,7 @@ public class TabPageMedia extends TabPage {
 	public int create() {
 		// タブのボタンだけはここで作る？
 		tabButton = DroidWidgetKit.getInstance().MakeButton();
+		OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns.add(tabButton);
 		// TAB_BUTTON
 		TabComponentPropertySetter tabBtnCreationData
 		= new TabComponentPropertySetter(
@@ -166,5 +167,9 @@ public class TabPageMedia extends TabPage {
 		}
 		// TabComponentParentのsetActivateで、全ての子クラスのsetActivateが実行される
         super.setActivate( bActivate );
+        if( toggleEx != null && toggleEx.getView() != null )
+        {
+        	toggleEx.getView().bringToFront();
+        }
 	}
 }

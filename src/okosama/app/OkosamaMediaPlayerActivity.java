@@ -13,31 +13,25 @@ import okosama.app.adapter.TrackListAdapter;
 import okosama.app.factory.DroidWidgetKit;
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Intent;
+//import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.media.AudioManager;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import okosama.app.service.MediaPlayer;
 import okosama.app.service.MediaPlayer.ServiceToken;
-import okosama.app.service.TwitterUtils;
 import okosama.app.state.DisplayStateFactory;
 import okosama.app.state.IDisplayState;
 import okosama.app.state.absDisplayState;
 import okosama.app.storage.Database;
 import okosama.app.tab.*;
 import okosama.app.tab.media.TabMediaSelect;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
+import okosama.app.widget.Button;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -46,7 +40,6 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.RelativeLayout;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection {
@@ -54,7 +47,7 @@ implements ServiceConnection {
 	// サービスのトークン
     private ServiceToken mToken;
     
-    private static boolean externalRef = false;
+    private static boolean externalRef = true;// false;
     public static boolean isExternalRef() {
 		return externalRef;
 	}
@@ -249,15 +242,10 @@ implements ServiceConnection {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         
         // Debug出力
-        String log;
-        log = String.valueOf(MediaPlayer.getServiceConnectionCount());
-        Toast.makeText(this, log, Toast.LENGTH_LONG).show();
-        
-        // サービスへの接続を開始
-        if( 0 == MediaPlayer.getServiceConnectionCount() )
-        {
-        	mToken = MediaPlayer.bindToService(this, this);
-        }
+//        String log;
+//        log = String.valueOf(MediaPlayer.getServiceConnectionCount());
+//        Toast.makeText(this, log, Toast.LENGTH_LONG).show();
+//       
         
         // リソースの情報を設定する(ここで設定後、二度と設定し直さないのはヤバい気もする
         ResourceAccessor.CreateInstance(this);
@@ -271,6 +259,11 @@ implements ServiceConnection {
         HideTabComponentAction.getInstance().setTabLayout(componentContainer);
         ShowTabComponentAction.getInstance().setTabLayout(componentContainer);
 
+        // サービスへの接続を開始
+        if( 0 == MediaPlayer.getServiceConnectionCount() )
+        {
+        	mToken = MediaPlayer.bindToService(this, this);
+        }      
 //        if (savedInstanceState != null) {
 //        	// 取得できなければ-1を返却する(=TABPAGE_ID_UNKNOWN)
 //        	currentMainTabId = savedInstanceState.getInt(tabNameMain + dispIdKey);
@@ -341,7 +334,9 @@ implements ServiceConnection {
 		        		// リスナを更新
 		            	updateListeners();
 		            	// メディアを更新
-		            	reScanMedia();		        		
+		            	reScanMedia();
+		            	// 共通部分再描画
+		            	updateCommonCtrls();
 		        		break;
 	        	}
 	        };
@@ -466,7 +461,7 @@ implements ServiceConnection {
         }
 		
 		int iRet = 0;
-		int iRet2 = 0;
+		//int iRet2 = 0;
 		if( currentMainTabId != mainTab )//|| bForceUpd == true )
         {
     	   currentMainTabId = mainTab;
@@ -478,7 +473,8 @@ implements ServiceConnection {
         	// 画面IDから状態が取得できた
         	if( iRet == 1 )
         	{
-        		iRet2 = stateMain.ChangeDisplayBasedOnThisState(tab);
+        		//iRet2 = 
+        		stateMain.ChangeDisplayBasedOnThisState(tab);
         	}
         }
         if( stateSubTmp != null )
@@ -514,6 +510,23 @@ implements ServiceConnection {
         }
         return iRet;
 	}
+	void updateCommonCtrls()
+	{
+		// 共通で利用するボタンを最前面に持っていく
+		if( getResourceAccessor().commonBtns != null )
+		{
+			for( Button btn : getResourceAccessor().commonBtns )
+			{
+				if( btn.getView() != null )
+				{
+					btn.getView().bringToFront();
+				}
+			}
+		}
+		
+		// TODO:時間表時の再描画？ここは、結局別関数にする必要があると思われるが・・・
+	}
+	
 	/**
 	 * 現在の状況に合わせて、リスナを登録し直す
 	 */
@@ -531,11 +544,11 @@ implements ServiceConnection {
 		}		
 		if( iRet == 1 )
 		{
-			Log.w("registerReceivers=1","maybe listener not registered.");
+			// Log.w("registerReceivers=1","maybe listener not registered.");
 		}
 		else if( iRet < 0 )
 		{
-			Log.e("registerReceivers<0","Failed to register the listeners.");
+			// Log.e("registerReceivers<0","Failed to register the listeners.");
 		}		
 	}
 	/**
@@ -588,15 +601,15 @@ implements ServiceConnection {
 			{
 			case TabPage.TABPAGE_ID_ALBUM:
 				// Listにカーソルを設定
-				Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null, null);
+				Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );//, null);
 				break;
 			case TabPage.TABPAGE_ID_ARTIST:
 				// Listにカーソルを設定
 				Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);			
 				break;
 			case TabPage.TABPAGE_ID_SONG:
-				// Listにカーソルを設定
-				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null, null, true, null, null, null);			
+				OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
+				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null, true );//, null, null, null);			
 				break;
 			case TabPage.TABPAGE_ID_PLAYLIST:
 				Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);						
@@ -604,9 +617,12 @@ implements ServiceConnection {
 			}
 		}
 		else if( currentMainTabId == TabPage.TABPAGE_ID_NOW_PLAYLIST )
-		{		
+		{
+			// TODO: 現在、トラックと同じカーソルになっているが、考えた方がいいかもしれない
 			// NOWPLAYLIST
-			Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), Database.PlaylistName_NowPlaying, null, true, null, null, null);
+			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
+			
+			Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null, true );//, null, null, null);
 		}
 	}
 	
@@ -620,8 +636,7 @@ implements ServiceConnection {
 	@Override
 	protected void onDestroy() {
 		// サービスの登録解除
-        Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
-		//MediaPlayer.unbindFromService(mToken);
+        MediaPlayer.unbindFromService(mToken);
 		super.onDestroy();
 	}
 
@@ -653,7 +668,7 @@ implements ServiceConnection {
 	 */
 	@Override
 	public void onServiceDisconnected(ComponentName name) {
-        Toast.makeText(this, "onServiceDisconnected:" + name, Toast.LENGTH_LONG).show();
+       // Toast.makeText(this, "onServiceDisconnected:" + name, Toast.LENGTH_LONG).show();
 		
 		// よくわからないけど、サービス切断されたら終了する？
 		finish();

@@ -238,7 +238,8 @@ public class Database {
      * @param artistId
      * @return
      */
-    public Cursor createAlbumCursor(AsyncQueryHandler async, String filter, String artistId) {
+    public Cursor createAlbumCursor(AsyncQueryHandler async, String filter ) { // , String artistId) {
+    	String artistId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID();
     	// where句を設定する
         StringBuilder where = new StringBuilder();
         where.append(MediaStore.Audio.Albums.ALBUM + "!=''");
@@ -476,9 +477,14 @@ public class Database {
      * @param async
      * @return
      */
-    public Cursor createTrackCursor(TrackQueryHandler queryhandler, String playlist, String filter,
-            boolean async, String genre, String albumId, String artistId) {
+    public Cursor createTrackCursor(TrackQueryHandler queryhandler, String filter, //String playlist, String filter,
+            boolean async ) { //, String genre, String albumId, String artistId) {
 
+    	String playlist = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getPlaylistName();
+    	String genre = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getGenre();
+    	String albumId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getGenre();
+    	String artistId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID();
+    	
         if (queryhandler == null) {
         	// トラックカーソルの場合、handlerクラスが必ず必要
             throw new IllegalArgumentException();
@@ -700,7 +706,7 @@ public class Database {
                     long trackid = mNowPlaying[i];
                     int crsridx = Arrays.binarySearch(mCursorIdxs, trackid);
                     if (crsridx < 0) {
-                        //Log.i("@@@@@", "item no longer exists in db: " + trackid);
+                        Log.i("@@@@@", "item no longer exists in db: " + trackid);
                         removed += mService.removeTrack(trackid);
                     }
                 }

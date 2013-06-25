@@ -1,5 +1,6 @@
 package okosama.app.tab;
 import android.graphics.drawable.Drawable;
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.widget.*;
 
 /**
@@ -26,6 +27,26 @@ public abstract class TabPage extends TabComponentParent {
 	public static final int TABPAGE_ID_PLAYLIST = 7;
 	public static final int TABPAGE_ID_NOW_PLAYLIST = 8;
 
+	@Override
+	public void setActivate( boolean b )
+	{
+		super.setActivate(b);
+		if( tabButton != null && tabButton.getView() != null )
+			tabButton.getView().bringToFront();
+		
+//		if( OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns == null )
+//		{
+//			for( Button btn : OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns )
+//			{
+//				if( btn.getView() != null )
+//				{
+//					btn.getView().bringToFront();
+//				}
+//			}
+//		}
+		
+	}
+	
 	/**
 	 * @param tabButton the tabButton to set
 	 */

@@ -205,7 +205,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			activity.registerForContextMenu(lst);
 			
 			// カーソルの作成
-			Database.getInstance(external).createAlbumCursor(activity.getAlbumAdp().getQueryHandler(), null, null);
+			// Database.getInstance(external).createAlbumCursor(activity.getAlbumAdp().getQueryHandler(), null, null);
 		}
 		////////////// Artist ///////////////////
 		else if( type == ComponentType.LIST_ARTIST )
@@ -242,7 +242,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			activity.registerForContextMenu(lst);
 
 			// カーソルの作成
-			Database.getInstance(external).createArtistCursor(activity.getArtistAdp().getQueryHandler(), null);			
+			// Database.getInstance(external).createArtistCursor(activity.getArtistAdp().getQueryHandler(), null);			
 		}
 		else if( type == ComponentType.LIST_SONG )
 		{
@@ -292,7 +292,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			activity.registerForContextMenu(lst);
 
 			// カーソルの作成
-			Database.getInstance(external).createTrackCursor(activity.getTrackAdp().getQueryHandler(), null, null, true, null, null, null);			
+			// Database.getInstance(external).createTrackCursor(activity.getTrackAdp().getQueryHandler(), null, null, true, null, null, null);			
 		}
 		else if( type == ComponentType.LIST_PLAYLIST )
 		{
@@ -327,7 +327,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			activity.registerForContextMenu(lst);
 
 			// カーソルの作成
-			Database.getInstance(external).createPlaylistCursor(activity.getPlaylistAdp().getQueryHandler(), null, false);						
+			// Database.getInstance(external).createPlaylistCursor(activity.getPlaylistAdp().getQueryHandler(), null, false);						
 		}
 		else if( type == ComponentType.LIST_NOWPLAYLIST )
 		{
@@ -377,7 +377,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 
 			// カーソルの作成
 			// 現在の再生対象のプレイリストを指定する
-			Database.getInstance(external).createTrackCursor(activity.getTrackAdp().getQueryHandler(), Database.PlaylistName_NowPlaying, null, true, null, null, null);			
+			// Database.getInstance(external).createTrackCursor(activity.getTrackAdp().getQueryHandler(), Database.PlaylistName_NowPlaying, null, true, null, null, null);			
 		}		
 		if( bkImageId != null )
 		{

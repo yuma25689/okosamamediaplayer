@@ -2,6 +2,8 @@ package okosama.app.tab;
 
 import java.util.HashMap;
 
+import okosama.app.AppStatus;
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
@@ -31,6 +33,7 @@ public class TabPageNowPlaylist extends TabPage {
 	public int create() {
 		// タブのボタンだけはここで作る？
 		tabButton = DroidWidgetKit.getInstance().MakeButton();
+		OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns.add(tabButton);
 		// TAB_BUTTON
 		TabComponentPropertySetter tabBtnCreationData
 		= new TabComponentPropertySetter(
@@ -53,7 +56,8 @@ public class TabPageNowPlaylist extends TabPage {
 			new TabComponentPropertySetter(
 				List.LISTNAME_NOW_PLAYLIST, ComponentType.LIST_NOWPLAYLIST, 
 				// 0, 260, 480, 599
-				0, 150 + 2, 480, 637 //599
+				0, 0,//150 + 2
+				480, AppStatus.LIST_HEIGHT_1//637 //599
 				, null, null//R.drawable.tab_3_list_bk
 				, "", ScaleType.FIT_XY
 			)
@@ -92,7 +96,7 @@ public class TabPageNowPlaylist extends TabPage {
 			// =メディアタブが選択された場合？
 			// タブボタンを「無」効な時の表示にする
 			tabButton.setEnabled( false );
-			pageContainer.setBackgroundColor(Color.rgb(100, 120, 140));
+			// pageContainer.setBackgroundColor(Color.rgb(100, 120, 140));
 
 			// TODO:背景イメージを設定する
 			// pageContainer.setBackgroundDrawable(null);

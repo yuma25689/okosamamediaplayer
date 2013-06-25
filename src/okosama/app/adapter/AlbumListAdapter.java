@@ -34,15 +34,15 @@ public class AlbumListAdapter extends SimpleCursorAdapter implements SectionInde
     private int mAlbumIdx;
     private int mArtistIdx;
     private int mAlbumArtIndex;
-    private String mArtistId;
+    //private String mArtistId;
     /**
      * アーティストIDの取得
      * @param artistId
      */
-    public void setArtistId(String artistId)
-    {
-    	mArtistId = artistId;
-    }
+//    public void setArtistId(String artistId)
+//    {
+//    	mArtistId = artistId;
+//    }
     // private final Resources mResources;
     //private final StringBuilder mStringBuilder = new StringBuilder();
     private final String mUnknownAlbum;
@@ -233,8 +233,7 @@ public class AlbumListAdapter extends SimpleCursorAdapter implements SectionInde
         	// 状態が変わっていなければ、そのまま？
             return getCursor();
         }
-        // TODO: mArtistIdは暫定版なので、後で直すこと
-        Cursor c = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).createAlbumCursor(null, s, mArtistId);
+        Cursor c = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).createAlbumCursor(null, s ) ;//, mArtistId);
         mConstraint = s;
         mConstraintIsValid = true;
         return c;

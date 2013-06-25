@@ -4,12 +4,12 @@
 <item 
   android:state_selected="false"
   android:state_pressed="false" 
-  android:drawable="@color/magenta" />
+  android:drawable="@color/dummy_white" />
 <item 
   android:state_pressed="true" 
-  android:drawable="@color/green" />
+  android:drawable="@color/orange" />
 <item 
   android:state_selected="true"
   android:state_pressed="false" 
-  android:drawable="@color/green" />
+  android:drawable="@color/lightgray" />
 </selector>

@@ -4,7 +4,9 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.service.MediaPlayer;
 import okosama.app.storage.Database;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -19,7 +21,12 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 	@Override
 	public void onItemClick(int iItemType) {
 		// TODO Auto-generated method stub
-
+		// TODO: 検索条件を設定後、トラックタブへ移動
+//        Intent intent = new Intent(Intent.ACTION_PICK);
+//        intent.setDataAndType(Uri.EMPTY, "vnd.android.cursor.dir/track");
+//        intent.putExtra("album", Long.valueOf(id).toString());
+//        intent.putExtra("artist", mArtistId);
+//        startActivity(intent);
 	}
 
 	@Override

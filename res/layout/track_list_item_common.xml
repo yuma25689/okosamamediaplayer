@@ -26,9 +26,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     
+    <!-- android:textColor="?android:attr/textColorTertiary" -->
     <TextView android:id="@+id/duration"
+        android:textColor="@color/dummy_black"
         android:textSize="12sp"
-        android:textColor="?android:attr/textColorTertiary"
         android:textStyle="bold"
         android:paddingLeft="4dip"
         android:paddingRight="11dip"
@@ -41,6 +42,7 @@
     <!-- The height is set to half the height of the parent, which is 64 dip -->
     <TextView android:id="@+id/line1"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/dummy_black"
         android:layout_width="wrap_content"
         android:paddingLeft="9dip"
         android:layout_height="wrap_content"
@@ -53,6 +55,7 @@
     <!-- The height is set to half the height of the parent, which is 64 dip -->
     <TextView android:id="@+id/line2" android:visibility="visible"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/gray"
         android:singleLine="true"
         android:ellipsize="end"
         android:paddingLeft="9dip"
@@ -71,14 +74,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="12dip" />
-    <CheckBox android:id="@+id/check"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:focusable="false"
-        />
     
 </merge>

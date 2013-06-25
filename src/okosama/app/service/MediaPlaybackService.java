@@ -1452,6 +1452,7 @@ public class MediaPlaybackService extends Service {
     }
     
     private void stop(boolean remove_status_icon) {
+    	Log.w("stop","stop come!");
         if (mPlayer.isInitialized()) {
         	// プレイヤー停止
             mPlayer.stop();
@@ -1883,6 +1884,7 @@ public class MediaPlaybackService extends Service {
             if (gotonext) {
             	// 次へ
                 if (mPlayListLen == 0) {
+                	Log.w("playlist len = 0", "stop come!");
                 	// プレイリストの長さが0
                 	// 停止
                     stop(true);

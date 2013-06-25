@@ -320,7 +320,7 @@ public class ArtistAlbumListAdapter extends SimpleCursorTreeAdapter implements S
         	external_string = "internal";	// 多分、これでよい
         }        
         // クエリ発行
-        Cursor c = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).query(mActivity,
+        Cursor c = Database.query(mActivity,
                 MediaStore.Audio.Artists.Albums.getContentUri(external_string, id),
                 cols, null, null, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
         

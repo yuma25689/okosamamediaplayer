@@ -2,6 +2,7 @@ package okosama.app.tab.media;
 
 import java.util.HashMap;
 
+import okosama.app.AppStatus;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
@@ -49,7 +50,7 @@ public class TabPageArtist extends TabPage {
 			//0, 859 - 150 + 2, 90, 70,
 			90 + 5, 859 - 70, 90, 70,
 			R.drawable.music_select_artist_image,
-			R.drawable.tab2_btn_select_2, 
+			null,//R.drawable.tab2_btn_select_2, 
 			"", ScaleType.FIT_XY 
 		);
 		tabButton.acceptConfigurator(tabBtnCreationData);
@@ -67,7 +68,8 @@ public class TabPageArtist extends TabPage {
 			new TabComponentPropertySetter(
 				ExpList.LISTNAME_ARTIST, ComponentType.LIST_ARTIST, 
 				//0, 260, 480, 599
-				0, 150 + 2 + 90, 480, 637 - 90//599
+				0, 0//150 + 2 // + 90
+				, 480, AppStatus.LIST_HEIGHT_1//637 + 70 // - 90//599
 				, null, null,//R.drawable.tab_2_list_bk
 				"", ScaleType.FIT_XY
 			)
@@ -89,8 +91,8 @@ public class TabPageArtist extends TabPage {
 			lst.acceptConfigurator(creationData[i]);
 			// TODO:ボタンのアクションを設定
 			
-			lst.getView().setBackgroundColor(Color.CYAN);
-			
+			//lst.getView().setBackgroundColor(Color.CYAN);
+			//lst.getView().sendToBack();
 			// ボタンをこのタブ子項目として追加
 			addChild( lst );
 			// ボタンを配置
