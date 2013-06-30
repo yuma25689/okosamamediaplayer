@@ -59,7 +59,7 @@ public class TrackQueryHandler extends AsyncQueryHandler {
             return null;
         }
         // “¯ŠúH
-        return Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).query(ctx,
+        return Database.query(ctx,
                 uri, projection, selection, selectionArgs, orderBy);
     }
 

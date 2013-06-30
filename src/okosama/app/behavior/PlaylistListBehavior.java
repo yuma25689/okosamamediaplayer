@@ -4,11 +4,13 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 public class PlaylistListBehavior extends IListBehavior {
 
 	@Override
-	public void onItemClick(int iItemType) {
+	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 
 	}

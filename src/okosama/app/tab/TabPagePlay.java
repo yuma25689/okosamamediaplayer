@@ -4,17 +4,16 @@ import java.util.HashMap;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.R.drawable;
+import okosama.app.action.CycleRepeatAction;
 import okosama.app.action.IViewAction;
-import okosama.app.action.MediaPauseAction;
-import okosama.app.action.MediaPlayAction;
 import okosama.app.action.MediaStopAction;
-import okosama.app.action.NextAction;
-import okosama.app.action.PrevAction;
 import okosama.app.action.TabSelectAction;
+import okosama.app.action.ToggleShuffleAction;
 import okosama.app.action.TweetAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
-import okosama.app.widget.Button;
+import okosama.app.widget.absWidget;
 import android.graphics.Color;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
@@ -145,34 +144,42 @@ public class TabPagePlay extends TabPage {
 			new TabComponentPropertySetter(
 				"shufflebutton", ComponentType.BUTTON, 
 				20, 700, 100, 100
-				, null, null, "", ScaleType.FIT_XY
+				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),
 			// --------------------- REPEAT
 			new TabComponentPropertySetter(
 				"repeatbutton", ComponentType.BUTTON, 
 				200, 690, 100, 100
-				, null, null, "", ScaleType.FIT_XY
+				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),
-		};
+			// --------------------- DURATION
+			new TabComponentPropertySetter(
+				"repeatbutton", ComponentType.LABEL, 
+				200, 330, 200, 50
+				, null, drawable.no_image, "", ScaleType.FIT_XY
+			),		};
 		
 		// 背景画像はなぜかsetActivateの担当なので、ここでは追加しない
 		
+		
+		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		// ボタンのハンドルクラスを作成
 		// おそらく、クラスに持った方がいい
-		Button btns[] = {
-			DroidWidgetKit.getInstance().MakeButton()
-			,DroidWidgetKit.getInstance().MakeButton()
-			,DroidWidgetKit.getInstance().MakeButton()
-			,DroidWidgetKit.getInstance().MakeButton()
-			,DroidWidgetKit.getInstance().MakeButton()
-			,DroidWidgetKit.getInstance().MakeButton()
-			,DroidWidgetKit.getInstance().MakeButton()
-			//,DroidWidgetKit.getInstance().MakeButton()
+		absWidget widgets[] = {
+			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getTimesButton()[0]
+			,OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getTimesButton()[1]
+			,OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getTimesButton()[2]
+			,OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getTimesButton()[3]
+			,OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getTimesButton()[4]
+			,OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getTimesButton()[5]
 			,DroidWidgetKit.getInstance().MakeButton()
 			//,DroidWidgetKit.getInstance().MakeButton()
+			,DroidWidgetKit.getInstance().MakeButton()
 			//,DroidWidgetKit.getInstance().MakeButton()
-			,DroidWidgetKit.getInstance().MakeButton()
-			,DroidWidgetKit.getInstance().MakeButton()
+			//,DroidWidgetKit.getInstance().MakeButton()
+			,activity.getShuffleButton()//DroidWidgetKit.getInstance().MakeButton()
+			,activity.getRepeatButton()//DroidWidgetKit.getInstance().MakeButton()
+			,activity.getDurationLabel()
 		};
 		
 		// ---- action
@@ -196,14 +203,14 @@ public class TabPagePlay extends TabPage {
 //		HashMap< Integer, IViewAction > actMapBack
 //			= new HashMap< Integer, IViewAction >();
 //		actMapBack.put( IViewAction.ACTION_ID_ONCLICK, new PrevAction() );
-//		// shuffleボタン
-//		HashMap< Integer, IViewAction > actMapShuffle
-//			= new HashMap< Integer, IViewAction >();
-//		actMapShuffle.put( IViewAction.ACTION_ID_ONCLICK, new ShuffleAction() );
-//		// repeatボタン
-//		HashMap< Integer, IViewAction > actMapRepeat
-//			= new HashMap< Integer, IViewAction >();
-//		actMapRepeat.put( IViewAction.ACTION_ID_ONCLICK, new RepeatAction() );
+		// shuffleボタン
+		HashMap< Integer, IViewAction > actMapShuffle
+			= new HashMap< Integer, IViewAction >();
+		actMapShuffle.put( IViewAction.ACTION_ID_ONCLICK, new ToggleShuffleAction() );
+		// repeatボタン
+		HashMap< Integer, IViewAction > actMapRepeat
+			= new HashMap< Integer, IViewAction >();
+		actMapRepeat.put( IViewAction.ACTION_ID_ONCLICK, new CycleRepeatAction() );
 		
 		TabComponentActionSetter actionSetterCont[] = {
 			null
@@ -217,49 +224,50 @@ public class TabPagePlay extends TabPage {
 			,new TabComponentActionSetter( actMapTwitter )
 			//,new TabComponentActionSetter( actMapNext )
 			//,new TabComponentActionSetter( actMapBack )
+			,new TabComponentActionSetter( actMapShuffle )
+			,new TabComponentActionSetter( actMapRepeat )
 			,null
-			,null
-//			,new TabComponentActionSetter( actMapShuffle )
-//			,new TabComponentActionSetter( actMapRepeat )
 		};
 		
 		
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;
-		for( Button btn : btns )
+		for( absWidget widget : widgets )
 		{
-			btn.acceptConfigurator(creationData[i]);
+			widget.acceptConfigurator(creationData[i]);
 			// TODO:ボタンのアクションを設定
 			if( actionSetterCont[i] != null )
 			{
-				btn.acceptConfigurator(actionSetterCont[i]);
+				widget.acceptConfigurator(actionSetterCont[i]);
 			}
 			
 			// ボタンをこのタブ子項目として追加
-			addChild( btn );
+			addChild( widget );
 			// ボタンを配置
 			// これは、setActivateで行う
 			// componentContainer.addView( btn.getView() );
 			i++;
 		}
+		activity.setShuffleButtonImage();
+		activity.setRepeatButtonImage();
 		
-		//////////////////////// image /////////////////////
-		TabComponentPropertySetter creationDataImg[] = {
-			new TabComponentPropertySetter(
-				"sep", ComponentType.IMAGE, 
-				157, 380, 
-				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
-				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
-				, R.drawable.num8_1, null, "", ScaleType.FIT_XY // TODO:セパレータの画像に変更する
-			),
-			new TabComponentPropertySetter(
-				"sep", ComponentType.IMAGE, 
-				293, 405, 
-				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
-				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
-				, R.drawable.num8_1, null, "", ScaleType.FIT_XY // TODO:セパレータの画像に変更する
-			)
-		};
+//		//////////////////////// image /////////////////////
+//		TabComponentPropertySetter creationDataImg[] = {
+//			new TabComponentPropertySetter(
+//				"sep", ComponentType.IMAGE, 
+//				157, 380, 
+//				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
+//				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
+//				, R.drawable.num8_1, null, "", ScaleType.FIT_XY // TODO:セパレータの画像に変更する
+//			),
+//			new TabComponentPropertySetter(
+//				"sep", ComponentType.IMAGE, 
+//				293, 405, 
+//				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
+//				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
+//				, R.drawable.num8_1, null, "", ScaleType.FIT_XY // TODO:セパレータの画像に変更する
+//			)
+//		};
 		return 0;
 	}
 	/**

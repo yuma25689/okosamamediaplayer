@@ -4,11 +4,10 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
-import okosama.app.action.IViewAction;
 import okosama.app.behavior.IListBehavior;
 import okosama.app.tab.*;
 
-public class List extends TabLeaf {
+public class List extends absWidget {
 
 	// このアプリケーションで利用するリストの名称
 	public static String LISTNAME_ALBUM = "AlbumList";
@@ -31,6 +30,15 @@ public class List extends TabLeaf {
 	@Override
 	public int create() {
 		impl = new ListImpl(activity);
+		impl.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> l, View v,
+					int pos, long id) {
+                // クリック時の処理
+				behavior.onItemClick(l, v, pos, id);
+			}
+        });		
 		return 0;
 	}
 
@@ -43,21 +51,26 @@ public class List extends TabLeaf {
 	{
 		impl.setAdapter(a);
 	}	
-	@Override
-	public void configureAction()
-	{
-		if( actionMap.containsKey( IViewAction.ACTION_ID_ONCLICK ) )
-		{
-			impl.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//	@Override
+//	public void configureAction()
+//	{
+//		if( actionMap.containsKey( IViewAction.ACTION_ID_ONCLICK ) )
+//		{
+//			impl.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//				@Override
+//				public void onItemClick(AdapterView<?> l, View v,
+//						int pos, long id) {
+//	                // クリック時の処理
+//					behavior.onItemClick(l, v, pos, id);
+//				}
+//	        });
+//		}
+//	}	
 
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View v,
-						int arg2, long arg3) {
-	                // クリック時の処理
-	            	actionMap.get( IViewAction.ACTION_ID_ONCLICK )
-	            		.doAction(v);					
-				}
-	        });
-		}
-	}	
+	@Override
+	public void setEnabled(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
 }

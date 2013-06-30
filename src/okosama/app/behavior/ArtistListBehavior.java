@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import okosama.app.OkosamaMediaPlayerActivity;
@@ -23,7 +24,7 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	public static final int SEARCH = CHILD_MENU_BASE;
 
 	@Override
-	public void onItemClick(int iItemType) {
+	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 
 	}

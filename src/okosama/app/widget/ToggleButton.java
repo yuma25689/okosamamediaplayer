@@ -12,7 +12,7 @@ import okosama.app.tab.*;
  * @author 25689
  *
  */
-public class ToggleButton extends TabLeaf {
+public class ToggleButton extends absWidget {
 	
 	
 	public ToggleButton( Activity activity )

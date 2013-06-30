@@ -2,24 +2,26 @@ package okosama.app.behavior;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.action.IViewAction;
+import okosama.app.action.TabSelectAction;
 import okosama.app.service.MediaPlayer;
 import okosama.app.storage.Database;
-import android.content.Intent;
+import okosama.app.tab.TabPage;
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 
 	public static final int SEARCH = CHILD_MENU_BASE;
 	@Override
-	public void onItemClick(int iItemType) {
+	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		// TODO: 検索条件を設定後、トラックタブへ移動
 //        Intent intent = new Intent(Intent.ACTION_PICK);
@@ -27,6 +29,11 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 //        intent.putExtra("album", Long.valueOf(id).toString());
 //        intent.putExtra("artist", mArtistId);
 //        startActivity(intent);
+		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(Long.valueOf(id).toString());
+		// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(
+		IViewAction action = new TabSelectAction( act.getTabMain().getTabPageMedia().getTabContent(), TabPage.TABPAGE_ID_SONG );
+		action.doAction(v);
 	}
 
 	@Override

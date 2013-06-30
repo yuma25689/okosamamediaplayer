@@ -10,7 +10,7 @@ import okosama.app.tab.*;
  * @author 25689
  *
  */
-public class Image extends TabLeaf {
+public class Image extends absWidget {
 		
 	public Image( Activity activity )
 	{
@@ -51,4 +51,11 @@ public class Image extends TabLeaf {
 	public View getView() {
 		return impl;
 	}
+
+	@Override
+	public void acceptConfigurator(ITabComponentConfigurator conf) {
+		// TODO Auto-generated method stub
+		conf.configure(this);		
+	}
+	
 }

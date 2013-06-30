@@ -24,8 +24,6 @@ import android.widget.ImageView.ScaleType;
  */
 public class Tab extends TabComponentParent {
 
-	String tabName;
-	Button playButton;
 	TabPageMedia tabPageMedia = null;
 	public TabPageMedia getTabPageMedia()
 	{
@@ -34,7 +32,7 @@ public class Tab extends TabComponentParent {
 	
 	public Tab( String name, LinearLayout ll, RelativeLayout rl )
 	{
-		tabName = name;
+		this.name = name;
 		pageContainer = ll;
 		componentContainer = rl;
 	}
@@ -64,6 +62,18 @@ public class Tab extends TabComponentParent {
 				"prevbutton", ComponentType.BUTTON, 
 				10, 155 + 2, 90, 90
 				, null, R.drawable.back_button_image, "", ScaleType.FIT_XY
+			),
+			// --------------------- SHUFFLE
+			new TabComponentPropertySetter(
+				"shufflebutton", ComponentType.BUTTON, 
+				20, 700, 100, 100
+				, null, R.drawable.btn_no_repeat_image, "", ScaleType.FIT_XY
+			),
+			// --------------------- REPEAT
+			new TabComponentPropertySetter(
+				"repeatbutton", ComponentType.BUTTON, 
+				200, 690, 100, 100
+				, null, R.drawable.btn_no_shuffle_image, "", ScaleType.FIT_XY
 			)
 		};
 				
@@ -138,7 +148,7 @@ public class Tab extends TabComponentParent {
 		// Ç±ÇÃèÍèäÇæÇØÇ≈Ç¢Ç¢Ç©Ç«Ç§Ç©ÇÕïsñæ
         if( save == true )
         {
-        	OkosamaMediaPlayerActivity.setCurrentDisplayId(tabName,tabId);
+        	OkosamaMediaPlayerActivity.setCurrentDisplayId(this.name,tabId);
         }
 	}
 

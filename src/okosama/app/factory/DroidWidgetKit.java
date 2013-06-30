@@ -5,6 +5,7 @@ import okosama.app.behavior.IExpListBehavior;
 import okosama.app.behavior.IListBehavior;
 import okosama.app.widget.Button;
 import okosama.app.widget.ExpList;
+import okosama.app.widget.Label;
 import okosama.app.widget.List;
 import okosama.app.widget.ToggleButton;
 
@@ -37,5 +38,10 @@ public class DroidWidgetKit implements IWidgetKit {
 	@Override
 	public ToggleButton MakeToggleButton() {
 		return new ToggleButton(activity);
-	}	
+	}
+	@Override
+	public Label MakeLabel()
+	{
+		return new Label(activity);
+	}
 }

@@ -77,7 +77,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		this.scaleType = scaleType;
 	}
 	public static enum ComponentType {
-		NONE, TAB, TAB_PAGE, BUTTON, LIST_ALBUM, LIST_ARTIST, LIST_SONG, LIST_PLAYLIST, LIST_NOWPLAYLIST, TEXT, IMAGE, EXPLIST, TOGGLEBUTTON
+		NONE, TAB, TAB_PAGE, BUTTON, LIST_ALBUM, LIST_ARTIST, LIST_SONG, LIST_PLAYLIST, LIST_NOWPLAYLIST, TEXT, IMAGE, EXPLIST, TOGGLEBUTTON, LABEL
 	};
 	
 	

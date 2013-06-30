@@ -4,9 +4,11 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 public interface IBehavior {
-	void onItemClick(int iItemType);
+	void onItemClick(AdapterView<?> l, View v, int position, long id);
 	void onCreateOptionsMenu();
 	void onPrepareOptionsMenu();
 	void onOptionsItemSelected();

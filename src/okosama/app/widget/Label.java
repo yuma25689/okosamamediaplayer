@@ -2,7 +2,6 @@ package okosama.app.widget;
 
 import android.app.Activity;
 import android.view.View;
-import okosama.app.action.IViewAction;
 import okosama.app.tab.*;
 
 /**
@@ -11,8 +10,10 @@ import okosama.app.tab.*;
  * @author 25689
  *
  */
-public class Button extends absWidget {
-	public Button( Activity activity )
+public class Label extends absWidget {
+	
+	
+	public Label( Activity activity )
 	{
 		super( activity );
 		create();
@@ -21,13 +22,13 @@ public class Button extends absWidget {
 	/**
 	 * 実装クラス
 	 */
-	private ButtonImpl impl;
+	private LabelImpl impl;
 
 	/**
 	 * 実装クラスの設定
 	 * @param impl
 	 */
-	public void setImpl(ButtonImpl impl) {
+	public void setImpl(LabelImpl impl) {
 		this.impl = impl;
 	}
 	
@@ -58,27 +59,12 @@ public class Button extends absWidget {
 	@Override
 	public int create() {
 		// TODO もっと汎用性のあるやり方にできるはず
-		impl = new ButtonImpl(activity);
+		impl = new LabelImpl(activity);
 		return 0;
 	}
 
 	@Override
 	public View getView() {
 		return impl;
-	}
-	
-	@Override
-	public void configureAction()
-	{
-		if( actionMap.containsKey( IViewAction.ACTION_ID_ONCLICK ) )
-		{
-			impl.setOnClickListener(new View.OnClickListener() {
-	            public void onClick(View v) {
-	                // クリック時の処理
-	            	actionMap.get( IViewAction.ACTION_ID_ONCLICK )
-	            		.doAction(v);
-	            }
-	        });
-		}
 	}
 }

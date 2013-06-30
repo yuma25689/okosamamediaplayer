@@ -8,12 +8,15 @@ import okosama.app.storage.Database;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class TrackListBehavior extends IListBehavior implements Database.Defs {
@@ -27,9 +30,25 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
     private static final int SEARCH = CHILD_MENU_BASE + 6;
 
 	@Override
-	public void onItemClick(int iItemType) {
-		// TODO Auto-generated method stub
-
+	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
+		Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).getCursor(Database.SongCursorName);
+		
+		if (cursor.getCount() == 0) {
+            return;
+        }
+        // When selecting a track from the queue, just jump there instead of
+        // reloading the queue. This is both faster, and prevents accidentally
+        // dropping out of party shuffle.
+        if (cursor instanceof Database.NowPlayingCursor) {
+            if (MediaPlayer.sService != null) {
+                try {
+                	MediaPlayer.sService.setQueuePosition(position);
+                    return;
+                } catch (RemoteException ex) {
+                }
+            }
+        }
+        MediaPlayer.playAll(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(), cursor, position);
 	}
 
 	@Override

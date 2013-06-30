@@ -1,5 +1,6 @@
 package okosama.app.state;
 
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.tab.Tab;
@@ -19,5 +20,10 @@ public class DisplayStateNone extends absDisplayState {
 		// このタブは、リスナ登録対象外？
 		// 怪しいので、後で確認すること
 		return 1;
+	}
+	@Override
+	public long updateDisplay() {
+		// TODO Auto-generated method stub
+		return OkosamaMediaPlayerActivity.NO_REFRESH;
 	}
 }

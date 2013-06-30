@@ -73,5 +73,10 @@ public class absDisplayStateMediaTab extends absDisplayState {
 			break;
 		}
 		
+	}
+	@Override
+	public long updateDisplay() {
+		// TODO Auto-generated method stub
+		return OkosamaMediaPlayerActivity.NO_REFRESH;
 	}	
 }

@@ -5,7 +5,7 @@ import android.view.View;
 import okosama.app.behavior.IExpListBehavior;
 import okosama.app.tab.*;
 
-public class ExpList extends TabLeaf {
+public class ExpList extends absWidget {
 	
 	public static String LISTNAME_ARTIST = "ArtistList";
 	

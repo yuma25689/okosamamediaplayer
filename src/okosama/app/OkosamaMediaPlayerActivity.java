@@ -23,6 +23,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteException;
+import okosama.app.service.MediaPlaybackService;
 import okosama.app.service.MediaPlayer;
 import okosama.app.service.MediaPlayer.ServiceToken;
 import okosama.app.state.DisplayStateFactory;
@@ -32,6 +34,8 @@ import okosama.app.storage.Database;
 import okosama.app.tab.*;
 import okosama.app.tab.media.TabMediaSelect;
 import okosama.app.widget.Button;
+import okosama.app.widget.Label;
+import okosama.app.widget.LabelImpl;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -40,10 +44,124 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.RelativeLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+import okosama.app.widget.ButtonImpl;
 
 public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection {
 	
+    private static final int REFRESH = 1001;
+    private boolean paused;
+	// あまりよくないが、ここに置く
+	Button btnRepeat = null;
+	public Button getRepeatButton()
+	{
+		if( btnRepeat == null )
+		{
+			btnRepeat = DroidWidgetKit.getInstance().MakeButton();
+		}
+		return btnRepeat;
+	}
+	public void setRepeatButtonImage()
+	{
+        if (MediaPlayer.sService == null || btnShuffle == null || btnShuffle.getView() == null ) return;
+        try {
+            switch (MediaPlayer.sService.getRepeatMode()) {
+                case MediaPlaybackService.REPEAT_ALL:
+                	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.btn_no_repeat_image);
+                    break;
+                case MediaPlaybackService.REPEAT_CURRENT:
+                	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.btn_one_repeat_image);
+                    break;
+                default:
+                	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.btn_repeat_all_image);
+                    break;
+            }
+        } catch (RemoteException ex) {
+        }	
+	}
+	Button btnShuffle = null;
+	public Button getShuffleButton()
+	{
+		if( btnShuffle == null )
+		{
+			btnShuffle = DroidWidgetKit.getInstance().MakeButton();
+		}		
+		return btnShuffle;
+	}
+	public void setShuffleButtonImage()
+	{
+        if (MediaPlayer.sService == null || btnShuffle == null || btnShuffle.getView() == null ) return;
+        try {
+            switch (MediaPlayer.sService.getShuffleMode()) {
+                case MediaPlaybackService.SHUFFLE_NONE:
+                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_no_shuffle_image);
+                    break;
+                case MediaPlaybackService.SHUFFLE_AUTO:
+                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_shuffle_auto_image);
+                    break;
+                default:
+                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_shuffle_auto_image);
+                    break;
+            }
+        } catch (RemoteException ex) {
+        }	
+	}
+	Label durationLabel = null;
+	public Label getDurationLabel()
+	{
+		if( durationLabel == null )
+		{
+			durationLabel = DroidWidgetKit.getInstance().MakeLabel();
+		}		
+		return durationLabel;
+	}
+    private static final Integer[] sDurationArgs = new Integer[6];	
+    public void setDurationLabel(long duration)
+    {
+    	if( durationLabel == null
+    	|| durationLabel.getView() == null )
+    	{
+    		return;
+    	}
+    	if( duration == 0 )
+    	{
+    		((LabelImpl)durationLabel.getView()).setText("");
+    		return;
+    	}
+    	boolean bShowImgFlg[] = {
+                ( duration >= (3600*60) )
+                ,( duration >= 3600 )
+                ,( duration >= 600 )
+                ,( duration >= 60)
+                ,( duration >= 10)
+                ,( duration > 0)
+    	};    	
+    	long tmp = 0;
+        final Integer[] timeArgs = sDurationArgs;
+        tmp = duration;
+        timeArgs[0] = (int) (tmp / (3600*60));
+        tmp -= timeArgs[0]*(3600*60);
+        timeArgs[1] = (int) (tmp / 3600);
+        tmp -= timeArgs[1]*3600;
+        timeArgs[2] = (int) (tmp / 600);
+        tmp -= timeArgs[2]*600;
+        timeArgs[3] = (int) (tmp / 60);
+        tmp -= timeArgs[3]*60;
+        timeArgs[4] = (int) (tmp / 10);
+        tmp -= timeArgs[4]*10;
+        timeArgs[5] = (int) tmp;
+        
+        StringBuilder sDuration = new StringBuilder();
+        for( int i = 0; i < timeArgs.length; i++ )
+        {
+        	if( bShowImgFlg[i] == true )
+        	{
+        		sDuration.append(timeArgs[i]);
+        	}
+        }
+        ((LabelImpl)durationLabel.getView()).setText(sDuration);
+    }	
 	// サービスのトークン
     private ServiceToken mToken;
     
@@ -60,7 +178,7 @@ implements ServiceConnection {
 		externalRef = externalRef_;
 		if( bChg )
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia();
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(null, true);
 		}
 	}
 
@@ -77,7 +195,7 @@ implements ServiceConnection {
 		internalRef = internalRef_;
 		if( bChg )
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia();
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(null, true);
 		}
 	}
 	private static boolean internalRef = true;
@@ -188,6 +306,10 @@ implements ServiceConnection {
 		return res;
 	}
 	private Tab tab = null;
+	public Tab getTabMain()
+	{
+		return tab;
+	}
 	static private Tab tabMedia = null;
 	public static Tab createMediaTab(LinearLayout ll, RelativeLayout rl)
 	{
@@ -259,6 +381,11 @@ implements ServiceConnection {
         HideTabComponentAction.getInstance().setTabLayout(componentContainer);
         ShowTabComponentAction.getInstance().setTabLayout(componentContainer);
 
+        // 時間表時の初期化
+		updateTimeDisplayVisible(0);
+		setDurationLabel(0);
+		updateTimeDisplay(0);
+        
         // サービスへの接続を開始
         if( 0 == MediaPlayer.getServiceConnectionCount() )
         {
@@ -280,7 +407,21 @@ implements ServiceConnection {
         // サイズが取得できたら、下記の処理実行されるようにする
         handler =  new Handler(){
 	        //メッセージ受信
-	        public void handleMessage(Message message) {   	
+	        public void handleMessage(Message message) {
+        		if( message.what == REFRESH )
+        		{
+	                long next = NO_REFRESH;
+	                if( currentMainTabId != TabPage.TABPAGE_ID_MEDIA )
+	                {
+	                	next = stateMain.updateDisplay();
+	                }
+	                else
+	                {
+	                	next = stateSub.updateDisplay();
+	                }
+	                queueNextRefresh(next);
+	                return;
+        		}
 	        	switch( message.arg1 )
 	        	{
 		        	case DisplayInfo.MSG_INIT_END:
@@ -309,7 +450,8 @@ implements ServiceConnection {
 		//	           	{
 			    		SharedPreferences pref = getPreferences(MODE_PRIVATE);
 			           	setTabSelection( pref.getInt(tabNameMain + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN), 
-			           			pref.getInt(tabNameMedia + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN) );
+			           			pref.getInt(tabNameMedia + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN)
+			           			, true );
 			           	TabSelectAction selAct = new TabSelectAction(tab, currentMainTabId);
 			           	selAct.doAction(null);
 			           	TabSelectAction selActMedia = new TabSelectAction( tab.getTabPageMedia().getTabContent(), currentSubTabId );
@@ -326,15 +468,22 @@ implements ServiceConnection {
 		        	}
 		        	case TabSelectAction.MSG_ID_TAB_SELECT:
 		        		// タブが選択された通知
+		        		if( message.arg2 == TabPage.TABPAGE_ID_MEDIA 
+		        		&& currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
+		        		{
+		        			// 何も処理しない
+		        			break;
+		        		}
 		        		// Activityのタブidを更新
 		        		setTabSelection(
 		        				OkosamaMediaPlayerActivity.getCurrentDisplayId(OkosamaMediaPlayerActivity.tabNameMain)		        		
 		        				,OkosamaMediaPlayerActivity.getCurrentDisplayId(OkosamaMediaPlayerActivity.tabNameMedia)
+		        				,false
 		        		);
 		        		// リスナを更新
 		            	updateListeners();
 		            	// メディアを更新
-		            	reScanMedia();
+		            	reScanMedia((String)message.obj,false);
 		            	// 共通部分再描画
 		            	updateCommonCtrls();
 		        		break;
@@ -342,7 +491,15 @@ implements ServiceConnection {
 	        };
         };
     }
-        
+    public static final int NO_REFRESH = -10;
+    public static final int DEFAULT_REFRESH_MS = 500;
+    public void queueNextRefresh(long delay) {
+        if (!paused && delay != NO_REFRESH) {
+            Message msg = handler.obtainMessage(REFRESH);
+            handler.removeMessages(REFRESH);
+            handler.sendMessageDelayed(msg, delay);
+        }
+    }
     /**
      * ベース画像上での絶対座標を指定した位置を表すLayoutParamを作成する
      * @param left
@@ -422,7 +579,7 @@ implements ServiceConnection {
 		componentContainer.removeAllViews();
 		bInitEnd = false;
 		// bTabInitEnd = false;
-		System.gc();
+		// System.gc();
 		super.onPause();
 	}
 
@@ -445,10 +602,12 @@ implements ServiceConnection {
 	 * まだこの関数は未完成（その、サブタブの選択部分)
 	 * @param mainTab
 	 * @param subTab
+	 * @param bSndChgMsg 変化があったとき、メッセージを送信するか
 	 * @return 0:変化なし 1:変化有り -1:エラー
 	 */
-	int setTabSelection( int mainTab, int subTab )//, boolean bForceUpd )
+	int setTabSelection( int mainTab, int subTab, boolean bSndChgMsg )//, boolean bForceUpd )
 	{
+		String tabName = null;
 		IDisplayState stateMainTmp = DisplayStateFactory.createDisplayState(mainTab);
 		if( stateMainTmp == null )
 		{
@@ -466,6 +625,7 @@ implements ServiceConnection {
         {
     	   currentMainTabId = mainTab;
     	   stateMain = stateMainTmp;
+    	   tabName = tabNameMain;
     	   iRet = 1;
         }
         if( stateMain != null )
@@ -502,10 +662,11 @@ implements ServiceConnection {
         		DisplayStateFactory.createDisplayState(TabPage.TABPAGE_ID_NONE).ChangeDisplayBasedOnThisState(tabMedia);  
         	}
         }
-        if( iRet == 1 )
+        if( bSndChgMsg == true && iRet == 1 )
         {
         	Message msg = new Message();
         	msg.arg1 = TabSelectAction.MSG_ID_TAB_SELECT;
+        	msg.obj = tabName;
         	handler.sendMessage(msg);
         }
         return iRet;
@@ -524,7 +685,8 @@ implements ServiceConnection {
 			}
 		}
 		
-		// TODO:時間表時の再描画？ここは、結局別関数にする必要があると思われるが・・・
+		// 時間表時の再描画?
+		queueNextRefresh(1);
 	}
 	
 	/**
@@ -590,10 +752,13 @@ implements ServiceConnection {
 		}
 	}
 	
-	public void reScanMedia()
+	public void reScanMedia(String tabName, boolean bForce)
 	{
 		// 現在選択中のタブによって操作を変更
-		if( currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
+		if( //tabName == tabNameMedia && 
+			( true == bForce
+			|| false == tabNameMain.equals(tabName) )
+			&& currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
 		{
 			// メディアタブならば
 			// メディアを再度クエリ発行して更新する
@@ -614,9 +779,12 @@ implements ServiceConnection {
 			case TabPage.TABPAGE_ID_PLAYLIST:
 				Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);						
 				break;
+			case TabPage.TABPAGE_ID_NONE:
+				// TODO: クリア処理を入れた方がいいかも
+				break;
 			}
 		}
-		else if( currentMainTabId == TabPage.TABPAGE_ID_NOW_PLAYLIST )
+		else if( tabName != null && tabName.equals( tabNameMain ) && currentMainTabId == TabPage.TABPAGE_ID_NOW_PLAYLIST )
 		{
 			// TODO: 現在、トラックと同じカーソルになっているが、考えた方がいいかもしれない
 			// NOWPLAYLIST
@@ -631,6 +799,8 @@ implements ServiceConnection {
 		// TODO Auto-generated method stub
 		// MediaPlayer.unbindFromService(mToken);
 		super.onStop();
+        paused = true;
+        handler.removeMessages(REFRESH);
 	}
 
 	@Override
@@ -641,11 +811,12 @@ implements ServiceConnection {
 	}
 
 	// とりあえず、必要ではない？
-//	@Override
-//	protected void onStart() {
-//		// TODO Auto-generated method stub
-//		super.onStart();
-//	}
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+        paused = false;
+	}
 	
 	///////////////////////// サービス用のメソッド //////////////////////////////
 	/**
@@ -794,6 +965,78 @@ implements ServiceConnection {
 //	        }
 	        return super.onOptionsItemSelected(item);
 	    }
-	    
 
+	    private static int timeImgResIds[] = {
+	    	R.drawable.num0_1
+	    	,R.drawable.num1_1
+	    	,R.drawable.num2_1
+	    	,R.drawable.num3_1
+	    	,R.drawable.num4_1
+	    	,R.drawable.num5_1
+	    	,R.drawable.num6_1
+	    	,R.drawable.num7_1
+	    	,R.drawable.num8_1
+	    	,R.drawable.num9_1
+	    };
+	    
+	    private static final Integer[] sTimeArgs = new Integer[6];
+	    public void updateTimeDisplayVisible(long duration)
+	    {
+	    	boolean bShowImgFlg[] = {
+	                ( duration >= (3600*60) )
+	                ,( duration >= 3600 )
+	                ,( duration >= 600 )
+	                ,( duration >= 60)
+	                ,( duration >= 10)
+	                ,( duration > 0)
+	    	};
+	        Button timeBtns[] = getResourceAccessor().appStatus.getTimesButton();
+	        for( int i=0; i<timeBtns.length; i++ )
+	        {
+	        	if( null != timeBtns[i].getView() )
+	        	{
+	        		((ButtonImpl)timeBtns[i].getView()).setVisibility(bShowImgFlg[i] ? View.VISIBLE : View.INVISIBLE );
+	        	}
+	        }
+	    }
+	    public void updateTimeDisplay(long secs)
+	    {
+	        /* Provide multiple arguments so the format can be changed easily
+	         * by modifying the xml.
+	         */
+	        //sFormatBuilder.setLength(0);
+
+	    	long tmp = 0;
+	        final Integer[] timeArgs = sTimeArgs;
+	        tmp = secs;
+	        timeArgs[0] = (int) (tmp / (3600*60));
+	        tmp -= timeArgs[0]*(3600*60);
+	        timeArgs[1] = (int) (tmp / 3600);
+	        tmp -= timeArgs[1]*3600;
+	        timeArgs[2] = (int) (tmp / 600);
+	        tmp -= timeArgs[2]*600;
+	        timeArgs[3] = (int) (tmp / 60);
+	        tmp -= timeArgs[3]*60;
+	        timeArgs[4] = (int) (tmp / 10);
+	        tmp -= timeArgs[4]*10;
+	        timeArgs[5] = (int) tmp;
+	        
+	        Button timeBtns[] = getResourceAccessor().appStatus.getTimesButton();
+	        for( int i=0; i<timeBtns.length; i++ )
+	        {
+	        	if( null != timeBtns[i].getView() )
+	        	{
+	        		((ButtonImpl)timeBtns[i].getView()).setImageResource( timeImgResIds[ timeArgs[i] ] );
+	        	}
+	        }
+	    }
+	    
+	    Toast mToast;
+	    public void showToast(int resid) {
+	        if (mToast == null) {
+	            mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+	        }
+	        mToast.setText(resid);
+	        mToast.show();
+	    }
 }

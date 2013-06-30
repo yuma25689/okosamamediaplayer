@@ -482,7 +482,7 @@ public class Database {
 
     	String playlist = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getPlaylistName();
     	String genre = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getGenre();
-    	String albumId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getGenre();
+    	String albumId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getAlbumID();
     	String artistId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID();
     	
         if (queryhandler == null) {
@@ -624,7 +624,7 @@ public class Database {
      * @author 25689
      *
      */
-    private class NowPlayingCursor extends AbstractCursor
+    public class NowPlayingCursor extends AbstractCursor
     {
         public NowPlayingCursor(IMediaPlaybackService service, String [] cols)
         {

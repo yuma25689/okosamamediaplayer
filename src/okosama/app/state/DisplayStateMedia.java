@@ -1,5 +1,6 @@
 package okosama.app.state;
 
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.tab.Tab;
@@ -20,5 +21,10 @@ public class DisplayStateMedia extends absDisplayState {
 	public int registerReceivers(int status) {
 		// このタブは、対象外
 		return 1;
+	}
+	@Override
+	public long updateDisplay() {
+		// TODO Auto-generated method stub
+		return OkosamaMediaPlayerActivity.NO_REFRESH;
 	}
 }

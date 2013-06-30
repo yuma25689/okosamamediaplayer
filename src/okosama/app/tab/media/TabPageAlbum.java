@@ -7,7 +7,6 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
 import okosama.app.action.IViewAction;
-import okosama.app.action.NoAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.behavior.AlbumListBehavior;
 import okosama.app.factory.DroidWidgetKit;
@@ -83,12 +82,12 @@ public class TabPageAlbum extends TabPage {
 //			,DroidWidgetKit.getInstance().MakeButton()
 		};
 		// ---- action
-		HashMap< Integer, IViewAction > actMapList
-			= new HashMap< Integer, IViewAction >();
-		// TODO: Actionの設定
-		actMapList.put( IViewAction.ACTION_ID_ONCLICK, new NoAction() );
-		TabComponentActionSetter actionLstClick = new TabComponentActionSetter( actMapList );			
-		lsts[0].acceptConfigurator(actionLstClick);
+//		HashMap< Integer, IViewAction > actMapList
+//			= new HashMap< Integer, IViewAction >();
+//		// TODO: Actionの設定
+//		actMapList.put( IViewAction.ACTION_ID_ONCLICK, new NoAction() );
+//		TabComponentActionSetter actionLstClick = new TabComponentActionSetter( actMapList );			
+//		lsts[0].acceptConfigurator(actionLstClick);
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;
 		for( List lst : lsts )

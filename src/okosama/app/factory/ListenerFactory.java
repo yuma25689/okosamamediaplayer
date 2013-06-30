@@ -40,7 +40,7 @@ public class ListenerFactory {
 		return new Handler() {
 	        @Override
 	        public void handleMessage(Message msg) {
-	        	((OkosamaMediaPlayerActivity)OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()).reScanMedia();
+	        	((OkosamaMediaPlayerActivity)OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()).reScanMedia(null,false);
 	        	
 	//            if (mAdapter != null) {
 	//                getAlbumCursor(mAdapter.getQueryHandler(), null);

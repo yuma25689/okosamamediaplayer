@@ -94,14 +94,6 @@ public abstract class TabLeaf implements ITabComponent {
 	}
 
 	/**
-	 * 外部オブジェクトに設定を委譲する
-	 * @param conf
-	 */
-	public void acceptConfigurator( ITabComponentConfigurator conf )
-	{
-		conf.configure(this);
-	}
-	/**
 	 * 設定されたアクションの内容を、コンポーネントに設定する
 	 */
 	public void configureAction()

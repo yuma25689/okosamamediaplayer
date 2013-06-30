@@ -31,4 +31,11 @@ public interface IDisplayState {
 	 * この画面状態の(?)BloadcastReceiverを解除する
 	 */
 	public void unregisterReceivers(int status);
+	
+	/**
+	 * 現在の状態で、表示を更新すべきときにコールする
+	 * @return 次の更新へのカウントダウン(ms) NO_REFRESHならば、継続的には更新しない
+	 */
+	public long updateDisplay();
+	
 }

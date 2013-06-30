@@ -34,6 +34,7 @@ public class TabPageMedia extends TabPage {
 		this.parent = parent;
 		this.pageContainer = ll;
 		this.componentContainer = rl;
+		this.name = OkosamaMediaPlayerActivity.tabNameMedia;
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_MEDIA;
 		create();

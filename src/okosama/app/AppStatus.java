@@ -3,6 +3,9 @@
  */
 package okosama.app;
 
+import okosama.app.factory.DroidWidgetKit;
+import okosama.app.widget.Button;
+
 /**
  * アプリケーションの状態を保持するクラス
  * アプリケーション全体から参照可能にする
@@ -124,6 +127,24 @@ public final class AppStatus {
 		this.playlistName = playlistName;
 	}
 
+	// あまりよくないが、ここにおく
+	// 時間を表示するボタン
 	
+	public Button[] getTimesButton()
+	{
+		if( btnTimes == null )
+		{
+			btnTimes = new Button[6];
+			btnTimes[0] = DroidWidgetKit.getInstance().MakeButton();
+			btnTimes[1] = DroidWidgetKit.getInstance().MakeButton();
+			btnTimes[2] = DroidWidgetKit.getInstance().MakeButton();
+			btnTimes[3] = DroidWidgetKit.getInstance().MakeButton();
+			btnTimes[4] = DroidWidgetKit.getInstance().MakeButton();
+			btnTimes[5] = DroidWidgetKit.getInstance().MakeButton();		
+		}
+		return btnTimes;
+	}
+	
+	Button btnTimes[] = null;
 	
 }

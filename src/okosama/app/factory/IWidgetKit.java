@@ -14,4 +14,5 @@ public interface IWidgetKit {
 	List MakeList(IListBehavior behavior);
 	ExpList MakeExpList(IExpListBehavior behavior);
 	ToggleButton MakeToggleButton();
+	Label MakeLabel();
 }
