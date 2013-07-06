@@ -23,13 +23,13 @@ public static okosama.app.service.IMediaPlaybackService asInterface(android.os.I
 if ((obj==null)) {
 return null;
 }
-android.os.IInterface iin = (android.os.IInterface)obj.queryLocalInterface(DESCRIPTOR);
+android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
 if (((iin!=null)&&(iin instanceof okosama.app.service.IMediaPlaybackService))) {
 return ((okosama.app.service.IMediaPlaybackService)iin);
 }
 return new okosama.app.service.IMediaPlaybackService.Stub.Proxy(obj);
 }
-public android.os.IBinder asBinder()
+@Override public android.os.IBinder asBinder()
 {
 return this;
 }
@@ -319,7 +319,7 @@ Proxy(android.os.IBinder remote)
 {
 mRemote = remote;
 }
-public android.os.IBinder asBinder()
+@Override public android.os.IBinder asBinder()
 {
 return mRemote;
 }
@@ -327,7 +327,7 @@ public java.lang.String getInterfaceDescriptor()
 {
 return DESCRIPTOR;
 }
-public void openFile(java.lang.String path, boolean oneShot) throws android.os.RemoteException
+@Override public void openFile(java.lang.String path, boolean oneShot) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -343,7 +343,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public void openFileAsync(java.lang.String path) throws android.os.RemoteException
+@Override public void openFileAsync(java.lang.String path) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -358,7 +358,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public void open(long[] list, int position) throws android.os.RemoteException
+@Override public void open(long[] list, int position) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -374,7 +374,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public int getQueuePosition() throws android.os.RemoteException
+@Override public int getQueuePosition() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -391,7 +391,7 @@ _data.recycle();
 }
 return _result;
 }
-public boolean isPlaying() throws android.os.RemoteException
+@Override public boolean isPlaying() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -408,7 +408,7 @@ _data.recycle();
 }
 return _result;
 }
-public void stop() throws android.os.RemoteException
+@Override public void stop() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -422,7 +422,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public void pause() throws android.os.RemoteException
+@Override public void pause() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -436,7 +436,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public void play() throws android.os.RemoteException
+@Override public void play() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -450,7 +450,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public void prev() throws android.os.RemoteException
+@Override public void prev() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -464,7 +464,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public void next() throws android.os.RemoteException
+@Override public void next() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -478,7 +478,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public long duration() throws android.os.RemoteException
+@Override public long duration() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -495,7 +495,7 @@ _data.recycle();
 }
 return _result;
 }
-public long position() throws android.os.RemoteException
+@Override public long position() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -512,7 +512,7 @@ _data.recycle();
 }
 return _result;
 }
-public long seek(long pos) throws android.os.RemoteException
+@Override public long seek(long pos) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -530,7 +530,7 @@ _data.recycle();
 }
 return _result;
 }
-public java.lang.String getTrackName() throws android.os.RemoteException
+@Override public java.lang.String getTrackName() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -547,7 +547,7 @@ _data.recycle();
 }
 return _result;
 }
-public java.lang.String getAlbumName() throws android.os.RemoteException
+@Override public java.lang.String getAlbumName() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -564,7 +564,7 @@ _data.recycle();
 }
 return _result;
 }
-public long getAlbumId() throws android.os.RemoteException
+@Override public long getAlbumId() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -581,7 +581,7 @@ _data.recycle();
 }
 return _result;
 }
-public java.lang.String getArtistName() throws android.os.RemoteException
+@Override public java.lang.String getArtistName() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -598,7 +598,7 @@ _data.recycle();
 }
 return _result;
 }
-public long getArtistId() throws android.os.RemoteException
+@Override public long getArtistId() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -615,7 +615,7 @@ _data.recycle();
 }
 return _result;
 }
-public void enqueue(long[] list, int action) throws android.os.RemoteException
+@Override public void enqueue(long[] list, int action) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -631,7 +631,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public long[] getQueue() throws android.os.RemoteException
+@Override public long[] getQueue() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -648,7 +648,7 @@ _data.recycle();
 }
 return _result;
 }
-public void moveQueueItem(int from, int to) throws android.os.RemoteException
+@Override public void moveQueueItem(int from, int to) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -664,7 +664,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public void setQueuePosition(int index) throws android.os.RemoteException
+@Override public void setQueuePosition(int index) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -679,7 +679,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public java.lang.String getPath() throws android.os.RemoteException
+@Override public java.lang.String getPath() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -696,7 +696,7 @@ _data.recycle();
 }
 return _result;
 }
-public long getAudioId() throws android.os.RemoteException
+@Override public long getAudioId() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -713,7 +713,7 @@ _data.recycle();
 }
 return _result;
 }
-public void setShuffleMode(int shufflemode) throws android.os.RemoteException
+@Override public void setShuffleMode(int shufflemode) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -728,7 +728,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public int getShuffleMode() throws android.os.RemoteException
+@Override public int getShuffleMode() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -745,7 +745,7 @@ _data.recycle();
 }
 return _result;
 }
-public int removeTracks(int first, int last) throws android.os.RemoteException
+@Override public int removeTracks(int first, int last) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -764,7 +764,7 @@ _data.recycle();
 }
 return _result;
 }
-public int removeTrack(long id) throws android.os.RemoteException
+@Override public int removeTrack(long id) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -782,7 +782,7 @@ _data.recycle();
 }
 return _result;
 }
-public void setRepeatMode(int repeatmode) throws android.os.RemoteException
+@Override public void setRepeatMode(int repeatmode) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -797,7 +797,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-public int getRepeatMode() throws android.os.RemoteException
+@Override public int getRepeatMode() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -814,7 +814,7 @@ _data.recycle();
 }
 return _result;
 }
-public int getMediaMountedCount() throws android.os.RemoteException
+@Override public int getMediaMountedCount() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();

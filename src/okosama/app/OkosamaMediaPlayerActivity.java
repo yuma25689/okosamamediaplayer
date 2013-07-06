@@ -25,8 +25,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import okosama.app.service.MediaPlaybackService;
-import okosama.app.service.MediaPlayer;
-import okosama.app.service.MediaPlayer.ServiceToken;
+import okosama.app.service.MediaPlayerUtil;
+import okosama.app.service.MediaPlayerUtil.ServiceToken;
 import okosama.app.state.DisplayStateFactory;
 import okosama.app.state.IDisplayState;
 import okosama.app.state.absDisplayState;
@@ -50,7 +50,7 @@ import okosama.app.widget.ButtonImpl;
 public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection {
 	
-    private static final int REFRESH = 1001;
+    public static final int REFRESH = 1001;
     private boolean paused;
 	// あまりよくないが、ここに置く
 	Button btnRepeat = null;
@@ -64,9 +64,9 @@ implements ServiceConnection {
 	}
 	public void setRepeatButtonImage()
 	{
-        if (MediaPlayer.sService == null || btnShuffle == null || btnShuffle.getView() == null ) return;
+        if (MediaPlayerUtil.sService == null || btnShuffle == null || btnShuffle.getView() == null ) return;
         try {
-            switch (MediaPlayer.sService.getRepeatMode()) {
+            switch (MediaPlayerUtil.sService.getRepeatMode()) {
                 case MediaPlaybackService.REPEAT_ALL:
                 	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.btn_no_repeat_image);
                     break;
@@ -91,9 +91,9 @@ implements ServiceConnection {
 	}
 	public void setShuffleButtonImage()
 	{
-        if (MediaPlayer.sService == null || btnShuffle == null || btnShuffle.getView() == null ) return;
+        if (MediaPlayerUtil.sService == null || btnShuffle == null || btnShuffle.getView() == null ) return;
         try {
-            switch (MediaPlayer.sService.getShuffleMode()) {
+            switch (MediaPlayerUtil.sService.getShuffleMode()) {
                 case MediaPlaybackService.SHUFFLE_NONE:
                 	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_no_shuffle_image);
                     break;
@@ -161,7 +161,90 @@ implements ServiceConnection {
         	}
         }
         ((LabelImpl)durationLabel.getView()).setText(sDuration);
+    }
+	Label nowPlayingSongLabel = null;
+	public Label getNowPlayingSongLabel()
+	{
+		if( nowPlayingSongLabel == null )
+		{
+			nowPlayingSongLabel = DroidWidgetKit.getInstance().MakeLabel();
+		}		
+		return nowPlayingSongLabel;
+	}
+    public void setNowPlayingSongLabel(String strSong)
+    {
+    	if( nowPlayingSongLabel == null
+    	|| nowPlayingSongLabel.getView() == null )
+    	{
+    		return;
+    	}
+    	((LabelImpl)nowPlayingSongLabel.getView()).setText(strSong);
+    	return;
     }	
+	Label nowPlayingArtistLabel = null;
+	public Label getNowPlayingArtistLabel()
+	{
+		if( nowPlayingArtistLabel == null )
+		{
+			nowPlayingArtistLabel = DroidWidgetKit.getInstance().MakeLabel();
+		}		
+		return nowPlayingArtistLabel;
+	}
+    public void setNowPlayingArsistLabel(String strSong)
+    {
+    	if( nowPlayingArtistLabel == null
+    	|| nowPlayingArtistLabel.getView() == null )
+    	{
+    		return;
+    	}
+    	((LabelImpl)nowPlayingArtistLabel.getView()).setText(strSong);
+    	return;
+    }	
+	Label nowPlayingAlbumLabel = null;
+	public Label getNowPlayingAlbumLabel()
+	{
+		if( nowPlayingAlbumLabel == null )
+		{
+			nowPlayingAlbumLabel = DroidWidgetKit.getInstance().MakeLabel();
+		}		
+		return nowPlayingAlbumLabel;
+	}
+    public void setNowPlayingAlbumLabel(String strSong)
+    {
+    	if( nowPlayingAlbumLabel == null
+    	|| nowPlayingAlbumLabel.getView() == null )
+    	{
+    		return;
+    	}
+    	((LabelImpl)nowPlayingAlbumLabel.getView()).setText(strSong);
+    	return;
+    }
+	Button btnPlayPause = null;
+	public Button getPlayPauseButton()
+	{
+		if( btnPlayPause == null )
+		{
+			btnPlayPause = DroidWidgetKit.getInstance().MakeButton();
+		}
+		return btnPlayPause;
+	}
+	public void setPlayPauseButtonImage()
+	{
+        if (MediaPlayerUtil.sService == null 
+        		|| btnPlayPause == null 
+        		|| btnPlayPause.getView() == null ) return;
+        try {
+            if(MediaPlayerUtil.sService.isPlaying()== true) 
+            {
+               	((ButtonImpl)btnPlayPause.getView()).setImageResource(R.drawable.pause_button_image);
+            }
+            else
+            {
+            	((ButtonImpl)btnPlayPause.getView()).setImageResource(R.drawable.play_button_image);
+            }
+        } catch (RemoteException ex) {
+        }	
+	}    
 	// サービスのトークン
     private ServiceToken mToken;
     
@@ -323,8 +406,8 @@ implements ServiceConnection {
 //	}
 	
 	// 初期化時に、スクリーンサイズ取得にスレッドが必要になるため、スレッドとの同期が必要に・・・
-	static private Handler handler;
-	public static Handler getHandler()
+	private static Handler handler = null;
+	public Handler getHandler()
 	{
 		return handler;
 	}
@@ -387,9 +470,9 @@ implements ServiceConnection {
 		updateTimeDisplay(0);
         
         // サービスへの接続を開始
-        if( 0 == MediaPlayer.getServiceConnectionCount() )
+        if( 0 == MediaPlayerUtil.getServiceConnectionCount() )
         {
-        	mToken = MediaPlayer.bindToService(this, this);
+        	mToken = MediaPlayerUtil.bindToService(this, this);
         }      
 //        if (savedInstanceState != null) {
 //        	// 取得できなければ-1を返却する(=TABPAGE_ID_UNKNOWN)
@@ -408,15 +491,23 @@ implements ServiceConnection {
         handler =  new Handler(){
 	        //メッセージ受信
 	        public void handleMessage(Message message) {
-        		if( message.what == REFRESH )
+	        	if( message.what == REFRESH )
         		{
 	                long next = NO_REFRESH;
 	                if( currentMainTabId != TabPage.TABPAGE_ID_MEDIA )
 	                {
+	        			if( stateMain == null )
+	        			{
+	        				return;
+	        			}
 	                	next = stateMain.updateDisplay();
 	                }
 	                else
 	                {
+	        			if( stateSub == null )
+	        			{
+	        				return;
+	        			}
 	                	next = stateSub.updateDisplay();
 	                }
 	                queueNextRefresh(next);
@@ -806,7 +897,7 @@ implements ServiceConnection {
 	@Override
 	protected void onDestroy() {
 		// サービスの登録解除
-        MediaPlayer.unbindFromService(mToken);
+        MediaPlayerUtil.unbindFromService(mToken);
 		super.onDestroy();
 	}
 

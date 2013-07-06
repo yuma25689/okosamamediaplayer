@@ -87,7 +87,7 @@
         android:layout_width="0dip"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_appwidget_music_next"
+        android:src="@drawable/nestbtn_normal"
         android:background="@drawable/appwidget_button_right"
         android:scaleType="center"
         />

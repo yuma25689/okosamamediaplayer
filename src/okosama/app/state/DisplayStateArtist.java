@@ -1,5 +1,6 @@
 package okosama.app.state;
 
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.tab.Tab;
@@ -13,6 +14,12 @@ public class DisplayStateArtist extends absDisplayStateMediaTab {
 		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_ARTIST );
 		action.doAction(null);
 		return 0;
+	}
+	@Override
+	public long updateDisplay() {
+		long ret =  OkosamaMediaPlayerActivity.NO_REFRESH;
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(OkosamaMediaPlayerActivity.tabNameMedia, false);
+		return ret;
 	}
 //	@Override
 //	public int registerReceivers(int status) {

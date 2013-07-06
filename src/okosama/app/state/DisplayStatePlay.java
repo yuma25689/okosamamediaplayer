@@ -5,7 +5,7 @@ import android.util.Log;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
-import okosama.app.service.MediaPlayer;
+import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
 
@@ -29,25 +29,40 @@ public class DisplayStatePlay extends absDisplayState {
 	public long updateDisplay() {
 		long ret =  OkosamaMediaPlayerActivity.NO_REFRESH;
 		boolean bPlaying = false;
-        if(MediaPlayer.sService == null)
+        if(MediaPlayerUtil.sService == null)
         {
             return ret;
 		}
 
         try
         {
-	        bPlaying = MediaPlayer.sService.isPlaying();
-	        ret = OkosamaMediaPlayerActivity.DEFAULT_REFRESH_MS;
+	        bPlaying = MediaPlayerUtil.sService.isPlaying();
+			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 	        if( bPlaying )
 	        {
 				// 再生中かどうかで、処理を振り分ける
-		        long pos = MediaPlayer.sService.position();
+	        	ret = 1000; //	再生中は、1000msごとに画面更新
+			    long pos = MediaPlayerUtil.sService.position();
 	
-				OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-				act.updateTimeDisplayVisible(MediaPlayer.sService.duration() / 1000);
-				act.setDurationLabel(MediaPlayer.sService.duration() / 1000);
+				act.updateTimeDisplayVisible(MediaPlayerUtil.sService.duration() / 1000);
+				act.setDurationLabel(MediaPlayerUtil.sService.duration() / 1000);
+				act.setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
+				act.setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
+				act.setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
+				act.setPlayPauseButtonImage();
 				act.updateTimeDisplay(pos/1000);	
 	        }
+	        else
+	        {
+				act.updateTimeDisplayVisible(0);
+				act.setDurationLabel(0);
+				act.setNowPlayingSongLabel("");
+				act.setNowPlayingArsistLabel("");
+				act.setNowPlayingAlbumLabel("");
+				act.setPlayPauseButtonImage();
+	        	
+	        }
+			act.setPlayPauseButtonImage();
         }
         catch( RemoteException ex )
         {

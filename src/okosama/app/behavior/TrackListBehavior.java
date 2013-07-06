@@ -2,7 +2,7 @@ package okosama.app.behavior;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.service.MediaPlayer;
+import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
 
 import android.content.Intent;
@@ -40,15 +40,15 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
         // reloading the queue. This is both faster, and prevents accidentally
         // dropping out of party shuffle.
         if (cursor instanceof Database.NowPlayingCursor) {
-            if (MediaPlayer.sService != null) {
+            if (MediaPlayerUtil.sService != null) {
                 try {
-                	MediaPlayer.sService.setQueuePosition(position);
+                	MediaPlayerUtil.sService.setQueuePosition(position);
                     return;
                 } catch (RemoteException ex) {
                 }
             }
         }
-        MediaPlayer.playAll(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(), cursor, position);
+        MediaPlayerUtil.playAll(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(), cursor, position);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 		    mSelectedId = mi.id;
 		}
 		// only add the 'search' menu if the selected item is music
-		if (MediaPlayer.isMusic(cursor)) {
+		if (MediaPlayerUtil.isMusic(cursor)) {
 		    menu.add(0, SEARCH, 0, R.string.search_title);
 		}
 		mCurrentAlbumName = cursor.getString(cursor.getColumnIndexOrThrow(
@@ -119,13 +119,13 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 		case PLAY_SELECTION: {
 			// play the track
 			int position = mSelectedPosition;
-			MediaPlayer.playAll(activity, cursor, position);
+			MediaPlayerUtil.playAll(activity, cursor, position);
 			return true;
 		}
 	
 	   case QUEUE: {
 	       long [] list = new long[] { mSelectedId };
-	       MediaPlayer.addToCurrentPlaylist(activity, list);
+	       MediaPlayerUtil.addToCurrentPlaylist(activity, list);
 	       return true;
 	   }
 	

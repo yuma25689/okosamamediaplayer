@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
+import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.R;
 import okosama.app.behavior.IListBehavior;
 import okosama.app.tab.*;
 
@@ -38,7 +40,9 @@ public class List extends absWidget {
                 // ƒNƒŠƒbƒN‚Ìˆ—
 				behavior.onItemClick(l, v, pos, id);
 			}
-        });		
+        });
+		impl.setDivider(OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.list_divider_tesuri));
+		
 		return 0;
 	}
 

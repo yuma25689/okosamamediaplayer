@@ -47,9 +47,9 @@ public class TabPageSong extends TabPage {
 		// TAB_BUTTON
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
 			"albumTabBtn", ComponentType.BUTTON, 
-			( 90 + 5 ) * 2, 859 - 70, 90, 70,
+			( 120 + 5 ) * 2, 859 - 100, 120, 100,
 			R.drawable.music_select_song_image,
-			null, // R.drawable.tab3_btn_not_select_no_shadow2, 
+			R.drawable.no_image, // R.drawable.tab3_btn_not_select_no_shadow2, 
 			"", ScaleType.FIT_XY 
 		);
 		tabButton.acceptConfigurator(tabBtnCreationData);

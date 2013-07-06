@@ -1427,9 +1427,12 @@ public class MediaPlaybackService extends Service {
             // クリック時に発行されるインテント？だろうか？
             // タイミングを指定して発行できるインテント
             // 今回は多分、Notificationがクリックされたとき
+            Intent clickIntent = new Intent();
+            clickIntent.setClassName(
+            		"okosama.app", "okosama.app.OkosamaMediaPlayerActivity");
             status.contentIntent = PendingIntent.getActivity(this, 0,
             		// TODO: Activity変更
-                    new Intent("com2.android.music.PLAYBACK_VIEWER")
+            		clickIntent
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), 0);
             // statusbarにNotification表示
             startForeground(PLAYBACKSERVICE_STATUS, status);

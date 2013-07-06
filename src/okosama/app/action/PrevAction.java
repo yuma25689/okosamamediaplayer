@@ -1,5 +1,5 @@
 package okosama.app.action;
-import okosama.app.service.MediaPlayer;
+import okosama.app.service.MediaPlayerUtil;
 import android.view.View;
 
 /**
@@ -14,7 +14,7 @@ public final class PrevAction implements IViewAction {
 	 */
 	@Override
 	public int doAction( View v ) {		
-		MediaPlayer.prev();
+		MediaPlayerUtil.prev();
         return 0;
 	}
 

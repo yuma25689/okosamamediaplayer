@@ -42,6 +42,7 @@ public class DroidWidgetKit implements IWidgetKit {
 	@Override
 	public Label MakeLabel()
 	{
-		return new Label(activity);
+		Label ret = new Label(activity);
+		return ret;
 	}
 }

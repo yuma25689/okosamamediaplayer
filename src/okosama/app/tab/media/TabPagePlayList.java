@@ -14,7 +14,6 @@ import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.tab.TabPage;
 import okosama.app.widget.List;
-import android.graphics.Color;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,9 +46,9 @@ public class TabPagePlayList extends TabPage {
 		// TAB_BUTTON
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
 			List.LISTNAME_PLAYLIST, ComponentType.BUTTON, 
-			( 90 + 5 ) * 3, 859 - 70, 90, 70,
+			( 120 + 5 ) * 3, 859 - 100, 120, 100,
 			R.drawable.music_select_playlist_image,
-			null,//R.drawable.tab4_btn_not_select_no_shadow2, 
+			R.drawable.no_image,//R.drawable.tab4_btn_not_select_no_shadow2, 
 			"", ScaleType.FIT_XY 
 		);
 		tabButton.acceptConfigurator(tabBtnCreationData);

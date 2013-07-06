@@ -170,9 +170,9 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
         // Set correct drawable for pause state
         final boolean playing = service.isPlaying();
         if (playing) {
-            views.setImageViewResource(R.id.control_play, R.drawable.ic_appwidget_music_pause);
+            views.setImageViewResource(R.id.control_play, R.drawable.stop_hand_normal );// R.drawable.ic_appwidget_music_pause);
         } else {
-            views.setImageViewResource(R.id.control_play, R.drawable.ic_appwidget_music_play);
+            views.setImageViewResource(R.id.control_play, R.drawable.play_ear_normal );//R.drawable.ic_appwidget_music_play);
         }
 
         // Link actions buttons to intents

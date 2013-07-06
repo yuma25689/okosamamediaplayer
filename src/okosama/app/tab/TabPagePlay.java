@@ -118,7 +118,7 @@ public class TabPagePlay extends TabPage {
 			// --------------------- STOP
 			new TabComponentPropertySetter(
 				"stopbutton", ComponentType.BUTTON, 
-				150, 590, 200, 100
+				150, 590, 100, 100
 				, null, R.drawable.stop_button_image, "", ScaleType.FIT_XY
 			),
 			// --------------------- TWITTER
@@ -154,10 +154,29 @@ public class TabPagePlay extends TabPage {
 			),
 			// --------------------- DURATION
 			new TabComponentPropertySetter(
-				"repeatbutton", ComponentType.LABEL, 
-				200, 330, 200, 50
+				"durationlabel", ComponentType.LABEL, 
+				40, 370, 200, 50
 				, null, drawable.no_image, "", ScaleType.FIT_XY
-			),		};
+			),		
+			// --------------------- SONG
+			new TabComponentPropertySetter(
+				"songlabel", ComponentType.LABEL, 
+				30, 320, 400, 50
+				, null, drawable.no_image, "", ScaleType.FIT_XY
+			),		
+			// --------------------- ARTIST
+			new TabComponentPropertySetter(
+				"artistlabel", ComponentType.LABEL, 
+				35, 480, 400, 50
+				, null, drawable.no_image, "", ScaleType.FIT_XY
+			),		
+			// --------------------- ALBUM
+			new TabComponentPropertySetter(
+				"albumlabel", ComponentType.LABEL, 
+				35, 530, 400, 50
+				, null, drawable.no_image, "", ScaleType.FIT_XY
+			),		
+		};
 		
 		// 背景画像はなぜかsetActivateの担当なので、ここでは追加しない
 		
@@ -180,6 +199,9 @@ public class TabPagePlay extends TabPage {
 			,activity.getShuffleButton()//DroidWidgetKit.getInstance().MakeButton()
 			,activity.getRepeatButton()//DroidWidgetKit.getInstance().MakeButton()
 			,activity.getDurationLabel()
+			,activity.getNowPlayingSongLabel()
+			,activity.getNowPlayingArtistLabel()
+			,activity.getNowPlayingAlbumLabel()
 		};
 		
 		// ---- action
@@ -191,18 +213,6 @@ public class TabPagePlay extends TabPage {
 		HashMap< Integer, IViewAction > actMapTwitter
 			= new HashMap< Integer, IViewAction >();
 		actMapTwitter.put( IViewAction.ACTION_ID_ONCLICK, new TweetAction() );
-//		// Playボタン
-//		HashMap< Integer, IViewAction > actMapPlay 
-//		= new HashMap< Integer, IViewAction >();
-//		actMapPlay.put( IViewAction.ACTION_ID_ONCLICK, new MediaPlayAction() );
-//		// nextボタン
-//		HashMap< Integer, IViewAction > actMapNext
-//			= new HashMap< Integer, IViewAction >();
-//		actMapNext.put( IViewAction.ACTION_ID_ONCLICK, new NextAction() );
-//		// backボタン
-//		HashMap< Integer, IViewAction > actMapBack
-//			= new HashMap< Integer, IViewAction >();
-//		actMapBack.put( IViewAction.ACTION_ID_ONCLICK, new PrevAction() );
 		// shuffleボタン
 		HashMap< Integer, IViewAction > actMapShuffle
 			= new HashMap< Integer, IViewAction >();
@@ -226,6 +236,9 @@ public class TabPagePlay extends TabPage {
 			//,new TabComponentActionSetter( actMapBack )
 			,new TabComponentActionSetter( actMapShuffle )
 			,new TabComponentActionSetter( actMapRepeat )
+			,null
+			,null
+			,null
 			,null
 		};
 		

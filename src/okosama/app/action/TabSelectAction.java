@@ -3,6 +3,7 @@ package okosama.app.action;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
+import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 
@@ -41,7 +42,12 @@ public final class TabSelectAction implements IViewAction {
 				msg.arg1 = MSG_ID_TAB_SELECT;
 				msg.arg2 = tabId;
 				msg.obj = tabRoot.getName();
-				OkosamaMediaPlayerActivity.getHandler().sendMessage( msg );
+                Handler hdr = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getHandler();                        
+                if( hdr == null )
+                {
+                	return -1;
+                }                		
+                hdr.sendMessage( msg );
 			}
 		}
 		return 0;

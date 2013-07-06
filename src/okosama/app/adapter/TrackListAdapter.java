@@ -3,7 +3,7 @@ package okosama.app.adapter;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
-import okosama.app.service.MediaPlayer;
+import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
 import okosama.app.storage.TrackQueryHandler;
 import android.content.Context;
@@ -233,13 +233,13 @@ public class TrackListAdapter extends SimpleCursorAdapter implements SectionInde
         // サービスがあり、再生中ならば、idにキューの位置を
         // 再生中でなければ、idにオーディオid
         long id = -1;
-        if (MediaPlayer.sService != null) {
+        if (MediaPlayerUtil.sService != null) {
             // TODO: IPC call on each bind??
             try {
                 if (mIsNowPlaying) {
-                    id = MediaPlayer.sService.getQueuePosition();
+                    id = MediaPlayerUtil.sService.getQueuePosition();
                 } else {
-                    id = MediaPlayer.sService.getAudioId();
+                    id = MediaPlayerUtil.sService.getAudioId();
                 }
             } catch (RemoteException ex) {
             }

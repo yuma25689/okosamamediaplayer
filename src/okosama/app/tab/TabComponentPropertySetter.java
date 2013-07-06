@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -379,6 +380,15 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			// 現在の再生対象のプレイリストを指定する
 			// Database.getInstance(external).createTrackCursor(activity.getTrackAdp().getQueryHandler(), Database.PlaylistName_NowPlaying, null, true, null, null, null);			
 		}		
+		else if( type == ComponentType.LABEL )
+		{
+			TextView txt = null;
+			if( v instanceof TextView )
+			{
+				txt = (TextView)v;
+			}
+			txt.setTextSize(18.0f);
+		}
 		if( bkImageId != null )
 		{
 			// メモリ解放のテスト用

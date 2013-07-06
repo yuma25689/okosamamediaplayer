@@ -4,7 +4,7 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
-import okosama.app.service.MediaPlayer;
+import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
 import android.database.Cursor;
@@ -99,13 +99,13 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
         case PLAY_SELECTION: {
             // play the selected album
             long [] list = Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
-            MediaPlayer.playAll(activity, list, 0);
+            MediaPlayerUtil.playAll(activity, list, 0);
             return true;
         }
 
         case QUEUE: {
             long [] list = Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
-            MediaPlayer.addToCurrentPlaylist(activity, list);
+            MediaPlayerUtil.addToCurrentPlaylist(activity, list);
             return true;
         }
 

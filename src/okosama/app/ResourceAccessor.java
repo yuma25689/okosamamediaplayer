@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Locale;
 
-import okosama.app.factory.DroidWidgetKit;
 import okosama.app.widget.Button;
 
 import android.content.Context;

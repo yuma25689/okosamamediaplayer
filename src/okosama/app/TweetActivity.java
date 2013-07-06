@@ -1,6 +1,6 @@
 package okosama.app;
 
-import okosama.app.service.MediaPlayer;
+import okosama.app.service.MediaPlayerUtil;
 import okosama.app.service.TwitterUtils;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -22,7 +22,7 @@ public class TweetActivity extends Activity {
     public static RequestToken mRequestToken;
     private EditText mInputText;
     private Twitter mTwitter;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -35,9 +35,9 @@ public class TweetActivity extends Activity {
 		String nowplayingtag = getString(R.string.nowplaying_tag);
 		String artist, album, song;
 		try {
-	        artist = MediaPlayer.sService.getArtistName();
-	        album = MediaPlayer.sService.getAlbumName();
-	        song = MediaPlayer.sService.getTrackName();
+	        artist = MediaPlayerUtil.sService.getArtistName();
+	        album = MediaPlayerUtil.sService.getAlbumName();
+	        song = MediaPlayerUtil.sService.getTrackName();
 		} catch( RemoteException e ) {
 			artist = getString(R.string.unknown_artist_name);
 			album = getString(R.string.unknown_album_name);

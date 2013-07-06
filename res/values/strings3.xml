@@ -25,7 +25,7 @@
 	<string name="tweet">つぶやく</string>
 	<string name="nowplaying_tag">#NowPlaying</string>
 	<string name="unknown_song_name">不明</string>		
-	<string name="artist_label">[アーティスト]</string>		
-	<string name="album_label">[アルバム]</string>		
-	<string name="song_label">[曲]</string>		
+	<string name="artist_label">[artist]</string>		
+	<string name="album_label">[album]</string>		
+	<string name="song_label">[track]</string>		
 </resources>

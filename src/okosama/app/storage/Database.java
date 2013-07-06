@@ -10,7 +10,7 @@ import java.util.Map;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.service.IMediaPlaybackService;
-import okosama.app.service.MediaPlayer;
+import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.TabPage;
 
 import android.content.AsyncQueryHandler;
@@ -542,10 +542,10 @@ public class Database {
             if (playlist.equals(PlaylistName_NowPlaying)) {
             	// TODO:プレイリストの設定
             	// プレイリストがnowplayingなら
-                if (MediaPlayer.sService != null) {
+                if (MediaPlayerUtil.sService != null) {
                 	// サービスが設定されていたら
                 	// nowplayingカーソルを作成し、それを返す？
-                    ret = new NowPlayingCursor(MediaPlayer.sService, mPlaylistCols);
+                    ret = new NowPlayingCursor(MediaPlayerUtil.sService, mPlaylistCols);
                     if (ret.getCount() == 0) {
                     	// カーソルの中身がなければ？状態がおかしいのかな？
                     	// サンプルでは多分強制終了している
@@ -1112,11 +1112,11 @@ public class Database {
                 while (! c.isAfterLast()) {
                     // remove from current playlist
                     long id = c.getLong(0);
-                    MediaPlayer.sService.removeTrack(id);
+                    MediaPlayerUtil.sService.removeTrack(id);
                     // remove from album art cache
                     long artIndex = c.getLong(2);
-                    synchronized(MediaPlayer.sArtCache) {
-                    	MediaPlayer.sArtCache.remove(artIndex);
+                    synchronized(MediaPlayerUtil.sArtCache) {
+                    	MediaPlayerUtil.sArtCache.remove(artIndex);
                     }
                     c.moveToNext();
                 }

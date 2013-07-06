@@ -2,7 +2,7 @@ package okosama.app.adapter;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.service.MediaPlayer;
+import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
 import okosama.app.storage.QueryHandler;
 import android.content.AsyncQueryHandler;
@@ -186,12 +186,12 @@ public class AlbumListAdapter extends SimpleCursorAdapter implements SectionInde
         if (unknown || art == null || art.length() == 0) {
             iv.setImageDrawable(null);
         } else {
-            Drawable d = MediaPlayer.getCachedArtwork(context, aid, mDefaultAlbumIcon);
+            Drawable d = MediaPlayerUtil.getCachedArtwork(context, aid, mDefaultAlbumIcon);
             iv.setImageDrawable(d);
         }
         
         // 再生中のオーバレイとなる画像を、アイコンの上に重ねる・・・のかな？
-        long currentalbumid = MediaPlayer.getCurrentAlbumId();
+        long currentalbumid = MediaPlayerUtil.getCurrentAlbumId();
         iv = vh.play_indicator;
         if (currentalbumid == aid) {
             iv.setImageDrawable(mNowPlayingOverlay);

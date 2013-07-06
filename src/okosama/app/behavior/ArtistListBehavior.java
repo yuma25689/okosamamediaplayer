@@ -16,7 +16,7 @@ import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.adapter.ArtistAlbumListAdapter;
-import okosama.app.service.MediaPlayer;
+import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
 
 public class ArtistListBehavior extends IExpListBehavior implements Database.Defs {
@@ -150,7 +150,7 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	                Database.getSongListForArtist(activity, Long.parseLong(mCurrentArtistId))
 	                : Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
 	                    
-	            MediaPlayer.playAll(activity, list, 0);
+	            MediaPlayerUtil.playAll(activity, list, 0);
 	            return true;
 	        }
 	
@@ -159,7 +159,7 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	                mCurrentArtistId != null ?
 	                Database.getSongListForArtist(activity, Long.parseLong(mCurrentArtistId))
 	                : Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
-	            MediaPlayer.addToCurrentPlaylist(activity, list);
+	            MediaPlayerUtil.addToCurrentPlaylist(activity, list);
 	            return true;
 	        }
 	

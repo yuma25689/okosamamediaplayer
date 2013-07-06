@@ -12,7 +12,6 @@ import okosama.app.tab.*;
  */
 public class Label extends absWidget {
 	
-	
 	public Label( Activity activity )
 	{
 		super( activity );

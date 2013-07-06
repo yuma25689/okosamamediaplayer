@@ -1,7 +1,7 @@
 package okosama.app.factory;
 
 import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.service.MediaPlayer;
+import okosama.app.service.MediaPlayerUtil;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +30,7 @@ public class ListenerFactory {
 	            //MusicUtils.setSpinnerState(AlbumBrowserActivity.this);
 	        	mReScanHandler.sendEmptyMessage(0);
 	            if (intent.getAction().equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
-	                MediaPlayer.clearAlbumArtCache();
+	                MediaPlayerUtil.clearAlbumArtCache();
 	            }
 	        }
 		};

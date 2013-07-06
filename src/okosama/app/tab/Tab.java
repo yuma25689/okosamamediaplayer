@@ -5,7 +5,7 @@ import java.util.HashMap;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
-import okosama.app.action.MediaPlayAction;
+import okosama.app.action.MediaPlayPauseAction;
 import okosama.app.action.NextAction;
 import okosama.app.action.PrevAction;
 import okosama.app.factory.DroidWidgetKit;
@@ -77,10 +77,11 @@ public class Tab extends TabComponentParent {
 			)
 		};
 				
+		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		// TODO:おそらく、クラスに持った方がいい
 		// 画像を書き換え必要になるかもしれない
 		Button btns[] = {
-			DroidWidgetKit.getInstance().MakeButton()
+			act.getPlayPauseButton()//DroidWidgetKit.getInstance().MakeButton()
 			,DroidWidgetKit.getInstance().MakeButton()
 			,DroidWidgetKit.getInstance().MakeButton()
 		};
@@ -88,7 +89,7 @@ public class Tab extends TabComponentParent {
 		// Playボタン
 		HashMap< Integer, IViewAction > actMapPlay 
 		= new HashMap< Integer, IViewAction >();
-		actMapPlay.put( IViewAction.ACTION_ID_ONCLICK, new MediaPlayAction() );
+		actMapPlay.put( IViewAction.ACTION_ID_ONCLICK, new MediaPlayPauseAction() );
 		// nextボタン
 		HashMap< Integer, IViewAction > actMapNext
 			= new HashMap< Integer, IViewAction >();

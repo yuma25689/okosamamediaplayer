@@ -3,7 +3,7 @@ package okosama.app.adapter;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
-import okosama.app.service.MediaPlayer;
+import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
 import okosama.app.storage.QueryHandler;
 import android.content.AsyncQueryHandler;
@@ -204,7 +204,7 @@ public class ArtistAlbumListAdapter extends SimpleCursorTreeAdapter implements S
         // 現在のアーティストと、レコードのアーティストIDを比較し、同じならば、再生中にする？
         // TODO:何か、それではアーティストの別のアルバムでも再生中になってしまう気がするが、
         // このリストではアルバムの区別はないのかも
-        long currentartistid = MediaPlayer.getCurrentArtistId();
+        long currentartistid = MediaPlayerUtil.getCurrentArtistId();
         long artistid = cursor.getLong(mGroupArtistIdIdx);
         if (currentartistid == artistid && !isexpanded) {
             vh.play_indicator.setImageDrawable(mNowPlayingOverlay);
@@ -277,13 +277,13 @@ public class ArtistAlbumListAdapter extends SimpleCursorTreeAdapter implements S
         } else {
         	// 分かる場合は、Databaseから取得する
             long artIndex = cursor.getLong(0);
-            Drawable d = MediaPlayer.getCachedArtwork(context, artIndex, mDefaultAlbumIcon);
+            Drawable d = MediaPlayerUtil.getCachedArtwork(context, artIndex, mDefaultAlbumIcon);
             iv.setImageDrawable(d);
         }
 
         // 再生中のアルバムのidと、この項目のアルバムのidを取得し、
         // 一致したら現在プレイ中にする
-        long currentalbumid = MediaPlayer.getCurrentAlbumId();
+        long currentalbumid = MediaPlayerUtil.getCurrentAlbumId();
         long aid = cursor.getLong(0);
         iv = vh.play_indicator;
         if (currentalbumid == aid) {

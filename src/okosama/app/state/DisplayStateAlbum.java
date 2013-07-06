@@ -18,5 +18,11 @@ public class DisplayStateAlbum extends absDisplayStateMediaTab {
 		
 		return 0;
 	}
+	@Override
+	public long updateDisplay() {
+		long ret =  OkosamaMediaPlayerActivity.NO_REFRESH;
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(OkosamaMediaPlayerActivity.tabNameMedia, false);
+		return ret;
+	}
 
 }
