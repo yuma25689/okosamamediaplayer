@@ -1,7 +1,5 @@
 package okosama.app.tab;
 
-import java.util.HashMap;
-
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
@@ -11,6 +9,7 @@ import okosama.app.action.PrevAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.Button;
+import android.util.SparseArray;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;
@@ -87,16 +86,16 @@ public class Tab extends TabComponentParent {
 		};
 		
 		// Playボタン
-		HashMap< Integer, IViewAction > actMapPlay 
-		= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapPlay 
+		= new SparseArray< IViewAction >();
 		actMapPlay.put( IViewAction.ACTION_ID_ONCLICK, new MediaPlayPauseAction() );
 		// nextボタン
-		HashMap< Integer, IViewAction > actMapNext
-			= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapNext
+			= new SparseArray< IViewAction >();
 		actMapNext.put( IViewAction.ACTION_ID_ONCLICK, new NextAction() );
 		// backボタン
-		HashMap< Integer, IViewAction > actMapBack
-			= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapBack
+			= new SparseArray< IViewAction >();
 		actMapBack.put( IViewAction.ACTION_ID_ONCLICK, new PrevAction() );
 
 		TabComponentActionSetter actionSetterCont[] = {

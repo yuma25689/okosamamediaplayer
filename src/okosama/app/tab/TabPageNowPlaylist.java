@@ -12,6 +12,7 @@ import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.List;
 import android.graphics.Color;
+import android.util.SparseArray;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;
@@ -44,8 +45,8 @@ public class TabPageNowPlaylist extends TabPage {
 		);
 		tabButton.acceptConfigurator(tabBtnCreationData);
 		// NowPlaylistTabボタンのアクション
-		HashMap< Integer, IViewAction > actMapTemp
-			= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapTemp
+			= new SparseArray< IViewAction >();
 		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, tabId ) );
 		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );	
 		tabButton.acceptConfigurator(actionSetter);

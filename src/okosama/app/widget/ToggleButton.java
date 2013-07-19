@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.CompoundButton;
 import okosama.app.action.IViewAction;
-import okosama.app.tab.*;
 
 /**
  * このアプリケーションで利用するボタンのハンドル
@@ -73,8 +72,8 @@ public class ToggleButton extends absWidget {
 	@Override
 	public void configureAction()
 	{
-		if( actionMap.containsKey( IViewAction.ACTION_ID_ONTOGGLEON ) 
-		&& actionMap.containsKey( IViewAction.ACTION_ID_ONTOGGLEOFF ))
+		if( actionMap.get( IViewAction.ACTION_ID_ONTOGGLEON, null ) != null 
+		&& actionMap.get( IViewAction.ACTION_ID_ONTOGGLEOFF, null ) != null )
 		{
 			impl.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 				

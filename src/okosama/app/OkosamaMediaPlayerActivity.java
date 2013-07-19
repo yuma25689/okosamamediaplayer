@@ -49,7 +49,7 @@ import okosama.app.widget.ButtonImpl;
 
 public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection {
-	
+
     public static final int REFRESH = 1001;
     private boolean paused;
 	// あまりよくないが、ここに置く
@@ -64,7 +64,7 @@ implements ServiceConnection {
 	}
 	public void setRepeatButtonImage()
 	{
-        if (MediaPlayerUtil.sService == null || btnShuffle == null || btnShuffle.getView() == null ) return;
+        if (MediaPlayerUtil.sService == null || btnRepeat == null || btnRepeat.getView() == null ) return;
         try {
             switch (MediaPlayerUtil.sService.getRepeatMode()) {
                 case MediaPlaybackService.REPEAT_ALL:
@@ -94,14 +94,15 @@ implements ServiceConnection {
         if (MediaPlayerUtil.sService == null || btnShuffle == null || btnShuffle.getView() == null ) return;
         try {
             switch (MediaPlayerUtil.sService.getShuffleMode()) {
-                case MediaPlaybackService.SHUFFLE_NONE:
-                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_no_shuffle_image);
-                    break;
                 case MediaPlaybackService.SHUFFLE_AUTO:
                 	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_shuffle_auto_image);
                     break;
+                case MediaPlaybackService.SHUFFLE_NORMAL:
+                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_shuffle_all_image);
+                    break;
+                //case MediaPlaybackService.SHUFFLE_NONE:
                 default:
-                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_shuffle_auto_image);
+                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_no_shuffle_image);
                     break;
             }
         } catch (RemoteException ex) {
@@ -355,8 +356,8 @@ implements ServiceConnection {
 	// onCreateとonResumeでの処理のダブりを回避する目的
 	// boolean bTabInitEnd = false;
 	
-	public static int TIMECHAR_WIDTH = 60;
-	public static int TIMECHAR_HEIGHT = 80;
+	public static int TIMECHAR_WIDTH = 80;
+	public static int TIMECHAR_HEIGHT = 100;
 
 	static int currentMainTabId = TabPage.TABPAGE_ID_UNKNOWN;
 	static int currentSubTabId = TabPage.TABPAGE_ID_UNKNOWN;
@@ -423,7 +424,7 @@ implements ServiceConnection {
 	 */
 	public static void setCurrentDisplayId( String name, int iDispId )
 	{
-		tabCurrentDisplayIdMap.put( name + dispIdKey, iDispId );		
+		tabCurrentDisplayIdMap.put( name + dispIdKey, iDispId );
 	}
 	public static int getCurrentDisplayId( String name )
 	{
@@ -435,7 +436,7 @@ implements ServiceConnection {
 		{
 			return TabPage.TABPAGE_ID_NONE;
 		}
-	}	
+	}
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -540,6 +541,8 @@ implements ServiceConnection {
 		//	           	if( bTabInitEnd == false )
 		//	           	{
 			    		SharedPreferences pref = getPreferences(MODE_PRIVATE);
+			    		setCurrentDisplayId( tabNameMain, pref.getInt(tabNameMain + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN) );
+			    		setCurrentDisplayId( tabNameMedia, pref.getInt(tabNameMedia + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN) );
 			           	setTabSelection( pref.getInt(tabNameMain + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN), 
 			           			pref.getInt(tabNameMedia + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN)
 			           			, true );
@@ -567,9 +570,9 @@ implements ServiceConnection {
 		        		}
 		        		// Activityのタブidを更新
 		        		setTabSelection(
-		        				OkosamaMediaPlayerActivity.getCurrentDisplayId(OkosamaMediaPlayerActivity.tabNameMain)		        		
-		        				,OkosamaMediaPlayerActivity.getCurrentDisplayId(OkosamaMediaPlayerActivity.tabNameMedia)
-		        				,false
+		        			OkosamaMediaPlayerActivity.getCurrentDisplayId(OkosamaMediaPlayerActivity.tabNameMain)		        		
+		        			,OkosamaMediaPlayerActivity.getCurrentDisplayId(OkosamaMediaPlayerActivity.tabNameMedia)
+		        			,false
 		        		);
 		        		// リスナを更新
 		            	updateListeners();
@@ -896,8 +899,16 @@ implements ServiceConnection {
 
 	@Override
 	protected void onDestroy() {
-		// サービスの登録解除
-        MediaPlayerUtil.unbindFromService(mToken);
+		try {
+			if( false == MediaPlayerUtil.sService.isPlaying() )
+			{
+				// サービスの登録解除
+			    MediaPlayerUtil.unbindFromService(mToken);
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		super.onDestroy();
 	}
 

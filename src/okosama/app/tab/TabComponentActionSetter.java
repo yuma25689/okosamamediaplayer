@@ -5,6 +5,8 @@ package okosama.app.tab;
 
 import java.util.HashMap;
 
+import android.util.SparseArray;
+
 import okosama.app.action.IViewAction;
 
 /**
@@ -13,13 +15,13 @@ import okosama.app.action.IViewAction;
  */
 public class TabComponentActionSetter implements ITabComponentConfigurator {
 
-	public TabComponentActionSetter(HashMap< Integer, IViewAction > actionMap)
+	public TabComponentActionSetter(SparseArray< IViewAction > actionMap)
 	{
 		this.actionMap = actionMap;
 	}
-	protected HashMap< Integer, IViewAction > actionMap;
+	protected SparseArray< IViewAction > actionMap;
 
-	public HashMap<Integer, IViewAction> getActionMap() {
+	public SparseArray< IViewAction > getActionMap() {
 		return actionMap;
 	}
 

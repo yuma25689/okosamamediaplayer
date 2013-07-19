@@ -2,6 +2,9 @@ package okosama.app.widget;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.behavior.IExpListBehavior;
@@ -27,6 +30,19 @@ public class ExpList extends absWidget {
 	public int create() {
 		impl = new ExpListImpl(activity);
 		impl.setDivider(OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.list_divider_tesuri));
+		impl.setOnChildClickListener(new OnChildClickListener() {
+			
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				// ÉNÉäÉbÉNéûÇÃèàóù
+				behavior.onItemClick( parent, v, groupPosition, childPosition, id);
+				return false;
+			}
+		});
+		impl.setGroupIndicator(
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getResources().getDrawable(
+						R.drawable.exp_ind));
 		return 0;
 	}
 

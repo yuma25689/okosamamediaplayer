@@ -1,11 +1,12 @@
 package okosama.app.tab;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+// import java.util.HashMap;
 
 import okosama.app.action.IViewAction;
 import okosama.app.behavior.IBehavior;
 
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,8 +48,8 @@ public abstract class TabComponentParent implements ITabComponent {
 	protected RelativeLayout componentContainer;
 
 	protected Tab parent;
-	protected HashMap< Integer, IViewAction > actionMap;
-	public void setActionMap(HashMap<Integer, IViewAction> actionMap) {
+	protected SparseArray< IViewAction > actionMap;
+	public void setActionMap(SparseArray< IViewAction > actionMap) {
 		this.actionMap = actionMap;
 	}
 	

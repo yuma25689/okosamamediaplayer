@@ -2,6 +2,7 @@ package okosama.app.behavior;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -15,18 +16,39 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.action.IViewAction;
+import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.ArtistAlbumListAdapter;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
+import okosama.app.tab.TabPage;
 
 public class ArtistListBehavior extends IExpListBehavior implements Database.Defs {
 
 	public static final int SEARCH = CHILD_MENU_BASE;
 
+	public void onItemClick(ExpandableListView parent, View v, int grouppos, int childpos, long id)
+	{
+		// ‚±‚ê‚ªchildclick‚Æ‚µ‚ÄŽg‚í‚ê‚é
+		mCurrentAlbumId = Long.valueOf(id).toString();
+		
+		Cursor c = (Cursor) parent.getExpandableListAdapter().getChild(grouppos, childpos);
+		String album = c.getString(c.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
+		if (album == null || album.equals(MediaStore.UNKNOWN_STRING)) {
+		    // unknown album, so we should include the artist ID to limit the songs to songs only by that artist
+			Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()).getCursor(Database.ArtistCursorName);
+			cursor.moveToPosition(grouppos);
+			mCurrentArtistId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Artists._ID));
+			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(mCurrentArtistId);
+		}
+		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(mCurrentAlbumId);
+		// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(
+		IViewAction action = new TabSelectAction( act.getTabMain().getTabPageMedia().getTabContent(), TabPage.TABPAGE_ID_SONG );
+		action.doAction(v);		
+	}	
 	@Override
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

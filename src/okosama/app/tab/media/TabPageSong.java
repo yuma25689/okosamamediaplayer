@@ -1,7 +1,5 @@
 package okosama.app.tab.media;
 
-import java.util.HashMap;
-
 import okosama.app.AppStatus;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
@@ -14,7 +12,7 @@ import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.tab.TabPage;
 import okosama.app.widget.List;
-import android.graphics.Color;
+import android.util.SparseArray;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -55,8 +53,8 @@ public class TabPageSong extends TabPage {
 		tabButton.acceptConfigurator(tabBtnCreationData);
 
 		// ---- action
-		HashMap< Integer, IViewAction > actMapTemp 
-			= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapTemp 
+			= new SparseArray< IViewAction >();
 		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, tabId ) );
 		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );			
 		tabButton.acceptConfigurator(actionSetter);

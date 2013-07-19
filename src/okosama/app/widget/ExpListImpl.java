@@ -1,6 +1,5 @@
 package okosama.app.widget;
 
-import okosama.app.behavior.IExpListBehavior;
 import android.content.Context;
 import android.widget.ExpandableListView;
 

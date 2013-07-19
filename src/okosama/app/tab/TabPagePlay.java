@@ -9,12 +9,14 @@ import okosama.app.action.CycleRepeatAction;
 import okosama.app.action.IViewAction;
 import okosama.app.action.MediaStopAction;
 import okosama.app.action.TabSelectAction;
+import okosama.app.action.TimeButtonClickAction;
 import okosama.app.action.ToggleShuffleAction;
 import okosama.app.action.TweetAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.absWidget;
 import android.graphics.Color;
+import android.util.SparseArray;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -55,8 +57,8 @@ public class TabPagePlay extends TabPage {
 		tabButton.acceptConfigurator(tabBtnCreationData);
 
 		// ---- action
-		HashMap< Integer, IViewAction > actMapTemp 
-			= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapTemp 
+			= new SparseArray< IViewAction >();
 		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, tabId ) );
 		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );			
 		tabButton.acceptConfigurator(actionSetter);
@@ -69,14 +71,14 @@ public class TabPagePlay extends TabPage {
 				22, 400, 
 				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
 				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
-				, R.drawable.num1_1, R.drawable.time_background, "", ScaleType.FIT_XY
+				, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 			),
 			new TabComponentPropertySetter(
 				"hour1", ComponentType.BUTTON, 
 				92, 400, 
 				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
 				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
-				, R.drawable.num3_1, R.drawable.time_background, "", ScaleType.FIT_XY
+				, R.drawable.num3_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 			),
 
 			// ------------- MINUTE
@@ -85,14 +87,14 @@ public class TabPagePlay extends TabPage {
 				167, 390, 
 				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
 				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
-				, R.drawable.num4_1, R.drawable.time_background, "", ScaleType.FIT_XY
+				, R.drawable.num4_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 			),
 			new TabComponentPropertySetter(
 				"minute1", ComponentType.BUTTON, 
 				237, 375, 
 				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
 				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
-				, R.drawable.num6_1, R.drawable.time_background, "", ScaleType.FIT_XY
+				, R.drawable.num6_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 			),
 			// --------------------- SECOND
 			new TabComponentPropertySetter(
@@ -100,14 +102,14 @@ public class TabPagePlay extends TabPage {
 				303, 390, 
 				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
 				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
-				, R.drawable.num8_1, R.drawable.time_background, "", ScaleType.FIT_XY 
+				, R.drawable.num8_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY 
 			),
 			new TabComponentPropertySetter(
 				"sec1", ComponentType.BUTTON, 
 				373, 375, 
 				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
 				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
-				, R.drawable.num1_1, R.drawable.time_background, "", ScaleType.FIT_XY
+				, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 			),			
 //			// --------------------- PLAY
 //			new TabComponentPropertySetter(
@@ -206,29 +208,42 @@ public class TabPagePlay extends TabPage {
 		
 		// ---- action
 		// Stopボタン
-		HashMap< Integer, IViewAction > actMapStop 
-			= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapTimeClick1 = new SparseArray< IViewAction >();
+		SparseArray< IViewAction > actMapTimeClick2 = new SparseArray< IViewAction >();
+		SparseArray< IViewAction > actMapTimeClick3 = new SparseArray< IViewAction >();
+		SparseArray< IViewAction > actMapTimeClick4 = new SparseArray< IViewAction >();
+		SparseArray< IViewAction > actMapTimeClick5 = new SparseArray< IViewAction >();
+		SparseArray< IViewAction > actMapTimeClick6 = new SparseArray< IViewAction >();
+		actMapTimeClick1.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_HOUR_10) );	
+		actMapTimeClick2.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_HOUR_1) );	
+		actMapTimeClick3.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_MINUTE_10) );	
+		actMapTimeClick4.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_MINUTE_1) );	
+		actMapTimeClick5.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_SEC_10) );	
+		actMapTimeClick6.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_SEC_1) );	
+		// Stopボタン
+		SparseArray< IViewAction > actMapStop 
+			= new SparseArray< IViewAction >();
 		actMapStop.put( IViewAction.ACTION_ID_ONCLICK, new MediaStopAction() );
 		// twitterボタン
-		HashMap< Integer, IViewAction > actMapTwitter
-			= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapTwitter
+			= new SparseArray< IViewAction >();
 		actMapTwitter.put( IViewAction.ACTION_ID_ONCLICK, new TweetAction() );
 		// shuffleボタン
-		HashMap< Integer, IViewAction > actMapShuffle
-			= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapShuffle
+			= new SparseArray< IViewAction >();
 		actMapShuffle.put( IViewAction.ACTION_ID_ONCLICK, new ToggleShuffleAction() );
 		// repeatボタン
-		HashMap< Integer, IViewAction > actMapRepeat
-			= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapRepeat
+			= new SparseArray< IViewAction >();
 		actMapRepeat.put( IViewAction.ACTION_ID_ONCLICK, new CycleRepeatAction() );
 		
 		TabComponentActionSetter actionSetterCont[] = {
-			null
-			,null
-			,null
-			,null
-			,null
-			,null
+			new TabComponentActionSetter( actMapTimeClick1 )
+			,new TabComponentActionSetter( actMapTimeClick2 )
+			,new TabComponentActionSetter( actMapTimeClick3 )
+			,new TabComponentActionSetter( actMapTimeClick4 )
+			,new TabComponentActionSetter( actMapTimeClick5 )
+			,new TabComponentActionSetter( actMapTimeClick6 )
 			//,new TabComponentActionSetter( actMapPlay )
 			,new TabComponentActionSetter( actMapStop )
 			,new TabComponentActionSetter( actMapTwitter )

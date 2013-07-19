@@ -42,27 +42,31 @@ public class DisplayStatePlay extends absDisplayState {
 	        {
 				// 再生中かどうかで、処理を振り分ける
 	        	ret = 1000; //	再生中は、1000msごとに画面更新
-			    long pos = MediaPlayerUtil.sService.position();
-	
-				act.updateTimeDisplayVisible(MediaPlayerUtil.sService.duration() / 1000);
-				act.setDurationLabel(MediaPlayerUtil.sService.duration() / 1000);
-				act.setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
-				act.setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
-				act.setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
-				act.setPlayPauseButtonImage();
-				act.updateTimeDisplay(pos/1000);	
 	        }
-	        else
-	        {
-				act.updateTimeDisplayVisible(0);
-				act.setDurationLabel(0);
-				act.setNowPlayingSongLabel("");
-				act.setNowPlayingArsistLabel("");
-				act.setNowPlayingAlbumLabel("");
-				act.setPlayPauseButtonImage();
-	        	
-	        }
+		    long pos = MediaPlayerUtil.sService.position();
+
+			act.updateTimeDisplayVisible(MediaPlayerUtil.sService.duration() / 1000);
+			act.setDurationLabel(MediaPlayerUtil.sService.duration() / 1000);
+			act.setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
+			act.setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
+			act.setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
 			act.setPlayPauseButtonImage();
+			act.updateTimeDisplay(pos/1000);	
+//	        }
+//	        else
+//	        {
+//				//act.updateTimeDisplayVisible(0);
+//				//act.setDurationLabel(0);
+////				act.setNowPlayingSongLabel("");
+////				act.setNowPlayingArsistLabel("");
+////				act.setNowPlayingAlbumLabel("");
+//				act.setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
+//				act.setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
+//				act.setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
+//				act.setPlayPauseButtonImage();
+//	        	
+//	        }
+//			act.setPlayPauseButtonImage();
         }
         catch( RemoteException ex )
         {

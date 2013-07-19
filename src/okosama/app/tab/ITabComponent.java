@@ -1,9 +1,8 @@
 package okosama.app.tab;
 
-import java.util.HashMap;
-
 import okosama.app.action.IViewAction;
 import okosama.app.behavior.IBehavior;
+import android.util.SparseArray;
 import android.view.View;
 
 /**
@@ -73,7 +72,7 @@ public interface ITabComponent {
 	 * ActionMap‚ğ“à•”‚Éİ’è‚·‚é
 	 * @param actionMap
 	 */
-	public void setActionMap(HashMap<Integer, IViewAction> actionMap);
+	public void setActionMap(SparseArray< IViewAction > actionMap);
 	
 	public IBehavior getBehavior();
 	/**

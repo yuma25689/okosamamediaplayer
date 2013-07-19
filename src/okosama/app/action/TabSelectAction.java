@@ -33,7 +33,7 @@ public final class TabSelectAction implements IViewAction {
 		{
 			// 案外高コストかもしれない
 			// System.gc();
-			tabRoot.setCurrentTab(tabId, true);
+			tabRoot.setCurrentTab(tabId, (tabId != TabPage.TABPAGE_ID_NONE) );
 			
 			if( tabId != TabPage.TABPAGE_ID_NONE )
 			{			

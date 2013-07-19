@@ -3,6 +3,7 @@ package okosama.app.tab;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.util.SparseArray;
 import okosama.app.action.HideTabComponentAction;
 import okosama.app.action.IViewAction;
 import okosama.app.action.NoAction;
@@ -25,25 +26,36 @@ public abstract class TabLeaf implements ITabComponent {
 	{
 		return this.name;
 	}	
-	protected HashMap< Integer, IViewAction > actionMap;
+	protected SparseArray< IViewAction > actionMap;
 	public void addAction( int id, IViewAction action )
 	{
 		actionMap.put( id, action );
 	}
 	
-	public void setActionMap(HashMap<Integer, IViewAction> actionMap) {
+	public void setActionMap(SparseArray< IViewAction > actionMap) {
 		this.actionMap = actionMap;
 	}
 	public boolean isActionExists(int id)
 	{
-		return actionMap.containsKey(id);
+		if( null == actionMap.get(id, null) )
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 	public IViewAction getAction(int id)
 	{
-		if( actionMap.containsKey(id))
-			return actionMap.get( id );
-		else
+		if( null == actionMap.get(id, null) )
+		{
 			return new NoAction();
+		}
+		else
+		{
+			return actionMap.get( id );
+		}		
 	}
 
 	public TabLeaf( Activity activity )

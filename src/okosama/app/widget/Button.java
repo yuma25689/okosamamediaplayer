@@ -70,7 +70,7 @@ public class Button extends absWidget {
 	@Override
 	public void configureAction()
 	{
-		if( actionMap.containsKey( IViewAction.ACTION_ID_ONCLICK ) )
+		if( actionMap.get( IViewAction.ACTION_ID_ONCLICK, null ) != null )
 		{
 			impl.setOnClickListener(new View.OnClickListener() {
 	            public void onClick(View v) {

@@ -1,7 +1,5 @@
 package okosama.app.tab;
 
-import java.util.HashMap;
-
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
@@ -10,6 +8,7 @@ import okosama.app.action.ToggleChangeAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.ToggleButton;
+import android.util.SparseArray;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;
@@ -81,15 +80,15 @@ public class TabPageMedia extends TabPage {
 		*/
 		
 		// MediaTabボタンのアクション
-		HashMap< Integer, IViewAction > actMapTemp
-			= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapTemp
+			= new SparseArray< IViewAction >();
 		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, tabId ) );
 		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );	
 		tabButton.acceptConfigurator(actionSetter);
 
 		// toggleのアクション
-		HashMap< Integer, IViewAction > actMapTemp2
-		= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapTemp2
+		= new SparseArray< IViewAction >();
 		actMapTemp2.put( IViewAction.ACTION_ID_ONTOGGLEON, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_EXTERNAL, true ) );
 		actMapTemp2.put( IViewAction.ACTION_ID_ONTOGGLEOFF, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_EXTERNAL, false ) );
 		actionSetter = new TabComponentActionSetter( actMapTemp2 );	
@@ -97,8 +96,8 @@ public class TabPageMedia extends TabPage {
 
 		/*
 		// toggleのアクション
-		HashMap< Integer, IViewAction > actMapTemp3
-		= new HashMap< Integer, IViewAction >();
+		SparseArray< IViewAction > actMapTemp3
+		= new SparseArray< IViewAction >();
 		actMapTemp3.put( IViewAction.ACTION_ID_ONTOGGLEON, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_INTERNAL, true ) );
 		actMapTemp3.put( IViewAction.ACTION_ID_ONTOGGLEOFF, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_INTERNAL, true ) );
 		actionSetter = new TabComponentActionSetter( actMapTemp3 );	
