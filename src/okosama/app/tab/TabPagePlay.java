@@ -29,7 +29,7 @@ import android.widget.RelativeLayout;
  */
 public class TabPagePlay extends TabPage {
 
-	public TabPagePlay( Tab parent, LinearLayout ll, RelativeLayout rl ) {
+	public TabPagePlay( Tab parent, LinearLayout ll, ViewGroup rl ) {
 		super();
 		this.parent = parent;
 		this.pageContainer = ll;

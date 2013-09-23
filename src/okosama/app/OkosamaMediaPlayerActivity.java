@@ -299,13 +299,6 @@ implements ServiceConnection {
 	{
 		return tab;
 	}
-	static private Tab tabMedia = null;
-	public static Tab createMediaTab(LinearLayout ll, RelativeLayout rl)
-	{
-		tabMedia = new TabMediaSelect(ll, rl);
-		tabMedia.create();
-		return tabMedia;
-	}
 //	public static Tab getMediaTab()
 //	{
 //		return tabMedia;

@@ -10,6 +10,7 @@ import okosama.app.behavior.IBehavior;
 import android.app.Activity;
 import android.util.SparseArray;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -36,7 +37,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	public String getName()
 	{
 		return this.name;
-	}	
+	}
 	protected boolean active = false;
 	public boolean isActive() {
 		return active;
@@ -45,6 +46,8 @@ public abstract class TabComponentParent implements ITabComponent {
 		active = b;
 	}
 
+	ViewGroup tabBaseLayout;
+	
 	// 子項目のリスト
 	// 本当は最初にaddする時に作った方が無駄がないはずだが、こちらの方が安全ではある
 	protected ArrayList<ITabComponent> children 
@@ -55,7 +58,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	// 子でこれを使わないクラスもいつかできるのかも
 	// 設計としてはよくない
 	protected LinearLayout pageContainer;
-	protected RelativeLayout componentContainer;
+	protected ViewGroup componentContainer;
 
 	protected Tab parent;
 	protected SparseArray< IViewAction > actionMap;
