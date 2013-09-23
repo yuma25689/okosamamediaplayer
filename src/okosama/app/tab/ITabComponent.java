@@ -55,7 +55,7 @@ public interface ITabComponent {
 	 * 子項目の追加
 	 * @param child
 	 */
-	public void addChild( ITabComponent child );
+	public void addChild( int ID, ITabComponent child );
 
 	/**
 	 * 外部オブジェクトに設定を委譲する
