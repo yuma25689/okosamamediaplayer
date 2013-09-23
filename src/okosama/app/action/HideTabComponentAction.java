@@ -1,5 +1,6 @@
 package okosama.app.action;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 
 /**
@@ -28,9 +29,13 @@ public final class HideTabComponentAction implements IViewAction {
 	 * 
 	 */
 	@Override
-	public int doAction( View v ) {
+	public int doAction( Object param ) {
+		View v = (View)param;
 		if( tabLayout != null && v != null )
 		{
+//			AlphaAnimation animation = new AlphaAnimation( 100, 0 );
+//			animation.setDuration(1000);
+//			v.startAnimation(animation);
 			tabLayout.removeView(v);
 		}
 		return 0;

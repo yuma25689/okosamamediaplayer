@@ -16,7 +16,8 @@ public final class NextAction implements IViewAction {
 	 * 
 	 */
 	@Override
-	public int doAction( View v ) {		
+	public int doAction( Object param ) {		
+		OkosamaMediaPlayerActivity.getResourceAccessor().playSound(8);
 		MediaPlayerUtil.next();
         Handler handler = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getHandler();
         if( handler == null )

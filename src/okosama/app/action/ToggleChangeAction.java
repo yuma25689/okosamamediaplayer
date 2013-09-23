@@ -25,7 +25,7 @@ public final class ToggleChangeAction implements IViewAction {
 	 * 
 	 */
 	@Override
-	public int doAction( View v ) {
+	public int doAction( Object param ) {
 		switch( toggleId )
 		{
 		case TOGGLE_ID_INTERNAL:

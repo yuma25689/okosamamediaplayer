@@ -11,8 +11,9 @@ public class DisplayStateMedia extends absDisplayState {
 	@Override
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
 		// メディア選択画面への切り替え
-		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_MEDIA );
-		action.doAction(null);
+		tab.setCurrentTab(TabPage.TABPAGE_ID_MEDIA, true);
+//		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_MEDIA );
+//		action.doAction(null);
 
 		// サブ画面があるので、1を返却する
 		return TabPage.TABPAGE_ID_MEDIA;

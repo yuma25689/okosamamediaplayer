@@ -11,8 +11,9 @@ public class DisplayStateSong extends absDisplayStateMediaTab {
 	@Override
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
 		// ‹È‘I‘ğ‰æ–Ê‚Ö‚ÌØ‚è‘Ö‚¦
-		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_SONG );
-		action.doAction(null);
+		tab.setCurrentTab(TabPage.TABPAGE_ID_SONG, true);		
+//		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_SONG );
+//		action.doAction(null);
 		return 0;
 	}
 	@Override

@@ -20,6 +20,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.media.SoundPool.OnLoadCompleteListener;
 
 /**
  * リソースにアクセスするためのクラス
@@ -35,6 +38,23 @@ public final class ResourceAccessor {
 	public AppStatus appStatus = new AppStatus();
 
 	public ArrayList<Button> commonBtns = null;
+
+	public static final int SOUND_MAX_COUNT = 9;
+	public static final int SOUND_RES_IDS[] =
+		{
+			R.raw.sound1,
+			R.raw.sound2,
+			R.raw.sound3,
+			R.raw.sound4,
+			R.raw.sound5,
+			R.raw.sound6,
+			R.raw.sound7,
+			R.raw.sound8,
+			R.raw.sound9
+		};
+	private int soundIds[];
+	private int iSoundLoadCnt = 0;
+	private SoundPool soundPool;
 	
 //	// 解放のために、Drawableを保持するマップ
 //	// マップのキーには、画像を利用するTabpageのIDを利用する
@@ -69,16 +89,56 @@ public final class ResourceAccessor {
 	}
 	public static void CreateInstance( OkosamaMediaPlayerActivity activity )
 	{
-		if( instance == null ) {
+		if( instance == null ) 
+		{
 			instance = new ResourceAccessor( activity );
 		}
 		else
 		{
-			instance.setActivity(activity);
+			instance.setActivity( activity );
 		}
 	}
-	public static ResourceAccessor getInstance() {
+	public static ResourceAccessor getInstance()
+	{
 		return instance;
+	}
+	public void initSound()
+	{
+		soundPool = new SoundPool(SOUND_MAX_COUNT,AudioManager.STREAM_MUSIC,100);
+		soundPool.setOnLoadCompleteListener(
+				new OnLoadCompleteListener()
+				{
+					@Override
+					public void onLoadComplete(SoundPool s,int Id, int sts)
+					{
+						if( sts == 0 ) iSoundLoadCnt++;
+					}
+				}
+		);
+		soundIds = new int[SOUND_RES_IDS.length];
+		int j=0;
+		for( int i : SOUND_RES_IDS ) {
+			soundIds[j] = soundPool.load(this.activity, i, 1);
+			j++;
+		}
+	}
+	public void playSound( int idIndex )
+	{
+		if( iSoundLoadCnt != SOUND_RES_IDS.length 
+		|| idIndex < 0 
+		|| SOUND_RES_IDS.length <= idIndex)
+		{
+			// 未初期化の場合、もしくは、indexが無効の場合、再生しない
+			return;
+		}
+		// id, leftVol, rightVol, priority, loop, speedrate
+		soundPool.play(soundIds[idIndex], 2.0f, 2.0f, 1, 0, 1.0f);
+		//soundPool.stop(soundIds[idIndex]);
+	}
+	public void releaseSound()
+	{
+		iSoundLoadCnt = 0;
+		soundPool.release();
 	}
 	public Bitmap createBitmapFromDrawableId( int id )
 	{

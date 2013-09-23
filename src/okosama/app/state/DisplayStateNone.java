@@ -11,8 +11,9 @@ public class DisplayStateNone extends absDisplayState {
 	@Override
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
 		// ñ¢ëIëÇ÷êÿÇËë÷Ç¶
-		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_NONE );
-		action.doAction(null);
+		tab.setCurrentTab(TabPage.TABPAGE_ID_NONE, true);		
+//		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_NONE );
+//		action.doAction(null);
 		return TabPage.TABPAGE_ID_NONE;
 	}
 	@Override

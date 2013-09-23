@@ -1,5 +1,6 @@
 package okosama.app.action;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 
 /**
@@ -28,9 +29,14 @@ public final class ShowTabComponentAction implements IViewAction {
 	 * 
 	 */
 	@Override
-	public int doAction( View v ) {
+	public int doAction( Object param ) {
+		View v = (View)param;
 		if( tabLayout != null && v != null )
 		{
+//			AlphaAnimation animation = new AlphaAnimation( 0, 100 );
+//			animation.setDuration(1000);
+//			v.startAnimation(animation);
+			
 			for( int i=0; i < tabLayout.getChildCount(); i++ )
 			{
 				if( v == tabLayout.getChildAt(i) )
@@ -38,7 +44,7 @@ public final class ShowTabComponentAction implements IViewAction {
 					// Šù‚É’Ç‰Á‚³‚ê‚Ä‚¢‚é
 					return 1;
 				}
-			}			
+			}
 			tabLayout.addView(v);
 		}
 		return 0;

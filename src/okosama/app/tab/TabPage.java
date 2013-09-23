@@ -54,6 +54,14 @@ public abstract class TabPage extends TabComponentParent {
 		this.tabButton = tabButton;
 	}
 
+	public void setTabButtonToFront() {
+		if( this.tabButton != null
+		&& this.tabButton.getView() != null )
+		{
+			this.tabButton.getView().bringToFront();
+		}
+	}
+	
 	/**
 	 * @return “à•”‚ÌtabId‚ªˆø”‚Ì‚à‚Ì‚Æˆê’v‚·‚é‚© 
 	 */

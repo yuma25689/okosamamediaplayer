@@ -4,8 +4,10 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.R.drawable;
 import okosama.app.action.IViewAction;
+import okosama.app.action.MediaSeekAction;
 import okosama.app.action.TimeButtonClickAction;
 import okosama.app.factory.DroidWidgetKit;
+import okosama.app.tab.ITabComponent;
 import okosama.app.tab.TabComponentActionSetter;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
@@ -90,6 +92,13 @@ public class TimeControlPanel extends ControlPanel {
 				35, 530, 400, 50
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),			
+			// --------------------- PROGRESS
+			// TODO: 後で別に移す
+			new TabComponentPropertySetter(
+				"albumlabel", ComponentType.PROGRESS, 
+				0, 270, 480, 40
+				, null, null, "", ScaleType.FIT_XY
+			),
 		};
 		// OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 	
@@ -104,6 +113,7 @@ public class TimeControlPanel extends ControlPanel {
 				,getNowPlayingSongLabel()
 				,getNowPlayingArtistLabel()
 				,getNowPlayingAlbumLabel()
+				,getProgressBar()
 			};
 		// ---- action
 		// Timeコンポーネント
@@ -120,6 +130,10 @@ public class TimeControlPanel extends ControlPanel {
 		actMapTimeClick5.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_SEC_10) );	
 		actMapTimeClick6.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_SEC_1) );	
 
+		// ProgressBar用 action
+		SparseArray< IViewAction > actMapProgress = new SparseArray< IViewAction >();
+		actMapProgress.put( IViewAction.ACTION_ID_ONCLICKSEEK, new MediaSeekAction() );	
+
 		TabComponentActionSetter actionSetterCont[] = {
 				new TabComponentActionSetter( actMapTimeClick1 )
 				,new TabComponentActionSetter( actMapTimeClick2 )
@@ -131,6 +145,7 @@ public class TimeControlPanel extends ControlPanel {
 				,null
 				,null
 				,null
+				,new TabComponentActionSetter( actMapProgress )
 			};
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;
@@ -264,5 +279,24 @@ public class TimeControlPanel extends ControlPanel {
     	((LabelImpl)nowPlayingAlbumLabel.getView()).setText(strSong);
     	return;
     }
-
+    // TODO: 後で別に移すべき
+	SeekBar seekBar = null;
+	public SeekBar getProgressBar()
+	{
+		if( seekBar == null )
+		{
+			seekBar = DroidWidgetKit.getInstance().MakeSeekBar();
+		}		
+		return seekBar;
+	}    
+	/**
+	 * Activeかどうかを設定。子の同関数もコールする
+	 * @param b
+	 */
+	public void setActivate( boolean b )
+	{
+		for( ITabComponent c : children ) {
+        	c.setActivate( b );
+        }
+	}
 }

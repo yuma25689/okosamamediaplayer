@@ -13,7 +13,7 @@ import android.view.View;
 public class MediaPlayPauseAction implements IViewAction {
 
 	@Override
-	public int doAction(View v) {
+	public int doAction(Object param) {
 		IMediaPlaybackService service = MediaPlayerUtil.sService;
         try {
             if(service != null) {

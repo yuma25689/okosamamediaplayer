@@ -12,7 +12,7 @@ public final class NoAction implements IViewAction {
 	 * 
 	 */
 	@Override
-	public int doAction( View v ) {
+	public int doAction( Object param ) {
 		return 0;
 	}
 

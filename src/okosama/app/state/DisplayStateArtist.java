@@ -11,8 +11,9 @@ public class DisplayStateArtist extends absDisplayStateMediaTab {
 	@Override
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
 		// アーティスト別選択画面への切り替え
-		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_ARTIST );
-		action.doAction(null);
+		tab.setCurrentTab(TabPage.TABPAGE_ID_ARTIST, true);
+//		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_ARTIST );
+//		action.doAction(null);
 		return 0;
 	}
 	@Override

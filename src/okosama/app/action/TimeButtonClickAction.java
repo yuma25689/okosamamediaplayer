@@ -35,10 +35,12 @@ public final class TimeButtonClickAction implements IViewAction {
 	 * 
 	 */
 	@Override
-	public int doAction( View v ) {
+	public int doAction( Object param ) {
 
         try
         {
+			OkosamaMediaPlayerActivity.getResourceAccessor().playSound(9);
+        	
 	        boolean bPlaying = MediaPlayerUtil.sService.isPlaying();
 			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 	        if( bPlaying && this.timeID != TIME_ID_UNKNOWN)

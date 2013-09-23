@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.ImageView;
@@ -78,7 +79,9 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		this.scaleType = scaleType;
 	}
 	public static enum ComponentType {
-		NONE, TAB, TAB_PAGE, BUTTON, LIST_ALBUM, LIST_ARTIST, LIST_SONG, LIST_PLAYLIST, LIST_NOWPLAYLIST, TEXT, IMAGE, EXPLIST, TOGGLEBUTTON, LABEL
+		NONE, TAB, TAB_PAGE, BUTTON, LIST_ALBUM, 
+		LIST_ARTIST, LIST_SONG, LIST_PLAYLIST, LIST_NOWPLAYLIST,
+		TEXT, IMAGE, EXPLIST, TOGGLEBUTTON, LABEL, PROGRESS
 	};
 	
 	
@@ -389,6 +392,9 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			}
 			txt.setTextSize(18.0f);
 		}
+		else if( type == ComponentType.PROGRESS )
+		{
+		}		
 		if( bkImageId != null )
 		{
 			// メモリ解放のテスト用

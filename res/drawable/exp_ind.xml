@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+	<!-- 開いている時 -->
+	<item
+		android:state_empty="true"
+		android:drawable="@drawable/exp_up_ind" />
+	<!-- 閉じられている時 -->
+	<item
+		android:state_expanded="true"
+		android:drawable="@drawable/exp_down_ind" />
+</selector> 

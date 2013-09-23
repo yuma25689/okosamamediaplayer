@@ -28,12 +28,14 @@ public final class TabSelectAction implements IViewAction {
 	 * 
 	 */
 	@Override
-	public int doAction( View v ) {
+	public int doAction( Object param ) {
 		if( tabRoot != null && tabId != TabPage.TABPAGE_ID_UNKNOWN )
 		{
+			OkosamaMediaPlayerActivity.getResourceAccessor().playSound(6);
 			// 案外高コストかもしれない
 			// System.gc();
-			tabRoot.setCurrentTab(tabId, (tabId != TabPage.TABPAGE_ID_NONE) );
+			// tabRoot.setCurrentTab(tabId, (tabId != TabPage.TABPAGE_ID_NONE) );
+			OkosamaMediaPlayerActivity.setCurrentDisplayId(tabRoot.getName(),tabId);
 			
 			if( tabId != TabPage.TABPAGE_ID_NONE )
 			{			
@@ -46,7 +48,7 @@ public final class TabSelectAction implements IViewAction {
                 if( hdr == null )
                 {
                 	return -1;
-                }                		
+                }
                 hdr.sendMessage( msg );
 			}
 		}

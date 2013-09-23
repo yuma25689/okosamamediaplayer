@@ -15,4 +15,6 @@ public interface IWidgetKit {
 	ExpList MakeExpList(IExpListBehavior behavior);
 	ToggleButton MakeToggleButton();
 	Label MakeLabel();
+	ProgressBar MakeProgressBar();
+	SeekBar MakeSeekBar();
 }

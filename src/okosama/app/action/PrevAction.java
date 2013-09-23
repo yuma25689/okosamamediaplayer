@@ -16,7 +16,8 @@ public final class PrevAction implements IViewAction {
 	 * 
 	 */
 	@Override
-	public int doAction( View v ) {
+	public int doAction( Object param ) {
+		OkosamaMediaPlayerActivity.getResourceAccessor().playSound(7);
 		MediaPlayerUtil.prev();
         Handler handler = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getHandler();
         if( handler == null )

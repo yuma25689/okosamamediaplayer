@@ -12,7 +12,7 @@ public class CycleRepeatAction implements IViewAction {
 
 	
 	@Override
-	public int doAction(View v) {
+	public int doAction(Object param) {
 		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
         if (MediaPlayerUtil.sService == null) {
             return -1;

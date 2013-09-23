@@ -3,9 +3,11 @@ package okosama.app.tab;
 import java.util.ArrayList;
 // import java.util.HashMap;
 
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.action.IViewAction;
 import okosama.app.behavior.IBehavior;
 
+import android.app.Activity;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -18,6 +20,14 @@ import android.widget.RelativeLayout;
  */
 public abstract class TabComponentParent implements ITabComponent {
 
+	Activity activity;	
+	public TabComponentParent()
+	{
+	}
+	public TabComponentParent( Activity activity )
+	{
+		this.activity = activity;		
+	}
 	protected String name;
 	public void setName(String name)
 	{

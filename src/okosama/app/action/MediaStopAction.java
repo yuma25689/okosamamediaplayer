@@ -1,5 +1,6 @@
 package okosama.app.action;
 
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.service.IMediaPlaybackService;
 import okosama.app.service.MediaPlayerUtil;
 import android.os.RemoteException;
@@ -8,8 +9,9 @@ import android.view.View;
 public class MediaStopAction implements IViewAction {
 
 	@Override
-	public int doAction(View v) {
-		// TODO 画面のリフレッシュ
+	public int doAction(Object param) {
+		OkosamaMediaPlayerActivity.getResourceAccessor().playSound(0);
+		 		// TODO 画面のリフレッシュ
 		IMediaPlaybackService service = MediaPlayerUtil.sService;
         try {
             if(service != null) {

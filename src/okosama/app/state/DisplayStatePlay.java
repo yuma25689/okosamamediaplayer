@@ -2,6 +2,7 @@ package okosama.app.state;
 
 import android.os.RemoteException;
 import android.util.Log;
+import android.view.View;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
@@ -14,8 +15,9 @@ public class DisplayStatePlay extends absDisplayState {
 	@Override
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
 		// ÉvÉåÉCëIëâÊñ Ç÷ÇÃêÿÇËë÷Ç¶
-		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_PLAY );
-		action.doAction(null);
+		tab.setCurrentTab(TabPage.TABPAGE_ID_PLAY, true);
+		//IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_PLAY );
+		//action.doAction(null);
 		return 0;
 	}
 	@Override
@@ -33,7 +35,6 @@ public class DisplayStatePlay extends absDisplayState {
         {
             return ret;
 		}
-
         try
         {
 	        bPlaying = MediaPlayerUtil.sService.isPlaying();
@@ -46,12 +47,15 @@ public class DisplayStatePlay extends absDisplayState {
 		    long pos = MediaPlayerUtil.sService.position();
 
 			act.updateTimeDisplayVisible(MediaPlayerUtil.sService.duration() / 1000);
-			act.setDurationLabel(MediaPlayerUtil.sService.duration() / 1000);
-			act.setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
-			act.setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
-			act.setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
+			act.getTimeCP().setDurationLabel(MediaPlayerUtil.sService.duration() / 1000);
+			act.getTimeCP().setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
+			act.getTimeCP().setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
+			act.getTimeCP().setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
+			act.getTimeCP().getProgressBar().setMax((int)(MediaPlayerUtil.sService.duration()));
+			act.getTimeCP().getProgressBar().setProgress((int)(pos));
+			act.getTimeCP().getProgressBar().setVisibility(View.VISIBLE);
 			act.setPlayPauseButtonImage();
-			act.updateTimeDisplay(pos/1000);	
+			act.updateTimeDisplay(pos/1000);
 //	        }
 //	        else
 //	        {

@@ -140,8 +140,21 @@ public class Tab extends TabComponentParent {
 	public void setCurrentTab(int tabId,boolean save)
 	{
         for( ITabComponent c : children ) {
+        	if( c instanceof TabPage ) {
+        		// 一度全てのタブの選択を解除
+        		c.setActivate( false );
+        	}
+        	// 指定のタブIDのタブだけ、ピンポイントで選択する
         	if( c instanceof TabPage ) { // できたら使いたくなかった・・・。
-        		c.setActivate( ((TabPage) c).IsEqualTabId(tabId) );
+        		if( ((TabPage) c).IsEqualTabId(tabId) == true )
+        		{
+        			c.setActivate( true );
+        		}
+        	}
+        }
+        for( ITabComponent c : children ) {
+        	if( c instanceof TabPage ) { // できたら使いたくなかった・・・。
+        		((TabPage) c).setTabButtonToFront();
         	}
         }
 		// アプリケーションに選択されたタブの画面IDを設定する

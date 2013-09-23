@@ -7,6 +7,8 @@ import okosama.app.widget.Button;
 import okosama.app.widget.ExpList;
 import okosama.app.widget.Label;
 import okosama.app.widget.List;
+import okosama.app.widget.ProgressBar;
+import okosama.app.widget.SeekBar;
 import okosama.app.widget.ToggleButton;
 
 public class DroidWidgetKit implements IWidgetKit {
@@ -45,4 +47,16 @@ public class DroidWidgetKit implements IWidgetKit {
 		Label ret = new Label(activity);
 		return ret;
 	}
+	@Override
+	public ProgressBar MakeProgressBar()
+	{
+		ProgressBar ret = new ProgressBar(activity);
+		return ret;
+	}
+	@Override
+	public SeekBar MakeSeekBar()
+	{
+		SeekBar ret = new SeekBar(activity);
+		return ret;
+	}	
 }

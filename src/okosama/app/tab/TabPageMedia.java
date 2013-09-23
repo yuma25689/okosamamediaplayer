@@ -107,7 +107,7 @@ public class TabPageMedia extends TabPage {
 		tabContent = OkosamaMediaPlayerActivity.createMediaTab(pageContainer, componentContainer);//new TabMediaSelect(pageContainer, componentContainer);
 		// tabContent.create();
         // タブページをNoneに
-		tabContent.setCurrentTab(TabPage.TABPAGE_ID_NONE, false);
+		// tabContent.setCurrentTab(TabPage.TABPAGE_ID_NONE, false);
 		
 		return 0;
 	}
@@ -140,7 +140,9 @@ public class TabPageMedia extends TabPage {
 			|| TabPage.TABPAGE_ID_UNKNOWN == iTabId)
 			{
 				//TabSelectAction action = new TabSelectAction(tabContent, TabPage.TABPAGE_ID_ARTIST);
-				tabContent.setCurrentTab(TabPage.TABPAGE_ID_ARTIST, true);
+				// tabContent.setCurrentTab(TabPage.TABPAGE_ID_ARTIST, true);
+				// コードが複雑になっているので、多分あまりよろしくないけど、もう一度メイン画面内部に格納されているタブの状態のみを更新
+				// (画面は更新しない)
 				//action.doAction(null);
 			}
 			else
