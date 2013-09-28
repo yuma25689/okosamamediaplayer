@@ -426,7 +426,7 @@ implements ServiceConnection {
 				            	,pageContainer
 				            	,componentContainer 
 				            );
-				            tab.create();
+				            tab.create(R.layout.tab_layout_header));
 			        	}
 			            // 現在選択中のタブの情報をクリアする
 			            // TODO:場所微妙
@@ -500,6 +500,35 @@ implements ServiceConnection {
             handler.sendMessageDelayed(msg, delay);
         }
     }
+    /**
+     * ベース画像上での絶対座標を指定した位置を表すLayoutParamを作成する
+     * 幅、高さはFILL_PARENT
+     * @param left
+     * @param top
+     * @return LayoutParam
+     */
+	public static RelativeLayout.LayoutParams 
+	createLayoutParamForAbsolutePosOnBk(
+			int left, int top )
+	{
+		int xCorrect = dispInfo.getCorrectionXConsiderDensity(left);
+		int yCorrect = dispInfo.getCorrectionYConsiderDensity(top);
+		
+		RelativeLayout.LayoutParams lp = 
+				new RelativeLayout.LayoutParams(
+						RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
+		
+        lp.topMargin = yCorrect;
+        lp.leftMargin = xCorrect;
+        // このアプリケーションでは、bottomとrightのmarginはゼロだが・・・。
+        lp.bottomMargin = 0;
+        lp.rightMargin = 0;
+        lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        
+        return lp;
+	}
+    
     /**
      * ベース画像上での絶対座標を指定した位置を表すLayoutParamを作成する
      * @param left

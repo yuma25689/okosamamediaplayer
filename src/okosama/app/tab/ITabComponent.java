@@ -16,7 +16,7 @@ public interface ITabComponent {
 	 * ©‚ç‚Ìì¬
 	 * @return 0:³í 0ˆÈŠO:ˆÙí
 	 */
-	public int create();
+	public int create(int panelLayoutId);
 
 	/**
 	 * –¼‘O‚Ìİ’è

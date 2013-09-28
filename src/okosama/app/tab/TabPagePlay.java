@@ -29,7 +29,7 @@ import android.widget.RelativeLayout;
  */
 public class TabPagePlay extends TabPage {
 
-	public TabPagePlay( Tab parent, LinearLayout ll, ViewGroup rl ) {
+	public TabPagePlay( Tab parent, LinearLayout ll, RelativeLayout rl ) {
 		super();
 		this.parent = parent;
 		this.pageContainer = ll;
@@ -51,7 +51,7 @@ public class TabPagePlay extends TabPage {
 		// TAB_BUTTON
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
 			"playTabBtn", ComponentType.BUTTON, 
-			10, 40, 100, 100, 
+			10, 0, 100, 100, 
 			null, R.drawable.music_tab_button_image,
 			"", ScaleType.FIT_XY
 		);

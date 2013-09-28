@@ -1,6 +1,7 @@
 package okosama.app.tab;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 // import java.util.HashMap;
 
 import okosama.app.OkosamaMediaPlayerActivity;
@@ -50,8 +51,8 @@ public abstract class TabComponentParent implements ITabComponent {
 	
 	// 子項目のリスト
 	// 本当は最初にaddする時に作った方が無駄がないはずだが、こちらの方が安全ではある
-	protected ArrayList<ITabComponent> children 
-		= new ArrayList<ITabComponent>();
+	protected HashMap<Integer,ITabComponent> children 
+		= new HashMap<Integer,ITabComponent>();
 	
 	// ここにコンテナを持つのは、作りが雑かもしれない。
 	// 結果的にこのクラスはタブとタブページにしか継承されていないが、
@@ -80,7 +81,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	public void setActivate( boolean b )
 	{
 		active = b;
-        for( ITabComponent c : children ) {
+        for( ITabComponent c : children.values() ) {
         	c.setActivate( b );
         }
 	}
@@ -90,7 +91,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	 */	
 	public void setVisible( boolean b )
 	{
-        for( ITabComponent c : children ) {
+        for( ITabComponent c : children.values() ) {
         	c.setVisible( b );
         }	
 	}
@@ -98,7 +99,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	 * 表示の更新。子の同関数もコールする
 	 */
 	public void updateDisplay() {
-        for( ITabComponent c : children ) {
+        for( ITabComponent c : children.values() ) {
         	c.updateDisplay();
         }
 	}
@@ -107,8 +108,8 @@ public abstract class TabComponentParent implements ITabComponent {
 	 * 子項目の追加
 	 * @param child
 	 */
-	public void addChild( ITabComponent child) {
-		children.add(child);
+	public void addChild( int tabId, ITabComponent child ) {
+		children.put(tabId,child);
 	}
 
 	/**

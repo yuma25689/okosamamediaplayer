@@ -32,7 +32,8 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(Long.valueOf(id).toString());
 		// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(
-		IViewAction action = new TabSelectAction( act.getTabMain().getTabPageMedia().getTabContent(), TabPage.TABPAGE_ID_SONG );
+		IViewAction action = new TabSelectAction( act.getTabMain().getTabPageMedia().getTabContent(),
+				TabPage.TABPAGE_ID_SONG );
 		action.doAction(v);
 	}
 
