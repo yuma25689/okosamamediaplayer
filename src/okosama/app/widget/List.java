@@ -12,10 +12,10 @@ import okosama.app.tab.*;
 public class List extends absWidget {
 
 	// このアプリケーションで利用するリストの名称
-	public static String LISTNAME_ALBUM = "AlbumList";
-	public static String LISTNAME_SONG = "SongList";
-	public static String LISTNAME_PLAYLIST = "PlaylistList";
-	public static String LISTNAME_NOW_PLAYLIST = "NowPlayingList";
+	public static int LISTID_ALBUM = 201;
+	public static int LISTID_SONG = 202;
+	public static int LISTID_PLAYLIST = 203;
+	public static int LISTID_NOW_PLAYLIST = 204;
 	
 	/**
 	 * 実装クラス

@@ -13,6 +13,7 @@ import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.tab.TabPage;
 import okosama.app.widget.ExpList;
 import android.util.SparseArray;
+import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,7 +25,7 @@ import android.widget.RelativeLayout;
  */
 public class TabPageArtist extends TabPage {
 
-	public TabPageArtist( Tab parent, LinearLayout ll, RelativeLayout rl ) {
+	public TabPageArtist( Tab parent, LinearLayout ll, ViewGroup rl ) {
 		super();
 		this.parent = parent;
 		this.pageContainer = ll;
@@ -33,7 +34,7 @@ public class TabPageArtist extends TabPage {
 		this.tabId = TABPAGE_ID_ARTIST;
 		
 		create();
-		componentContainer.addView(tabButton.getView());
+		// componentContainer.addView(tabButton.getView());
 	}
 	/* (non-Javadoc)
 	 * @see okosama.app.container.ITabComponent#create()
@@ -41,30 +42,24 @@ public class TabPageArtist extends TabPage {
 	@Override
 	public int create() {
 		// タブのボタンだけはここで作る？
-		tabButton = DroidWidgetKit.getInstance().MakeButton();
+		//tabButton = DroidWidgetKit.getInstance().MakeButton();
 		// TAB_BUTTON
-		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
-			"artisttabbtn", ComponentType.BUTTON, 
-			//0, 859 - 150 + 2, 90, 70,
-			120 + 5, 859 - 100, 120, 100,
-			R.drawable.music_select_artist_image,
-			R.drawable.no_image,//R.drawable.tab2_btn_select_2, 
-			"", ScaleType.FIT_XY 
-		);
-		tabButton.acceptConfigurator(tabBtnCreationData);
+//		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
+//			"artisttabbtn", ComponentType.BUTTON, 
+//			//0, 859 - 150 + 2, 90, 70,
+//			120 + 5, 859 - 100, 120, 100,
+//			R.drawable.music_select_artist_image,
+//			R.drawable.no_image,//R.drawable.tab2_btn_select_2, 
+//			"", ScaleType.FIT_XY 
+//		);
+//		tabButton.acceptConfigurator(tabBtnCreationData);
 
-		// ---- action
-		SparseArray< IViewAction > actMapTemp 
-			= new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, tabId ) );
-		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );			
-		tabButton.acceptConfigurator(actionSetter);
 		
 		//////////////////// list //////////////////////////
 		TabComponentPropertySetter creationData[] = {
 			// ------------- LIST
 			new TabComponentPropertySetter(
-				ExpList.LISTNAME_ARTIST, ComponentType.LIST_ARTIST, 
+				ExpList.LISTID_ARTIST, ComponentType.LIST_ARTIST, 
 				//0, 260, 480, 599
 				0, 0//150 + 2 // + 90
 				, 480, AppStatus.LIST_HEIGHT_1//637 + 70 // - 90//599
@@ -92,7 +87,7 @@ public class TabPageArtist extends TabPage {
 			//lst.getView().setBackgroundColor(Color.CYAN);
 			//lst.getView().sendToBack();
 			// ボタンをこのタブ子項目として追加
-			addChild( lst );
+			addChild( creationData[i].getInternalID(), lst );
 			// ボタンを配置
 			// これは、setActivateで行う
 			// componentContainer.addView( btn.getView() );
@@ -114,7 +109,7 @@ public class TabPageArtist extends TabPage {
 		{			
 			// タブがアクティブ化された場合
 			// タブボタンを「無」効な時の表示にする
-			tabButton.setEnabled( false );
+			//tabButton.setEnabled( false );
 			// 背景イメージを消す？
 //			if( pageContainer.getBackground() != null )
 //			{
@@ -132,7 +127,7 @@ public class TabPageArtist extends TabPage {
 		{
 			// タブがアクティブではなくなった場合
 			// タブボタンを「有」効な時の表示にする
-			tabButton.setEnabled( true );
+			// tabButton.setEnabled( true );
 			// 背景イメージを消す
 			// 必要なし？
 			// pageContainer.setBackgroundDrawable(null);
@@ -140,7 +135,7 @@ public class TabPageArtist extends TabPage {
 		// 親タブが無効ならば、表示を消去
 		// このタブの場合、Activeとの違いが必要
 		// TODO:ここでやるかどうかは微妙
-		tabButton.setVisible(parent.isActive());
+		// tabButton.setVisible(parent.isActive());
 		
 		// TabComponentParentのsetActivateで、全ての子クラスのsetActivateが実行される
         super.setActivate( bActivate );

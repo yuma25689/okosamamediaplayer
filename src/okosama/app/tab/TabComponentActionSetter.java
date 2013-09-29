@@ -3,8 +3,6 @@
  */
 package okosama.app.tab;
 
-import java.util.HashMap;
-
 import android.util.SparseArray;
 
 import okosama.app.action.IViewAction;

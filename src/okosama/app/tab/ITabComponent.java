@@ -16,18 +16,19 @@ public interface ITabComponent {
 	 * 自らの作成
 	 * @return 0:正常 0以外:異常
 	 */
-	public int create(int panelLayoutId);
+	// public int create();
 
 	/**
-	 * 名前の設定
-	 * @param name
+	 * IDの設定
+	 * @param ID
 	 */
-	public void setName(String name);
+	//public void setName(String name);
+	public void setInternalID(Integer ID);
 	/**
-	 * 名前の取得
+	 * IDの取得
 	 * @return
 	 */
-	public String getName();
+	public Integer getInternalID();
 	/**
 	 * Viewの取得
 	 * @return view
@@ -53,6 +54,7 @@ public interface ITabComponent {
  
 	/**
 	 * 子項目の追加
+	 * @param ID 項目のID
 	 * @param child
 	 */
 	public void addChild( int ID, ITabComponent child );

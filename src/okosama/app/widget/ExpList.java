@@ -12,7 +12,7 @@ import okosama.app.tab.*;
 
 public class ExpList extends absWidget {
 	
-	public static String LISTNAME_ARTIST = "ArtistList";
+	public static int LISTID_ARTIST = 300;
 	
 	/**
 	 * ŽÀ‘•ƒNƒ‰ƒX

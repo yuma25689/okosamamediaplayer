@@ -28,34 +28,34 @@ public class TabPageNowPlaylist extends TabPage {
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_NOW_PLAYLIST;
 		create();
-		componentContainer.addView(tabButton.getView());
+//		componentContainer.addView(tabButton.getView());
 	}
 	@Override
 	public int create() {
 		// タブのボタンだけはここで作る？
-		tabButton = DroidWidgetKit.getInstance().MakeButton();
-		OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns.add(tabButton);
-		// TAB_BUTTON
-		TabComponentPropertySetter tabBtnCreationData
-		= new TabComponentPropertySetter(
-			"playlistTabBtn", ComponentType.BUTTON,
-			230, 40, 100, 100,
-			null, R.drawable.now_playlist_button_image,
-			"", ScaleType.FIT_XY
-		);
-		tabButton.acceptConfigurator(tabBtnCreationData);
+//		tabButton = DroidWidgetKit.getInstance().MakeButton();
+//		OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns.add(tabButton);
+//		// TAB_BUTTON
+//		TabComponentPropertySetter tabBtnCreationData
+//		= new TabComponentPropertySetter(
+//			"playlistTabBtn", ComponentType.BUTTON,
+//			230, 40, 100, 100,
+//			null, R.drawable.now_playlist_button_image,
+//			"", ScaleType.FIT_XY
+//		);
+//		tabButton.acceptConfigurator(tabBtnCreationData);
 		// NowPlaylistTabボタンのアクション
 		SparseArray< IViewAction > actMapTemp
 			= new SparseArray< IViewAction >();
 		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, tabId ) );
 		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );	
-		tabButton.acceptConfigurator(actionSetter);
+//		tabButton.acceptConfigurator(actionSetter);
 
 		//////////////////// list //////////////////////////
 		TabComponentPropertySetter creationData[] = {
 			// ------------- TAB
 			new TabComponentPropertySetter(
-				List.LISTNAME_NOW_PLAYLIST, ComponentType.LIST_NOWPLAYLIST, 
+				List.LISTID_NOW_PLAYLIST, ComponentType.LIST_NOWPLAYLIST, 
 				// 0, 260, 480, 599
 				0, 0,//150 + 2
 				480, AppStatus.LIST_HEIGHT_1//637 //599
@@ -96,7 +96,7 @@ public class TabPageNowPlaylist extends TabPage {
 			// タブがアクティブ化された場合
 			// =メディアタブが選択された場合？
 			// タブボタンを「無」効な時の表示にする
-			tabButton.setEnabled( false );
+//			tabButton.setEnabled( false );
 			// pageContainer.setBackgroundColor(Color.rgb(100, 120, 140));
 
 			// TODO:背景イメージを設定する
@@ -108,7 +108,7 @@ public class TabPageNowPlaylist extends TabPage {
 		{
 			// タブがアクティブではなくなった場合
 			// タブボタンを「有」効な時の表示にする
-			tabButton.setEnabled( true );
+//			tabButton.setEnabled( true );
 			// 背景イメージを消す
 			// 必要なし？
 			// pageContainer.setBackgroundDrawable(null);

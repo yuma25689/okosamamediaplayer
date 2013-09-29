@@ -1,5 +1,6 @@
 package okosama.app.tab;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
@@ -9,6 +10,8 @@ import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.ToggleButton;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;
@@ -33,78 +36,44 @@ public class TabPageMedia extends TabPage {
 		this.parent = parent;
 		this.pageContainer = ll;
 		this.componentContainer = rl;
-		this.name = OkosamaMediaPlayerActivity.tabNameMedia;
+		this.internalID = ControlIDs.TAB_ID_MEDIA;
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_MEDIA;
-		create();
-		componentContainer.addView(tabButton.getView());
-		componentContainer.addView(toggleEx.getView());
+		create(R.layout.tab_layout_content_generic);
+		// componentContainer.addView(tabButton.getView());
+		// componentContainer.addView(toggleEx.getView());
 		// componentContainer.addView(toggleIn.getView());
 	}
 	@Override
-	public int create() {
-		// タブのボタンだけはここで作る？
-		tabButton = DroidWidgetKit.getInstance().MakeButton();
-		OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns.add(tabButton);
-		// TAB_BUTTON
-		TabComponentPropertySetter tabBtnCreationData
-		= new TabComponentPropertySetter(
-			"mediaTabBtn", ComponentType.BUTTON,
-			120, 40, 100, 100,
-			null, R.drawable.music_choice_button_image,
-			"", ScaleType.FIT_XY
-		);
-		tabButton.acceptConfigurator(tabBtnCreationData);
+	public int create(int panelLayoutID) {
+
+		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		LayoutInflater inflator = act.getLayoutInflater();
+		tabBaseLayout = (ViewGroup)inflator.inflate(panelLayoutID, null, false);
+
 		// メディアの場所トグルボタン
 		// external
 		toggleEx = DroidWidgetKit.getInstance().MakeToggleButton();
 		TabComponentPropertySetter externalBtnCreationData
 		= new TabComponentPropertySetter(
-			"externalToggleBtn", ComponentType.TOGGLEBUTTON,
+			ControlIDs.EXTERNAL_TAB_BUTTON, ComponentType.TOGGLEBUTTON,
 			50, 155 + 2, 80, 80,
 			null, R.drawable.external_btn_image,
 			"", ScaleType.FIT_XY
 		);
 		toggleEx.acceptConfigurator(externalBtnCreationData);
-		/*
-		// internal
-		toggleIn = DroidWidgetKit.getInstance().MakeToggleButton();
-		TabComponentPropertySetter internalBtnCreationData
-		= new TabComponentPropertySetter(
-			"externalToggleBtn", ComponentType.TOGGLEBUTTON,
-			200, 155 + 2, 80, 80,
-			null, R.drawable.internal_btn_image,
-			"", ScaleType.FIT_XY
-		);
-		toggleIn.acceptConfigurator(internalBtnCreationData);
-		*/
 		
-		// MediaTabボタンのアクション
-		SparseArray< IViewAction > actMapTemp
-			= new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, tabId ) );
-		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );	
-		tabButton.acceptConfigurator(actionSetter);
-
 		// toggleのアクション
 		SparseArray< IViewAction > actMapTemp2
 		= new SparseArray< IViewAction >();
 		actMapTemp2.put( IViewAction.ACTION_ID_ONTOGGLEON, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_EXTERNAL, true ) );
 		actMapTemp2.put( IViewAction.ACTION_ID_ONTOGGLEOFF, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_EXTERNAL, false ) );
-		actionSetter = new TabComponentActionSetter( actMapTemp2 );	
+		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp2 );	
 		toggleEx.acceptConfigurator(actionSetter);
 
-		/*
-		// toggleのアクション
-		SparseArray< IViewAction > actMapTemp3
-		= new SparseArray< IViewAction >();
-		actMapTemp3.put( IViewAction.ACTION_ID_ONTOGGLEON, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_INTERNAL, true ) );
-		actMapTemp3.put( IViewAction.ACTION_ID_ONTOGGLEOFF, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_INTERNAL, true ) );
-		actionSetter = new TabComponentActionSetter( actMapTemp3 );	
-		toggleIn.acceptConfigurator(actionSetter);
-		 */
-		
+		tabBaseLayout.addView( toggleEx.getView() );
 		tabContent = OkosamaMediaPlayerActivity.createMediaTab(pageContainer, componentContainer);//new TabMediaSelect(pageContainer, componentContainer);
+		componentContainer.addView( tabBaseLayout );
 		// tabContent.create();
         // タブページをNoneに
 		// tabContent.setCurrentTab(TabPage.TABPAGE_ID_NONE, false);
@@ -123,7 +92,7 @@ public class TabPageMedia extends TabPage {
 			// タブがアクティブ化された場合
 			// =メディアタブが選択された場合？
 			// タブボタンを「無」効な時の表示にする
-			tabButton.setEnabled( false );
+//			tabButton.setEnabled( false );
 			toggleEx.setEnabled(true);
 			//toggleIn.setEnabled(true);
 			toggleEx.setVisible(true);
@@ -154,7 +123,7 @@ public class TabPageMedia extends TabPage {
 		{
 			// タブがアクティブではなくなった場合
 			// タブボタンを「有」効な時の表示にする
-			tabButton.setEnabled( true );
+//			tabButton.setEnabled( true );
 			toggleEx.setVisible(false);
 			toggleEx.setEnabled(false);
 			//toggleIn.setVisible(false);

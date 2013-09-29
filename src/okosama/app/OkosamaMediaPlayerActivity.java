@@ -426,7 +426,7 @@ implements ServiceConnection {
 				            	,pageContainer
 				            	,componentContainer 
 				            );
-				            tab.create(R.layout.tab_layout_header));
+				            tab.create(R.layout.tab_layout_header);
 			        	}
 			            // 現在選択中のタブの情報をクリアする
 			            // TODO:場所微妙

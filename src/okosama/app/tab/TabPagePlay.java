@@ -2,6 +2,7 @@ package okosama.app.tab;
 
 import java.util.HashMap;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.R.drawable;
@@ -37,8 +38,8 @@ public class TabPagePlay extends TabPage {
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_PLAY;
 		
-		create();
-		componentContainer.addView(tabButton.getView());
+		create(R.layout.tab_layout_content_generic);
+//		componentContainer.addView(tabButton.getView());
 	}
 	/* (non-Javadoc)
 	 * @see okosama.app.container.ITabComponent#create()
@@ -46,16 +47,16 @@ public class TabPagePlay extends TabPage {
 	@Override
 	public int create() {
 		// タブのボタンだけはここで作る？
-		tabButton = DroidWidgetKit.getInstance().MakeButton();
-		OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns.add(tabButton);
-		// TAB_BUTTON
-		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
-			"playTabBtn", ComponentType.BUTTON, 
-			10, 0, 100, 100, 
-			null, R.drawable.music_tab_button_image,
-			"", ScaleType.FIT_XY
-		);
-		tabButton.acceptConfigurator(tabBtnCreationData);
+//		tabButton = DroidWidgetKit.getInstance().MakeButton();
+//		OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns.add(tabButton);
+//		// TAB_BUTTON
+//		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
+//			"playTabBtn", ComponentType.BUTTON, 
+//			10, 0, 100, 100, 
+//			null, R.drawable.music_tab_button_image,
+//			"", ScaleType.FIT_XY
+//		);
+//		tabButton.acceptConfigurator(tabBtnCreationData);
 
 		// ---- action
 		SparseArray< IViewAction > actMapTemp 
@@ -120,13 +121,13 @@ public class TabPagePlay extends TabPage {
 //			),
 			// --------------------- STOP
 			new TabComponentPropertySetter(
-				"stopbutton", ComponentType.BUTTON, 
+				ControlIDs.STOP_BUTTON, ComponentType.BUTTON, 
 				150, 590, 100, 100
 				, null, R.drawable.stop_button_image, "", ScaleType.FIT_XY
 			),
 			// --------------------- TWITTER
 			new TabComponentPropertySetter(
-				"tweetbutton", ComponentType.BUTTON, 
+				ControlIDs.TWEET_BUTTON, ComponentType.BUTTON, 
 				370, 590, 80, 80
 				, null, R.drawable.internal_btn_image, "", ScaleType.FIT_XY
 			),
@@ -145,13 +146,13 @@ public class TabPagePlay extends TabPage {
 			// TODO: おそらく、シャッフルとリピートはトグルにすべきである
 			// --------------------- SHUFFLE
 			new TabComponentPropertySetter(
-				"shufflebutton", ComponentType.BUTTON, 
+				ControlIDs.SHUFFLE_BUTTON, ComponentType.BUTTON, 
 				20, 700, 100, 100
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),
 			// --------------------- REPEAT
 			new TabComponentPropertySetter(
-				"repeatbutton", ComponentType.BUTTON, 
+				ControlIDs.REPEAT_BUTTON, ComponentType.BUTTON, 
 				200, 690, 100, 100
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),
@@ -310,7 +311,7 @@ public class TabPagePlay extends TabPage {
 		{
 			// タブがアクティブ化された場合
 			// タブボタンを「無」効な時の表示にする
-			tabButton.setEnabled( false );
+			// tabButton.setEnabled( false );
 			// 背景イメージを設定する
 			//pageContainer.setBackgroundColor(Color.rgb(120, 120, 180));
 			pageContainer.setBackgroundResource(R.color.gradiant_test);
@@ -326,7 +327,7 @@ public class TabPagePlay extends TabPage {
 		{
 			// タブがアクティブではなくなった場合
 			// タブボタンを「有」効な時の表示にする
-			tabButton.setEnabled( true );
+			// tabButton.setEnabled( true );
 			// 背景イメージを消す
 			// 必要なし？
 			// pageContainer.setBackgroundDrawable(null);

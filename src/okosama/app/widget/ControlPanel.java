@@ -15,7 +15,7 @@ public class ControlPanel extends TabComponentParent {
 	}
 
 	@Override
-	public int create() {
+	public int create(int panelLayoutId) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

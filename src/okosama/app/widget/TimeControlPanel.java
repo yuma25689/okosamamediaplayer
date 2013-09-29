@@ -159,7 +159,7 @@ public class TimeControlPanel extends ControlPanel {
 			}
 			
 			// ボタンをこのタブ子項目として追加
-			addChild( widget );
+			addChild( creationData[i].getInternalID(), widget );
 			// ボタンを配置
 			// これは、setActivateで行う?
 			// componentContainer.addView( btn.getView() );
@@ -295,8 +295,9 @@ public class TimeControlPanel extends ControlPanel {
 	 */
 	public void setActivate( boolean b )
 	{
-		for( ITabComponent c : children ) {
-        	c.setActivate( b );
+		for( int i=0; i < children.size(); i++ )
+		{
+			children.valueAt(i).setActivate( b );
         }
 	}
 }

@@ -18,6 +18,7 @@ import okosama.app.tab.TabPage;
 import okosama.app.widget.List;
 import android.graphics.Color;
 import android.util.SparseArray;
+import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -29,7 +30,7 @@ import android.widget.RelativeLayout;
  */
 public class TabPageAlbum extends TabPage {
 
-	public TabPageAlbum( Tab parent, LinearLayout ll, RelativeLayout rl ) {
+	public TabPageAlbum( Tab parent, LinearLayout ll, ViewGroup rl ) {
 		super();
 		this.parent = parent;
 		this.pageContainer = ll;
@@ -38,7 +39,7 @@ public class TabPageAlbum extends TabPage {
 		this.tabId = TABPAGE_ID_ALBUM;
 		
 		create();
-		componentContainer.addView(tabButton.getView());
+		// componentContainer.addView(tabButton.getView());
 	}
 	/* (non-Javadoc)
 	 * @see okosama.app.container.ITabComponent#create()
@@ -46,30 +47,30 @@ public class TabPageAlbum extends TabPage {
 	@Override
 	public int create() {
 		// タブのボタンだけはここで作る？
-		tabButton = DroidWidgetKit.getInstance().MakeButton();
+		// tabButton = DroidWidgetKit.getInstance().MakeButton();
 		// TAB_BUTTON
-		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
-			"albumTabBtn", ComponentType.BUTTON, 
-			//90 + 5, 859 - 150 + 2, 90, 70,
-			0, 859 - 100, 120, 100,
-			R.drawable.music_select_album_image,
-			R.drawable.no_image, // R.drawable.tab1_btn_not_select_no_shadow2, 
-			"", ScaleType.FIT_XY 
-		);
-		tabButton.acceptConfigurator(tabBtnCreationData);
+//		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
+//			"albumTabBtn", ComponentType.BUTTON, 
+//			//90 + 5, 859 - 150 + 2, 90, 70,
+//			0, 859 - 100, 120, 100,
+//			R.drawable.music_select_album_image,
+//			R.drawable.no_image, // R.drawable.tab1_btn_not_select_no_shadow2, 
+//			"", ScaleType.FIT_XY 
+//		);
+//		tabButton.acceptConfigurator(tabBtnCreationData);
 
-		// ---- action
-		SparseArray< IViewAction > actMapTemp 
-			= new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, tabId ) );
-		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );			
-		tabButton.acceptConfigurator(actionSetter);
+//		// ---- action
+//		SparseArray< IViewAction > actMapTemp 
+//			= new SparseArray< IViewAction >();
+//		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, tabId ) );
+//		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );			
+//		tabButton.acceptConfigurator(actionSetter);
 		
 		//////////////////// list //////////////////////////
 		TabComponentPropertySetter creationData[] = {
 			// ------------- TAB
 			new TabComponentPropertySetter(
-				List.LISTNAME_ALBUM, ComponentType.LIST_ALBUM, 
+				List.LISTID_ALBUM, ComponentType.LIST_ALBUM, 
 				//0, 260, 480, 599
 				0, 0//150 + 2 // + 90
 				, 480, AppStatus.LIST_HEIGHT_1//637 + 70//- 90 //599
@@ -98,7 +99,7 @@ public class TabPageAlbum extends TabPage {
 			lst.getView().setBackgroundColor(Color.YELLOW);
 			
 			// リストをこのタブ子項目として追加
-			addChild( lst );
+			addChild( List.LISTID_ALBUM, lst );
 			// ボタンを配置
 			// これは、setActivateで行う
 			// componentContainer.addView( btn.getView() );
@@ -120,7 +121,7 @@ public class TabPageAlbum extends TabPage {
 		{			
 			// タブがアクティブ化された場合
 			// タブボタンを「無」効な時の表示にする
-			tabButton.setEnabled( false );
+			// tabButton.setEnabled( false );
 			
 			// 背景イメージを消す？
 //			if( pageContainer.getBackground() != null )
@@ -151,7 +152,7 @@ public class TabPageAlbum extends TabPage {
 		{
 			// タブがアクティブではなくなった場合
 			// タブボタンを「有」効な時の表示にする
-			tabButton.setEnabled( true );
+			// tabButton.setEnabled( true );
 			// 背景イメージを消す
 			// 必要なし？
 			// pageContainer.setBackgroundDrawable(null);
@@ -159,7 +160,7 @@ public class TabPageAlbum extends TabPage {
 		// 親タブが無効ならば、表示を消去
 		// このタブの場合、Activeとの違いが必要
 		// TODO:ここでやるかどうかは微妙
-		tabButton.setVisible(parent.isActive());
+		// tabButton.setVisible(parent.isActive());
 		
 		// TabComponentParentのsetActivateで、全ての子クラスのsetActivateが実行される
         super.setActivate( bActivate );

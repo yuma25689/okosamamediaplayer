@@ -6,7 +6,6 @@ import okosama.app.adapter.AlbumListAdapter;
 import okosama.app.adapter.ArtistAlbumListAdapter;
 import okosama.app.adapter.PlaylistListAdapter;
 import okosama.app.adapter.TrackListAdapter;
-import okosama.app.storage.Database;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.provider.MediaStore;
@@ -14,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.ImageView;
@@ -31,17 +29,17 @@ import android.widget.RelativeLayout;
  */
 public class TabComponentPropertySetter implements ITabComponentConfigurator {
 	public TabComponentPropertySetter(
-			String internalName,
+			Integer internalID,
 			ComponentType type ) 
 	{
-		this.internalName = internalName;
+		this.internalID = internalID;
 		this.type = type;
 	}
-	public TabComponentPropertySetter(String internalName,
+	public TabComponentPropertySetter(Integer internalID,
 			ComponentType type, Integer left, Integer top,
 			Integer width, Integer height, Integer imageId ) 
 	{
-		this.internalName = internalName;
+		this.internalID = internalID;
 		this.type = type;
 		this.left = left;
 		this.top = top;
@@ -49,11 +47,11 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		this.height = height;
 		this.imageId = imageId;
 	}	
-	public TabComponentPropertySetter(String internalName,
+	public TabComponentPropertySetter(Integer internalID,
 			ComponentType type, Integer left, Integer top,
 			Integer width, Integer height, Integer imageId, Integer bkImageId ) 
 	{
-		this.internalName = internalName;
+		this.internalID = internalID;
 		this.type = type;
 		this.left = left;
 		this.top = top;
@@ -62,12 +60,12 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		this.imageId = imageId;
 		this.bkImageId = bkImageId;
 	}
-	public TabComponentPropertySetter(String internalName,
+	public TabComponentPropertySetter(Integer internalID,
 			ComponentType type, Integer left, Integer top,
 			Integer width, Integer height, Integer imageId,
 			Integer bkImageId, String text, ScaleType scaleType) 
 	{
-		this.internalName = internalName;
+		this.internalID = internalID;
 		this.type = type;
 		this.left = left;
 		this.top = top;
@@ -86,7 +84,8 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 	
 	
 	boolean external = false;	// TODO:ébíËî≈
-	String internalName;
+	// String internalName;
+	Integer internalID;
 	ComponentType type = ComponentType.NONE;
 	Integer left, top, width, height;
 	Integer imageId;
@@ -94,9 +93,14 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 	String text;
 	ScaleType scaleType = null;
 	
+	public Integer getInternalID()
+	{
+		return internalID;
+	}
+	
 	@Override
 	public int configure(ITabComponent component) {
-		component.setName( this.internalName );
+		component.setInternalID( this.internalID );
 		// î˜ñ≠ÇæÇ™ÅAActivityÇÕResourceAccessorÇ©ÇÁéÊìæÇ∑ÇÈ
 		OkosamaMediaPlayerActivity activity = (OkosamaMediaPlayerActivity) OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		View v = component.getView();

@@ -1,10 +1,7 @@
 package okosama.app.tab;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 // import java.util.HashMap;
 
-import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.action.IViewAction;
 import okosama.app.behavior.IBehavior;
 
@@ -22,7 +19,8 @@ import android.widget.RelativeLayout;
  */
 public abstract class TabComponentParent implements ITabComponent {
 
-	Activity activity;	
+	Activity activity;
+	protected abstract int create( int panelLayoutId );
 	public TabComponentParent()
 	{
 	}
@@ -30,14 +28,14 @@ public abstract class TabComponentParent implements ITabComponent {
 	{
 		this.activity = activity;		
 	}
-	protected String name;
-	public void setName(String name)
+	protected Integer internalID;
+	public void setInternalID(Integer internalID)
 	{
-		this.name = name;
+		this.internalID = internalID;
 	}
-	public String getName()
+	public Integer getInternalID()
 	{
-		return this.name;
+		return this.internalID;
 	}
 	protected boolean active = false;
 	public boolean isActive() {
@@ -47,12 +45,12 @@ public abstract class TabComponentParent implements ITabComponent {
 		active = b;
 	}
 
-	ViewGroup tabBaseLayout;
+	protected ViewGroup tabBaseLayout;
 	
 	// 子項目のリスト
 	// 本当は最初にaddする時に作った方が無駄がないはずだが、こちらの方が安全ではある
-	protected HashMap<Integer,ITabComponent> children 
-		= new HashMap<Integer,ITabComponent>();
+	protected SparseArray<ITabComponent> children 
+		= new SparseArray<ITabComponent>();
 	
 	// ここにコンテナを持つのは、作りが雑かもしれない。
 	// 結果的にこのクラスはタブとタブページにしか継承されていないが、
@@ -81,8 +79,8 @@ public abstract class TabComponentParent implements ITabComponent {
 	public void setActivate( boolean b )
 	{
 		active = b;
-        for( ITabComponent c : children.values() ) {
-        	c.setActivate( b );
+        for( int i=0; i < children.size(); i++ ) {
+        	children.valueAt(i).setActivate( b );
         }
 	}
 	/**
@@ -91,16 +89,16 @@ public abstract class TabComponentParent implements ITabComponent {
 	 */	
 	public void setVisible( boolean b )
 	{
-        for( ITabComponent c : children.values() ) {
-        	c.setVisible( b );
+		for( int i=0; i < children.size(); i++ ) {
+			children.valueAt(i).setVisible( b );
         }	
 	}
 	/**
 	 * 表示の更新。子の同関数もコールする
 	 */
 	public void updateDisplay() {
-        for( ITabComponent c : children.values() ) {
-        	c.updateDisplay();
+		for( int i=0; i < children.size(); i++ ) {
+			children.valueAt(i).updateDisplay();
         }
 	}
 
@@ -108,8 +106,8 @@ public abstract class TabComponentParent implements ITabComponent {
 	 * 子項目の追加
 	 * @param child
 	 */
-	public void addChild( int tabId, ITabComponent child ) {
-		children.put(tabId,child);
+	public void addChild( int ID, ITabComponent child ) {
+		children.put(ID,child);
 	}
 
 	/**
@@ -146,5 +144,5 @@ public abstract class TabComponentParent implements ITabComponent {
 	 */
 //	public void clearChild() {
 //		children.clear();
-//	}	
+//	}
 }

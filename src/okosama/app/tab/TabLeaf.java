@@ -1,7 +1,5 @@
 package okosama.app.tab;
 
-import java.util.HashMap;
-
 import android.app.Activity;
 import android.util.SparseArray;
 import okosama.app.action.HideTabComponentAction;
@@ -15,16 +13,26 @@ public abstract class TabLeaf implements ITabComponent {
 
 	protected Activity activity;
 	
-	protected String name;
+	protected Integer internalID;
 	protected IBehavior behavior = null;
-	
-	public void setName(String name)
+//	protected HashMap<Integer,ITabComponent> children 
+//	= new HashMap<Integer,ITabComponent>();
+	protected SparseArray<ITabComponent> children
+	= new SparseArray<ITabComponent>();
+	/**
+	 * éqçÄñ⁄ÇÃí«â¡
+	 * @param child
+	 */
+	public void addChild( int ID, ITabComponent child ) {
+		children.put(ID,child);
+	}	
+	public void setInternalID(Integer internalID)
 	{
-		this.name = name;
+		this.internalID = internalID;
 	}
-	public String getName()
+	public Integer getInternalID()
 	{
-		return this.name;
+		return this.internalID;
 	}	
 	protected SparseArray< IViewAction > actionMap;
 	public void addAction( int id, IViewAction action )

@@ -3,6 +3,7 @@ package okosama.app.tab;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
@@ -29,12 +30,12 @@ import android.widget.ImageView.ScaleType;
  */
 public class Tab extends TabComponentParent {
 
-	HashMap<Integer,Button> mapBtn;
+	protected SparseArray<Button> mapBtn;
 	int iCurrentTabPageId;
 	
-	public Tab( String name, LinearLayout ll, ViewGroup rl )
+	public Tab( int ID, LinearLayout ll, ViewGroup rl )
 	{
-		this.name = name;
+		this.internalID = ID;
 		pageContainer = ll;
 		componentContainer = rl;
 		iCurrentTabPageId = TabPage.TABPAGE_ID_NONE;
@@ -64,7 +65,7 @@ public class Tab extends TabComponentParent {
 		// プレイタブボタン
 		mapBtn.put( TabPage.TABPAGE_ID_PLAY, DroidWidgetKit.getInstance().MakeButton() );
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
-			"playTabBtn", ComponentType.BUTTON, 
+			ControlIDs.PLAY_TAB_BUTTON, ComponentType.BUTTON, 
 			10, 10, 100, 100, 
 			null, R.drawable.music_tab_button_image,
 			"", ScaleType.FIT_XY
@@ -79,7 +80,7 @@ public class Tab extends TabComponentParent {
 		mapBtn.put( TabPage.TABPAGE_ID_MEDIA, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData
 		= new TabComponentPropertySetter(
-			"mediaTabBtn", ComponentType.BUTTON,
+			ControlIDs.MEDIA_TAB_BUTTON, ComponentType.BUTTON,
 			120, 40, 100, 100,
 			null, R.drawable.music_choice_button_image,
 			"", ScaleType.FIT_XY
@@ -92,10 +93,10 @@ public class Tab extends TabComponentParent {
 		mapBtn.get(TabPage.TABPAGE_ID_MEDIA).acceptConfigurator(actionSetter);
 		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_MEDIA).getView());
 		// プレイリストタブボタン
-		mapBtn.put( TabPage.TABPAGE_ID_PLAYLIST, DroidWidgetKit.getInstance().MakeButton() );
+		mapBtn.put( TabPage.TABPAGE_ID_NOW_PLAYLIST, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData
 		= new TabComponentPropertySetter(
-			"playlistTabBtn", ComponentType.BUTTON,
+			ControlIDs.PLAYLIST_TAB_BUTTON, ComponentType.BUTTON,
 			230, 40, 100, 100,
 			null, R.drawable.now_playlist_button_image,
 			"", ScaleType.FIT_XY
@@ -133,9 +134,9 @@ public class Tab extends TabComponentParent {
 
 //        		// 一度全てのタブの選択を解除
 //        		c.setActivate( false );
-		if( true == children.containsKey(tabId) )
+		if( null != children.get(tabId,null) )
 		{
-			if( true == children.containsKey(iCurrentTabPageId) )
+			if( null != children.get(iCurrentTabPageId,null) )
 			{
 	    		// 現在選択中のタブのタブページをクリアする
 				children.get(iCurrentTabPageId).setActivate(false);
@@ -153,7 +154,7 @@ public class Tab extends TabComponentParent {
 		// この場所だけでいいかどうかは不明
         if( save == true )
         {
-        	OkosamaMediaPlayerActivity.setCurrentDisplayId(this.name,tabId);
+        	OkosamaMediaPlayerActivity.setCurrentDisplayId(this.internalID,tabId);
         }
 	}
 
