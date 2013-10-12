@@ -70,8 +70,8 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
     private int mSelectedPosition;
     private long mSelectedId;
     private String mCurrentTrackName;
-    private String mCurrentAlbumName;
-    private String mCurrentArtistNameForAlbum;
+//    private String mCurrentAlbumName;
+//    private String mCurrentArtistNameForAlbum;
     
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfoIn) {
@@ -101,10 +101,10 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 		if (MediaPlayerUtil.isMusic(cursor)) {
 		    menu.add(0, SEARCH, 0, R.string.search_title);
 		}
-		mCurrentAlbumName = cursor.getString(cursor.getColumnIndexOrThrow(
-		        MediaStore.Audio.Media.ALBUM));
-		mCurrentArtistNameForAlbum = cursor.getString(cursor.getColumnIndexOrThrow(
-		        MediaStore.Audio.Media.ARTIST));
+//		mCurrentAlbumName = cursor.getString(cursor.getColumnIndexOrThrow(
+//		        MediaStore.Audio.Media.ALBUM));
+//		mCurrentArtistNameForAlbum = cursor.getString(cursor.getColumnIndexOrThrow(
+//		        MediaStore.Audio.Media.ARTIST));
 		mCurrentTrackName = cursor.getString(cursor.getColumnIndexOrThrow(
 		        MediaStore.Audio.Media.TITLE));
 		menu.setHeaderTitle(mCurrentTrackName);

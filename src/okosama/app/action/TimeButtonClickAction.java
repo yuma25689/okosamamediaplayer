@@ -2,13 +2,8 @@ package okosama.app.action;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.service.MediaPlayerUtil;
-import okosama.app.tab.Tab;
-import okosama.app.tab.TabPage;
-import android.os.Handler;
-import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
-import android.view.View;
 
 /**
  * 時間をクリックした時に実行するアクション

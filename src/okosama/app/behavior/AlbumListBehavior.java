@@ -1,5 +1,6 @@
 package okosama.app.behavior;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
@@ -29,10 +30,10 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 //        intent.putExtra("album", Long.valueOf(id).toString());
 //        intent.putExtra("artist", mArtistId);
 //        startActivity(intent);
-		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		// OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(Long.valueOf(id).toString());
 		// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(
-		IViewAction action = new TabSelectAction( act.getTabMain().getTabPageMedia().getTabContent(),
+		IViewAction action = new TabSelectAction( ControlIDs.TAB_ID_MEDIA,
 				TabPage.TABPAGE_ID_SONG );
 		action.doAction(v);
 	}

@@ -102,7 +102,10 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 	public int configure(ITabComponent component) {
 		component.setInternalID( this.internalID );
 		// ”÷–­‚¾‚ªAActivity‚ÍResourceAccessor‚©‚çæ“¾‚·‚é
-		OkosamaMediaPlayerActivity activity = (OkosamaMediaPlayerActivity) OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		OkosamaMediaPlayerActivity activity 
+		= (OkosamaMediaPlayerActivity) 
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		
 		View v = component.getView();
 		if( v == null )
 		{

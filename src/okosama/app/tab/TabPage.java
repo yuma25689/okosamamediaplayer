@@ -29,44 +29,22 @@ public abstract class TabPage extends TabComponentParent {
 	public static final int TABPAGE_ID_SONG = 6;
 	public static final int TABPAGE_ID_PLAYLIST = 7;
 	public static final int TABPAGE_ID_NOW_PLAYLIST = 8;
-
+	public static final int TABPAGE_ID_MEDIA_IMPL = 12;
+	
 	@Override
-	public void setActivate( boolean b )
-	{
-		// TODO: panelÇÃï\é¶êßå‰ÅH
-		
-		super.setActivate(b);
-//		if( tabButton != null && tabButton.getView() != null )
-//			tabButton.getView().bringToFront();
-		
-//		if( OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns == null )
-//		{
-//			for( Button btn : OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns )
-//			{
-//				if( btn.getView() != null )
-//				{
-//					btn.getView().bringToFront();
-//				}
-//			}
-//		}
-		
+	public void setActivate( boolean bActivate )
+	{		
+		if( bActivate )
+		{
+			componentContainer.addView( tabBaseLayout );
+		}
+		else
+		{
+			componentContainer.removeView( tabBaseLayout );			
+		}
+		super.setActivate(bActivate);
 	}
-	
-	/**
-	 * @param tabButton the tabButton to set
-	 */
-//	public void setTabButton(Button tabButton) {
-//		this.tabButton = tabButton;
-//	}
-//
-//	public void setTabButtonToFront() {
-//		if( this.tabButton != null
-//		&& this.tabButton.getView() != null )
-//		{
-//			this.tabButton.getView().bringToFront();
-//		}
-//	}
-	
+		
 	/**
 	 * @return ì‡ïîÇÃtabIdÇ™à¯êîÇÃÇ‡ÇÃÇ∆àÍívÇ∑ÇÈÇ© 
 	 */

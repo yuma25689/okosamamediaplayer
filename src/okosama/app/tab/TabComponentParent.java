@@ -2,11 +2,13 @@ package okosama.app.tab;
 
 // import java.util.HashMap;
 
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.action.IViewAction;
 import okosama.app.behavior.IBehavior;
 
 import android.app.Activity;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -46,7 +48,15 @@ public abstract class TabComponentParent implements ITabComponent {
 	}
 
 	protected ViewGroup tabBaseLayout;
-	
+
+	protected void resetPanelViews(int iPanelLayoutId)
+	{
+		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		LayoutInflater inflator = act.getLayoutInflater();
+		tabBaseLayout = (ViewGroup)inflator.inflate(iPanelLayoutId, null, false);	
+		tabBaseLayout.removeAllViews();
+	}
+
 	// 子項目のリスト
 	// 本当は最初にaddする時に作った方が無駄がないはずだが、こちらの方が安全ではある
 	protected SparseArray<ITabComponent> children 

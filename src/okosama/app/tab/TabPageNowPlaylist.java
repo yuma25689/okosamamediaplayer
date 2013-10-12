@@ -13,6 +13,8 @@ import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.List;
 import android.graphics.Color;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;
@@ -27,28 +29,26 @@ public class TabPageNowPlaylist extends TabPage {
 		this.componentContainer = rl;
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_NOW_PLAYLIST;
-		create();
+		create(R.layout.tab_layout_content_generic);
 //		componentContainer.addView(tabButton.getView());
 	}
 	@Override
-	public int create() {
-		// タブのボタンだけはここで作る？
-//		tabButton = DroidWidgetKit.getInstance().MakeButton();
-//		OkosamaMediaPlayerActivity.getResourceAccessor().commonBtns.add(tabButton);
-//		// TAB_BUTTON
-//		TabComponentPropertySetter tabBtnCreationData
-//		= new TabComponentPropertySetter(
-//			"playlistTabBtn", ComponentType.BUTTON,
-//			230, 40, 100, 100,
-//			null, R.drawable.now_playlist_button_image,
-//			"", ScaleType.FIT_XY
-//		);
-//		tabButton.acceptConfigurator(tabBtnCreationData);
+	public int create(int panelLayoutID) {
+		
+		resetPanelViews( panelLayoutID );
+		RelativeLayout.LayoutParams lp 
+		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+        		0, 0
+        );
+		tabBaseLayout.setLayoutParams(lp);
+		tabBaseLayout.setBackgroundResource(R.color.gradiant_test3);
+
 		// NowPlaylistTabボタンのアクション
-		SparseArray< IViewAction > actMapTemp
-			= new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, tabId ) );
-		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );	
+//		SparseArray< IViewAction > actMapTemp
+//			= new SparseArray< IViewAction >();
+//		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( 
+//				parent, tabId ) );
+//		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );	
 //		tabButton.acceptConfigurator(actionSetter);
 
 		//////////////////// list //////////////////////////
@@ -76,47 +76,15 @@ public class TabPageNowPlaylist extends TabPage {
 			
 			lst.getView().setBackgroundColor(Color.DKGRAY);
 			// ボタンをこのタブ子項目として追加
-			addChild( lst );
+			// addChild( creationData[i].getInternalID(), lst );
+			tabBaseLayout.addView( lst.getView() );
+			// tabContent = OkosamaMediaPlayerActivity.createMediaTab(pageContainer, componentContainer);//new TabMediaSelect(pageContainer, componentContainer);
 			// ボタンを配置
 			// これは、setActivateで行う
 			// componentContainer.addView( btn.getView() );
 			i++;
-		}		
+		}
+		
 		return 0;
 	}
-	/**
-	 * Activeかどうかを設定。
-	 * @param bActivate
-	 */
-	@Override
-	public void setActivate( boolean bActivate )
-	{
-		if( bActivate )
-		{
-			// タブがアクティブ化された場合
-			// =メディアタブが選択された場合？
-			// タブボタンを「無」効な時の表示にする
-//			tabButton.setEnabled( false );
-			// pageContainer.setBackgroundColor(Color.rgb(100, 120, 140));
-
-			// TODO:背景イメージを設定する
-			// pageContainer.setBackgroundDrawable(null);
-			// タブページを初期化
-			// tabContent.setActiveFlg( true );	// setActivateとsetActiveFlgができてしまったのは不本意だが仕方ない
-		}
-		else
-		{
-			// タブがアクティブではなくなった場合
-			// タブボタンを「有」効な時の表示にする
-//			tabButton.setEnabled( true );
-			// 背景イメージを消す
-			// 必要なし？
-			// pageContainer.setBackgroundDrawable(null);
-			// タブページを初期化
-			// tabContent.setActiveFlg( false );	// setActivateとsetActiveFlgができてしまったのは不本意だが仕方ない
-		}
-		// TabComponentParentのsetActivateで、全ての子クラスのsetActivateが実行される
-        super.setActivate( bActivate );
-	}
-
 }

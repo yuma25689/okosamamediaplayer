@@ -10,11 +10,13 @@
         android:id="@+id/tab_contents"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        ></RelativeLayout>
+        >
+    </RelativeLayout>
     <RelativeLayout 
         android:id="@+id/tab_hooter"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         ></RelativeLayout>
 
 </LinearLayout>

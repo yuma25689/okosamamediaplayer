@@ -3,8 +3,8 @@
  */
 package okosama.app;
 
-import okosama.app.factory.DroidWidgetKit;
-import okosama.app.widget.Button;
+//import okosama.app.factory.DroidWidgetKit;
+//import okosama.app.widget.Button;
 
 /**
  * アプリケーションの状態を保持するクラス
@@ -26,7 +26,7 @@ public final class AppStatus {
 	public void clearModeFlag()
 	{
 		shuffleMode = SHUFFLE_NONE;
-		repeatMode = REPEAT_NONE;
+		// repeatMode = REPEAT_NONE;
 	}
 	
 	// ----------------- 再生用の値
@@ -41,7 +41,7 @@ public final class AppStatus {
     public static final int REPEAT_ALL = 2;
     
 	private static int shuffleMode = SHUFFLE_NONE;
-	private static int repeatMode = REPEAT_NONE;
+	// private static int repeatMode = REPEAT_NONE;
     
 	
 	// -------------------- 検索用の値
@@ -126,25 +126,5 @@ public final class AppStatus {
 	public void setPlaylistName(String playlistName) {
 		this.playlistName = playlistName;
 	}
-
-	// あまりよくないが、ここにおく
-	// 時間を表示するボタン
-	
-	public Button[] getTimesButton()
-	{
-		if( btnTimes == null )
-		{
-			btnTimes = new Button[6];
-			btnTimes[0] = DroidWidgetKit.getInstance().MakeButton();
-			btnTimes[1] = DroidWidgetKit.getInstance().MakeButton();
-			btnTimes[2] = DroidWidgetKit.getInstance().MakeButton();
-			btnTimes[3] = DroidWidgetKit.getInstance().MakeButton();
-			btnTimes[4] = DroidWidgetKit.getInstance().MakeButton();
-			btnTimes[5] = DroidWidgetKit.getInstance().MakeButton();		
-		}
-		return btnTimes;
-	}
-	
-	Button btnTimes[] = null;
 	
 }

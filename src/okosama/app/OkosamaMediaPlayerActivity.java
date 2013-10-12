@@ -3,8 +3,8 @@ package okosama.app;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import okosama.app.action.HideTabComponentAction;
-import okosama.app.action.ShowTabComponentAction;
+//import okosama.app.action.HideTabComponentAction;
+//import okosama.app.action.ShowTabComponentAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.AlbumListAdapter;
 import okosama.app.adapter.ArtistAlbumListAdapter;
@@ -24,7 +24,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
-import okosama.app.service.MediaPlaybackService;
+import okosama.app.panel.PlayControlPanel;
+import okosama.app.panel.SubControlPanel;
+import okosama.app.panel.TimeControlPanel;
+//import okosama.app.service.MediaPlaybackService;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.service.MediaPlayerUtil.ServiceToken;
 import okosama.app.state.DisplayStateFactory;
@@ -34,12 +37,12 @@ import okosama.app.storage.Database;
 import okosama.app.tab.*;
 import okosama.app.tab.media.TabMediaSelect;
 import okosama.app.widget.Button;
-import okosama.app.widget.TimeControlPanel;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.RelativeLayout;
 import android.widget.LinearLayout;
@@ -55,101 +58,50 @@ implements ServiceConnection {
     public static final int REFRESH = 1001;
     // ポーズ中？
     private boolean paused;
-	// あまりよくないが、ここに置く
-    // リピートボタン
-	Button btnRepeat = null;
-	public Button getRepeatButton()
+//	// 時間パネル
+//	static TimeControlPanel timeCP = null;
+//	private void createTimeCP()
+//	{
+//		if( timeCP == null )
+//		{
+//			timeCP = new TimeControlPanel(this);
+//		}
+//	}
+//	public TimeControlPanel getTimeCP()
+//	{
+//		return timeCP;
+//	}
+//	// Playパネル
+//	static PlayControlPanel playCP = null;
+//	public PlayControlPanel getPlayCP()
+//	{
+//		if( playCP == null )
+//		{
+//			playCP = new PlayControlPanel(this);
+//		}
+//		return playCP;
+//	}	
+//	// Playパネル
+//	static SubControlPanel subCP = null;
+//	public SubControlPanel getSubCP()
+//	{
+//		if( subCP == null )
+//		{
+//			subCP = new SubControlPanel(this);
+//		}
+//		return subCP;
+//	}
+	public void updatePlayStateButtonImage()
 	{
-		if( btnRepeat == null )
+		if( PlayControlPanel.getInstance() != null ) 
+			PlayControlPanel.getInstance().setPlayPauseButtonImage();
+		
+		if( SubControlPanel.getInstance() != null )
 		{
-			btnRepeat = DroidWidgetKit.getInstance().MakeButton();
+			SubControlPanel.getInstance().setShuffleButtonImage();
+			SubControlPanel.getInstance().setRepeatButtonImage();
 		}
-		return btnRepeat;
 	}
-	public void setRepeatButtonImage()
-	{
-        if (MediaPlayerUtil.sService == null || btnRepeat == null || btnRepeat.getView() == null ) return;
-        try {
-            switch (MediaPlayerUtil.sService.getRepeatMode()) {
-                case MediaPlaybackService.REPEAT_ALL:
-                	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.btn_no_repeat_image);
-                    break;
-                case MediaPlaybackService.REPEAT_CURRENT:
-                	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.btn_one_repeat_image);
-                    break;
-                default:
-                	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.btn_repeat_all_image);
-                    break;
-            }
-        } catch (RemoteException ex) {
-        }	
-	}
-	// シャッフルボタン
-	Button btnShuffle = null;
-	public Button getShuffleButton()
-	{
-		if( btnShuffle == null )
-		{
-			btnShuffle = DroidWidgetKit.getInstance().MakeButton();
-		}		
-		return btnShuffle;
-	}
-	public void setShuffleButtonImage()
-	{
-        if (MediaPlayerUtil.sService == null || btnShuffle == null || btnShuffle.getView() == null ) return;
-        try {
-            switch (MediaPlayerUtil.sService.getShuffleMode()) {
-                case MediaPlaybackService.SHUFFLE_AUTO:
-                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_shuffle_auto_image);
-                    break;
-                case MediaPlaybackService.SHUFFLE_NORMAL:
-                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_shuffle_all_image);
-                    break;
-                //case MediaPlaybackService.SHUFFLE_NONE:
-                default:
-                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_no_shuffle_image);
-                    break;
-            }
-        } catch (RemoteException ex) {
-        }	
-	}
-	// 時間パネル
-	TimeControlPanel timeCP = null;
-	public TimeControlPanel getTimeCP()
-	{
-		if( timeCP == null )
-		{
-			timeCP = new TimeControlPanel(this);
-		}
-		return timeCP;
-	}
-	// ポーズボタン
-	Button btnPlayPause = null;
-	public Button getPlayPauseButton()
-	{
-		if( btnPlayPause == null )
-		{
-			btnPlayPause = DroidWidgetKit.getInstance().MakeButton();
-		}
-		return btnPlayPause;
-	}
-	public void setPlayPauseButtonImage()
-	{
-        if (MediaPlayerUtil.sService == null 
-        		|| btnPlayPause == null 
-        		|| btnPlayPause.getView() == null ) return;
-        try {
-            if(MediaPlayerUtil.sService.isPlaying()== true) 
-            {
-               	((ButtonImpl)btnPlayPause.getView()).setImageResource(R.drawable.pause_button_image);
-            }
-            else
-            {
-            	((ButtonImpl)btnPlayPause.getView()).setImageResource(R.drawable.play_button_image);
-            }
-        } catch (RemoteException ex) {
-        }	
-	}    
 	// サービスのトークン
     private ServiceToken mToken;
     
@@ -167,7 +119,7 @@ implements ServiceConnection {
 		externalRef = externalRef_;
 		if( bChg )
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(null, true);
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(ControlIDs.ID_NOT_SPECIFIED, true);
 		}
 	}
 
@@ -184,7 +136,7 @@ implements ServiceConnection {
 		internalRef = internalRef_;
 		if( bChg )
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(null, true);
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(ControlIDs.ID_NOT_SPECIFIED, true);
 		}
 	}
 	private static boolean internalRef = true;
@@ -271,8 +223,8 @@ implements ServiceConnection {
 //	int mainTabId = TabPage.TABPAGE_ID_UNKNOWN;
 	IDisplayState stateSub = null;
 //	int subTabId = TabPage.TABPAGE_ID_UNKNOWN;
-	public static final String tabNameMain = "maintab";
-	public static final String tabNameMedia = "mediatab";
+//	public static final String tabNameMain = "maintab";
+//	public static final String tabNameMedia = "mediatab";
 	public static int getCurrentSubTabId()
 	{
 		return currentSubTabId;
@@ -281,7 +233,7 @@ implements ServiceConnection {
 	LinearLayout pageContainer = null;
 	RelativeLayout componentContainer = null;
 	
-	private static String dispIdKey = "_displayId";
+	// private static String dispIdKey = "_displayId";
 	
 	public static DisplayInfo dispInfo = DisplayInfo.getInstance();
 	
@@ -299,10 +251,18 @@ implements ServiceConnection {
 	{
 		return tab;
 	}
-//	public static Tab getMediaTab()
-//	{
-//		return tabMedia;
-//	}
+	private static TabMediaSelect tabMedia = null;
+	public static TabMediaSelect createMediaTab(
+		LinearLayout pageContainer, ViewGroup componentContainer )
+	{
+		tabMedia = new TabMediaSelect( ControlIDs.TAB_ID_MEDIA, pageContainer, componentContainer );
+		tabMedia.create(R.layout.tab_layout_hooter);
+		return tabMedia;
+	}
+	public TabMediaSelect getMediaTab()
+	{
+		return tabMedia;
+	}
 	
 	// 初期化時に、スクリーンサイズ取得にスレッドが必要になるため、スレッドとの同期が必要に・・・
 	private static Handler handler = null;
@@ -312,23 +272,24 @@ implements ServiceConnection {
 	}
 	boolean bInitEnd = false;
 	
-	private static HashMap<String,Integer> tabCurrentDisplayIdMap = new HashMap<String,Integer>();
+	private static HashMap<Integer,Integer> tabCurrentDisplayIdMap = new HashMap<Integer,Integer>();
 	/**
 	 * 現在の画面IDを設定する
 	 * 今のところ、画面IDというのは、タブIDに等しい
 	 * また、この値は、アクティビティにあるが、アプリケーション全体で利用する感じのものである。
 	 * とりあえずstaticにしておくが、クラスを移動してもいいかもしれない
+	 * @param internalID
 	 * @param iDispId
 	 */
-	public static void setCurrentDisplayId( String name, int iDispId )
+	public static void setCurrentDisplayId( int internalID, int iDispId )
 	{
-		tabCurrentDisplayIdMap.put( name + dispIdKey, iDispId );
+		tabCurrentDisplayIdMap.put( internalID, iDispId );
 	}
-	public static int getCurrentDisplayId( String name )
+	public static int getCurrentDisplayId( int internalID )
 	{
-		if( tabCurrentDisplayIdMap.containsKey( name + dispIdKey ))
+		if( tabCurrentDisplayIdMap.containsKey( internalID ))
 		{
-			return tabCurrentDisplayIdMap.get( name + dispIdKey );
+			return tabCurrentDisplayIdMap.get( internalID );
 		}
 		else
 		{
@@ -339,8 +300,11 @@ implements ServiceConnection {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // ビューの設定
         setContentView(R.layout.main);
 
+        // Databaseクラスにアクティビティ格納
         Database.setActivity( this );
         // ボリュームを音楽用に設定する
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -360,8 +324,8 @@ implements ServiceConnection {
         pageContainer = (LinearLayout)findViewById(R.id.main_linearlayout);
         componentContainer = (RelativeLayout)findViewById(R.id.main_relativelayout);
         // タブの表示切り替え用の設定
-        HideTabComponentAction.getInstance().setTabLayout(componentContainer);
-        ShowTabComponentAction.getInstance().setTabLayout(componentContainer);
+        //HideTabComponentAction.getInstance().setTabLayout(componentContainer);
+        //ShowTabComponentAction.getInstance().setTabLayout(componentContainer);
 
         // 時間表時の初期化
 		updateTimeDisplayVisible(0);
@@ -389,46 +353,60 @@ implements ServiceConnection {
         handler =  new Handler(){
 	        //メッセージ受信
 	        public void handleMessage(Message message) {
-	        	if( message.what == REFRESH )
+	        	switch( message.what )
         		{
-	                long next = NO_REFRESH;
-	                if( currentMainTabId != TabPage.TABPAGE_ID_MEDIA )
-	                {
-	        			if( stateMain == null )
-	        			{
-	        				return;
-	        			}
-	        			next = stateMain.updateDisplay();
-	                }
-	                else
-	                {
-	        			if( stateSub == null )
-	        			{
-	        				return;
-	        			}
-	                	next = stateSub.updateDisplay();
-	                }
-	                queueNextRefresh(next);
-	                return;
-        		}
-	        	switch( message.arg1 )
-	        	{
+	        		case REFRESH:
+	        		{
+		                long next = NO_REFRESH;
+		                if( currentMainTabId != TabPage.TABPAGE_ID_MEDIA )
+		                {
+		        			if( stateMain == null )
+		        			{
+		        				break;
+		        			}
+		        			next = stateMain.updateDisplay();
+		                }
+		                else
+		                {
+		        			if( stateSub == null )
+		        			{
+		        				break;
+		        			}
+		                	next = stateSub.updateDisplay();
+		                }
+		                queueNextRefresh(next);
+		                break;
+        			}
 		        	case DisplayInfo.MSG_INIT_END:
 		        	{
+		        		// 現状、これがOnResume時のディスプレイ初期化後に飛んでくる
 			        	if( bInitEnd == true )
 			        	{
+			        		// もう既に初期化済ならば、何もしない？
 			        	}
 			        	else
 			        	{
-			        		// タブを作成
+			        		TimeControlPanel.createInstance(OkosamaMediaPlayerActivity.this);
+			        		PlayControlPanel.createInstance(OkosamaMediaPlayerActivity.this);
+			        		SubControlPanel.createInstance(OkosamaMediaPlayerActivity.this);
+				            
+			        		// 初期化されていなければ、タブを作成
+			        		// このアクティビティのレイアウトクラスを渡す
 				            tab = new Tab(
-				            	tabNameMain
+				            	ControlIDs.TAB_ID_MAIN
 				            	,pageContainer
 				            	,componentContainer 
 				            );
 				            tab.create(R.layout.tab_layout_header);
 			        	}
-			            // 現在選択中のタブの情報をクリアする
+			    		bInitEnd = true;
+			        	
+			            // 時間表示等の初期化
+			    		updateTimeDisplayVisible(0);
+			    		updateTimeDisplay(0);
+			    		updatePlayStateButtonImage();
+
+			    		// 現在選択中のタブの情報をクリアする
 			            // TODO:場所微妙
 			           	tabCurrentDisplayIdMap.clear();
 			            // 必要であれば、設定を復元する
@@ -438,57 +416,68 @@ implements ServiceConnection {
 		//	           	if( bTabInitEnd == false )
 		//	           	{
 			    		SharedPreferences pref = getPreferences(MODE_PRIVATE);
-			    		setCurrentDisplayId( tabNameMain, pref.getInt(tabNameMain + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN) );
-			    		setCurrentDisplayId( tabNameMedia, pref.getInt(tabNameMedia + dispIdKey, TabPage.TABPAGE_ID_ARTIST ) );//TabPage.TABPAGE_ID_UNKNOWN) );
+			    		setCurrentDisplayId( ControlIDs.TAB_ID_MAIN, 
+			    				pref.getInt( String.valueOf( ControlIDs.TAB_ID_MAIN ), TabPage.TABPAGE_ID_UNKNOWN) );
+			    		setCurrentDisplayId( ControlIDs.TAB_ID_MEDIA, 
+			    				pref.getInt( String.valueOf( ControlIDs.TAB_ID_MEDIA ), TabPage.TABPAGE_ID_ARTIST ) );//TabPage.TABPAGE_ID_UNKNOWN) );
 //			           	setMainTabSelection(
 //			           		pref.getInt(tabNameMain + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN)
 //			           	);
 //			           	setMediaTabSelection(
 //			           		pref.getInt(tabNameMedia + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN)
 //			           	);
-			           	sendUpdateMessage(tabNameMain);
-			           	sendUpdateMessage(tabNameMedia);
+			           	sendUpdateMessage(ControlIDs.TAB_ID_MAIN);
+			           	sendUpdateMessage(ControlIDs.TAB_ID_MEDIA);
 //			           	TabSelectAction selAct = new TabSelectAction(tab, currentMainTabId);
 //			           	selAct.doAction(null);
 //			           	TabSelectAction selActMedia = new TabSelectAction( tab.getTabPageMedia().getTabContent(), currentSubTabId );
 //			           	selActMedia.doAction(null);
-			           	getTimeCP().setDurationLabel(0);
+			           	if( TimeControlPanel.getInstance() != null )
+			           	{
+			           		TimeControlPanel.getInstance().setDurationLabel(0);
+			           	}
 			    				           	
 	//	           		if( 1 == setTabSelection( currentMainTabId, currentSubTabId ) )
 	//	           		{
 		    	           	// updateListeners();	           			
 	//	           		}
 		//	           	}
-			    		bInitEnd = true;
 			            //bTabInitEnd = true;
 			    		break;
 		        	}
 		        	case TabSelectAction.MSG_ID_TAB_SELECT:
+		        	{
 		        		// タブが選択された通知
-		        		if( message.arg2 == TabPage.TABPAGE_ID_MEDIA 
-		        		&& currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
+//		        		if( message.arg2 == TabPage.TABPAGE_ID_MEDIA 
+//		        		&& currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
+//		        		{
+//		        			// メディアタブ内での処理
+//		        			// 何も処理しない
+//		        			break;
+//		        		}
+		        		if( ControlIDs.TAB_ID_MAIN == (Integer)message.obj )
 		        		{
-		        			// メディアタブ内での処理
-		        			// 何も処理しない
-		        			break;
+			        		// Activityのタブidを更新
+			        		setMainTabSelection(
+			        			OkosamaMediaPlayerActivity.getCurrentDisplayId( ControlIDs.TAB_ID_MAIN )
+			        		);
 		        		}
-		        		// Activityのタブidを更新
-		        		setMainTabSelection(
-		        			OkosamaMediaPlayerActivity.getCurrentDisplayId(OkosamaMediaPlayerActivity.tabNameMain)
-		        		);
-		        		setMediaTabSelection(
-		        			OkosamaMediaPlayerActivity.getCurrentDisplayId(OkosamaMediaPlayerActivity.tabNameMedia)
-		        		);
-		        	
+		        		else if( ControlIDs.TAB_ID_MEDIA == (Integer)message.obj )
+		        		{
+			        		setMediaTabSelection(
+			        			OkosamaMediaPlayerActivity.getCurrentDisplayId( ControlIDs.TAB_ID_MEDIA )
+			        		);
+		        		}
 		        		// リスナを更新
 		            	updateListeners();
 		            	// メディアを更新
-		            	reScanMedia((String)message.obj,false);
+		            	reScanMedia((Integer)message.obj,false);
 		            	// 共通部分再描画
 		            	updateCommonCtrls();
 		        		break;
-	        	}
-	        };
+		        	}
+        		}
+        	}
         };
     }
     public static final int NO_REFRESH = -10;
@@ -591,8 +580,8 @@ implements ServiceConnection {
 		//tabCurrentDisplayIdMap.
         //outcicle.putInt("displayid", iCurrentDisplayId);
 		Editor editor = getPreferences(MODE_PRIVATE).edit();
-		for(Entry<String, Integer> e : tabCurrentDisplayIdMap.entrySet()) {
-			editor.putInt( e.getKey(), e.getValue() );
+		for(Entry<Integer, Integer> e : tabCurrentDisplayIdMap.entrySet()) {
+			editor.putInt( String.valueOf( e.getKey() ), e.getValue() );
 		}
 		editor.commit();
 		
@@ -600,16 +589,28 @@ implements ServiceConnection {
 		// setTabSelection( TabPage.TABPAGE_ID_NONE, TabPage.TABPAGE_ID_NONE );
 		// 本当は、上記でそうなって欲しいのだが、現状そうなっていないかもしれない
 		// 全てのビューをクリアしておく
-		if( pageContainer.getBackground() != null )
-		{
-			pageContainer.getBackground().setCallback(null);
-			pageContainer.setBackgroundDrawable(null);
-		}
+//		if( pageContainer.getBackground() != null )
+//		{
+//			pageContainer.getBackground().setCallback(null);
+//			pageContainer.setBackgroundDrawable(null);
+//		}
 		componentContainer.removeAllViews();
 		bInitEnd = false;
 		bForceRefresh = true;
         getResourceAccessor().releaseSound();
-		
+        if( TimeControlPanel.getInstance() != null )
+        {
+        	TimeControlPanel.getInstance().removeViewFromParent();
+        }
+        if( PlayControlPanel.getInstance() != null )
+        {
+        	PlayControlPanel.getInstance().removeViewFromParent();
+        }
+        if( SubControlPanel.getInstance() != null )
+        {
+        	SubControlPanel.getInstance().removeViewFromParent();
+        }
+        		
 		// bTabInitEnd = false;
 		// System.gc();
 		super.onPause();
@@ -708,11 +709,11 @@ implements ServiceConnection {
         }
         return iRet;
 	}
-	void sendUpdateMessage(String tabName)
+	void sendUpdateMessage(int tabID)//String tabName)
 	{
     	Message msg = new Message();
-    	msg.arg1 = TabSelectAction.MSG_ID_TAB_SELECT;
-    	msg.obj = tabName;
+    	msg.what = TabSelectAction.MSG_ID_TAB_SELECT;
+    	msg.obj = tabID;
     	handler.sendMessage(msg);
 	}
 	void updateCommonCtrls()
@@ -796,12 +797,17 @@ implements ServiceConnection {
 		}
 	}
 	
-	public void reScanMedia(String tabName, boolean bForce)
+	/**
+	 * メディアの再スキャン？スキャンのロジック自体に、見直し必要
+	 * @param tabID
+	 * @param bForce
+	 */
+	public void reScanMedia(int tabID, boolean bForce)
 	{
 		// 現在選択中のタブによって操作を変更
 		if( //tabName == tabNameMedia && 
 			( true == bForce
-			|| false == tabNameMain.equals(tabName) )
+			|| ControlIDs.TAB_ID_MEDIA == tabID )
 			&& currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
 		{
 			// メディアタブならば
@@ -828,7 +834,8 @@ implements ServiceConnection {
 				break;
 			}
 		}
-		else if( tabName != null && tabName.equals( tabNameMain ) && currentMainTabId == TabPage.TABPAGE_ID_NOW_PLAYLIST )
+		else if( tabID == ControlIDs.TAB_ID_MAIN 
+				&& currentMainTabId == TabPage.TABPAGE_ID_NOW_PLAYLIST )
 		{
 			// TODO: 現在、トラックと同じカーソルになっているが、考えた方がいいかもしれない
 			// NOWPLAYLIST
@@ -850,7 +857,7 @@ implements ServiceConnection {
 	@Override
 	protected void onDestroy() {
 		try {
-			if( false == MediaPlayerUtil.sService.isPlaying() )
+			if( MediaPlayerUtil.sService != null && false == MediaPlayerUtil.sService.isPlaying() )
 			{
 				// サービスの登録解除
 			    MediaPlayerUtil.unbindFromService(mToken);
@@ -1042,13 +1049,16 @@ implements ServiceConnection {
 	                ,( duration >= 10)
 	                ,( duration > 0)
 	    	};
-	        Button timeBtns[] = getResourceAccessor().appStatus.getTimesButton();
-	        for( int i=0; i<timeBtns.length; i++ )
-	        {
-	        	if( null != timeBtns[i].getView() )
-	        	{
-	        		((ButtonImpl)timeBtns[i].getView()).setVisibility(bShowImgFlg[i] ? View.VISIBLE : View.INVISIBLE );
-	        	}
+	    	if( TimeControlPanel.getInstance() != null && TimeControlPanel.getInstance().getTimesButton() != null )
+	    	{
+	    		Button timeBtns[] = TimeControlPanel.getInstance().getTimesButton();
+		        for( int i=0; i<timeBtns.length; i++ )
+		        {
+		        	if( null != timeBtns[i].getView() )
+		        	{
+		        		((ButtonImpl)timeBtns[i].getView()).setVisibility(bShowImgFlg[i] ? View.VISIBLE : View.INVISIBLE );
+		        	}
+		        }
 	        }
 	    }
 	    public void updateTimeDisplay(long secs)
@@ -1073,13 +1083,16 @@ implements ServiceConnection {
 	        tmp -= timeArgs[4]*10;
 	        timeArgs[5] = (int) tmp;
 	        
-	        Button timeBtns[] = getResourceAccessor().appStatus.getTimesButton();
-	        for( int i=0; i<timeBtns.length; i++ )
-	        {
-	        	if( null != timeBtns[i].getView() )
-	        	{
-	        		((ButtonImpl)timeBtns[i].getView()).setImageResource( timeImgResIds[ timeArgs[i] ] );
-	        	}
+	    	if( TimeControlPanel.getInstance() != null && TimeControlPanel.getInstance().getTimesButton() != null )
+	    	{
+	    		Button timeBtns[] = TimeControlPanel.getInstance().getTimesButton();
+		        for( int i=0; i<timeBtns.length; i++ )
+		        {
+		        	if( null != timeBtns[i].getView() )
+		        	{
+		        		((ButtonImpl)timeBtns[i].getView()).setImageResource( timeImgResIds[ timeArgs[i] ] );
+		        	}
+		        }
 	        }
 	    }
 	    

@@ -104,6 +104,7 @@ public final class ResourceAccessor {
 	}
 	public void initSound()
 	{
+		// ‰¹ºo—Íİ’è‚Ì‰Šú‰»‚ğs‚¤
 		soundPool = new SoundPool(SOUND_MAX_COUNT,AudioManager.STREAM_MUSIC,100);
 		soundPool.setOnLoadCompleteListener(
 				new OnLoadCompleteListener()

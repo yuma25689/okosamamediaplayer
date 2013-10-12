@@ -3,7 +3,6 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.service.MediaPlayerUtil;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
 
 /**
  * ŽŸ‚Ì‹È‚ÖˆÚ“®ƒAƒNƒVƒ‡ƒ“
@@ -28,6 +27,7 @@ public final class NextAction implements IViewAction {
         handler.removeMessages(OkosamaMediaPlayerActivity.REFRESH);
         handler.sendMessageDelayed(msg, 1);
 		
+        OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().updatePlayStateButtonImage();
         return 0;
 	}
 

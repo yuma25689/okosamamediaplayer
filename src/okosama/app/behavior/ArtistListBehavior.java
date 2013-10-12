@@ -2,7 +2,7 @@ package okosama.app.behavior;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
+//import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -14,6 +14,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
@@ -41,10 +42,12 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 			mCurrentArtistId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Artists._ID));
 			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(mCurrentArtistId);
 		}
-		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		// OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(mCurrentAlbumId);
 		// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(
-		IViewAction action = new TabSelectAction( act.getTabMain().getTabPageMedia().getTabContent(), TabPage.TABPAGE_ID_SONG );
+		IViewAction action = new TabSelectAction( 
+				ControlIDs.TAB_ID_MEDIA, //act.getMediaTab().getTabContent(),
+				TabPage.TABPAGE_ID_SONG );
 		action.doAction(v);		
 	}	
 	@Override

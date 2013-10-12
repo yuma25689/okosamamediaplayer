@@ -1,6 +1,7 @@
 package okosama.app.tab.media;
 
 import okosama.app.AppStatus;
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
@@ -13,6 +14,7 @@ import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.tab.TabPage;
 import okosama.app.widget.List;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
@@ -33,14 +35,21 @@ public class TabPagePlayList extends TabPage {
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_PLAYLIST;
 		
-		create();
+		create(R.layout.tab_layout_content_generic);
 		// componentContainer.addView(tabButton.getView());
 	}
 	/* (non-Javadoc)
 	 * @see okosama.app.container.ITabComponent#create()
 	 */
 	@Override
-	public int create() {
+	public int create(int panelLayoutID) {
+		
+		resetPanelViews( panelLayoutID );
+		RelativeLayout.LayoutParams lp 
+		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+        		0, 0
+        );
+		tabBaseLayout.setLayoutParams(lp);
 		
 		//////////////////// list //////////////////////////
 		TabComponentPropertySetter creationData[] = {
@@ -74,7 +83,9 @@ public class TabPagePlayList extends TabPage {
 			// lst.getView().setBackgroundColor(Color.MAGENTA);
 			
 			// ボタンをこのタブ子項目として追加
-			addChild( creationData[i].getInternalID(), lst );
+			// addChild( creationData[i].getInternalID(), lst );
+			tabBaseLayout.addView( lst.getView() );
+			
 			// ボタンを配置
 			// これは、setActivateで行う
 			// componentContainer.addView( btn.getView() );
@@ -84,48 +95,5 @@ public class TabPagePlayList extends TabPage {
 		//////////////////////// image /////////////////////
 
 		return 0;
-	}
-	/**
-	 * Activeかどうかを設定。
-	 * @param bActivate
-	 */
-	@Override
-	public void setActivate( boolean bActivate )
-	{
-		if( bActivate )
-		{			
-			// タブがアクティブ化された場合
-			// タブボタンを「無」効な時の表示にする
-			// tabButton.setEnabled( false );
-			// 背景イメージを消す？
-//			if( pageContainer.getBackground() != null )
-//			{
-//				pageContainer.getBackground().setCallback(null);
-//			}
-			
-			// 背景イメージを設定する
-//			pageContainer.setBackgroundDrawable(
-//				OkosamaMediaPlayerActivity.res.getResourceDrawable(
-//					R.drawable.tab_4_select_2
-//				)
-//				// getResources().getDrawable(R.drawable.background_2)
-//			);
-		}
-		else
-		{
-			// タブがアクティブではなくなった場合
-			// タブボタンを「有」効な時の表示にする
-			// tabButton.setEnabled( true );
-			// 背景イメージを消す?
-			// 必要なし？
-			// pageContainer.setBackgroundDrawable(null);
-		}
-		// 親タブが無効ならば、表示を消去
-		// このタブの場合、Activeとの違いが必要
-		// TODO:ここでやるかどうかは微妙
-		// tabButton.setVisible(parent.isActive());
-		
-		// TabComponentParentのsetActivateで、全ての子クラスのsetActivateが実行される
-        super.setActivate( bActivate );
 	}
 }

@@ -1,5 +1,4 @@
 package okosama.app.action;
-import android.view.View;
 
 /**
  * アクションクラスのインタフェース

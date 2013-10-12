@@ -1,15 +1,9 @@
 package okosama.app.tab;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
-import okosama.app.action.MediaPlayPauseAction;
-import okosama.app.action.NextAction;
-import okosama.app.action.PrevAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
@@ -30,6 +24,7 @@ import android.widget.ImageView.ScaleType;
  */
 public class Tab extends TabComponentParent {
 
+	public static int HDR_SIZE = 100;
 	protected SparseArray<Button> mapBtn;
 	int iCurrentTabPageId;
 	
@@ -39,6 +34,7 @@ public class Tab extends TabComponentParent {
 		pageContainer = ll;
 		componentContainer = rl;
 		iCurrentTabPageId = TabPage.TABPAGE_ID_NONE;
+		mapBtn = new SparseArray<Button>();
 	}
 	
 	/**
@@ -47,8 +43,9 @@ public class Tab extends TabComponentParent {
 	 */
 	public int create(int panelLayoutId) {
 		int errCode = 0;
-				
-		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+
+		OkosamaMediaPlayerActivity act 
+		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 
 		// タブのパネルを作成
 		LayoutInflater inflator = act.getLayoutInflater();
@@ -66,14 +63,16 @@ public class Tab extends TabComponentParent {
 		mapBtn.put( TabPage.TABPAGE_ID_PLAY, DroidWidgetKit.getInstance().MakeButton() );
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
 			ControlIDs.PLAY_TAB_BUTTON, ComponentType.BUTTON, 
-			10, 10, 100, 100, 
+			10, 40, 100, 100, 
 			null, R.drawable.music_tab_button_image,
 			"", ScaleType.FIT_XY
 		);
 		mapBtn.get(TabPage.TABPAGE_ID_PLAY).acceptConfigurator(tabBtnCreationData);		
 		SparseArray< IViewAction > actMapTemp 
 			= new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, TabPage.TABPAGE_ID_PLAY ) );
+		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( 
+				this.getInternalID(),
+				TabPage.TABPAGE_ID_PLAY ) );
 		mapBtn.get(TabPage.TABPAGE_ID_PLAY).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
 		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_PLAY).getView());
 		// メディアタブボタン
@@ -88,7 +87,8 @@ public class Tab extends TabComponentParent {
 		mapBtn.get(TabPage.TABPAGE_ID_MEDIA).acceptConfigurator(tabBtnCreationData);		
 		actMapTemp
 		= new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, TabPage.TABPAGE_ID_MEDIA ) );
+		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( 
+				this.getInternalID(), TabPage.TABPAGE_ID_MEDIA ) );
 		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );	
 		mapBtn.get(TabPage.TABPAGE_ID_MEDIA).acceptConfigurator(actionSetter);
 		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_MEDIA).getView());
@@ -101,21 +101,29 @@ public class Tab extends TabComponentParent {
 			null, R.drawable.now_playlist_button_image,
 			"", ScaleType.FIT_XY
 		);
-		mapBtn.get(TabPage.TABPAGE_ID_PLAYLIST).acceptConfigurator(tabBtnCreationData);		
+		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(tabBtnCreationData);		
 		actMapTemp
 		= new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, TabPage.TABPAGE_ID_PLAYLIST ) );
-		mapBtn.get(TabPage.TABPAGE_ID_PLAYLIST).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
-		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_PLAYLIST).getView());				
+		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( 
+				this.getInternalID(),
+				TabPage.TABPAGE_ID_NOW_PLAYLIST ) );
+		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
+		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).getView());				
 		
 		RelativeLayout rlCont = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_contents);
+		
 		// タブの追加
-		addChild( TabPage.TABPAGE_ID_PLAY, new TabPagePlay( this, pageContainer, rlCont ) );
-		addChild( TabPage.TABPAGE_ID_MEDIA, new TabPageMedia( this, pageContainer, rlCont ) );
-		addChild( TabPage.TABPAGE_ID_PLAY, new TabPageNowPlaylist( this, pageContainer, rlCont ));
+		addChild( TabPage.TABPAGE_ID_PLAY, 
+				new TabPagePlay( this, pageContainer, rlCont ) );
+		addChild( TabPage.TABPAGE_ID_MEDIA, 
+				new TabPageMedia( this, pageContainer, rlCont ) );//new TabPageMedia( this, pageContainer, rlCont ) );
+		addChild( TabPage.TABPAGE_ID_NOW_PLAYLIST, 
+				new TabPageNowPlaylist( this, pageContainer, rlCont ));
 		// タブページは、setCurrentTabを読んだ時、アクティブなものだけが作られる。
 		// なぜかタブページのcreateは呼んではいけないことになってしまった。
 		// また、create時のタブIDは不明なので、setCurrentTabはここでは呼ばず、上位に呼ばせる。
+		
+		rlCont.setBackgroundResource(R.color.gradiant_test);
 		
 		// タブのパネルを親から与えられたレイアウトに追加
 		componentContainer.addView(tabBaseLayout);

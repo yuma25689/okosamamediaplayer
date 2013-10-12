@@ -8,6 +8,7 @@ import okosama.app.action.TabSelectAction;
 import okosama.app.action.ToggleChangeAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
+import okosama.app.tab.media.TabPageAlbum;
 import okosama.app.widget.ToggleButton;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -31,7 +32,7 @@ public class TabPageMedia extends TabPage {
 	}
 	ToggleButton toggleEx;
 	//ToggleButton toggleIn;
-	TabPageMedia( Tab parent, LinearLayout ll, RelativeLayout rl ) {
+	public TabPageMedia( Tab parent, LinearLayout ll, RelativeLayout rl ) {
 		super();
 		this.parent = parent;
 		this.pageContainer = ll;
@@ -47,10 +48,14 @@ public class TabPageMedia extends TabPage {
 	@Override
 	public int create(int panelLayoutID) {
 
-		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-		LayoutInflater inflator = act.getLayoutInflater();
-		tabBaseLayout = (ViewGroup)inflator.inflate(panelLayoutID, null, false);
-
+		resetPanelViews( panelLayoutID );
+		RelativeLayout.LayoutParams lp 
+		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+        		0, 0
+        );
+		tabBaseLayout.setLayoutParams(lp);
+		tabBaseLayout.setBackgroundResource(R.color.gradiant_test2);
+		
 		// メディアの場所トグルボタン
 		// external
 		toggleEx = DroidWidgetKit.getInstance().MakeToggleButton();
@@ -71,9 +76,11 @@ public class TabPageMedia extends TabPage {
 		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp2 );	
 		toggleEx.acceptConfigurator(actionSetter);
 
-		tabBaseLayout.addView( toggleEx.getView() );
-		tabContent = OkosamaMediaPlayerActivity.createMediaTab(pageContainer, componentContainer);//new TabMediaSelect(pageContainer, componentContainer);
-		componentContainer.addView( tabBaseLayout );
+		// tabBaseLayout.addView( toggleEx.getView() );
+		tabContent = OkosamaMediaPlayerActivity.createMediaTab(
+				pageContainer, tabBaseLayout);//new TabMediaSelect(pageContainer, componentContainer);
+		// addChild( TabPage.TABPAGE_ID_PLAY, new TabPagePlay( this, pageContainer, rlCont ) );
+		// componentContainer.addView( tabBaseLayout );
 		// tabContent.create();
         // タブページをNoneに
 		// tabContent.setCurrentTab(TabPage.TABPAGE_ID_NONE, false);
@@ -91,33 +98,31 @@ public class TabPageMedia extends TabPage {
 		{
 			// タブがアクティブ化された場合
 			// =メディアタブが選択された場合？
-			// タブボタンを「無」効な時の表示にする
-//			tabButton.setEnabled( false );
 			toggleEx.setEnabled(true);
-			//toggleIn.setEnabled(true);
 			toggleEx.setVisible(true);
-			//toggleIn.setVisible(true);
 			
 			// TODO:背景イメージを設定する
 			// pageContainer.setBackgroundDrawable(null);
 			// タブページを初期化
-			tabContent.setActiveFlg( true );	// setActivateとsetActiveFlgができてしまったのは不本意だが仕方ない
+			// tabContent.setActiveFlg( true );	// setActivateとsetActiveFlgができてしまったのは不本意だが仕方ない
 			// 注意:メディアタブというのは架空のタブでしかないので、それを画面IDにはできない
 			// メディアタブが選択されたら、ここでその子となるタブのいずれかを現在の画面IDにする
-			int iTabId = OkosamaMediaPlayerActivity.getCurrentDisplayId(OkosamaMediaPlayerActivity.tabNameMedia);
-			if( TabPage.TABPAGE_ID_NONE == iTabId
-			|| TabPage.TABPAGE_ID_UNKNOWN == iTabId)
-			{
+			//int iTabId = OkosamaMediaPlayerActivity.getCurrentDisplayId(ControlIDs.TAB_ID_MEDIA);
+			//if( TabPage.TABPAGE_ID_NONE == iTabId
+			//|| TabPage.TABPAGE_ID_UNKNOWN == iTabId)
+			//{
 				//TabSelectAction action = new TabSelectAction(tabContent, TabPage.TABPAGE_ID_ARTIST);
 				// tabContent.setCurrentTab(TabPage.TABPAGE_ID_ARTIST, true);
 				// コードが複雑になっているので、多分あまりよろしくないけど、もう一度メイン画面内部に格納されているタブの状態のみを更新
 				// (画面は更新しない)
 				//action.doAction(null);
-			}
-			else
-			{
-				tabContent.setCurrentTab(iTabId, true);
-			}
+//			}
+//			else
+//			{
+//				tabContent.setCurrentTab(iTabId, true);
+//			}
+			// componentContainer.addView( tabBaseLayout );
+			
 		}
 		else
 		{
@@ -132,9 +137,10 @@ public class TabPageMedia extends TabPage {
 			// 必要なし？
 			// pageContainer.setBackgroundDrawable(null);
 			// タブページを初期化
-			tabContent.setActiveFlg( false );	// setActivateとsetActiveFlgができてしまったのは不本意だが仕方ない			
+			// tabContent.setActiveFlg( false );	// setActivateとsetActiveFlgができてしまったのは不本意だが仕方ない			
 	        // TODO:本来は、前回値や、送信値を見て決める
-			tabContent.setCurrentTab(TabPage.TABPAGE_ID_NONE, false);
+			// tabContent.setCurrentTab(TabPage.TABPAGE_ID_NONE, false);
+			// omponentContainer.removeView( tabBaseLayout );			
 		}
 		// TabComponentParentのsetActivateで、全ての子クラスのsetActivateが実行される
         super.setActivate( bActivate );

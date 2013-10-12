@@ -1,5 +1,6 @@
 package okosama.app.factory;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.service.MediaPlayerUtil;
 import android.content.BroadcastReceiver;
@@ -40,7 +41,8 @@ public class ListenerFactory {
 		return new Handler() {
 	        @Override
 	        public void handleMessage(Message msg) {
-	        	((OkosamaMediaPlayerActivity)OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()).reScanMedia(null,false);
+	        	((OkosamaMediaPlayerActivity)OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()).reScanMedia(
+	        			ControlIDs.ID_NOT_SPECIFIED,false);
 	        	
 	//            if (mAdapter != null) {
 	//                getAlbumCursor(mAdapter.getQueryHandler(), null);

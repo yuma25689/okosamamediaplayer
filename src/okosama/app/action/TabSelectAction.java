@@ -1,11 +1,10 @@
 package okosama.app.action;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
 
 /**
  * タブを選択した時に実行するアクション
@@ -15,13 +14,13 @@ import android.view.View;
 public final class TabSelectAction implements IViewAction {
 
 	public static final int MSG_ID_TAB_SELECT = 101;
-	Tab tabRoot;
-	int tabId = TabPage.TABPAGE_ID_UNKNOWN;
+	int tabId = ControlIDs.ID_NOT_SPECIFIED;
+	int tabPageId = TabPage.TABPAGE_ID_UNKNOWN;
 
-	public TabSelectAction(Tab tabRoot, int tabId) {
+	public TabSelectAction(int tabId, int tabPageId) {
 		super();
-		this.tabRoot = tabRoot;
 		this.tabId = tabId;
+		this.tabPageId = tabPageId;
 	}
 
 	/**
@@ -29,21 +28,22 @@ public final class TabSelectAction implements IViewAction {
 	 */
 	@Override
 	public int doAction( Object param ) {
-		if( tabRoot != null && tabId != TabPage.TABPAGE_ID_UNKNOWN )
+		if( tabId != ControlIDs.ID_NOT_SPECIFIED  && tabId != TabPage.TABPAGE_ID_UNKNOWN )
 		{
 			OkosamaMediaPlayerActivity.getResourceAccessor().playSound(6);
 			// 案外高コストかもしれない
 			// System.gc();
 			// tabRoot.setCurrentTab(tabId, (tabId != TabPage.TABPAGE_ID_NONE) );
-			OkosamaMediaPlayerActivity.setCurrentDisplayId(tabRoot.getName(),tabId);
+			OkosamaMediaPlayerActivity.setCurrentDisplayId(tabId,tabPageId);
 			
-			if( tabId != TabPage.TABPAGE_ID_NONE )
+			if( tabId != ControlIDs.ID_NOT_SPECIFIED && tabPageId != TabPage.TABPAGE_ID_NONE )
 			{			
 				// handlerに通知する
 				Message msg = Message.obtain();
-				msg.arg1 = MSG_ID_TAB_SELECT;
-				msg.arg2 = tabId;
-				msg.obj = tabRoot.getName();
+				msg.what = MSG_ID_TAB_SELECT;
+				// msg.arg1 = MSG_ID_TAB_SELECT;
+				msg.arg2 = tabPageId;
+				msg.obj = tabId;
                 Handler hdr = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getHandler();                        
                 if( hdr == null )
                 {

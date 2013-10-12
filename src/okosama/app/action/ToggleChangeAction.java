@@ -1,7 +1,6 @@
 package okosama.app.action;
 
 import okosama.app.OkosamaMediaPlayerActivity;
-import android.view.View;
 
 /**
  * トグルボタンの値が変更された時に実行するアクション

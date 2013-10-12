@@ -18,6 +18,7 @@ import okosama.app.tab.TabPage;
 import okosama.app.widget.List;
 import android.graphics.Color;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
@@ -38,14 +39,22 @@ public class TabPageAlbum extends TabPage {
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_ALBUM;
 		
-		create();
+		create(R.layout.tab_layout_content_generic);
 		// componentContainer.addView(tabButton.getView());
 	}
 	/* (non-Javadoc)
 	 * @see okosama.app.container.ITabComponent#create()
 	 */
 	@Override
-	public int create() {
+	public int create(int panelLayoutID) {
+
+		resetPanelViews(panelLayoutID);
+		RelativeLayout.LayoutParams lp 
+		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+        		0, 0
+        );
+		tabBaseLayout.setLayoutParams(lp);
+
 		// タブのボタンだけはここで作る？
 		// tabButton = DroidWidgetKit.getInstance().MakeButton();
 		// TAB_BUTTON
@@ -99,7 +108,9 @@ public class TabPageAlbum extends TabPage {
 			lst.getView().setBackgroundColor(Color.YELLOW);
 			
 			// リストをこのタブ子項目として追加
-			addChild( List.LISTID_ALBUM, lst );
+			// addChild( List.LISTID_ALBUM, lst );
+			tabBaseLayout.addView( lst.getView() );
+			
 			// ボタンを配置
 			// これは、setActivateで行う
 			// componentContainer.addView( btn.getView() );
@@ -138,14 +149,14 @@ public class TabPageAlbum extends TabPage {
 			
 			// カーソルを再設定する
 			// カーソルの作成
-			OkosamaMediaPlayerActivity activity = (OkosamaMediaPlayerActivity) ResourceAccessor.getInstance().getActivity();
+			// OkosamaMediaPlayerActivity activity = (OkosamaMediaPlayerActivity) ResourceAccessor.getInstance().getActivity();
 			//if( null == Database.getInstance(activity).getCursor(Database.AlbumCursorName) )
 			//{
-			if( activity != null)
-			{
-				// TODO: 検索条件を、メインから取得
-				Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).createAlbumCursor(activity.getAlbumAdp().getQueryHandler(), null ); //, null);
-			}
+//			if( activity != null)
+//			{
+//				// TODO: 検索条件を、メインから取得
+//				Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).createAlbumCursor(activity.getAlbumAdp().getQueryHandler(), null ); //, null);
+//			}
 			//}
 		}
 		else

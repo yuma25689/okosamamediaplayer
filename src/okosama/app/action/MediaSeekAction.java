@@ -2,9 +2,9 @@ package okosama.app.action;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.service.MediaPlayerUtil;
-import android.R;
+// import android.R;
 import android.os.RemoteException;
-import android.view.View;
+// import android.view.View;
 
 /**
  * メディアを指定時間シークするアクション

@@ -1,10 +1,7 @@
 package okosama.app.action;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.TweetActivity;
-import okosama.app.service.TwitterUtils;
-import twitter4j.auth.AccessToken;
 import android.content.Intent;
-import android.view.View;
 
 /**
  * ‰½‚àˆ—‚µ‚È‚¢ƒAƒNƒVƒ‡ƒ“

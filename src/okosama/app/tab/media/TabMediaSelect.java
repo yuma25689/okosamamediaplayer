@@ -1,6 +1,7 @@
 package okosama.app.tab.media;
 
 import okosama.app.ControlIDs;
+import okosama.app.DroidDisplayInfo;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
@@ -26,6 +27,8 @@ import android.widget.ImageView.ScaleType;
  *
  */
 public class TabMediaSelect extends Tab {
+	static final int BUTTON_HEIGHT = 100;
+	static final int HOOTER_SIZE = BUTTON_HEIGHT + Tab.HDR_SIZE;
 	
 	public TabMediaSelect(int ID, LinearLayout ll, ViewGroup rl) {
 		super(ControlIDs.TAB_ID_MEDIA, ll, rl);
@@ -49,13 +52,14 @@ public class TabMediaSelect extends Tab {
         );
 		tabBaseLayout.setLayoutParams(lp);
 		// タブボタンを置くヘッダとなるレイアウト
-		RelativeLayout rlHdr = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_header);
-		
+		RelativeLayout rlHooter = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_hooter);
 		// アルバムタブボタン
+		
 		mapBtn.put( TabPage.TABPAGE_ID_ALBUM, DroidWidgetKit.getInstance().MakeButton() );
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
 			ControlIDs.ALBUM_TAB_BUTTON, ComponentType.BUTTON, 
-			0, 859 - 100, 120, 100,
+			0, 0, // DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE,
+			120, BUTTON_HEIGHT,
 			R.drawable.music_select_album_image,
 			R.drawable.no_image, // R.drawable.tab3_btn_not_select_no_shadow2, 
 			"", ScaleType.FIT_XY 
@@ -63,58 +67,61 @@ public class TabMediaSelect extends Tab {
 		mapBtn.get(TabPage.TABPAGE_ID_ALBUM).acceptConfigurator(tabBtnCreationData);
 		SparseArray< IViewAction > actMapTemp 
 		= new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, TabPage.TABPAGE_ID_ALBUM ) );
+		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( this.getInternalID(), TabPage.TABPAGE_ID_ALBUM ) );
 		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );			
 		mapBtn.get(TabPage.TABPAGE_ID_ALBUM).acceptConfigurator(actionSetter);
-		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_ALBUM).getView());
+		rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_ALBUM).getView());
 
 		// アーティストタブボタン
 		mapBtn.put( TabPage.TABPAGE_ID_ARTIST, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData = new TabComponentPropertySetter(
 			ControlIDs.ARTIST_TAB_BUTTON, ComponentType.BUTTON, 
-			120 + 5, 859 - 100, 120, 100,
+			120 + 5, 0, //DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
+			120, BUTTON_HEIGHT,
 			R.drawable.music_select_artist_image,
 			R.drawable.no_image,//R.drawable.tab4_btn_not_select_no_shadow2, 
 			"", ScaleType.FIT_XY 
 		);
 		mapBtn.get(TabPage.TABPAGE_ID_ARTIST).acceptConfigurator(tabBtnCreationData);
 		actMapTemp = new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, TabPage.TABPAGE_ID_ARTIST ) );
+		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( this.getInternalID(), TabPage.TABPAGE_ID_ARTIST ) );
 		actionSetter = new TabComponentActionSetter( actMapTemp );			
 		mapBtn.get(TabPage.TABPAGE_ID_ARTIST).acceptConfigurator(actionSetter);
-		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_ARTIST).getView());
+		rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_ARTIST).getView());
 
 		// ソングタブ
 		mapBtn.put( TabPage.TABPAGE_ID_SONG, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData = new TabComponentPropertySetter(
 			ControlIDs.SONG_TAB_BUTTON, ComponentType.BUTTON, 
-			( 120 + 5 ) * 2, 859 - 100, 120, 100,
+			( 120 + 5 ) * 2, 0, //DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
+			120, BUTTON_HEIGHT,
 			R.drawable.music_select_song_image,
 			R.drawable.no_image, // R.drawable.tab3_btn_not_select_no_shadow2, 
 			"", ScaleType.FIT_XY 
 		);
 		mapBtn.get(TabPage.TABPAGE_ID_SONG).acceptConfigurator(tabBtnCreationData);
 		actMapTemp = new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, TabPage.TABPAGE_ID_SONG ) );
-		actionSetter = new TabComponentActionSetter( actMapTemp );			
+		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( this.getInternalID(), TabPage.TABPAGE_ID_SONG ) );
+		actionSetter = new TabComponentActionSetter( actMapTemp );		
 		mapBtn.get(TabPage.TABPAGE_ID_SONG).acceptConfigurator(actionSetter);
-		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_SONG).getView());
+		rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_SONG).getView());
 		
 		// プレイリストタブ
 		mapBtn.put( TabPage.TABPAGE_ID_PLAYLIST, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData = new TabComponentPropertySetter(
 			ControlIDs.PLAYLIST_TAB_BUTTON, ComponentType.BUTTON, 
-			( 120 + 5 ) * 3, 859 - 100, 120, 100,
+			( 120 + 5 ) * 3, 0,//DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
+			120, BUTTON_HEIGHT,
 			R.drawable.music_select_playlist_image,
 			R.drawable.no_image,//R.drawable.tab4_btn_not_select_no_shadow2, 
 			"", ScaleType.FIT_XY 
 		);
 		mapBtn.get(TabPage.TABPAGE_ID_PLAYLIST).acceptConfigurator(tabBtnCreationData);
 		actMapTemp = new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, TabPage.TABPAGE_ID_PLAYLIST ) );
+		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( this.getInternalID(), TabPage.TABPAGE_ID_PLAYLIST ) );
 		actionSetter = new TabComponentActionSetter( actMapTemp );			
 		mapBtn.get(TabPage.TABPAGE_ID_PLAYLIST).acceptConfigurator(actionSetter);
-		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_PLAYLIST).getView());
+		rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_PLAYLIST).getView());
 		
 		RelativeLayout rlCont = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_contents);
 		// タブの追加
@@ -123,10 +130,12 @@ public class TabMediaSelect extends Tab {
 		addChild( TabPage.TABPAGE_ID_SONG, new TabPageSong( this, pageContainer, rlCont ) );
 		addChild( TabPage.TABPAGE_ID_PLAYLIST, new TabPagePlayList( this, pageContainer, rlCont ) );
 	
-		// タブページは、setCurrentTabを読んだ時、アクティブなものだけが作られる。
-		// なぜかタブページのcreateは呼んではいけないことになってしまった。
-		// また、create時のタブIDは不明なので、setCurrentTabはここでは呼ばず、上位に呼ばせる。
+		//rlHooter.setBackgroundResource(R.color.gradiant_test4);
+		rlCont.setBackgroundResource(R.color.gradiant_test4);
 		
+		// タブのパネルを親から与えられたレイアウトに追加
+		componentContainer.addView(tabBaseLayout);
+				
 		return errCode;
 	}
 

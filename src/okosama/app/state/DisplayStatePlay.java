@@ -6,6 +6,7 @@ import android.view.View;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
+import okosama.app.panel.TimeControlPanel;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
@@ -44,17 +45,20 @@ public class DisplayStatePlay extends absDisplayState {
 				// 再生中かどうかで、処理を振り分ける
 	        	ret = 1000; //	再生中は、1000msごとに画面更新
 	        }
-		    long pos = MediaPlayerUtil.sService.position();
-
+		    
 			act.updateTimeDisplayVisible(MediaPlayerUtil.sService.duration() / 1000);
-			act.getTimeCP().setDurationLabel(MediaPlayerUtil.sService.duration() / 1000);
-			act.getTimeCP().setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
-			act.getTimeCP().setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
-			act.getTimeCP().setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
-			act.getTimeCP().getProgressBar().setMax((int)(MediaPlayerUtil.sService.duration()));
-			act.getTimeCP().getProgressBar().setProgress((int)(pos));
-			act.getTimeCP().getProgressBar().setVisibility(View.VISIBLE);
-			act.setPlayPauseButtonImage();
+			long pos = MediaPlayerUtil.sService.position();
+			if( TimeControlPanel.getInstance() != null )
+			{
+				TimeControlPanel.getInstance().setDurationLabel(MediaPlayerUtil.sService.duration() / 1000);
+				TimeControlPanel.getInstance().setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
+				TimeControlPanel.getInstance().setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
+				TimeControlPanel.getInstance().setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
+				TimeControlPanel.getInstance().getProgressBar().setMax((int)(MediaPlayerUtil.sService.duration()));
+				TimeControlPanel.getInstance().getProgressBar().setProgress((int)(pos));
+				TimeControlPanel.getInstance().getProgressBar().setVisibility(View.VISIBLE);
+			}
+			// act.setPlayPauseButtonImage();
 			act.updateTimeDisplay(pos/1000);
 //	        }
 //	        else

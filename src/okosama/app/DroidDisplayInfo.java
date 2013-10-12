@@ -31,6 +31,8 @@ public final class DroidDisplayInfo {
 	double widthScaleCorrectDensity = 0;
 	double heightScaleCorrectDensity = 0;
 	
+	public static final int CURRENT_BASE_DEVICE_HEIGHT = 859;
+	
 	public void clear()
 	{
 		titleBarHeightPixels = 
@@ -124,7 +126,8 @@ public final class DroidDisplayInfo {
 				
 				// handler‚É’Ê’m‚·‚é
 				Message msg = Message.obtain();
-				msg.arg1 = DisplayInfo.MSG_INIT_END;
+				msg.what = DisplayInfo.MSG_INIT_END;
+				// msg.arg1 = DisplayInfo.MSG_INIT_END;
 				handler.sendMessage( msg );
 		    }
 		});	    

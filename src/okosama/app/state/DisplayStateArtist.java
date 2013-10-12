@@ -1,5 +1,6 @@
 package okosama.app.state;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
@@ -19,7 +20,7 @@ public class DisplayStateArtist extends absDisplayStateMediaTab {
 	@Override
 	public long updateDisplay() {
 		long ret =  OkosamaMediaPlayerActivity.NO_REFRESH;
-		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(OkosamaMediaPlayerActivity.tabNameMedia, false);
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(ControlIDs.TAB_ID_MEDIA, false);
 		return ret;
 	}
 //	@Override

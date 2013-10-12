@@ -6,7 +6,6 @@ import okosama.app.service.MediaPlaybackService;
 import okosama.app.service.MediaPlayerUtil;
 import android.os.RemoteException;
 import android.util.Log;
-import android.view.View;
 
 public class ToggleShuffleAction implements IViewAction {
 
@@ -22,7 +21,6 @@ public class ToggleShuffleAction implements IViewAction {
                 MediaPlayerUtil.sService.setShuffleMode(MediaPlaybackService.SHUFFLE_NORMAL);
                 if (MediaPlayerUtil.sService.getRepeatMode() == MediaPlaybackService.REPEAT_CURRENT) {
                     MediaPlayerUtil.sService.setRepeatMode(MediaPlaybackService.REPEAT_ALL);
-                    act.setRepeatButtonImage();
                 }
                 act.showToast(R.string.shuffle_on_notif);
             } else if (shuffle == MediaPlaybackService.SHUFFLE_NORMAL ||
@@ -32,7 +30,7 @@ public class ToggleShuffleAction implements IViewAction {
             } else {
                 Log.e("MediaPlaybackActivity", "Invalid shuffle mode: " + shuffle);
             }
-            act.setShuffleButtonImage();
+            act.updatePlayStateButtonImage();
         } catch (RemoteException ex) {
         }
 	    return 0;
