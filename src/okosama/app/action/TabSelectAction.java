@@ -30,6 +30,11 @@ public final class TabSelectAction implements IViewAction {
 	public int doAction( Object param ) {
 		if( tabId != ControlIDs.ID_NOT_SPECIFIED  && tabId != TabPage.TABPAGE_ID_UNKNOWN )
 		{
+			if( tabPageId == OkosamaMediaPlayerActivity.getCurrentDisplayId(tabId) )
+			{
+				return 0;
+			}
+			
 			OkosamaMediaPlayerActivity.getResourceAccessor().playSound(6);
 			// 案外高コストかもしれない
 			// System.gc();

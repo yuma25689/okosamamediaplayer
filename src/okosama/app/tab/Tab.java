@@ -123,7 +123,7 @@ public class Tab extends TabComponentParent {
 		// なぜかタブページのcreateは呼んではいけないことになってしまった。
 		// また、create時のタブIDは不明なので、setCurrentTabはここでは呼ばず、上位に呼ばせる。
 		
-		rlCont.setBackgroundResource(R.color.gradiant_test);
+		// rlCont.setBackgroundResource(R.color.gradiant_base);
 		
 		// タブのパネルを親から与えられたレイアウトに追加
 		componentContainer.addView(tabBaseLayout);

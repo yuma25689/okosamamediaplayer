@@ -815,18 +815,41 @@ implements ServiceConnection {
 			switch( currentSubTabId )
 			{
 			case TabPage.TABPAGE_ID_ALBUM:
+				if( bForce == false 
+				&& null != Database.getInstance(this).getCursor( Database.AlbumCursorName )) {
+					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
+					break;
+				}
 				// Listにカーソルを設定
 				Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );//, null);
 				break;
 			case TabPage.TABPAGE_ID_ARTIST:
+				if( bForce == false 
+				&& null != Database.getInstance(this).getCursor( Database.ArtistCursorName )) {
+					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
+					break;
+				}
+				
 				// Listにカーソルを設定
 				Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);			
 				break;
 			case TabPage.TABPAGE_ID_SONG:
+				if( bForce == false 
+				&& null != Database.getInstance(this).getCursor( Database.SongCursorName )) {
+					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
+					break;
+				}
+				
 				OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
 				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null, true );//, null, null, null);			
 				break;
 			case TabPage.TABPAGE_ID_PLAYLIST:
+				if( bForce == false 
+				&& null != Database.getInstance(this).getCursor( Database.PlaylistCursorName )) {
+					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
+					break;
+				}
+				
 				Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);						
 				break;
 			case TabPage.TABPAGE_ID_NONE:

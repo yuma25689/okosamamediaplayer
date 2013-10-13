@@ -25,10 +25,10 @@ public class MediaPlayPauseAction implements IViewAction {
                 else 
                 {
                 	service.play();
-                	IViewAction actionTabSet = new TabSelectAction(
-                			ControlIDs.TAB_ID_MAIN
-                			, TabPage.TABPAGE_ID_PLAY );
-                	actionTabSet.doAction(null);
+//                	IViewAction actionTabSet = new TabSelectAction(
+//                			ControlIDs.TAB_ID_MAIN
+//                			, TabPage.TABPAGE_ID_PLAY );
+//                	actionTabSet.doAction(null);
                 }
                 Handler handler = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getHandler();
                 if( handler == null )

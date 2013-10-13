@@ -1,9 +1,15 @@
 package okosama.app.tab;
+// import android.R;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.R;
 import okosama.app.widget.*;
 
 /**
@@ -36,15 +42,66 @@ public abstract class TabPage extends TabComponentParent {
 	{		
 		if( bActivate )
 		{
+			Animation anim = AnimationUtils.loadAnimation(
+					OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
+					, R.anim.left_in );//android.R.anim.slide_in_left );
+    		if( tabBaseLayout.getParent() != null )
+    		{
+    			if( tabBaseLayout.getParent() instanceof ViewGroup )
+    				((ViewGroup)tabBaseLayout.getParent()).removeView( tabBaseLayout );
+    		}			
+			tabBaseLayout.startAnimation(anim);
 			componentContainer.addView( tabBaseLayout );
 		}
 		else
 		{
-			componentContainer.removeView( tabBaseLayout );			
+			Animation anim = AnimationUtils.loadAnimation(
+					OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
+					, R.anim.right_out );
+			//R.anim.slide_out_right
+			bWaitRemove = true;
+			anim.setAnimationListener(
+			animationListener);
+			// tabBaseLayout.setAnimation(anim);
+			//anim.setFillAfter(true);
+			tabBaseLayout.startAnimation(anim);
+			//componentContainer.removeView( tabBaseLayout );			
 		}
 		super.setActivate(bActivate);
 	}
-		
+
+	boolean bWaitRemove = false;
+	boolean bWaitAdd = false;
+	
+	private AnimationListener animationListener = new AnimationListener() {
+
+		    @Override
+		    public void onAnimationEnd(Animation animation) {
+				Log.i("anim_end","ok");
+				componentContainer.post(new Runnable() {
+		            public void run() {
+                    	if( bWaitRemove )
+        		    	{
+                    		if( -1 != componentContainer.indexOfChild( tabBaseLayout ))
+                    			componentContainer.removeView( tabBaseLayout );
+        		    		bWaitRemove = false;
+        		    	}
+		            }
+		        });				
+		    }
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+				// TODO Auto-generated method stub
+				Log.i("anim_start","ok");
+			}  
+	};
 	/**
 	 * @return ì‡ïîÇÃtabIdÇ™à¯êîÇÃÇ‡ÇÃÇ∆àÍívÇ∑ÇÈÇ© 
 	 */
