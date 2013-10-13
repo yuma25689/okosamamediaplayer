@@ -135,12 +135,45 @@ public class PlaylistListAdapter extends SimpleCursorAdapter {
             cursor.close();
             cursor = null;
         }
-        if (cursor != Database.getInstance(mActivity).getCursor(Database.PlaylistCursorName)) {
+        //if (false == isEqualCursor( cursor, Database.getInstance(mActivity).getCursor(Database.PlaylistCursorName))) {
         	// カーソルが変更されていたら、カーソルを再設定する
         	Database.getInstance(mActivity).setCursor(Database.PlaylistCursorName, cursor);
-            super.changeCursor(cursor);
             getColumnIndices(cursor);
-        }
+        //}
+        super.changeCursor(cursor);
+    }
+    /**
+     * カーソルの内容が一致するかどうか調べる この場合、数と_ID列のみ確認
+     * @param c1
+     * @param c2
+     * @return
+     */
+    boolean isEqualCursor( Cursor c1, Cursor c2 )
+    {
+    	boolean bRet = false;
+    	
+    	if( c1 == null || c2 == null
+    	|| c1.getCount() != c2.getCount() )
+    	{
+    		// どちらかがnullの場合は、判定不可だが、falseとする
+    		// 数が違う場合
+    		return false;
+    	}
+    	if(c1.moveToFirst()){
+    		c2.moveToFirst();
+    		do{
+				long id1 = c1.getLong(c1.getColumnIndex("_ID"));
+				long id2 = c2.getLong(c2.getColumnIndex("_ID"));
+				if( id1 != id2 )
+				{
+					return false;
+				}
+				
+			}while(c1.moveToNext() && c2.moveToNext());
+    	}
+    	
+    	bRet = true;
+    	return bRet;
     }
     
     /**

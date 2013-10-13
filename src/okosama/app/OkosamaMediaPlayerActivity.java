@@ -474,6 +474,7 @@ implements ServiceConnection {
 		            	reScanMedia((Integer)message.obj,false);
 		            	// 共通部分再描画
 		            	updateCommonCtrls();
+		            	updatePlayStateButtonImage();
 		        		break;
 		        	}
         		}
@@ -773,6 +774,7 @@ implements ServiceConnection {
 			// nullのままでcursor設定されても特に問題はない
 			// return;
 		}
+		
 		switch( id )
 		{
 		// TODO:nullの場合、表示するビューを変更した方がいいかもしれない
@@ -818,9 +820,11 @@ implements ServiceConnection {
 				if( bForce == false 
 				&& null != Database.getInstance(this).getCursor( Database.AlbumCursorName )) {
 					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
+		            Log.i("test", "rescan escape album");
 					break;
 				}
 				// Listにカーソルを設定
+	            Log.i("test", "rescan album");
 				Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );//, null);
 				break;
 			case TabPage.TABPAGE_ID_ARTIST:
@@ -834,21 +838,21 @@ implements ServiceConnection {
 				Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);			
 				break;
 			case TabPage.TABPAGE_ID_SONG:
-				if( bForce == false 
-				&& null != Database.getInstance(this).getCursor( Database.SongCursorName )) {
-					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
-					break;
-				}
+//				if( bForce == false 
+//				&& null != Database.getInstance(this).getCursor( Database.SongCursorName )) {
+//					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
+//					break;
+//				}
 				
 				OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
 				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null, true );//, null, null, null);			
 				break;
 			case TabPage.TABPAGE_ID_PLAYLIST:
-				if( bForce == false 
-				&& null != Database.getInstance(this).getCursor( Database.PlaylistCursorName )) {
-					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
-					break;
-				}
+//				if( bForce == false 
+//				&& null != Database.getInstance(this).getCursor( Database.PlaylistCursorName )) {
+//					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
+//					break;
+//				}
 				
 				Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);						
 				break;
