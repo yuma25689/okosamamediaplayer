@@ -15,6 +15,10 @@ import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.factory.DroidWidgetKit;
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 //import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -53,6 +57,7 @@ import okosama.app.widget.ButtonImpl;
 
 public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection {
+	public static final String MEDIA_SERVICE_NOTIFY = "MediaServiceNotify";
 
 	// 強制リフレッシュフラグ？
 	public boolean bForceRefresh = false;
@@ -620,6 +625,12 @@ implements ServiceConnection {
         	SubControlPanel.getInstance().removeViewFromParent();
         }
         
+        if( null != receiver )
+        {
+        	this.unregisterReceiver(receiver);
+        	receiver = null;
+        }
+        
         // カーソルクローズ
         // Album
         Cursor cTmp = Database.getInstance(this).getCursor( Database.AlbumCursorName );
@@ -655,6 +666,18 @@ implements ServiceConnection {
 		super.onPause();
 	}
 
+	IntentFilter intentFilter;
+	BroadcastReceiver receiver;
+	class MediaServiceNotifyReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) 
+		{
+			// 表示の更新
+			updatePlayStateButtonImage();
+		}
+		
+	}
 	@Override
 	protected void onResume() {
 //		if( bInitEnd == true 
@@ -666,6 +689,12 @@ implements ServiceConnection {
 		
 		//setTabSelection( currentMainTabId, currentSubTabId );
 //		}
+        
+        receiver = new MediaServiceNotifyReceiver();
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(MEDIA_SERVICE_NOTIFY);
+        registerReceiver(receiver,intentFilter);
+        
         getResourceAccessor().initSound();
         bForceRefresh = true;
 		super.onResume();

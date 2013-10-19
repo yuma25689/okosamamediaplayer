@@ -59,6 +59,7 @@ import java.lang.ref.WeakReference;
 import java.util.Random;
 import java.util.Vector;
 
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 
 /**
@@ -249,7 +250,7 @@ public class MediaPlaybackService extends Service {
             	// コマンドが前へコマンドだった
                 prev();
             } else if (CMDTOGGLEPAUSE.equals(cmd) || TOGGLEPAUSE_ACTION.equals(action)) {
-            	Log.d("test","getPause");
+            	// Log.d("test","getPause");
             	// トグルポーズコマンドだった
                 if (isPlaying()) {
                 	// プレイ中ならば、止める
@@ -788,6 +789,13 @@ public class MediaPlaybackService extends Service {
         mDelayedStopHandler.removeCallbacksAndMessages(null);
         Message msg = mDelayedStopHandler.obtainMessage();
         mDelayedStopHandler.sendMessageDelayed(msg, IDLE_DELAY);
+        
+        // とりあえずここにだけ、Activityへのボタン更新通知処理を入れる
+        Intent activityNotifyIntent = new Intent();
+        activityNotifyIntent.setAction(
+        		OkosamaMediaPlayerActivity.MEDIA_SERVICE_NOTIFY);
+        getBaseContext().sendBroadcast(activityNotifyIntent);
+        
         // サービスが強制終了した場合、サービスは再起動するonStartCommand()が再度呼び出され、Intentにnullが渡される
         return START_STICKY;
     }
