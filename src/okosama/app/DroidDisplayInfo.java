@@ -93,7 +93,8 @@ public final class DroidDisplayInfo {
 	    // ステータスバーと、タイトルバーの高さを取得
 	    // Viewが非表示の状態だと、取れない。
 	    viewForMeasureBarHeight.post(new Runnable() {
-		    public void run() {
+		    @Override
+			public void run() {
 		    	// こうすることで、Viewが始まっていない場合でも、Viewが開始してから情報を取得できる？
 		        Rect rect = new Rect();
 		        // Viewからステータスバーの高さを取得
@@ -111,16 +112,16 @@ public final class DroidDisplayInfo {
 		        // 実際のDisplayの高さと横幅と、背景画像の高さと横幅との比率を求める
 				// ベース画像の、元（プログラムに入ってくる前）の高さと幅
 				double orgHeightOfBk 
-					= ((double)backgroundImgBase.getIntrinsicHeight()); /// metrics.density;
+					= (backgroundImgBase.getIntrinsicHeight()); /// metrics.density;
 				double orgWidthOfBk 
-					= ((double)backgroundImgBase.getIntrinsicWidth());// / metrics.density;
+					= (backgroundImgBase.getIntrinsicWidth());// / metrics.density;
 				// プログラム内でのクライアント領域のサイズと、元の画像のサイズとの比率を求める
 		        heightScaleCorrectDensity
-		        	=  (double)( clientHeightPixels 
-		        		/ orgHeightOfBk );
+		        	=  clientHeightPixels 
+		        		/ orgHeightOfBk;
 		        widthScaleCorrectDensity 
-		        =  (double)( metrics.widthPixels 
-		        		/ orgWidthOfBk );
+		        =  metrics.widthPixels 
+		        		/ orgWidthOfBk;
 				;
 			    
 				

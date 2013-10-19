@@ -1,14 +1,21 @@
 package okosama.app.tab;
 
+import java.util.ArrayList;
+
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.adapter.AlbumListAdapter;
+import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.ArtistAlbumListAdapter;
 import okosama.app.adapter.PlaylistListAdapter;
 import okosama.app.adapter.TrackListAdapter;
+import okosama.app.adapter.TrackListRawAdapter;
+import okosama.app.storage.AlbumData;
+import okosama.app.storage.TrackData;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.PlaylistsColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -103,8 +110,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		component.setInternalID( this.internalID );
 		// î˜ñ≠ÇæÇ™ÅAActivityÇÕResourceAccessorÇ©ÇÁéÊìæÇ∑ÇÈ
 		OkosamaMediaPlayerActivity activity 
-		= (OkosamaMediaPlayerActivity) 
-		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		
 		View v = component.getView();
 		if( v == null )
@@ -197,13 +203,14 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			// AdapterÇÃçÏê¨
 			if( activity.getAlbumAdp() == null )
 			{
+				ArrayList<AlbumData> data = new ArrayList<AlbumData>();
 				activity.setAlbumAdp(
-					new AlbumListAdapter(
+					new AlbumListRawAdapter(
 						activity,
-						R.layout.track_list_item,
-						null,//Cursor cursor,
-						new String[] {}, 
-						new int[] {}
+						R.layout.track_list_item,//,
+						data//,//Cursor cursor,
+//						new String[] {}, 
+//						new int[] {}
 					)
 				);
 			}
@@ -279,13 +286,15 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			// AdapterÇÃçÏê¨
 			if( activity.getTrackAdp() == null )
 			{
+				ArrayList<TrackData> data = new ArrayList<TrackData>();
 				activity.setTrackAdp(
-					new TrackListAdapter(
+					new TrackListRawAdapter(
 						activity,
 						editMode ? R.layout.edit_track_list_item : R.layout.track_list_item,
-						null,//Cursor cursor,
-						new String[] {}, 
-						new int[] {},
+//						null,//Cursor cursor,
+//						new String[] {}, 
+//						new int[] {},
+						data,
 						isnowplaying,
 						disablenowplayingindicator,
 						genre,
@@ -324,7 +333,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 						activity,
 						R.layout.track_list_item,
 						null,//Cursor cursor,
-						new String[] { MediaStore.Audio.Playlists.NAME},
+						new String[] { PlaylistsColumns.NAME},
 	                    new int[] { android.R.id.text1 }
 					)
 				);
@@ -363,13 +372,15 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			// AdapterÇÃçÏê¨
 			if( activity.getTrackAdp() == null )
 			{
+				ArrayList<TrackData> data = new ArrayList<TrackData>();
 				activity.setTrackAdp(
-					new TrackListAdapter(
+					new TrackListRawAdapter(
 						activity,
 						editMode ? R.layout.edit_track_list_item : R.layout.track_list_item,
-						null,//Cursor cursor,
-						new String[] {}, 
-						new int[] {},
+//						null,//Cursor cursor,
+//						new String[] {}, 
+//						new int[] {},
+						data,
 						isnowplaying,
 						disablenowplayingindicator,
 						genre,

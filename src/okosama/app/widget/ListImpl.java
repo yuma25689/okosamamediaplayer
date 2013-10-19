@@ -4,8 +4,6 @@ import okosama.app.behavior.IListBehavior;
 
 import android.content.Context;
 
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 /**

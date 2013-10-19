@@ -41,6 +41,7 @@ public class Tab extends TabComponentParent {
 	 * タブ全体の作成
 	 * @return 0:正常 0以外:異常
 	 */
+	@Override
 	public int create(int panelLayoutId) {
 		int errCode = 0;
 

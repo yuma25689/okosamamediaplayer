@@ -1,7 +1,6 @@
 package okosama.app.tab.media;
 
 import okosama.app.ControlIDs;
-import okosama.app.DroidDisplayInfo;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
@@ -38,6 +37,7 @@ public class TabMediaSelect extends Tab {
 	 * タブ全体の作成
 	 * @return 0:正常 0以外:異常
 	 */
+	@Override
 	public int create(int panelLayoutId) {
 		int errCode = 0;
 		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();

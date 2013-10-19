@@ -1,5 +1,7 @@
 package okosama.app.adapter;
 
+import java.util.ArrayList;
+
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
@@ -10,7 +12,10 @@ import android.content.Context;
 import android.database.CharArrayBuffer;
 import android.database.Cursor;
 import android.os.RemoteException;
+import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.AudioColumns;
+import android.provider.MediaStore.MediaColumns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AlphabetIndexer;
@@ -59,53 +64,6 @@ public class TrackListAdapter extends SimpleCursorAdapter implements SectionInde
         CharArrayBuffer buffer1;
         char [] buffer2;
     }
-
-//    class TrackQueryHandler extends AsyncQueryHandler {
-//
-//        class QueryArgs {
-//            public Uri uri;
-//            public String [] projection;
-//            public String selection;
-//            public String [] selectionArgs;
-//            public String orderBy;
-//        }
-//
-//        TrackQueryHandler(ContentResolver res) {
-//            super(res);
-//        }
-//        
-//        public Cursor doQuery(Uri uri, String[] projection,
-//                String selection, String[] selectionArgs,
-//                String orderBy, boolean async) {
-//            if (async) {
-//                // Get 100 results first, which is enough to allow the user to start scrolling,
-//                // while still being very fast.
-//                Uri limituri = uri.buildUpon().appendQueryParameter("limit", "100").build();
-//                QueryArgs args = new QueryArgs();
-//                args.uri = uri;
-//                args.projection = projection;
-//                args.selection = selection;
-//                args.selectionArgs = selectionArgs;
-//                args.orderBy = orderBy;
-//
-//                startQuery(0, args, limituri, projection, selection, selectionArgs, orderBy);
-//                return null;
-//            }
-//            return Database.query(mActivity,
-//                    uri, projection, selection, selectionArgs, orderBy);
-//        }
-//
-//        @Override
-//        protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-//            //Log.i("@@@", "query complete: " + cursor.getCount() + "   " + mActivity);
-//            mActivity.initAdapter(cursor, cookie != null);
-//            if (token == 0 && cookie != null && cursor != null && cursor.getCount() >= 100) {
-//                QueryArgs args = (QueryArgs) cookie;
-//                startQuery(1, null, args.uri, args.projection, args.selection,
-//                        args.selectionArgs, args.orderBy);
-//            }
-//        }
-//    }
     
     public TrackListAdapter( OkosamaMediaPlayerActivity currentactivity,
             int layout, Cursor cursor, String[] from, int[] to,
@@ -141,15 +99,15 @@ public class TrackListAdapter extends SimpleCursorAdapter implements SectionInde
         if (cursor != null) {
         	// 各カラムのインデックスを設定
         	// タイトル、アーティスト、時間
-            mTitleIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE);
-            mArtistIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST);
-            mDurationIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION);
+            mTitleIdx = cursor.getColumnIndexOrThrow(MediaColumns.TITLE);
+            mArtistIdx = cursor.getColumnIndexOrThrow(AudioColumns.ARTIST);
+            mDurationIdx = cursor.getColumnIndexOrThrow(AudioColumns.DURATION);
             try {
             	// オーディオ？まず、プレイリストのカラムidから取得を試み、失敗したらトラックのカラムidから取得するらしい
                 mAudioIdIdx = cursor.getColumnIndexOrThrow(
                         MediaStore.Audio.Playlists.Members.AUDIO_ID);
             } catch (IllegalArgumentException ex) {
-                mAudioIdIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID);
+                mAudioIdIdx = cursor.getColumnIndexOrThrow(BaseColumns._ID);
             }
             
             // インデクサの設定
@@ -342,15 +300,16 @@ public class TrackListAdapter extends SimpleCursorAdapter implements SectionInde
         {
         	OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
         }
-        Cursor c = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).createTrackCursor(mQueryHandler, s, false );//,genre, albumId, artistId );
+        //Cursor c = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).createTrackCursor(mQueryHandler, s, false );//,genre, albumId, artistId );
         mConstraint = s;
         mConstraintIsValid = true;
-        return c;
+        return null;//c;
     }
     
     // SectionIndexer methods
     
-    public Object[] getSections() {
+    @Override
+	public Object[] getSections() {
         if (mIndexer != null) { 
             return mIndexer.getSections();
         } else {
@@ -358,12 +317,56 @@ public class TrackListAdapter extends SimpleCursorAdapter implements SectionInde
         }
     }
     
-    public int getPositionForSection(int section) {
+    @Override
+	public int getPositionForSection(int section) {
         int pos = mIndexer.getPositionForSection(section);
         return pos;
     }
     
-    public int getSectionForPosition(int position) {
+    @Override
+	public int getSectionForPosition(int position) {
         return 0;
-    }        
+    }
+
+	/**
+	 * @return the genre
+	 */
+	public String getGenre() {
+		return genre;
+	}
+
+	/**
+	 * @param genre the genre to set
+	 */
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
+	/**
+	 * @return the albumId
+	 */
+	public String getAlbumId() {
+		return albumId;
+	}
+
+	/**
+	 * @param albumId the albumId to set
+	 */
+	public void setAlbumId(String albumId) {
+		this.albumId = albumId;
+	}
+
+	/**
+	 * @return the artistId
+	 */
+	public String getArtistId() {
+		return artistId;
+	}
+
+	/**
+	 * @param artistId the artistId to set
+	 */
+	public void setArtistId(String artistId) {
+		this.artistId = artistId;
+	}        
 }

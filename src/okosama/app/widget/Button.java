@@ -3,7 +3,6 @@ package okosama.app.widget;
 import android.app.Activity;
 import android.view.View;
 import okosama.app.action.IViewAction;
-import okosama.app.tab.*;
 
 /**
  * このアプリケーションで利用するボタンのハンドル
@@ -35,6 +34,7 @@ public class Button extends absWidget {
 	 * 有効無効制御
 	 * @param b
 	 */
+	@Override
 	public void setEnabled( boolean b )
 	{
 		impl.setEnabled(b);
@@ -73,7 +73,8 @@ public class Button extends absWidget {
 		if( actionMap.get( IViewAction.ACTION_ID_ONCLICK, null ) != null )
 		{
 			impl.setOnClickListener(new View.OnClickListener() {
-	            public void onClick(View v) {
+	            @Override
+				public void onClick(View v) {
 	                // クリック時の処理
 	            	actionMap.get( IViewAction.ACTION_ID_ONCLICK )
 	            		.doAction(v);

@@ -11,14 +11,17 @@ public class absWidget extends TabLeaf {
 	}
 	public void setEnabled( boolean b ) {
 	}
+	@Override
 	public void setVisible( boolean b ) {
 	}
 	public int create() {
 		return 0;
 	}
+	@Override
 	public View getView() {
 		return null;
 	}
+	@Override
 	public void configureAction() {
 		super.configureAction();
 	}

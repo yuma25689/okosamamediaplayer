@@ -2,13 +2,11 @@ package okosama.app.widget;
 
 import android.app.Activity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.behavior.IExpListBehavior;
-import okosama.app.tab.*;
 
 public class ExpList extends absWidget {
 	

@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.storage.Database;
 
@@ -31,6 +30,8 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.AudioColumns;
+import android.provider.MediaStore.MediaColumns;
 // import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
@@ -76,7 +77,8 @@ public class MediaPlayerUtil {
         /**
          * サービスが接続されたときコールされる？
          */
-        public void onServiceConnected(ComponentName className, android.os.IBinder service) {
+        @Override
+		public void onServiceConnected(ComponentName className, android.os.IBinder service) {
         	// サービスを取得
             sService = IMediaPlaybackService.Stub.asInterface(service);
             initAlbumArtCache();
@@ -89,7 +91,8 @@ public class MediaPlayerUtil {
         /**
          * サービスが切断されたときにコールされる？
          */
-        public void onServiceDisconnected(ComponentName className) {
+        @Override
+		public void onServiceDisconnected(ComponentName className) {
             if (mCallback != null) {
             	// コールバックがnullでなければ、コールバックをコールする
                mCallback.onServiceDisconnected(className);
@@ -469,7 +472,7 @@ public class MediaPlayerUtil {
         playAll(context, list, position, force_shuffle);
     }
     
-    private static void playAll(Context context, long [] list, int position, boolean force_shuffle) {
+    public static void playAll(Context context, long [] list, int position, boolean force_shuffle) {
         if (list.length == 0 || sService == null) {
             Log.d("MusicUtils", "attempt to play empty song list");
             // Don't try to play empty playlists. Nothing good will come of it.
@@ -523,9 +526,9 @@ public class MediaPlayerUtil {
     // Returns false if the entry matches the naming pattern used for recordings,
     // or if it is marked as not music in the database.
     public static boolean isMusic(Cursor c) {
-        int titleidx = c.getColumnIndex(MediaStore.Audio.Media.TITLE);
-        int albumidx = c.getColumnIndex(MediaStore.Audio.Media.ALBUM);
-        int artistidx = c.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+        int titleidx = c.getColumnIndex(MediaColumns.TITLE);
+        int albumidx = c.getColumnIndex(AudioColumns.ALBUM);
+        int artistidx = c.getColumnIndex(AudioColumns.ARTIST);
 
         String title = c.getString(titleidx);
         String album = c.getString(albumidx);
@@ -538,7 +541,7 @@ public class MediaPlayerUtil {
             return false;
         }
 
-        int ismusic_idx = c.getColumnIndex(MediaStore.Audio.Media.IS_MUSIC);
+        int ismusic_idx = c.getColumnIndex(AudioColumns.IS_MUSIC);
         boolean ismusic = true;
         if (ismusic_idx >= 0) {
         	Cursor trackCursor = Database.getInstance(false).getCursor(Database.SongCursorName);

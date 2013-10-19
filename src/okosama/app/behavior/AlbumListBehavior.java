@@ -9,7 +9,9 @@ import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
 import android.database.Cursor;
+import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.AlbumColumns;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -30,8 +32,16 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 //        intent.putExtra("album", Long.valueOf(id).toString());
 //        intent.putExtra("artist", mArtistId);
 //        startActivity(intent);
-		// OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(Long.valueOf(id).toString());
+		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		if( act.getAlbumAdp() == null
+		|| act.getAlbumAdp().getItem(position) == null )
+		{
+			return;
+		}
+		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(String.valueOf(act.getAlbumAdp().getItem(position).getAlbumId() ) );
+		act.getTrackAdp().setAlbumId(String.valueOf(act.getAlbumAdp().getItem(position).getAlbumId() ) );
+		act.getTrackAdp().updateList();
+		//Long.valueOf(id).toString());
 		// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(
 		IViewAction action = new TabSelectAction( ControlIDs.TAB_ID_MEDIA,
 				TabPage.TABPAGE_ID_SONG );
@@ -73,10 +83,10 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
         AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfoIn;
         Cursor albumCursor = Database.getInstance(activity).getCursor(Database.AlbumCursorName);
         albumCursor.moveToPosition(mi.position);
-        mCurrentAlbumId = albumCursor.getString(albumCursor.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID));
-        mCurrentAlbumName = albumCursor.getString(albumCursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM));
+        mCurrentAlbumId = albumCursor.getString(albumCursor.getColumnIndexOrThrow(BaseColumns._ID));
+        mCurrentAlbumName = albumCursor.getString(albumCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM));
         mCurrentArtistNameForAlbum = albumCursor.getString(
-        		albumCursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ARTIST));
+        		albumCursor.getColumnIndexOrThrow(AlbumColumns.ARTIST));
         mIsUnknownArtist = mCurrentArtistNameForAlbum == null ||
                 mCurrentArtistNameForAlbum.equals(MediaStore.UNKNOWN_STRING);
         mIsUnknownAlbum = mCurrentAlbumName == null ||

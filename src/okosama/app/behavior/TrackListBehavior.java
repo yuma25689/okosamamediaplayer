@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -30,24 +31,28 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 
 	@Override
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-		Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).getCursor(Database.SongCursorName);
+		// Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).getCursor(Database.SongCursorName);
+		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		
-		if (cursor.getCount() == 0) {
+		if (act.getTrackAdp().getCount() == 0) {
             return;
         }
         // When selecting a track from the queue, just jump there instead of
         // reloading the queue. This is both faster, and prevents accidentally
         // dropping out of party shuffle.
-        if (cursor instanceof Database.NowPlayingCursor) {
-            if (MediaPlayerUtil.sService != null) {
-                try {
-                	MediaPlayerUtil.sService.setQueuePosition(position);
-                    return;
-                } catch (RemoteException ex) {
-                }
-            }
-        }
-        MediaPlayerUtil.playAll(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(), cursor, position);
+//        if (cursor instanceof Database.NowPlayingCursor) {
+//            if (MediaPlayerUtil.sService != null) {
+//                try {
+//                	MediaPlayerUtil.sService.setQueuePosition(position);
+//                    return;
+//                } catch (RemoteException ex) {
+//                }
+//            }
+//        }
+		long[] list = act.getTrackAdp().getCurrentAllAudioIds();		
+        MediaPlayerUtil.playAll(
+        		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
+        		list, position, false);
 	}
 
 	@Override
@@ -106,7 +111,7 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 //		mCurrentArtistNameForAlbum = cursor.getString(cursor.getColumnIndexOrThrow(
 //		        MediaStore.Audio.Media.ARTIST));
 		mCurrentTrackName = cursor.getString(cursor.getColumnIndexOrThrow(
-		        MediaStore.Audio.Media.TITLE));
+		        MediaColumns.TITLE));
 		menu.setHeaderTitle(mCurrentTrackName);
 	}
 

@@ -4,8 +4,6 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.action.IViewAction;
-import okosama.app.action.TabSelectAction;
 import okosama.app.panel.TimeControlPanel;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.Tab;

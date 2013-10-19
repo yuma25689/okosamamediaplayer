@@ -4,8 +4,6 @@ package okosama.app.state;
 
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.action.IViewAction;
-import okosama.app.action.TabSelectAction;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
 

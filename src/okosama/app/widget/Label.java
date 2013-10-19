@@ -2,7 +2,6 @@ package okosama.app.widget;
 
 import android.app.Activity;
 import android.view.View;
-import okosama.app.tab.*;
 
 /**
  * このアプリケーションで利用するボタンのハンドル
@@ -35,6 +34,7 @@ public class Label extends absWidget {
 	 * 有効無効制御
 	 * @param b
 	 */
+	@Override
 	public void setEnabled( boolean b )
 	{
 		impl.setEnabled(b);

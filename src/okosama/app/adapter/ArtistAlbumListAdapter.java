@@ -12,7 +12,10 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.AlbumColumns;
+import android.provider.MediaStore.Audio.ArtistColumns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -97,10 +100,10 @@ public class ArtistAlbumListAdapter extends SimpleCursorTreeAdapter implements S
         	// カーソルが設定されていたら
         	// id,アーティストid,アルバムid,ソングid,インデクサ
         	// とりあえず、多分グループ用だと思われる
-            mGroupArtistIdIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID);
-            mGroupArtistIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST);
-            mGroupAlbumIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS);
-            mGroupSongIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_TRACKS);
+            mGroupArtistIdIdx = cursor.getColumnIndexOrThrow(BaseColumns._ID);
+            mGroupArtistIdx = cursor.getColumnIndexOrThrow(ArtistColumns.ARTIST);
+            mGroupAlbumIdx = cursor.getColumnIndexOrThrow(ArtistColumns.NUMBER_OF_ALBUMS);
+            mGroupSongIdx = cursor.getColumnIndexOrThrow(ArtistColumns.NUMBER_OF_TRACKS);
             if (mIndexer != null) {
                 mIndexer.setCursor(cursor);
             } else {
@@ -224,7 +227,7 @@ public class ArtistAlbumListAdapter extends SimpleCursorTreeAdapter implements S
         ViewHolder vh = (ViewHolder) view.getTag();
 
         // アルバム名を取得、設定
-        String name = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM));
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(AlbumColumns.ALBUM));
         String displayname = name;
         boolean unknown = name == null || name.equals(MediaStore.UNKNOWN_STRING); 
         if (unknown) {
@@ -233,8 +236,8 @@ public class ArtistAlbumListAdapter extends SimpleCursorTreeAdapter implements S
         vh.line1.setText(displayname);
 
         // 曲数とアーティストの曲数を取得
-        int numsongs = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
-        int numartistsongs = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.NUMBER_OF_SONGS_FOR_ARTIST));
+        int numsongs = cursor.getInt(cursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS));
+        int numartistsongs = cursor.getInt(cursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS_FOR_ARTIST));
 
         final StringBuilder builder = mBuffer;
         builder.delete(0, builder.length());
@@ -258,7 +261,7 @@ public class ArtistAlbumListAdapter extends SimpleCursorTreeAdapter implements S
                 final Object[] args = mFormatArgs3;
                 args[0] = numsongs;
                 args[1] = numartistsongs;
-                args[2] = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST));
+                args[2] = cursor.getString(cursor.getColumnIndexOrThrow(ArtistColumns.ARTIST));
                 builder.append(OkosamaMediaPlayerActivity.getResourceAccessor().getQuantityString(R.plurals.Nsongscomp, numsongs, args));
             }
         }
@@ -269,7 +272,7 @@ public class ArtistAlbumListAdapter extends SimpleCursorTreeAdapter implements S
         // We don't actually need the path to the thumbnail file,
         // we just use it to see if there is album art or not
         String art = cursor.getString(cursor.getColumnIndexOrThrow(
-                MediaStore.Audio.Albums.ALBUM_ART));
+                AlbumColumns.ALBUM_ART));
         if (unknown || art == null || art.length() == 0) {
         	// 分からない場合は、デフォルトを設定する
             iv.setBackgroundDrawable(mDefaultAlbumIcon);
@@ -301,15 +304,15 @@ public class ArtistAlbumListAdapter extends SimpleCursorTreeAdapter implements S
     protected Cursor getChildrenCursor(Cursor groupCursor) {
         
     	// グループカーソルから、そのアーティストのidを取得する
-        long id = groupCursor.getLong(groupCursor.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID));
+        long id = groupCursor.getLong(groupCursor.getColumnIndexOrThrow(BaseColumns._ID));
         
         // カラム名の設定
         String[] cols = new String[] {
-                MediaStore.Audio.Albums._ID,
-                MediaStore.Audio.Albums.ALBUM,
-                MediaStore.Audio.Albums.NUMBER_OF_SONGS,
-                MediaStore.Audio.Albums.NUMBER_OF_SONGS_FOR_ARTIST,
-                MediaStore.Audio.Albums.ALBUM_ART
+                BaseColumns._ID,
+                AlbumColumns.ALBUM,
+                AlbumColumns.NUMBER_OF_SONGS,
+                AlbumColumns.NUMBER_OF_SONGS_FOR_ARTIST,
+                AlbumColumns.ALBUM_ART
         };
         // uriの取得
         // 外部ストレージか内部かによって挙動を変更
@@ -365,7 +368,7 @@ public class ArtistAlbumListAdapter extends SimpleCursorTreeAdapter implements S
              */
             @Override
             public int getColumnIndexOrThrow(String name) {
-                if (MediaStore.Audio.Albums.ARTIST.equals(name)) {
+                if (AlbumColumns.ARTIST.equals(name)) {
                     return mMagicColumnIdx;
                 }
                 return super.getColumnIndexOrThrow(name); 
@@ -379,7 +382,7 @@ public class ArtistAlbumListAdapter extends SimpleCursorTreeAdapter implements S
                 if (idx != mMagicColumnIdx) {
                     return super.getColumnName(idx);
                 }
-                return MediaStore.Audio.Albums.ARTIST;
+                return AlbumColumns.ARTIST;
             }
             
             /**
@@ -468,15 +471,18 @@ public class ArtistAlbumListAdapter extends SimpleCursorTreeAdapter implements S
     }
 
     // 下記は、おそらくインデクサのオーバーライド関数
-    public Object[] getSections() {
+    @Override
+	public Object[] getSections() {
         return mIndexer.getSections();
     }
     
-    public int getPositionForSection(int sectionIndex) {
+    @Override
+	public int getPositionForSection(int sectionIndex) {
         return mIndexer.getPositionForSection(sectionIndex);
     }
     
-    public int getSectionForPosition(int position) {
+    @Override
+	public int getSectionForPosition(int position) {
         return 0;
     }
 }

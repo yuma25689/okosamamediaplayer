@@ -5,9 +5,6 @@ import okosama.app.R;
 import okosama.app.R.drawable;
 import okosama.app.action.CycleRepeatAction;
 import okosama.app.action.IViewAction;
-import okosama.app.action.MediaPlayPauseAction;
-import okosama.app.action.NextAction;
-import okosama.app.action.PrevAction;
 import okosama.app.action.ToggleShuffleAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.service.MediaPlaybackService;
@@ -23,7 +20,7 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.view.ViewParent;
 import android.widget.ImageView.ScaleType;
 
 public class SubControlPanel extends ControlPanel {
@@ -43,11 +40,19 @@ public class SubControlPanel extends ControlPanel {
 	{
 		if( instance != null && instance.getView() != null )
 		{
-			if( -1 == tabBaseLayout.indexOfChild(instance.getView()) )
+			if( instance.getView().getParent() != null )
 			{
-				tabBaseLayout.addView(instance.getView());
-				parent = tabBaseLayout;
+				ViewParent v = instance.getView().getParent();
+				if( v instanceof ViewGroup )
+				{
+					((ViewGroup) v).removeView(instance.getView());
+				}
 			}
+			//if( -1 == tabBaseLayout.indexOfChild(instance.getView()) )
+			//{
+			tabBaseLayout.addView(instance.getView());
+			parent = tabBaseLayout;
+			//}
 		}
 		else
 		{

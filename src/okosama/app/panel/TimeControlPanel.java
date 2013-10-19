@@ -8,7 +8,6 @@ import okosama.app.action.IViewAction;
 import okosama.app.action.MediaSeekAction;
 import okosama.app.action.TimeButtonClickAction;
 import okosama.app.factory.DroidWidgetKit;
-import okosama.app.service.MediaPlayerUtil;
 // import okosama.app.tab.ITabComponent;
 import okosama.app.tab.TabComponentActionSetter;
 import okosama.app.tab.TabComponentPropertySetter;
@@ -22,6 +21,7 @@ import android.app.Activity;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.view.ViewParent;
 //import android.view.LayoutInflater;
 //import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +45,20 @@ public class TimeControlPanel extends ControlPanel {
 	{
 		if( instance != null && instance.getView() != null )
 		{
-			if( -1 == tabBaseLayout.indexOfChild(instance.getView()) )
+			if( instance.getView().getParent() != null )
 			{
-				tabBaseLayout.addView(instance.getView());
-				parent = tabBaseLayout;				
+				ViewParent v = instance.getView().getParent();
+				if( v instanceof ViewGroup )
+				{
+					((ViewGroup) v).removeView(instance.getView());
+				}
 			}
+
+//			if( -1 == tabBaseLayout.indexOfChild(instance.getView()) )
+//			{
+			tabBaseLayout.addView(instance.getView());
+			parent = tabBaseLayout;				
+//			}
 		}
 		else
 		{

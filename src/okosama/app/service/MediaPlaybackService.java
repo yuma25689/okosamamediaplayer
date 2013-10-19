@@ -42,7 +42,10 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
+import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.AudioColumns;
+import android.provider.MediaStore.MediaColumns;
 //import android.telephony.PhoneStateListener;
 //import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -246,6 +249,7 @@ public class MediaPlaybackService extends Service {
             	// コマンドが前へコマンドだった
                 prev();
             } else if (CMDTOGGLEPAUSE.equals(cmd) || TOGGLEPAUSE_ACTION.equals(action)) {
+            	Log.d("test","getPause");
             	// トグルポーズコマンドだった
                 if (isPlaying()) {
                 	// プレイ中ならば、止める
@@ -285,7 +289,8 @@ public class MediaPlaybackService extends Service {
      * AudioFocusListener
      */
     private OnAudioFocusChangeListener mAudioFocusListener = new OnAudioFocusChangeListener() {
-        public void onAudioFocusChange(int focusChange) {
+        @Override
+		public void onAudioFocusChange(int focusChange) {
 //        	オーディオフォーカスを要求するあらゆるオーディオを再生する前に、使用するストリームのオーディオフォーカスを取得する必要が有ります。
 //        	これはrequestAudioFocus()をコールし、リクエストが成功したらAUDIOFOCUS_REQUEST_GRANTEDが返されます。
 //        	あなたは、オーディオフォーカスを短期的か長期的に要求するかに関わらずストリームを指定する必要が有ります。短時間のみオーディオを再生すると考えられる場合（例えば音声ナビ）トランジェントフォーカスを要求します。
@@ -1298,7 +1303,7 @@ public class MediaPlaybackService extends Service {
                    // TODO:getContentUriForPathを調査
                    uri = MediaStore.Audio.Media.getContentUriForPath(path);
                    // この場合、条件を設定
-                   where = MediaStore.Audio.Media.DATA + "=?";
+                   where = MediaColumns.DATA + "=?";
                    selectionArgs = new String[] { path };
                 }
                 
@@ -1756,7 +1761,7 @@ public class MediaPlaybackService extends Service {
                 // write 'pos' to the bookmark field
                 // ブックマーク時間を上書きする
                 ContentValues values = new ContentValues();
-                values.put(MediaStore.Audio.Media.BOOKMARK, pos);
+                values.put(AudioColumns.BOOKMARK, pos);
                 Uri uri = ContentUris.withAppendedId(
                         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, mCursor.getLong(IDCOLIDX));
                 getContentResolver().update(uri, values, null, null);
@@ -1820,7 +1825,7 @@ public class MediaPlaybackService extends Service {
         try {
         	// 音楽のIDを全て取得
             c = res.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    new String[] {MediaStore.Audio.Media._ID}, MediaStore.Audio.Media.IS_MUSIC + "=1",
+                    new String[] {BaseColumns._ID}, AudioColumns.IS_MUSIC + "=1",
                     null, null);
             if (c == null || c.getCount() == 0) {
                 return false;
@@ -2061,7 +2066,7 @@ public class MediaPlaybackService extends Service {
             if (mCursor == null) {
                 return null;
             }
-            return mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+            return mCursor.getString(mCursor.getColumnIndexOrThrow(AudioColumns.ARTIST));
         }
     }
     
@@ -2070,7 +2075,7 @@ public class MediaPlaybackService extends Service {
             if (mCursor == null) {
                 return -1;
             }
-            return mCursor.getLong(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST_ID));
+            return mCursor.getLong(mCursor.getColumnIndexOrThrow(AudioColumns.ARTIST_ID));
         }
     }
 
@@ -2079,7 +2084,7 @@ public class MediaPlaybackService extends Service {
             if (mCursor == null) {
                 return null;
             }
-            return mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
+            return mCursor.getString(mCursor.getColumnIndexOrThrow(AudioColumns.ALBUM));
         }
     }
 
@@ -2088,7 +2093,7 @@ public class MediaPlaybackService extends Service {
             if (mCursor == null) {
                 return -1;
             }
-            return mCursor.getLong(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+            return mCursor.getLong(mCursor.getColumnIndexOrThrow(AudioColumns.ALBUM_ID));
         }
     }
 
@@ -2097,7 +2102,7 @@ public class MediaPlaybackService extends Service {
             if (mCursor == null) {
                 return null;
             }
-            return mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+            return mCursor.getString(mCursor.getColumnIndexOrThrow(MediaColumns.TITLE));
         }
     }
 
@@ -2268,7 +2273,8 @@ public class MediaPlaybackService extends Service {
          * 再生完了のリスナ？
          */
         MediaPlayer.OnCompletionListener listener = new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mp) {
+            @Override
+			public void onCompletion(MediaPlayer mp) {
                 // Acquire a temporary wakelock, since when we return from
                 // this callback the MediaPlayer will release its wakelock
                 // and allow the device to go to sleep.
@@ -2288,7 +2294,8 @@ public class MediaPlaybackService extends Service {
          * 準備のリスナ？
          */
         MediaPlayer.OnPreparedListener preparedlistener = new MediaPlayer.OnPreparedListener() {
-            public void onPrepared(MediaPlayer mp) {
+            @Override
+			public void onPrepared(MediaPlayer mp) {
             	// 多分、使われていない
             	// TODO: Asyncの時は使うべきでは？
                 notifyChange(ASYNC_OPEN_COMPLETE);
@@ -2299,7 +2306,8 @@ public class MediaPlaybackService extends Service {
          * エラーのリスナ？
          */
         MediaPlayer.OnErrorListener errorListener = new MediaPlayer.OnErrorListener() {
-            public boolean onError(MediaPlayer mp, int what, int extra) {
+            @Override
+			public boolean onError(MediaPlayer mp, int what, int extra) {
                 switch (what) {
                 case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
                     mIsInitialized = false;
@@ -2350,99 +2358,130 @@ public class MediaPlaybackService extends Service {
             mService = new WeakReference<MediaPlaybackService>(service);
         }
 
-        public void openFileAsync(String path)
+        @Override
+		public void openFileAsync(String path)
         {
             mService.get().openAsync(path);
         }
-        public void openFile(String path, boolean oneShot)
+        @Override
+		public void openFile(String path, boolean oneShot)
         {
             mService.get().open(path, oneShot);
         }
-        public void open(long [] list, int position) {
+        @Override
+		public void open(long [] list, int position) {
             mService.get().open(list, position);
         }
-        public int getQueuePosition() {
+        @Override
+		public int getQueuePosition() {
             return mService.get().getQueuePosition();
         }
-        public void setQueuePosition(int index) {
+        @Override
+		public void setQueuePosition(int index) {
             mService.get().setQueuePosition(index);
         }
-        public boolean isPlaying() {
+        @Override
+		public boolean isPlaying() {
             return mService.get().isPlaying();
         }
-        public void stop() {
+        @Override
+		public void stop() {
             mService.get().stop();
         }
-        public void pause() {
+        @Override
+		public void pause() {
             mService.get().pause();
         }
-        public void play() {
+        @Override
+		public void play() {
             mService.get().play();
         }
-        public void prev() {
+        @Override
+		public void prev() {
             mService.get().prev();
         }
-        public void next() {
+        @Override
+		public void next() {
             mService.get().next(true);
         }
-        public String getTrackName() {
+        @Override
+		public String getTrackName() {
             return mService.get().getTrackName();
         }
-        public String getAlbumName() {
+        @Override
+		public String getAlbumName() {
             return mService.get().getAlbumName();
         }
-        public long getAlbumId() {
+        @Override
+		public long getAlbumId() {
             return mService.get().getAlbumId();
         }
-        public String getArtistName() {
+        @Override
+		public String getArtistName() {
             return mService.get().getArtistName();
         }
-        public long getArtistId() {
+        @Override
+		public long getArtistId() {
             return mService.get().getArtistId();
         }
-        public void enqueue(long [] list , int action) {
+        @Override
+		public void enqueue(long [] list , int action) {
             mService.get().enqueue(list, action);
         }
-        public long [] getQueue() {
+        @Override
+		public long [] getQueue() {
             return mService.get().getQueue();
         }
-        public void moveQueueItem(int from, int to) {
+        @Override
+		public void moveQueueItem(int from, int to) {
             mService.get().moveQueueItem(from, to);
         }
-        public String getPath() {
+        @Override
+		public String getPath() {
             return mService.get().getPath();
         }
-        public long getAudioId() {
+        @Override
+		public long getAudioId() {
             return mService.get().getAudioId();
         }
-        public long position() {
+        @Override
+		public long position() {
             return mService.get().position();
         }
-        public long duration() {
+        @Override
+		public long duration() {
             return mService.get().duration();
         }
-        public long seek(long pos) {
+        @Override
+		public long seek(long pos) {
             return mService.get().seek(pos);
         }
-        public void setShuffleMode(int shufflemode) {
+        @Override
+		public void setShuffleMode(int shufflemode) {
             mService.get().setShuffleMode(shufflemode);
         }
-        public int getShuffleMode() {
+        @Override
+		public int getShuffleMode() {
             return mService.get().getShuffleMode();
         }
-        public int removeTracks(int first, int last) {
+        @Override
+		public int removeTracks(int first, int last) {
             return mService.get().removeTracks(first, last);
         }
-        public int removeTrack(long id) {
+        @Override
+		public int removeTrack(long id) {
             return mService.get().removeTrack(id);
         }
-        public void setRepeatMode(int repeatmode) {
+        @Override
+		public void setRepeatMode(int repeatmode) {
             mService.get().setRepeatMode(repeatmode);
         }
-        public int getRepeatMode() {
+        @Override
+		public int getRepeatMode() {
             return mService.get().getRepeatMode();
         }
-        public int getMediaMountedCount() {
+        @Override
+		public int getMediaMountedCount() {
             return mService.get().getMediaMountedCount();
         }
 

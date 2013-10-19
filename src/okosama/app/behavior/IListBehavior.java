@@ -9,6 +9,7 @@ import android.widget.ExpandableListView;
  *
  */
 abstract public class IListBehavior implements IBehavior {
+	@Override
 	public void onItemClick(ExpandableListView parent, View v, int grouppos, int childpos, long id)
 	{
 	}

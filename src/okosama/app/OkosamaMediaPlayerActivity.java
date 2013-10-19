@@ -7,9 +7,11 @@ import java.util.Map.Entry;
 //import okosama.app.action.ShowTabComponentAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.AlbumListAdapter;
+import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.ArtistAlbumListAdapter;
 import okosama.app.adapter.PlaylistListAdapter;
 import okosama.app.adapter.TrackListAdapter;
+import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.factory.DroidWidgetKit;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -148,20 +150,21 @@ implements ServiceConnection {
     // HashMap< String, Object > mapAdapter;
     // AdapterStocker adapters;
     // 暫定版
-    private AlbumListAdapter albumAdp;
+    // private AlbumListAdapter albumAdp;
+	private AlbumListRawAdapter albumAdp;
     // private ListView albumList;
     private ArtistAlbumListAdapter artistAdp;
     // private ExpandableListView artistList;
     private PlaylistListAdapter playlistAdp;
     //private ListView songList;
-    private TrackListAdapter tracklistAdp;
+    private TrackListRawAdapter tracklistAdp;
     //private ListView playlistList;
 
-	public AlbumListAdapter getAlbumAdp() {
+	public AlbumListRawAdapter getAlbumAdp() {
 		return albumAdp;
 	}
 
-	public void setAlbumAdp(AlbumListAdapter albumAdp) {
+	public void setAlbumAdp(AlbumListRawAdapter albumAdp) {
 		this.albumAdp = albumAdp;
 	}
 
@@ -181,11 +184,11 @@ implements ServiceConnection {
 		this.playlistAdp = playlistAdp;
 	}
 
-	public TrackListAdapter getTrackAdp() {
+	public TrackListRawAdapter getTrackAdp() {
 		return tracklistAdp;
 	}
 
-	public void setTrackAdp(TrackListAdapter tracklistAdp) {
+	public void setTrackAdp(TrackListRawAdapter tracklistAdp) {
 		this.tracklistAdp = tracklistAdp;
 	}
 
@@ -436,6 +439,7 @@ implements ServiceConnection {
 			           	{
 			           		TimeControlPanel.getInstance().setDurationLabel(0);
 			           	}
+			           	reScanMedia(ControlIDs.ID_NOT_SPECIFIED, true);
 			    				           	
 	//	           		if( 1 == setTabSelection( currentMainTabId, currentSubTabId ) )
 	//	           		{
@@ -443,6 +447,10 @@ implements ServiceConnection {
 	//	           		}
 		//	           	}
 			            //bTabInitEnd = true;
+			           	
+			           	// 初期化時に、全てのメディアを取得する
+			           	reScanMedia(TabPage.TABPAGE_ID_ALBUM);
+			           	reScanMedia(TabPage.TABPAGE_ID_SONG);
 			    		break;
 		        	}
 		        	case TabSelectAction.MSG_ID_TAB_SELECT:
@@ -611,7 +619,37 @@ implements ServiceConnection {
         {
         	SubControlPanel.getInstance().removeViewFromParent();
         }
-        		
+        
+        // カーソルクローズ
+        // Album
+        Cursor cTmp = Database.getInstance(this).getCursor( Database.AlbumCursorName );
+        if( cTmp != null && cTmp.isClosed() == false )
+        {
+        	cTmp.close();
+        	Database.getInstance(this).setCursor(Database.AlbumCursorName, null);
+        }
+        // Artist
+        cTmp = Database.getInstance(this).getCursor( Database.ArtistCursorName );
+        if( cTmp != null && cTmp.isClosed() == false )
+        {
+        	cTmp.close();
+        	Database.getInstance(this).setCursor(Database.ArtistCursorName, null);
+        }
+        // Song
+        cTmp = Database.getInstance(this).getCursor( Database.SongCursorName );
+        if( cTmp != null && cTmp.isClosed() == false )
+        {
+        	cTmp.close();
+        	Database.getInstance(this).setCursor(Database.SongCursorName, null);
+        }
+        // Playlist
+        cTmp = Database.getInstance(this).getCursor( Database.PlaylistCursorName );
+        if( cTmp != null && cTmp.isClosed() == false )
+        {
+        	cTmp.close();
+        	Database.getInstance(this).setCursor(Database.PlaylistCursorName, null);
+        }
+        
 		// bTabInitEnd = false;
 		// System.gc();
 		super.onPause();
@@ -780,7 +818,7 @@ implements ServiceConnection {
 		// TODO:nullの場合、表示するビューを変更した方がいいかもしれない
 		case TabPage.TABPAGE_ID_ALBUM:
 			// Listにカーソルを設定
-			getAlbumAdp().changeCursor(cursor);
+			getAlbumAdp().insertAllDataFromCursor(cursor);//changeCursor(cursor);
 			break;
 		case TabPage.TABPAGE_ID_ARTIST:
 			// Listにカーソルを設定
@@ -788,7 +826,7 @@ implements ServiceConnection {
 			break;
 		case TabPage.TABPAGE_ID_SONG:
 			// Listにカーソルを設定
-			getTrackAdp().changeCursor(cursor);
+			getTrackAdp().insertAllDataFromCursor(cursor);
 			break;
 		case TabPage.TABPAGE_ID_PLAYLIST:
 			Cursor c = null;
@@ -798,6 +836,35 @@ implements ServiceConnection {
 			break;
 		}
 	}
+	
+	public void reScanMedia(int tabID)
+	{
+		switch( tabID )
+		{
+		case TabPage.TABPAGE_ID_ALBUM:
+			// Listにカーソルを設定
+            Log.i("test", "rescan album 2");
+			Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );
+			break;
+		case TabPage.TABPAGE_ID_ARTIST:			
+			// Listにカーソルを設定
+			Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);			
+			break;
+		case TabPage.TABPAGE_ID_SONG:
+			
+			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
+			Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);			
+			break;
+		case TabPage.TABPAGE_ID_PLAYLIST:
+			
+			Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);						
+			break;
+		case TabPage.TABPAGE_ID_NONE:
+			break;
+		}
+		
+	}
+	
 	
 	/**
 	 * メディアの再スキャン？スキャンのロジック自体に、見直し必要
@@ -809,8 +876,8 @@ implements ServiceConnection {
 		// 現在選択中のタブによって操作を変更
 		if( //tabName == tabNameMedia && 
 			( true == bForce
-			|| ControlIDs.TAB_ID_MEDIA == tabID )
-			&& currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
+			|| ControlIDs.TAB_ID_MEDIA == tabID ) )
+			//&& currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
 		{
 			// メディアタブならば
 			// メディアを再度クエリ発行して更新する
@@ -818,7 +885,7 @@ implements ServiceConnection {
 			{
 			case TabPage.TABPAGE_ID_ALBUM:
 				if( bForce == false 
-				&& null != Database.getInstance(this).getCursor( Database.AlbumCursorName )) {
+				&& 0 < getAlbumAdp().getCount() ) { //null != Database.getInstance(this).getCursor( Database.AlbumCursorName )) {
 					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
 		            Log.i("test", "rescan escape album");
 					break;
@@ -838,14 +905,14 @@ implements ServiceConnection {
 				Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);			
 				break;
 			case TabPage.TABPAGE_ID_SONG:
-//				if( bForce == false 
-//				&& null != Database.getInstance(this).getCursor( Database.SongCursorName )) {
-//					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
-//					break;
-//				}
+				if( bForce == false 
+				&& null != Database.getInstance(this).getCursor( Database.SongCursorName )) {
+					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
+					break;
+				}
 				
-				OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
-				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null, true );//, null, null, null);			
+				OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );
+				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);			
 				break;
 			case TabPage.TABPAGE_ID_PLAYLIST:
 //				if( bForce == false 
@@ -868,7 +935,7 @@ implements ServiceConnection {
 			// NOWPLAYLIST
 			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
 			
-			Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null, true );//, null, null, null);
+			Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);
 		}
 	}
 	
@@ -928,6 +995,7 @@ implements ServiceConnection {
        // Toast.makeText(this, "onServiceDisconnected:" + name, Toast.LENGTH_LONG).show();
 		
 		// よくわからないけど、サービス切断されたら終了する？
+		Log.e("service disconnect","finish because service disconnect.");
 		finish();
 	}
 

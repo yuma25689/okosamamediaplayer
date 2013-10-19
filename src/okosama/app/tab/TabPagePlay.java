@@ -1,17 +1,10 @@
 package okosama.app.tab;
 
-import java.util.HashMap;
-
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.R.drawable;
-import okosama.app.action.CycleRepeatAction;
 import okosama.app.action.IViewAction;
 import okosama.app.action.MediaStopAction;
-import okosama.app.action.TabSelectAction;
-import okosama.app.action.TimeButtonClickAction;
-import okosama.app.action.ToggleShuffleAction;
 import okosama.app.action.TweetAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.panel.PlayControlPanel;
@@ -19,10 +12,7 @@ import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TimeControlPanel;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.absWidget;
-import android.graphics.Color;
 import android.util.SparseArray;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;

@@ -1,7 +1,6 @@
 package okosama.app.panel;
 
 import okosama.app.ControlIDs;
-import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
 import okosama.app.action.MediaPlayPauseAction;
@@ -19,10 +18,8 @@ import android.app.Activity;
 import android.os.RemoteException;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.view.ViewParent;
 import android.widget.ImageView.ScaleType;
 
 public class PlayControlPanel extends ControlPanel {
@@ -42,11 +39,20 @@ public class PlayControlPanel extends ControlPanel {
 	{
 		if( instance != null && instance.getView() != null )
 		{
-			if( -1 == tabBaseLayout.indexOfChild(instance.getView()) )
+			if( instance.getView().getParent() != null )
 			{
-				tabBaseLayout.addView(instance.getView());
-				parent = tabBaseLayout;				
+				ViewParent v = instance.getView().getParent();
+				if( v instanceof ViewGroup )
+				{
+					((ViewGroup) v).removeView(instance.getView());
+				}
 			}
+
+			//if( -1 == tabBaseLayout.indexOfChild(instance.getView()) )
+			//{
+			tabBaseLayout.addView(instance.getView());
+			parent = tabBaseLayout;				
+			//}
 		}
 		else
 		{

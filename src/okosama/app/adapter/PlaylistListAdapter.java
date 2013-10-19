@@ -7,7 +7,9 @@ import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.PlaylistsColumns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -60,7 +62,8 @@ public class PlaylistListAdapter extends SimpleCursorAdapter {
         protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
             //Log.i("@@@", "query complete: " + cursor.getCount() + "   " + mActivity);
             if (cursor != null) {
-                cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).mergedCursor(cursor, createShortcut);
+                cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).mergedCursor(
+                		cursor, createShortcut);
             }
             mActivity.initAdapter(token,cursor);
         }
@@ -75,8 +78,8 @@ public class PlaylistListAdapter extends SimpleCursorAdapter {
     }
     private void getColumnIndices(Cursor cursor) {
         if (cursor != null) {
-            mTitleIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Playlists.NAME);
-            mIdIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Playlists._ID);
+            mTitleIdx = cursor.getColumnIndexOrThrow(PlaylistsColumns.NAME);
+            mIdIdx = cursor.getColumnIndexOrThrow(BaseColumns._ID);
         }
     }
 

@@ -1,20 +1,13 @@
 package okosama.app.tab;
 
-import java.util.HashMap;
-
 import okosama.app.AppStatus;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.action.IViewAction;
-import okosama.app.action.TabSelectAction;
 import okosama.app.behavior.TrackListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.List;
 import android.graphics.Color;
-import android.util.SparseArray;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;

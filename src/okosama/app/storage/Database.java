@@ -24,7 +24,13 @@ import android.database.MatrixCursor;
 import android.database.MergeCursor;
 import android.net.Uri;
 import android.os.RemoteException;
+import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.AlbumColumns;
+import android.provider.MediaStore.Audio.ArtistColumns;
+import android.provider.MediaStore.Audio.AudioColumns;
+import android.provider.MediaStore.Audio.PlaylistsColumns;
+import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.view.SubMenu;
 import android.widget.Toast;
@@ -175,7 +181,7 @@ public class Database {
 
     	// アーティスト名が空でない、という条件を付け加える
         StringBuilder where = new StringBuilder();
-        where.append(MediaStore.Audio.Artists.ARTIST + " != ''");
+        where.append(ArtistColumns.ARTIST + " != ''");
         String whereclause = where.toString();
         
         // アーティストのコンテントプロバイダのuriを設定
@@ -205,27 +211,27 @@ public class Database {
             }
             for (int i = 0; i < searchWords.length; i++) {
                 where.append(" AND ");
-                where.append(MediaStore.Audio.Media.ARTIST_KEY + " LIKE ? ESCAPE '\\'");
+                where.append(AudioColumns.ARTIST_KEY + " LIKE ? ESCAPE '\\'");
             }
         }
         
         // カラムの設定
         String[] cols = new String[] {
-                MediaStore.Audio.Artists._ID,
-                MediaStore.Audio.Artists.ARTIST,
-                MediaStore.Audio.Artists.NUMBER_OF_ALBUMS,
-                MediaStore.Audio.Artists.NUMBER_OF_TRACKS
+                BaseColumns._ID,
+                ArtistColumns.ARTIST,
+                ArtistColumns.NUMBER_OF_ALBUMS,
+                ArtistColumns.NUMBER_OF_TRACKS
         };
         Cursor ret = null;
         if (async != null) {
         	// 非同期ならば、非同期でクエリ発行
         	Log.d("query uri", "uri :" + uri);
             async.startQuery(TabPage.TABPAGE_ID_ARTIST, null, uri,
-                    cols, whereclause , keywords, MediaStore.Audio.Artists.ARTIST_KEY);
+                    cols, whereclause , keywords, ArtistColumns.ARTIST_KEY);
         } else {
         	// 同期ならば、同期でクエリ発行
             ret = query(ctx, uri,
-                    cols, whereclause, keywords, MediaStore.Audio.Artists.ARTIST_KEY);
+                    cols, whereclause, keywords, ArtistColumns.ARTIST_KEY);
         }
         // 得られたカーソルを返却
         return ret;	
@@ -242,7 +248,7 @@ public class Database {
     	String artistId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID();
     	// where句を設定する
         StringBuilder where = new StringBuilder();
-        where.append(MediaStore.Audio.Albums.ALBUM + "!=''");
+        where.append(AlbumColumns.ALBUM + "!=''");
         String whereclause = where.toString();
         
         // アルバムのコンテントプロバイダのuriを設定
@@ -272,17 +278,17 @@ public class Database {
             }
             for (int i = 0; i < searchWords.length; i++) {
                 where.append(" AND ");
-                where.append(MediaStore.Audio.Media.ARTIST_KEY + "||");
-                where.append(MediaStore.Audio.Media.ALBUM_KEY + " LIKE ? ESCAPE '\\'");
+                where.append(AudioColumns.ARTIST_KEY + "||");
+                where.append(AudioColumns.ALBUM_KEY + " LIKE ? ESCAPE '\\'");
             }
         }
         
         // 取得カラムの設定
         String[] cols = new String[] {
-                MediaStore.Audio.Albums._ID,
-                MediaStore.Audio.Albums.ARTIST,
-                MediaStore.Audio.Albums.ALBUM,
-                MediaStore.Audio.Albums.ALBUM_ART
+                BaseColumns._ID,
+                AlbumColumns.ARTIST,
+                AlbumColumns.ALBUM,
+                AlbumColumns.ALBUM_ART
         };
         
         // クエリを発行するが、artistIDがnullかどうかによって、クエリを変更する
@@ -399,7 +405,7 @@ public class Database {
 
     	// プレイリスト名が空でないものという条件にする
         StringBuilder where = new StringBuilder();
-        where.append(MediaStore.Audio.Playlists.NAME + " != ''");
+        where.append(PlaylistsColumns.NAME + " != ''");
         String whereclause = where.toString();
                
         // フィルタの設定
@@ -416,7 +422,7 @@ public class Database {
             }
             for (int i = 0; i < searchWords.length; i++) {
                 where.append(" AND ");
-                where.append(MediaStore.Audio.Playlists.NAME + " LIKE ?");
+                where.append(PlaylistsColumns.NAME + " LIKE ?");
             }
         }
         
@@ -432,12 +438,12 @@ public class Database {
         	// 非同期の場合
         	// TODO: 受け先でマージカーソルにする必要有り
             async.startQuery(TabPage.TABPAGE_ID_PLAYLIST, null, uri,//MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI,
-            		playlistCols, whereclause, keywords, MediaStore.Audio.Playlists.NAME);
+            		playlistCols, whereclause, keywords, PlaylistsColumns.NAME);
             return null;
         }
         Cursor c = null;
         c = query(ctx, uri,//MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI,
-        		playlistCols, whereclause, keywords, MediaStore.Audio.Playlists.NAME);
+        		playlistCols, whereclause, keywords, PlaylistsColumns.NAME);
         
         // 最後に、ショートカットを付け加えたカーソルを返却する？
         return mergedCursor(c, createShortCut);
@@ -452,6 +458,9 @@ public class Database {
             MediaStore.Audio.Media.TITLE,
             MediaStore.Audio.Media.DATA,
             MediaStore.Audio.Media.ALBUM,
+            MediaStore.Audio.Media.ALBUM_ID,
+            //AlbumColumns.ALBUM_ART,            
+            // AudioColumns.ALBUM_ID,
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.ARTIST_ID,
             MediaStore.Audio.Media.DURATION
@@ -462,6 +471,8 @@ public class Database {
             MediaStore.Audio.Media.TITLE,
             MediaStore.Audio.Media.DATA,
             MediaStore.Audio.Media.ALBUM,
+            MediaStore.Audio.Media.ALBUM_ID,
+            //AlbumColumns.ALBUM_ART,            
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.ARTIST_ID,
             MediaStore.Audio.Media.DURATION,
@@ -477,48 +488,50 @@ public class Database {
      * @param async
      * @return
      */
-    public Cursor createTrackCursor(TrackQueryHandler queryhandler, String filter, //String playlist, String filter,
-            boolean async ) { //, String genre, String albumId, String artistId) {
+    public Cursor createTrackCursor(AsyncQueryHandler async, String filter //String playlist, String filter,
+        ) { //, String genre, String albumId, String artistId) {
 
     	String playlist = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getPlaylistName();
     	String genre = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getGenre();
     	String albumId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getAlbumID();
     	String artistId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID();
     	
-        if (queryhandler == null) {
-        	// トラックカーソルの場合、handlerクラスが必ず必要
-            throw new IllegalArgumentException();
-        }
+    	// TODO: 条件はadapterの方に設定する
+    	
+//        if (queryhandler == null) {
+//        	// トラックカーソルの場合、handlerクラスが必ず必要
+//            throw new IllegalArgumentException();
+//        }
 
         Cursor ret = null;
         // ソート条件に、タイトルを設定
-        mSortOrder = MediaStore.Audio.Media.TITLE_KEY;
+        mSortOrder = AudioColumns.TITLE_KEY;
         // タイトルが空でないものを条件に
         StringBuilder where = new StringBuilder();
-        where.append(MediaStore.Audio.Media.TITLE + " != ''");
+        where.append(MediaColumns.TITLE + " != ''");
 
         // フィルタを設定
         // この場合、アーティストとトラック？
         // Add in the filtering constraints
         String [] keywords = null;
-        if (filter != null) {
-            String [] searchWords = filter.split(" ");
-            keywords = new String[searchWords.length];
-            Collator col = Collator.getInstance();
-            col.setStrength(Collator.PRIMARY);
-            for (int i = 0; i < searchWords.length; i++) {
-                String key = MediaStore.Audio.keyFor(searchWords[i]);
-                key = key.replace("\\", "\\\\");
-                key = key.replace("%", "\\%");
-                key = key.replace("_", "\\_");
-                keywords[i] = '%' + key + '%';
-            }
-            for (int i = 0; i < searchWords.length; i++) {
-                where.append(" AND ");
-                where.append(MediaStore.Audio.Media.ARTIST_KEY + "||");
-                where.append(MediaStore.Audio.Media.TITLE_KEY + " LIKE ? ESCAPE '\\'");
-            }
-        }
+//        if (filter != null) {
+//            String [] searchWords = filter.split(" ");
+//            keywords = new String[searchWords.length];
+//            Collator col = Collator.getInstance();
+//            col.setStrength(Collator.PRIMARY);
+//            for (int i = 0; i < searchWords.length; i++) {
+//                String key = MediaStore.Audio.keyFor(searchWords[i]);
+//                key = key.replace("\\", "\\\\");
+//                key = key.replace("%", "\\%");
+//                key = key.replace("_", "\\_");
+//                keywords[i] = '%' + key + '%';
+//            }
+//            for (int i = 0; i < searchWords.length; i++) {
+//                where.append(" AND ");
+//                where.append(AudioColumns.ARTIST_KEY + "||");
+//                where.append(AudioColumns.TITLE_KEY + " LIKE ? ESCAPE '\\'");
+//            }
+//        }
         
         // トラックのコンテントプロバイダのuriを設定
     	Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -529,94 +542,109 @@ public class Database {
         	strExOrIn = "internal";
         }        	
         
-        if (genre != null) {
-        	// ジャンルが設定されていたら
-        	// ソート順をジャンルに？
-            mSortOrder = MediaStore.Audio.Genres.Members.DEFAULT_SORT_ORDER;
-            // ジャンルのuriを検索、ジャンルでフィルタ？
-            ret = queryhandler.doQuery(ctx,MediaStore.Audio.Genres.Members.getContentUri(strExOrIn,
-                    Integer.valueOf(genre)),
-                    mPlaylistCols, where.toString(), keywords, mSortOrder, async);
-        } else if (playlist != null) {
-        	// メンバ変数のプレイリストが設定されていたら？
-            if (playlist.equals(PlaylistName_NowPlaying)) {
-            	// TODO:プレイリストの設定
-            	// プレイリストがnowplayingなら
-                if (MediaPlayerUtil.sService != null) {
-                	// サービスが設定されていたら
-                	// nowplayingカーソルを作成し、それを返す？
-                    ret = new NowPlayingCursor(MediaPlayerUtil.sService, mPlaylistCols);
-                    if (ret.getCount() == 0) {
-                    	// カーソルの中身がなければ？状態がおかしいのかな？
-                    	// サンプルでは多分強制終了している
-                    	// しかし、今回はありではないかと思う
-                    	// TODO: 確認
-                    	// TODO: せめて、再生ボタンを無効に？
-                        // finish();
-                    	// ctx.initAdapter(TabPage.TABPAGE_ID_SONG,ret);
-                    	// return null;
-                    }
-                } else {
-                	// サービスがないので、何もプレイされていないのでいい？
-                    // Nothing is playing.
-                }
-            } else if (playlist.equals(PlaylistName_Podcasts)) {
-            	// プレイリストがpodcast
-            	// トラックのコンテントプロバイダを検索
-            	// 条件に、Podcastを加える？
-                where.append(" AND " + MediaStore.Audio.Media.IS_PODCAST + "=1");
-                ret = queryhandler.doQuery(ctx, uri,
-                		mPlaylistCols, where.toString(), keywords,
-                        MediaStore.Audio.Media.DEFAULT_SORT_ORDER, async);
-            } else if (playlist.equals(PlaylistName_RecentlyAdded)) {
-            	// プレイリストが最近追加されたもの
-            	// 最後x週に追加されたもの、という条件を加える
-            	// uriは同じで検索
-                // do a query for all songs added in the last X weeks
-                int X = OkosamaMediaPlayerActivity.getResourceAccessor().getIntPref("numweeks", 2) * (3600 * 24 * 7);
-                where.append(" AND " + MediaStore.MediaColumns.DATE_ADDED + ">");
-                where.append(System.currentTimeMillis() / 1000 - X);
-                ret = queryhandler.doQuery(ctx,uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                		mPlaylistCols, where.toString(), keywords,
-                        MediaStore.Audio.Media.DEFAULT_SORT_ORDER, async);
-            } else {
-            	// それ以外
-            	// ソートオーダーをプレイリストのものにする？
-                mSortOrder = MediaStore.Audio.Playlists.Members.DEFAULT_SORT_ORDER;
-                // 検索対象もプレイリストに？
-                ret = queryhandler.doQuery(ctx,MediaStore.Audio.Playlists.Members.getContentUri(strExOrIn,
-                        Long.valueOf(playlist)), mPlaylistMemberCols,
-                        where.toString(), keywords, mSortOrder, async);
-            }
-        } else {
+//        if (genre != null) {
+//        	// ジャンルが設定されていたら
+//        	// ソート順をジャンルに？
+//            mSortOrder = MediaStore.Audio.Genres.Members.DEFAULT_SORT_ORDER;
+//            // ジャンルのuriを検索、ジャンルでフィルタ？
+//            ret = queryhandler.doQuery(ctx,MediaStore.Audio.Genres.Members.getContentUri(strExOrIn,
+//                    Integer.valueOf(genre)),
+//                    mPlaylistCols, where.toString(), keywords, mSortOrder, async);
+//        } else if (playlist != null) {
+//        	// メンバ変数のプレイリストが設定されていたら？
+//            if (playlist.equals(PlaylistName_NowPlaying)) {
+//            	// TODO:プレイリストの設定
+//            	// プレイリストがnowplayingなら
+//                if (MediaPlayerUtil.sService != null) {
+//                	// サービスが設定されていたら
+//                	// nowplayingカーソルを作成し、それを返す？
+//                    ret = new NowPlayingCursor(MediaPlayerUtil.sService, mPlaylistCols);
+//                    if (ret.getCount() == 0) {
+//                    	// カーソルの中身がなければ？状態がおかしいのかな？
+//                    	// サンプルでは多分強制終了している
+//                    	// しかし、今回はありではないかと思う
+//                    	// TODO: 確認
+//                    	// TODO: せめて、再生ボタンを無効に？
+//                        // finish();
+//                    	// ctx.initAdapter(TabPage.TABPAGE_ID_SONG,ret);
+//                    	// return null;
+//                    }
+//                } else {
+//                	// サービスがないので、何もプレイされていないのでいい？
+//                    // Nothing is playing.
+//                }
+//            } else if (playlist.equals(PlaylistName_Podcasts)) {
+//            	// プレイリストがpodcast
+//            	// トラックのコンテントプロバイダを検索
+//            	// 条件に、Podcastを加える？
+//                where.append(" AND " + AudioColumns.IS_PODCAST + "=1");
+//                ret = queryhandler.doQuery(ctx, uri,
+//                		mPlaylistCols, where.toString(), keywords,
+//                        MediaStore.Audio.Media.DEFAULT_SORT_ORDER, async);
+//            } else if (playlist.equals(PlaylistName_RecentlyAdded)) {
+//            	// プレイリストが最近追加されたもの
+//            	// 最後x週に追加されたもの、という条件を加える
+//            	// uriは同じで検索
+//                // do a query for all songs added in the last X weeks
+//                int X = OkosamaMediaPlayerActivity.getResourceAccessor().getIntPref("numweeks", 2) * (3600 * 24 * 7);
+//                where.append(" AND " + MediaStore.MediaColumns.DATE_ADDED + ">");
+//                where.append(System.currentTimeMillis() / 1000 - X);
+//                ret = queryhandler.doQuery(ctx,uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+//                		mPlaylistCols, where.toString(), keywords,
+//                        MediaStore.Audio.Media.DEFAULT_SORT_ORDER, async);
+//            } else {
+//            	// それ以外
+//            	// ソートオーダーをプレイリストのものにする？
+//                mSortOrder = MediaStore.Audio.Playlists.Members.DEFAULT_SORT_ORDER;
+//                // 検索対象もプレイリストに？
+//                ret = queryhandler.doQuery(ctx,MediaStore.Audio.Playlists.Members.getContentUri(strExOrIn,
+//                        Long.valueOf(playlist)), mPlaylistMemberCols,
+//                        where.toString(), keywords, mSortOrder, async);
+//            }
+//        } else {
+        	// TODO: とりあえずここは変える
+        	// 全ての曲を取得
+        	
         	// プレイリストがnull
-            if (albumId != null) {
-            	// アルバムが空でなければ
-            	// それを検索条件に
-            	// ソート順の最優先を、トラックに？
-                where.append(" AND " + MediaStore.Audio.Media.ALBUM_ID + "=" + albumId);
-                mSortOrder = MediaStore.Audio.Media.TRACK + ", " + mSortOrder;
-            }
-            if (artistId != null) {
-            	// アーティストが空でなければ、それを検索条件に
-                where.append(" AND " + MediaStore.Audio.Media.ARTIST_ID + "=" + artistId);
-            }
+//            if (albumId != null) {
+//            	// アルバムが空でなければ
+//            	// それを検索条件に
+//            	// ソート順の最優先を、トラックに？
+//                where.append(" AND " + AudioColumns.ALBUM_ID + "=" + albumId);
+//                mSortOrder = AudioColumns.TRACK + ", " + mSortOrder;
+//            }
+//            if (artistId != null) {
+//            	// アーティストが空でなければ、それを検索条件に
+//                where.append(" AND " + AudioColumns.ARTIST_ID + "=" + artistId);
+//            }
+        	mSortOrder = AudioColumns.TRACK + ", " + mSortOrder;
             // 音楽指定
-            where.append(" AND " + MediaStore.Audio.Media.IS_MUSIC + "=1");
+            where.append(" AND " + AudioColumns.IS_MUSIC + "=1");
             // クエリ発行
-            ret = queryhandler.doQuery(ctx, uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-            		mPlaylistCols, where.toString() , keywords, mSortOrder, async);
-        }
-        
+            // Log.i("query1","query1");
+//            ret = queryhandler.doQuery(ctx, uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+//            		mPlaylistCols, where.toString() , keywords, mSortOrder, async);
+        //}
+            if (async != null) {
+            	Log.i("uri:", uri.toString());
+            	//async.startQuery(TabPage.TABPAGE_ID_ALBUM, null, uri, null, null, null, null );
+                async.startQuery(TabPage.TABPAGE_ID_SONG, null, uri,
+                		mPlaylistCols, where.toString(), keywords, mSortOrder);
+            } else {
+                ret = query(ctx, uri,
+                		mPlaylistCols, where.toString(), keywords, mSortOrder);
+            }
+            //return ret;
+
         // 非同期でも、nowplayingの場合はメッセージが飛んでこないので、そこで初期化できない。
         // それに対応
         // This special case is for the "nowplaying" cursor, which cannot be handled
         // asynchronously using AsyncQueryHandler, so we do some extra initialization here.
-        if (ret != null && async) {
+        //if (ret != null && async) {
         	// TODO:実装
-            ctx.initAdapter(TabPage.TABPAGE_ID_SONG,ret);
+            // ctx.initAdapter(TabPage.TABPAGE_ID_SONG,ret);
             //setTitle();
-        }
+        //}
         return ret;
     }
     /**
@@ -653,7 +681,7 @@ public class Database {
             // where句の作成
             StringBuilder where = new StringBuilder();
             // IDが、nowplayingの中にあるもの
-            where.append(MediaStore.Audio.Media._ID + " IN (");
+            where.append(BaseColumns._ID + " IN (");
             for (int i = 0; i < mSize; i++) {
                 where.append(mNowPlaying[i]);
                 if (i < mSize - 1) {
@@ -673,7 +701,7 @@ public class Database {
             // クエリ発行
             mCurrentPlaylistCursor = query(ctx,
                     uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    mCols, where.toString(), null, MediaStore.Audio.Media._ID);
+                    mCols, where.toString(), null, BaseColumns._ID);
 
             if (mCurrentPlaylistCursor == null) {
             	// カーソル取得失敗
@@ -686,7 +714,7 @@ public class Database {
             int size = mCurrentPlaylistCursor.getCount();
             mCursorIdxs = new long[size];
             mCurrentPlaylistCursor.moveToFirst();
-            int colidx = mCurrentPlaylistCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID);
+            int colidx = mCurrentPlaylistCursor.getColumnIndexOrThrow(BaseColumns._ID);
             for (int i = 0; i < size; i++) {
                 mCursorIdxs[i] = mCurrentPlaylistCursor.getLong(colidx);
                 mCurrentPlaylistCursor.moveToNext();
@@ -767,13 +795,13 @@ public class Database {
                 if (mService.removeTracks(which, which) == 0) {
                     return false; // delete failed
                 }
-                int i = (int) which;
+                int i = which;
                 mSize--;
                 while (i < mSize) {
                     mNowPlaying[i] = mNowPlaying[i+1];
                     i++;
                 }
-                onMove(-1, (int) mCurPos);
+                onMove(-1, mCurPos);
             } catch (RemoteException ex) {
             }
             return true;
@@ -946,17 +974,17 @@ public class Database {
      */
     public static void makePlaylistMenu(Context context, SubMenu sub) {
         String[] cols = new String[] {
-                MediaStore.Audio.Playlists._ID,
-                MediaStore.Audio.Playlists.NAME
+                BaseColumns._ID,
+                PlaylistsColumns.NAME
         };
         ContentResolver resolver = context.getContentResolver();
         if (resolver == null) {
             System.out.println("resolver = null");
         } else {
-            String whereclause = MediaStore.Audio.Playlists.NAME + " != ''";
+            String whereclause = PlaylistsColumns.NAME + " != ''";
             Cursor cur = resolver.query(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI,
                 cols, whereclause, null,
-                MediaStore.Audio.Playlists.NAME);
+                PlaylistsColumns.NAME);
             sub.clear();
             sub.add(1, Defs.QUEUE, 0, R.string.queue);
             sub.add(1, Defs.NEW_PLAYLIST, 0, R.string.new_playlist);
@@ -992,7 +1020,7 @@ public class Database {
         try {
             colidx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Playlists.Members.AUDIO_ID);
         } catch (IllegalArgumentException ex) {
-            colidx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID);
+            colidx = cursor.getColumnIndexOrThrow(BaseColumns._ID);
         }
         for (int i = 0; i < len; i++) {
             list[i] = cursor.getLong(colidx);
@@ -1002,12 +1030,12 @@ public class Database {
     }
 
     public static long [] getSongListForArtist(Context context, long id) {
-        final String[] ccols = new String[] { MediaStore.Audio.Media._ID };
-        String where = MediaStore.Audio.Media.ARTIST_ID + "=" + id + " AND " + 
-        MediaStore.Audio.Media.IS_MUSIC + "=1";
+        final String[] ccols = new String[] { BaseColumns._ID };
+        String where = AudioColumns.ARTIST_ID + "=" + id + " AND " + 
+        AudioColumns.IS_MUSIC + "=1";
         Cursor cursor = query(context, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 ccols, where, null,
-                MediaStore.Audio.Media.ALBUM_KEY + ","  + MediaStore.Audio.Media.TRACK);
+                AudioColumns.ALBUM_KEY + ","  + AudioColumns.TRACK);
         
         if (cursor != null) {
             long [] list = getSongListForCursor(cursor);
@@ -1017,11 +1045,11 @@ public class Database {
         return sEmptyList;
     }    
     public static long [] getSongListForAlbum(Context context, long id) {
-        final String[] ccols = new String[] { MediaStore.Audio.Media._ID };
-        String where = MediaStore.Audio.Media.ALBUM_ID + "=" + id + " AND " + 
-                MediaStore.Audio.Media.IS_MUSIC + "=1";
+        final String[] ccols = new String[] { BaseColumns._ID };
+        String where = AudioColumns.ALBUM_ID + "=" + id + " AND " + 
+                AudioColumns.IS_MUSIC + "=1";
         Cursor cursor = query(context, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                ccols, where, null, MediaStore.Audio.Media.TRACK);
+                ccols, where, null, AudioColumns.TRACK);
 
         if (cursor != null) {
             long [] list = getSongListForCursor(cursor);
@@ -1089,10 +1117,10 @@ public class Database {
     }
     public static void deleteTracks(Context context, long [] list) {
         
-        String [] cols = new String [] { MediaStore.Audio.Media._ID, 
-                MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ALBUM_ID };
+        String [] cols = new String [] { BaseColumns._ID, 
+                MediaColumns.DATA, AudioColumns.ALBUM_ID };
         StringBuilder where = new StringBuilder();
-        where.append(MediaStore.Audio.Media._ID + " IN (");
+        where.append(BaseColumns._ID + " IN (");
         for (int i = 0; i < list.length; i++) {
             where.append(list[i]);
             if (i < list.length - 1) {

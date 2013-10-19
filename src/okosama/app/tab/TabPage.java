@@ -2,15 +2,12 @@ package okosama.app.tab;
 // import android.R;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
-import android.widget.RelativeLayout;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.widget.*;
 
 /**
  * タブの１つのページを模倣したクラス
@@ -79,7 +76,8 @@ public abstract class TabPage extends TabComponentParent {
 		    public void onAnimationEnd(Animation animation) {
 				Log.i("anim_end","ok");
 				componentContainer.post(new Runnable() {
-		            public void run() {
+		            @Override
+					public void run() {
                     	if( bWaitRemove )
         		    	{
                     		if( -1 != componentContainer.indexOfChild( tabBaseLayout ))

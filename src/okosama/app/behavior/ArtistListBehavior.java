@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.database.Cursor;
 //import android.net.Uri;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.AlbumColumns;
+import android.provider.MediaStore.Audio.ArtistColumns;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -28,18 +31,19 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 
 	public static final int SEARCH = CHILD_MENU_BASE;
 
+	@Override
 	public void onItemClick(ExpandableListView parent, View v, int grouppos, int childpos, long id)
 	{
 		// ‚±‚ê‚ªchildclick‚Æ‚µ‚ÄŽg‚í‚ê‚é
 		mCurrentAlbumId = Long.valueOf(id).toString();
 		
 		Cursor c = (Cursor) parent.getExpandableListAdapter().getChild(grouppos, childpos);
-		String album = c.getString(c.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
+		String album = c.getString(c.getColumnIndex(AlbumColumns.ALBUM));
 		if (album == null || album.equals(MediaStore.UNKNOWN_STRING)) {
 		    // unknown album, so we should include the artist ID to limit the songs to songs only by that artist
 			Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()).getCursor(Database.ArtistCursorName);
 			cursor.moveToPosition(grouppos);
-			mCurrentArtistId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Artists._ID));
+			mCurrentArtistId = cursor.getString(cursor.getColumnIndex(BaseColumns._ID));
 			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(mCurrentArtistId);
 		}
 		// OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
@@ -121,8 +125,8 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
             
             gpos = gpos - v.getHeaderViewsCount();
             artistCursor.moveToPosition(gpos);
-            mCurrentArtistId = artistCursor.getString(artistCursor.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID));
-            mCurrentArtistName = artistCursor.getString(artistCursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST));
+            mCurrentArtistId = artistCursor.getString(artistCursor.getColumnIndexOrThrow(BaseColumns._ID));
+            mCurrentArtistName = artistCursor.getString(artistCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST));
             mCurrentAlbumId = null;
             mIsUnknownArtist = mCurrentArtistName == null ||
                     mCurrentArtistName.equals(MediaStore.UNKNOWN_STRING);
@@ -140,15 +144,15 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
                 Log.d("Artist/Album", "no child");
                 return;
             }
-            Cursor c = (Cursor) adapter.getChild(gpos, cpos);
+            Cursor c = adapter.getChild(gpos, cpos);
             c.moveToPosition(cpos);
             mCurrentArtistId = null;
             mCurrentAlbumId = Long.valueOf(mi.id).toString();
-            mCurrentAlbumName = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM));
+            mCurrentAlbumName = c.getString(c.getColumnIndexOrThrow(AlbumColumns.ALBUM));
             gpos = gpos - v.getHeaderViewsCount();
             artistCursor.moveToPosition(gpos);
             mCurrentArtistNameForAlbum = artistCursor.getString(
-            		artistCursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST));
+            		artistCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST));
             mIsUnknownArtist = mCurrentArtistNameForAlbum == null ||
                     mCurrentArtistNameForAlbum.equals(MediaStore.UNKNOWN_STRING);
             mIsUnknownAlbum = mCurrentAlbumName == null ||

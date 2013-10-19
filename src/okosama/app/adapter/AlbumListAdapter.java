@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.AlbumColumns;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,9 +112,9 @@ public class AlbumListAdapter extends SimpleCursorAdapter implements SectionInde
         if (cursor != null) {
         	// カーソルがnullでなければ
         	// カーソルから、各カラムのindexを取得し、メンバ変数に格納する
-            mAlbumIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM);
-            mArtistIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ARTIST);
-            mAlbumArtIndex = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ART);
+            mAlbumIdx = cursor.getColumnIndexOrThrow(AlbumColumns.ALBUM);
+            mArtistIdx = cursor.getColumnIndexOrThrow(AlbumColumns.ARTIST);
+            mAlbumArtIndex = cursor.getColumnIndexOrThrow(AlbumColumns.ALBUM_ART);
             
             // indexerにカーソルを設定する？
             if (mIndexer != null) {
@@ -279,20 +280,23 @@ public class AlbumListAdapter extends SimpleCursorAdapter implements SectionInde
     /**
      * インデックスからセクションを取得する
      */
-    public Object[] getSections() {
+    @Override
+	public Object[] getSections() {
         return mIndexer.getSections();
     }
     
     /**
      * インデックスからセクションのポジションを取得する
      */
-    public int getPositionForSection(int section) {
+    @Override
+	public int getPositionForSection(int section) {
         return mIndexer.getPositionForSection(section);
     }
     /**
      * ポジションのセクションを取得？
      */
-    public int getSectionForPosition(int position) {
+    @Override
+	public int getSectionForPosition(int position) {
         return 0;
     }
 }

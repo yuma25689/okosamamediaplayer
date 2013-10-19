@@ -31,10 +31,12 @@ public abstract class TabComponentParent implements ITabComponent {
 		this.activity = activity;		
 	}
 	protected Integer internalID;
+	@Override
 	public void setInternalID(Integer internalID)
 	{
 		this.internalID = internalID;
 	}
+	@Override
 	public Integer getInternalID()
 	{
 		return this.internalID;
@@ -71,6 +73,7 @@ public abstract class TabComponentParent implements ITabComponent {
 
 	protected Tab parent;
 	protected SparseArray< IViewAction > actionMap;
+	@Override
 	public void setActionMap(SparseArray< IViewAction > actionMap) {
 		this.actionMap = actionMap;
 	}
@@ -79,6 +82,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	 * Viewの取得
 	 * @return view
 	 */
+	@Override
 	public View getView() {
 		return null;
 	}
@@ -86,6 +90,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	 * Activeかどうかを設定。子の同関数もコールする
 	 * @param b
 	 */	
+	@Override
 	public void setActivate( boolean b )
 	{
 		active = b;
@@ -97,6 +102,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	 * Visibleかどうかを設定。子の同関数もコールする
 	 * @param b
 	 */	
+	@Override
 	public void setVisible( boolean b )
 	{
 		for( int i=0; i < children.size(); i++ ) {
@@ -106,6 +112,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	/**
 	 * 表示の更新。子の同関数もコールする
 	 */
+	@Override
 	public void updateDisplay() {
 		for( int i=0; i < children.size(); i++ ) {
 			children.valueAt(i).updateDisplay();
@@ -116,6 +123,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	 * 子項目の追加
 	 * @param child
 	 */
+	@Override
 	public void addChild( int ID, ITabComponent child ) {
 		children.put(ID,child);
 	}
@@ -125,6 +133,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	 * 子のオブジェクトには適用しない
 	 * @param conf
 	 */
+	@Override
 	public void acceptConfigurator( ITabComponentConfigurator conf )
 	{
 		conf.configure(this);
@@ -141,10 +150,12 @@ public abstract class TabComponentParent implements ITabComponent {
 	/**
 	 * 設定されたアクションの内容を、コンポーネントに設定する
 	 */
+	@Override
 	public void configureAction()
 	{
 	}
 	
+	@Override
 	public IBehavior getBehavior()
 	{
 		return null;

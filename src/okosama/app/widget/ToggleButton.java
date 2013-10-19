@@ -37,6 +37,7 @@ public class ToggleButton extends absWidget {
 	 * —LŒø–³Œø§Œä
 	 * @param b
 	 */
+	@Override
 	public void setEnabled( boolean b )
 	{
 		impl.setEnabled(b);

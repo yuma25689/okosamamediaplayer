@@ -23,13 +23,16 @@ public abstract class TabLeaf implements ITabComponent {
 	 * 子項目の追加
 	 * @param child
 	 */
+	@Override
 	public void addChild( int ID, ITabComponent child ) {
 		children.put(ID,child);
 	}	
+	@Override
 	public void setInternalID(Integer internalID)
 	{
 		this.internalID = internalID;
 	}
+	@Override
 	public Integer getInternalID()
 	{
 		return this.internalID;
@@ -40,6 +43,7 @@ public abstract class TabLeaf implements ITabComponent {
 		actionMap.put( id, action );
 	}
 	
+	@Override
 	public void setActionMap(SparseArray< IViewAction > actionMap) {
 		this.actionMap = actionMap;
 	}
@@ -107,6 +111,7 @@ public abstract class TabLeaf implements ITabComponent {
 			HideTabComponentAction.getInstance().doAction( getView() );
 		}
 	}
+	@Override
 	public void updateDisplay() {
 	}
 
@@ -116,6 +121,7 @@ public abstract class TabLeaf implements ITabComponent {
 	/**
 	 * 設定されたアクションの内容を、コンポーネントに設定する
 	 */
+	@Override
 	public void configureAction()
 	{
 	}
@@ -123,6 +129,7 @@ public abstract class TabLeaf implements ITabComponent {
 	{
 		this.behavior = behavior;
 	}
+	@Override
 	public IBehavior getBehavior()
 	{
 		return behavior;

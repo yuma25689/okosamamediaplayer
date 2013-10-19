@@ -6,6 +6,7 @@
 
     <uses-sdk android:minSdkVersion="8" />
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -22,7 +23,23 @@
             </intent-filter>
         </activity>
         <service android:name=".service.MediaPlaybackService"></service>
-        <activity android:name="TweetActivity"></activity>
+        <activity android:name="TweetActivity" android:launchMode="singleTask">
+        	<intent-filter>
+        	    <data android:scheme="yuma25689" android:host="twitter"/>
+ 	          	<category android:name="android.intent.category.DEFAULT" />
+            	<category android:name="android.intent.category.BROWSABLE" />     	    
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+            
+            
+        </activity>
+        <receiver android:name="okosama.app.service.MediaButtonIntentReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
+            </intent-filter>
+        </receiver>
+        
         <activity android:name="DeleteItems"></activity>
     </application>
 

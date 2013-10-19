@@ -7,7 +7,6 @@ import android.widget.ListAdapter;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.behavior.IListBehavior;
-import okosama.app.tab.*;
 
 public class List extends absWidget {
 
