@@ -8,6 +8,7 @@ import okosama.app.action.TabSelectAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.Button;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -133,12 +134,36 @@ public class Tab extends TabComponentParent {
 	}
 	
 	/**
+	 * タブ切り替え中のロックだが、本来は元のEnableを考慮した制御が必要
+	 * @param bEnable
+	 */
+	void setEnableAllTab(boolean bEnable)
+	{
+		for( int i=0; i < mapBtn.size(); ++i )
+		{
+			// あまりよくないが、選択中のタブボタンは、ここでEnable=trueにはさせない
+			if( bEnable == true )
+			{
+				if( iCurrentTabPageId == mapBtn.keyAt(i) )
+				{
+					mapBtn.valueAt(i).setEnabled(false);
+					continue;
+				}
+			}			
+			mapBtn.valueAt(i).setEnabled(bEnable);
+		}
+	}
+	
+	/**
 	 * 現在のタブを設定する
 	 * 現状、TabSelectActionでは結局これが呼ばれる
 	 * @param tabId
 	 */
 	public void setCurrentTab(int tabId,boolean save)
 	{
+		Log.d("tab.setCurrentTab", "tab:" + tabId);
+		OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(true, internalID);
+		setEnableAllTab(false);
 		// TODO: タブページはマップに格納した方がいいかもしれない
 
 //        		// 一度全てのタブの選択を解除
@@ -165,6 +190,9 @@ public class Tab extends TabComponentParent {
         {
         	OkosamaMediaPlayerActivity.setCurrentDisplayId(this.internalID,tabId);
         }
+		OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(false, internalID);
+		
+
 	}
 
 }

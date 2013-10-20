@@ -209,7 +209,7 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> {
     	for (AlbumData data : items) {
     	    add(data);
     	    mapIdAndArt.put(data.getAlbumId(), data.getAlbumArt());
-        	Log.i("updateData - add","data" + data.getAlbumId() + " name:" + data.getAlbumName() );    	    
+        	// Log.i("updateData - add","data" + data.getAlbumId() + " name:" + data.getAlbumName() );    	    
     	}
     	notifyDataSetChanged();
     }

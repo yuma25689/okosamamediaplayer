@@ -16,6 +16,8 @@ import okosama.app.R;
  */
 public abstract class TabPage extends TabComponentParent {
 
+//	Animation animIn = null;
+//	Animation animOut = null;
 	
 	// protected Button tabButton;
 	protected Drawable bk_drawable;
@@ -39,30 +41,55 @@ public abstract class TabPage extends TabComponentParent {
 	{		
 		if( bActivate )
 		{
-			Animation anim = AnimationUtils.loadAnimation(
-					OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
-					, R.anim.left_in );//android.R.anim.slide_in_left );
-    		if( tabBaseLayout.getParent() != null )
-    		{
-    			if( tabBaseLayout.getParent() instanceof ViewGroup )
-    				((ViewGroup)tabBaseLayout.getParent()).removeView( tabBaseLayout );
-    		}			
-			tabBaseLayout.startAnimation(anim);
-			componentContainer.addView( tabBaseLayout );
+			OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.requestTabMove(
+					TabChangeAnimation.TAB_IN, tabBaseLayout, componentContainer, this.tabId);
+//			if(bWaitRemove == true )
+//			{
+//				animOut.cancel();
+//				bWaitRemove = false;
+//				componentContainer.removeView( tabBaseLayout );				
+//			}
+//			if( animIn != null )
+//			{
+//				animIn.cancel();
+//			}
+//			else
+//			{
+//				animIn = AnimationUtils.loadAnimation(
+//						OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
+//						, R.anim.left_in );//android.R.anim.slide_in_left );
+//			}
+//    		if( tabBaseLayout.getParent() != null )
+//    		{
+//    			if( tabBaseLayout.getParent() instanceof ViewGroup )
+//    				((ViewGroup)tabBaseLayout.getParent()).removeView( tabBaseLayout );
+//    		}
+//			tabBaseLayout.startAnimation(animIn);
+//			componentContainer.addView( tabBaseLayout );
 		}
 		else
 		{
-			Animation anim = AnimationUtils.loadAnimation(
-					OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
-					, R.anim.right_out );
-			//R.anim.slide_out_right
-			bWaitRemove = true;
-			anim.setAnimationListener(
-			animationListener);
-			// tabBaseLayout.setAnimation(anim);
-			//anim.setFillAfter(true);
-			tabBaseLayout.startAnimation(anim);
-			//componentContainer.removeView( tabBaseLayout );			
+			OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.requestTabMove(
+					TabChangeAnimation.TAB_OUT, tabBaseLayout, componentContainer, this.tabId);			
+//			if( animOut != null )
+//			{
+//				animOut.cancel();
+//				componentContainer.removeView( tabBaseLayout );
+//			}
+//			else
+//			{
+//				animOut = AnimationUtils.loadAnimation(
+//						OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
+//						, R.anim.right_out );
+//			}
+//			//R.anim.slide_out_right
+//			bWaitRemove = true;
+//			animOut.setAnimationListener(
+//			animationListener);
+//			// tabBaseLayout.setAnimation(anim);
+//			//animOut.setFillAfter(true);
+//			tabBaseLayout.startAnimation(animOut);
+//			// componentContainer.removeView( tabBaseLayout );			
 		}
 		super.setActivate(bActivate);
 	}
@@ -74,7 +101,7 @@ public abstract class TabPage extends TabComponentParent {
 
 		    @Override
 		    public void onAnimationEnd(Animation animation) {
-				Log.i("anim_end","ok");
+				//Log.i("anim_end","ok");
 				componentContainer.post(new Runnable() {
 		            @Override
 					public void run() {
@@ -97,7 +124,7 @@ public abstract class TabPage extends TabComponentParent {
 			@Override
 			public void onAnimationStart(Animation animation) {
 				// TODO Auto-generated method stub
-				Log.i("anim_start","ok");
+				//Log.i("anim_start","ok");
 			}  
 	};
 	/**

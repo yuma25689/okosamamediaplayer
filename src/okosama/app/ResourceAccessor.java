@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Locale;
 
+import okosama.app.tab.TabChangeAnimation;
 import okosama.app.widget.Button;
 
 import android.content.Context;
@@ -34,6 +35,7 @@ import android.media.SoundPool.OnLoadCompleteListener;
  */
 public final class ResourceAccessor {
 	
+	public TabChangeAnimation tabAnim = new TabChangeAnimation();
 	// ここに、アプリケーションの状態を格納する
 	public AppStatus appStatus = new AppStatus();
 

@@ -48,6 +48,9 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 		}
 		// OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(mCurrentAlbumId);
+		// OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().setAlbumId( mCurrentAlbumId );
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().updateList();
+				
 		// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(
 		IViewAction action = new TabSelectAction( 
 				ControlIDs.TAB_ID_MEDIA, //act.getMediaTab().getTabContent(),

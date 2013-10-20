@@ -39,7 +39,7 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 			return;
 		}
 		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(String.valueOf(act.getAlbumAdp().getItem(position).getAlbumId() ) );
-		act.getTrackAdp().setAlbumId(String.valueOf(act.getAlbumAdp().getItem(position).getAlbumId() ) );
+		// act.getTrackAdp().setAlbumId(String.valueOf(act.getAlbumAdp().getItem(position).getAlbumId() ) );
 		act.getTrackAdp().updateList();
 		//Long.valueOf(id).toString());
 		// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(

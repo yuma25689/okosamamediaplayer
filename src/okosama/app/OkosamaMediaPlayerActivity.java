@@ -461,6 +461,10 @@ implements ServiceConnection {
 		        	case TabSelectAction.MSG_ID_TAB_SELECT:
 		        	{
 		        		// タブが選択された通知
+		        		// リスナを更新
+		            	updateListeners();
+		            	// メディアを更新
+		            	reScanMedia((Integer)message.obj,false);
 //		        		if( message.arg2 == TabPage.TABPAGE_ID_MEDIA 
 //		        		&& currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
 //		        		{
@@ -481,10 +485,6 @@ implements ServiceConnection {
 			        			OkosamaMediaPlayerActivity.getCurrentDisplayId( ControlIDs.TAB_ID_MEDIA )
 			        		);
 		        		}
-		        		// リスナを更新
-		            	updateListeners();
-		            	// メディアを更新
-		            	reScanMedia((Integer)message.obj,false);
 		            	// 共通部分再描画
 		            	updateCommonCtrls();
 		            	updatePlayStateButtonImage();
@@ -866,6 +866,10 @@ implements ServiceConnection {
 		}
 	}
 	
+	/**
+	 * 強制リスキャン
+	 * @param tabID
+	 */
 	public void reScanMedia(int tabID)
 	{
 		switch( tabID )
@@ -917,6 +921,8 @@ implements ServiceConnection {
 				&& 0 < getAlbumAdp().getCount() ) { //null != Database.getInstance(this).getCursor( Database.AlbumCursorName )) {
 					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
 		            Log.i("test", "rescan escape album");
+		            // 再更新もしない
+					// getAlbumAdp().updateList();
 					break;
 				}
 				// Listにカーソルを設定
@@ -934,12 +940,13 @@ implements ServiceConnection {
 				Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);			
 				break;
 			case TabPage.TABPAGE_ID_SONG:
+				getTrackAdp().setQueueView(false);
 				if( bForce == false 
 				&& null != Database.getInstance(this).getCursor( Database.SongCursorName )) {
-					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
+					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンはしない
+					getTrackAdp().updateList();
 					break;
 				}
-				
 				OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );
 				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);			
 				break;
@@ -962,9 +969,19 @@ implements ServiceConnection {
 		{
 			// TODO: 現在、トラックと同じカーソルになっているが、考えた方がいいかもしれない
 			// NOWPLAYLIST
-			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
-			
-			Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);
+			// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
+			getTrackAdp().setQueueView(true);
+			getTrackAdp().clear();
+			if( bForce == false 
+			&& null != Database.getInstance(this).getCursor( Database.SongCursorName )) {
+				// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンはしない
+				getTrackAdp().updateList();
+			}
+			else
+			{
+				// getTrackAdp().setQueueView(true);
+				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);
+			}
 		}
 	}
 	

@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
-import okosama.app.adapter.AlbumListRawAdapter.ViewHolder;
+//import okosama.app.adapter.AlbumListRawAdapter.ViewHolder;
 import okosama.app.service.MediaPlayerUtil;
-import okosama.app.storage.AlbumData;
+//import okosama.app.storage.AlbumData;
 import okosama.app.storage.Database;
 import okosama.app.storage.QueryHandler;
 import okosama.app.storage.TrackData;
-import okosama.app.storage.TrackQueryHandler;
+//import okosama.app.storage.TrackQueryHandler;
 import android.content.Context;
 import android.database.CharArrayBuffer;
 import android.database.Cursor;
@@ -22,18 +22,18 @@ import android.os.AsyncTask;
 import android.os.RemoteException;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Audio.AlbumColumns;
+//import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
 import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AlphabetIndexer;
+//import android.widget.AlphabetIndexer;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.SectionIndexer;
-import android.widget.SimpleCursorAdapter;
+//import android.widget.SectionIndexer;
+//import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 /**
@@ -47,6 +47,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
 	private ArrayList<TrackData> allItems = new ArrayList<TrackData>();
 	int maxShowCount = 80;
     	
+	long [] playlist = null;
     private final BitmapDrawable mDefaultAlbumIcon;
 	boolean bDataUpdating = false;	// 内部データを更新中かどうか
 	private LayoutInflater inflater;
@@ -77,6 +78,11 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
     // 外部からの設定値保持用
 	// TODO: 意味の調査
     boolean mIsNowPlaying;
+    boolean mIsQueueView;
+    public void setQueueView( boolean b )
+    {
+    	mIsQueueView = b;
+    }
     boolean mDisableNowPlayingIndicator;
     private String genre;
     private String albumId;
@@ -85,7 +91,10 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
     	albumId = id;
     }
     private String artistId;
-
+    public void setArtistId( String id )
+    {
+    	artistId = id;
+    }
     private final StringBuilder mBuilder = new StringBuilder();
     private final String mUnknownArtist;
     
@@ -399,12 +408,55 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
      */
     boolean isShowData(TrackData data)
     {
+    	// TODO: 現状、自動でキューを表示するかそうでないかを切り替えているが、
+    	// 自動ではなく、ユーザに選択させる
+    	// boolean bShow = true;
+    	// boolean bQueueExists = false;
+ 
+//    	if( playlist != null && 0 < playlist.length )
+//    	{
+//    		bQueueExists = true;
+//    		Log.d("debug","queue exists");
+//    	}
+    	
+    	if( mIsQueueView == true )
+    	// if( bQueueExists == true )
+    	{
+    		if( playlist != null )
+    		{
+	    		// 再生キューにあるものしか表示しない
+	    		for( int i=0; i< playlist.length; ++i )
+	    		{
+	    			if( playlist[i] == data.getTrackAudioId() )
+	    			{
+	    				return true;
+	    			}
+	    		}
+    		}
+			return false;
+    	}
+    	
+    	
+    	// albumIDのチェック
     	if( albumId != null && 0 < albumId.length() ) 
     	{
-    		Log.d("isShowData"," albumId:" + data.getTrackAlbumId() );     		
+    		// Log.d("isShowData"," albumId:" + data.getTrackAlbumId() );     		
     		if( albumId.equals(data.getTrackAlbumId()) )
     		{
-    			return true;
+    			// return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	// アーティストIDのチェック
+    	if( artistId != null && 0 < artistId.length() ) 
+    	{
+    		//Log.d("isShowData"," artistId:" + data.getTrackArtistId() );     		
+    		if( artistId.equals(data.getTrackArtistId()) )
+    		{
+    			// return true;
     		}
     		else
     		{
@@ -414,6 +466,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
     	return true;
     	
     }
+    
     /**
      * カーソルを変更する
      */
@@ -421,8 +474,19 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
     public void updateList() {
     	ArrayList<TrackData> items = allItems;
     	clear();
+    	
+    	// 検索条件のリセット
+    	playlist = null;
+       	try {
+    		playlist = MediaPlayerUtil.sService.getQueue();
+    	} catch( RemoteException ex ) {
+    		Log.e("Error", "sService getQueue RemoteException occured!");
+    	}    	
+    	setAlbumId( OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getAlbumID() );
+    	setArtistId( OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID() );
+				
     	currentAllAudioIds.clear();
-		Log.d("id", "itemCount:" + allItems.size() + " albumID:" + albumId );
+		// Log.d("id", "itemCount:" + allItems.size() + " albumID:" + albumId );
 		for (TrackData data : items) {
     		// ここでフィルタをかけてしまう？
     		if( false == isShowData( data ) )
@@ -431,7 +495,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
     		}
     	    add(data);
     	    currentAllAudioIds.add(data.getTrackAudioId());
-        	Log.d("updateData - add","data" + data.getTrackId() + " name:" + data.getTrackTitle() + " albumId:" + data.getTrackAlbumId() );    	    
+        	// Log.d("updateData - add","data" + data.getTrackId() + " name:" + data.getTrackTitle() + " albumId:" + data.getTrackAlbumId() );    	    
     		if( maxShowCount < this.getCount() )
     		{
     			// maxの表示件数以上は、表示しない
