@@ -47,24 +47,6 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 				TabPage.TABPAGE_ID_SONG );
 		action.doAction(v);
 	}
-
-	@Override
-	public void onCreateOptionsMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onPrepareOptionsMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onOptionsItemSelected() {
-		// TODO Auto-generated method stub
-
-	}
 	
     private String mCurrentAlbumId;
     private String mCurrentAlbumName;

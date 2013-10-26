@@ -6,11 +6,10 @@ import java.util.Map.Entry;
 //import okosama.app.action.HideTabComponentAction;
 //import okosama.app.action.ShowTabComponentAction;
 import okosama.app.action.TabSelectAction;
-import okosama.app.adapter.AlbumListAdapter;
 import okosama.app.adapter.AlbumListRawAdapter;
-import okosama.app.adapter.ArtistAlbumListAdapter;
+//import okosama.app.adapter.ArtistAlbumListAdapter;
+import okosama.app.adapter.ArtistAlbumListRawAdapter;
 import okosama.app.adapter.PlaylistListAdapter;
-import okosama.app.adapter.TrackListAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.factory.DroidWidgetKit;
 import android.app.Activity;
@@ -38,7 +37,7 @@ import okosama.app.service.MediaPlayerUtil;
 import okosama.app.service.MediaPlayerUtil.ServiceToken;
 import okosama.app.state.DisplayStateFactory;
 import okosama.app.state.IDisplayState;
-import okosama.app.state.absDisplayState;
+// import okosama.app.state.absDisplayState;
 import okosama.app.storage.Database;
 import okosama.app.tab.*;
 import okosama.app.tab.media.TabMediaSelect;
@@ -50,6 +49,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -64,7 +64,11 @@ implements ServiceConnection {
 	// リフレッシュ用メッセージID
     public static final int REFRESH = 1001;
     // ポーズ中？
-    private boolean paused;
+    private boolean paused = false;
+    public boolean isPaused()
+    {
+    	return paused;
+    }
 //	// 時間パネル
 //	static TimeControlPanel timeCP = null;
 //	private void createTimeCP()
@@ -158,7 +162,8 @@ implements ServiceConnection {
     // private AlbumListAdapter albumAdp;
 	private AlbumListRawAdapter albumAdp;
     // private ListView albumList;
-    private ArtistAlbumListAdapter artistAdp;
+    // private ArtistAlbumListAdapter artistAdp;
+	private ArtistAlbumListRawAdapter artistAdp;
     // private ExpandableListView artistList;
     private PlaylistListAdapter playlistAdp;
     //private ListView songList;
@@ -173,11 +178,11 @@ implements ServiceConnection {
 		this.albumAdp = albumAdp;
 	}
 
-	public ArtistAlbumListAdapter getArtistAdp() {
+	public ArtistAlbumListRawAdapter getArtistAdp() {
 		return artistAdp;
 	}
 
-	public void setArtistAdp(ArtistAlbumListAdapter artistAdp) {
+	public void setArtistAdp(ArtistAlbumListRawAdapter artistAdp) {
 		this.artistAdp = artistAdp;
 	}
 
@@ -360,7 +365,8 @@ implements ServiceConnection {
         // サイズが取得できたら、下記の処理実行されるようにする
         handler =  new Handler(){
 	        //メッセージ受信
-	        public void handleMessage(Message message) {
+	        @Override
+			public void handleMessage(Message message) {
 	        	switch( message.what )
         		{
 	        		case REFRESH:
@@ -455,6 +461,7 @@ implements ServiceConnection {
 			           	
 			           	// 初期化時に、全てのメディアを取得する
 			           	reScanMedia(TabPage.TABPAGE_ID_ALBUM);
+			           	reScanMedia(TabPage.TABPAGE_ID_ARTIST);
 			           	reScanMedia(TabPage.TABPAGE_ID_SONG);
 			    		break;
 		        	}
@@ -465,13 +472,6 @@ implements ServiceConnection {
 		            	updateListeners();
 		            	// メディアを更新
 		            	reScanMedia((Integer)message.obj,false);
-//		        		if( message.arg2 == TabPage.TABPAGE_ID_MEDIA 
-//		        		&& currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
-//		        		{
-//		        			// メディアタブ内での処理
-//		        			// 何も処理しない
-//		        			break;
-//		        		}
 		        		if( ControlIDs.TAB_ID_MAIN == (Integer)message.obj )
 		        		{
 			        		// Activityのタブidを更新
@@ -519,7 +519,7 @@ implements ServiceConnection {
 		
 		RelativeLayout.LayoutParams lp = 
 				new RelativeLayout.LayoutParams(
-						RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
+						LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		
         lp.topMargin = yCorrect;
         lp.leftMargin = xCorrect;
@@ -567,9 +567,9 @@ implements ServiceConnection {
 			int width, int height, int left, int top )
 	{
 		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-        		(int)(width), (int)(height));
-        lp.topMargin = (int)( top );
-        lp.leftMargin = (int)( left );
+        		(width), (height));
+        lp.topMargin = ( top );
+        lp.leftMargin = ( left );
         lp.bottomMargin = 0;
         lp.rightMargin = 0;
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -588,6 +588,35 @@ implements ServiceConnection {
         super.onSaveInstanceState(outcicle);
     }
 
+	IntentFilter intentFilter;
+	BroadcastReceiver receiver;
+	class MediaServiceNotifyReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) 
+		{
+			// 表示の更新
+			updatePlayStateButtonImage();
+		}
+		
+	}
+	@Override
+	protected void onResume() {
+    	// 画面のサイズ等の情報を更新する
+        dispInfo.init(this, componentContainer, handler);
+        
+        receiver = new MediaServiceNotifyReceiver();
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(MEDIA_SERVICE_NOTIFY);
+        registerReceiver(receiver,intentFilter);
+        
+        getResourceAccessor().initMotionSenser(this);
+        getResourceAccessor().initSound();
+        bForceRefresh = true;
+        paused = false;        
+		super.onResume();
+	}
+
 	@Override
 	protected void onPause() {
 		// マップをループして、全部の設定を保存
@@ -599,15 +628,8 @@ implements ServiceConnection {
 		}
 		editor.commit();
 		
-		// TODO Auto-generated method stub
-		// setTabSelection( TabPage.TABPAGE_ID_NONE, TabPage.TABPAGE_ID_NONE );
-		// 本当は、上記でそうなって欲しいのだが、現状そうなっていないかもしれない
-		// 全てのビューをクリアしておく
-//		if( pageContainer.getBackground() != null )
-//		{
-//			pageContainer.getBackground().setCallback(null);
-//			pageContainer.setBackgroundDrawable(null);
-//		}
+		paused = true;
+		
 		componentContainer.removeAllViews();
 		bInitEnd = false;
 		bForceRefresh = true;
@@ -663,43 +685,11 @@ implements ServiceConnection {
         
 		// bTabInitEnd = false;
 		// System.gc();
+        getResourceAccessor().rereaseMotionSenser();
+        
 		super.onPause();
 	}
-
-	IntentFilter intentFilter;
-	BroadcastReceiver receiver;
-	class MediaServiceNotifyReceiver extends BroadcastReceiver {
-
-		@Override
-		public void onReceive(Context context, Intent intent) 
-		{
-			// 表示の更新
-			updatePlayStateButtonImage();
-		}
-		
-	}
-	@Override
-	protected void onResume() {
-//		if( bInitEnd == true 
-//		&& bTabInitEnd == false )
-//		{
-			// TODO Auto-generated method stub
-    	// 画面のサイズ等の情報を更新する
-        dispInfo.init(this, componentContainer, handler);
-		
-		//setTabSelection( currentMainTabId, currentSubTabId );
-//		}
-        
-        receiver = new MediaServiceNotifyReceiver();
-        intentFilter = new IntentFilter();
-        intentFilter.addAction(MEDIA_SERVICE_NOTIFY);
-        registerReceiver(receiver,intentFilter);
-        
-        getResourceAccessor().initSound();
-        bForceRefresh = true;
-		super.onResume();
-	}
-
+	
 	/**
 	 * サブタブは、状況によって変化するので注意
 	 * まだこの関数は未完成（その、サブタブの選択部分)
@@ -812,10 +802,10 @@ implements ServiceConnection {
 		{
 			return;
 		}
-		int iRet = stateMain.registerReceivers(absDisplayState.STATUS_ON_CREATE);
+		int iRet = stateMain.registerReceivers(IDisplayState.STATUS_ON_CREATE);
 		if( iRet == 1 )
 		{
-			iRet = stateSub.registerReceivers(absDisplayState.STATUS_ON_CREATE);
+			iRet = stateSub.registerReceivers(IDisplayState.STATUS_ON_CREATE);
 		}		
 		if( iRet == 1 )
 		{
@@ -851,7 +841,7 @@ implements ServiceConnection {
 			break;
 		case TabPage.TABPAGE_ID_ARTIST:
 			// Listにカーソルを設定
-			getArtistAdp().changeCursor(cursor);
+			getArtistAdp().insertAllDataFromCursor(cursor);
 			break;
 		case TabPage.TABPAGE_ID_SONG:
 			// Listにカーソルを設定
@@ -990,7 +980,6 @@ implements ServiceConnection {
 		// TODO Auto-generated method stub
 		// MediaPlayer.unbindFromService(mToken);
 		super.onStop();
-        paused = true;
         handler.removeMessages(REFRESH);
 	}
 
@@ -1014,7 +1003,6 @@ implements ServiceConnection {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-        paused = false;
 	}
 	
 	///////////////////////// サービス用のメソッド //////////////////////////////
@@ -1132,20 +1120,52 @@ implements ServiceConnection {
 
 	    @Override
 	    public boolean onCreateOptionsMenu(Menu menu) {
-//	        super.onCreateOptionsMenu(menu);
-//	        menu.add(0, PARTY_SHUFFLE, 0, R.string.party_shuffle); // icon will be set in onPrepareOptionsMenu()
-//	        menu.add(0, SHUFFLE_ALL, 0, R.string.shuffle_all).setIcon(R.drawable.ic_menu_shuffle);
+	        super.onCreateOptionsMenu(menu);
+			if( stateMain == null 
+			|| stateSub == null )
+			{
+				return false;
+			}
+			int iRet = stateMain.onCreateOptionsMenu(menu);
+			if( iRet == IDisplayState.MENU_NEXT_STATE )
+			{
+				iRet = stateSub.onCreateOptionsMenu(menu);
+			}
 	        return true;
 	    }
 
 	    @Override
 	    public boolean onPrepareOptionsMenu(Menu menu) {
 //	        MusicUtils.setPartyShuffleMenuIcon(menu);
-	        return super.onPrepareOptionsMenu(menu);
+	        boolean b = super.onPrepareOptionsMenu(menu);
+			if( stateMain == null 
+			|| stateSub == null )
+			{
+				return false;
+			}
+			int iRet = stateMain.onPrepareOptionsMenu(menu);
+			if( iRet == IDisplayState.MENU_NEXT_STATE )
+			{
+				iRet = stateSub.onPrepareOptionsMenu(menu);
+			}
+	        return b;
 	    }
 
 	    @Override
 	    public boolean onOptionsItemSelected(MenuItem item) {
+	    	boolean b = super.onOptionsItemSelected(item);
+			if( stateMain == null 
+			|| stateSub == null )
+			{
+				return false;
+			}
+			int iRet = stateMain.onOptionsItemSelected(item);
+			if( iRet == IDisplayState.MENU_NEXT_STATE )
+			{
+				iRet = stateSub.onOptionsItemSelected(item);
+			}
+			return b;
+			
 //	        Cursor cursor;
 //	        switch (item.getItemId()) {
 //	            case PARTY_SHUFFLE:
@@ -1163,7 +1183,7 @@ implements ServiceConnection {
 //	                }
 //	                return true;
 //	        }
-	        return super.onOptionsItemSelected(item);
+//	        return super.onOptionsItemSelected(item);
 	    }
 
 	    private static int timeImgResIds[] = {

@@ -4,19 +4,19 @@ import java.util.ArrayList;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.adapter.AlbumListAdapter;
 import okosama.app.adapter.AlbumListRawAdapter;
-import okosama.app.adapter.ArtistAlbumListAdapter;
+import okosama.app.adapter.ArtistAlbumListRawAdapter;
 import okosama.app.adapter.PlaylistListAdapter;
-import okosama.app.adapter.TrackListAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.storage.AlbumData;
+import okosama.app.storage.ArtistChildData;
+import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.TrackData;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.PlaylistsColumns;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
@@ -240,15 +240,16 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			{
 				// AdapterÇÃçÏê¨
 				activity.setArtistAdp(
-						new ArtistAlbumListAdapter(
+						new ArtistAlbumListRawAdapter(
 						activity,
-						null, // cursor
+						new SparseArray<ArtistGroupData>(),
 	                    R.layout.track_list_item_group,
-	                    new String[] {},
-	                    new int[] {},
-	                    R.layout.track_list_item_child,
-	                    new String[] {},
-	                    new int[] {}
+//	                    new String[] {},
+//	                    new int[] {},
+						new SparseArray<ArtistChildData[]>(),
+	                    R.layout.track_list_item_child
+//	                    new String[] {},
+//	                    new int[] {}
 				));
 			}
 			// AdapterÇÃê›íË

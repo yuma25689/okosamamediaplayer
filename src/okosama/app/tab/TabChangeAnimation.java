@@ -1,24 +1,13 @@
 package okosama.app.tab;
 
-import java.util.ArrayList;
-import java.util.Queue;
-
 import okosama.app.ControlIDs;
-import okosama.app.DisplayInfo;
 import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.R;
-import okosama.app.action.TabSelectAction;
-import okosama.app.panel.PlayControlPanel;
-import okosama.app.panel.SubControlPanel;
-import okosama.app.panel.TimeControlPanel;
-
-import android.content.SharedPreferences;
+import okosama.app.anim.TabAnimationFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
 
 /**
@@ -123,7 +112,8 @@ public class TabChangeAnimation {
     // サイズが取得できたら、下記の処理実行されるようにする
     Handler handler =  new Handler(){
         //メッセージ受信
-        public void handleMessage(Message message) {
+        @Override
+		public void handleMessage(Message message) {
         	if( message.what != TAB_IN
         	&&  message.what != TAB_OUT )
         	{
@@ -158,12 +148,14 @@ public class TabChangeAnimation {
     		switch( message.what )
     		{
         	case TAB_IN:
-    			if( animIn == null )
+    			//if( animIn == null )
     			{
-    				// TODO: アニメーションは動的に生成
-    				animIn = AnimationUtils.loadAnimation(
-    					OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
-    					, R.anim.left_in );
+    				// アニメーションは動的に生成
+    				// TODO: 端末の傾きによって、アニメーションを変更する
+    				animIn = TabAnimationFactory.createTabInAnimation();
+//    				animIn = AnimationUtils.loadAnimation(
+//    					OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
+//    					, R.anim.left_in );
     			}
         		if( tabBaseLayout.getParent() != null )
         		{
@@ -182,12 +174,13 @@ public class TabChangeAnimation {
     			
         		break;
         	case TAB_OUT:
-    			if( animOut == null )
+    			//if( animOut == null )
     			{
     				// TODO: アニメーションは動的に生成
-    				animOut = AnimationUtils.loadAnimation(
-    						OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
-    						, R.anim.right_out );
+    				animOut = TabAnimationFactory.createTabOutAnimation();
+//    				animOut = AnimationUtils.loadAnimation(
+//    						OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
+//    						, R.anim.right_out );
         			outAnimDelay = animOut.getDuration();
     			}
     			animOut.setAnimationListener(

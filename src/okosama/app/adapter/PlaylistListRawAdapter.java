@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.adapter.PlaylistListAdapter.QueryHandler;
-import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.PlaylistData;
 import okosama.app.storage.Database;
 // import okosama.app.storage.QueryHandler;
@@ -18,8 +16,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.PlaylistsColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -217,7 +213,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> {
         p.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
         // ‘¼‚ÍŽg‚í‚È‚¢
-        iv = (ImageView) vh.play_indicator; //view.findViewById(R.id.play_indicator);
+        iv = vh.play_indicator; //view.findViewById(R.id.play_indicator);
         iv.setVisibility(View.GONE);
 
         // view.findViewById(R.id.line2).setVisibility(View.GONE);

@@ -306,8 +306,8 @@ public final class R {
     public static final class string {
         /**  Context menu item 
          */
-        public static final int add_to_playlist=0x7f070039;
-        public static final int album_label=0x7f07006a;
+        public static final int add_to_playlist=0x7f07003a;
+        public static final int album_label=0x7f07006b;
         /**  Category label on Library screen 
          */
         public static final int albums_menu=0x7f070012;
@@ -316,12 +316,12 @@ public final class R {
         public static final int albums_title=0x7f070013;
         /**  Do not translate. This is the separator character used when building the string that shows number of albums and songs. 
          */
-        public static final int albumsongseparator=0x7f070062;
+        public static final int albumsongseparator=0x7f070063;
         /**  All media screen title 
          */
         public static final int all_title=0x7f070019;
-        public static final int app_name=0x7f070060;
-        public static final int artist_label=0x7f070069;
+        public static final int app_name=0x7f070061;
+        public static final int artist_label=0x7f07006a;
         /**  Artist screen title 
          */
         public static final int artists_title=0x7f070011;
@@ -330,16 +330,16 @@ public final class R {
         public static final int browse_menu=0x7f07001a;
         /**  Text for the "cancel" button in the "delete" and "create playlist" confirmation dialogs 
          */
-        public static final int cancel=0x7f07004d;
+        public static final int cancel=0x7f07004e;
         /**  menu item to clear the current playlist 
          */
-        public static final int clear_playlist=0x7f070046;
+        public static final int clear_playlist=0x7f070047;
         /**  Button name when saving a playlist 
          */
-        public static final int create_playlist_create_text=0x7f07003e;
+        public static final int create_playlist_create_text=0x7f07003f;
         /**  Button name when saving a playlist and the new playlist will overwrite an existing one 
          */
-        public static final int create_playlist_overwrite_text=0x7f07003f;
+        public static final int create_playlist_overwrite_text=0x7f070040;
         /**  Delete confirmation dialog when deleting an entire album 
          */
         public static final int delete_album_desc=0x7f07000b;
@@ -355,7 +355,7 @@ public final class R {
         public static final int delete_item=0x7f070007;
         /**  Playlist context menu item to delete the selected playlist. 
          */
-        public static final int delete_playlist_menu=0x7f07001f;
+        public static final int delete_playlist_menu=0x7f070020;
         /**  Delete confirmation dialog when deleting a single song 
          */
         public static final int delete_song_desc=0x7f07000c;
@@ -367,19 +367,19 @@ public final class R {
         public static final int durationformatshort=0x7f070001;
         /**  Playlist context menu item to edit the selected playlist 
          */
-        public static final int edit_playlist_menu=0x7f070020;
+        public static final int edit_playlist_menu=0x7f070021;
         /**  Toast after selecting an empty playlist 
          */
-        public static final int emptyplaylist=0x7f07003d;
+        public static final int emptyplaylist=0x7f07003e;
         /**  Toast after streamStarter activity receives PLAYBACK_COMPLETE in case of an error 
          */
-        public static final int fail_to_start_stream=0x7f07005b;
+        public static final int fail_to_start_stream=0x7f07005c;
         /** The fast scroll thumb will show one character from this string depending on the position in the list 
          */
-        public static final int fast_scroll_alphabet=0x7f07005e;
+        public static final int fast_scroll_alphabet=0x7f07005f;
         /**  Title for track number in music gadget 
          */
-        public static final int gadget_track=0x7f07005a;
+        public static final int gadget_track=0x7f07005b;
         /**  Menu item that takes the user to the "now playing" screen of the music player 
          */
         public static final int goto_playback=0x7f070004;
@@ -388,42 +388,42 @@ public final class R {
         public static final int goto_start=0x7f070003;
         /**  Shown in the music picker while loading the music database. 
          */
-        public static final int loading=0x7f070055;
+        public static final int loading=0x7f070056;
         /**  Activity label. This might show up in the activity-picker 
          */
-        public static final int mediapickerlabel=0x7f07004b;
+        public static final int mediapickerlabel=0x7f07004c;
         /**  Activity label. This might show up in the activity-picker 
          */
-        public static final int mediaplaybacklabel=0x7f070049;
+        public static final int mediaplaybacklabel=0x7f07004a;
         /**  title of contextual music search menu 
          */
-        public static final int mediasearch=0x7f070050;
+        public static final int mediasearch=0x7f070051;
         /**   Title of the music picker activity. 
          */
-        public static final int music_picker_title=0x7f070059;
+        public static final int music_picker_title=0x7f07005a;
         /**  Activity label. This might show up in the activity-picker 
          */
-        public static final int musicbrowserlabel=0x7f070047;
+        public static final int musicbrowserlabel=0x7f070048;
         /**  Activity label. This might show up in the activity-picker 
          */
-        public static final int musicshortcutlabel=0x7f070048;
+        public static final int musicshortcutlabel=0x7f070049;
         /**  Context menu item 
          */
-        public static final int new_playlist=0x7f07003b;
+        public static final int new_playlist=0x7f07003c;
         /**  Template for newly created playlist name 
          */
-        public static final int new_playlist_name_template=0x7f07003c;
+        public static final int new_playlist_name_template=0x7f07003d;
         /**  Title of screen when there are no playlists, or if the SD card is busy 
          */
-        public static final int no_playlists_title=0x7f07001e;
+        public static final int no_playlists_title=0x7f07001f;
         /**  Title of screen when there are no songs, or if the SD card is busy 
          */
-        public static final int no_tracks_title=0x7f07001c;
+        public static final int no_tracks_title=0x7f07001d;
         /**  Title of screen when there are no videos, or if the SD card is busy 
          */
-        public static final int no_videos_title=0x7f07001d;
-        public static final int notification_artist_album=0x7f070061;
-        public static final int nowplaying_tag=0x7f070067;
+        public static final int no_videos_title=0x7f07001e;
+        public static final int notification_artist_album=0x7f070062;
+        public static final int nowplaying_tag=0x7f070068;
         /**  title of the "current playlist" screen when not in party shuffle mode 
          */
         public static final int nowplaying_title=0x7f07000f;
@@ -444,16 +444,16 @@ public final class R {
         public static final int play_all=0x7f070009;
         /**  Context menu item 
          */
-        public static final int play_selection=0x7f070038;
+        public static final int play_selection=0x7f070039;
         /**  Shown as a transient message whenever a file fails to play 
          */
-        public static final int playback_failed=0x7f07004c;
+        public static final int playback_failed=0x7f07004d;
         /**  Transient popup message shown after deleting a playlist 
          */
-        public static final int playlist_deleted_message=0x7f070022;
+        public static final int playlist_deleted_message=0x7f070023;
         /**  Transient popup message shown after renaming a playlist 
          */
-        public static final int playlist_renamed_message=0x7f070023;
+        public static final int playlist_renamed_message=0x7f070024;
         /**  Category label on Library screen 
          */
         public static final int playlists_menu=0x7f070016;
@@ -462,151 +462,154 @@ public final class R {
         public static final int playlists_title=0x7f070017;
         /**  The name of the pseudo-playlist that holds all the podcasts, shown in list view 
          */
-        public static final int podcasts_listitem=0x7f070026;
+        public static final int podcasts_listitem=0x7f070027;
         /**  The name of the pseudo-playlist that holds all the podcasts, shown in title bar of songs list 
          */
-        public static final int podcasts_title=0x7f070027;
+        public static final int podcasts_title=0x7f070028;
         /**  Context menu item 
          */
-        public static final int queue=0x7f07003a;
+        public static final int queue=0x7f07003b;
         /**  The name of the pseudo-playlist that holds all the recently added files, shown in list view 
          */
-        public static final int recentlyadded=0x7f070024;
+        public static final int recentlyadded=0x7f070025;
         /**  The name of the pseudo-playlist that holds all the recently added files, shown in title bar of songs list 
          */
-        public static final int recentlyadded_title=0x7f070025;
+        public static final int recentlyadded_title=0x7f070026;
         /**  context menu item to remove the selected item from the playlist 
          */
-        public static final int remove_from_playlist=0x7f07004e;
+        public static final int remove_from_playlist=0x7f07004f;
         /**  Playlist context menu item to rename the selected playlist
          */
-        public static final int rename_playlist_menu=0x7f070021;
+        public static final int rename_playlist_menu=0x7f070022;
         /**  Toast after turning repeat all on 
          */
-        public static final int repeat_all_notif=0x7f070034;
+        public static final int repeat_all_notif=0x7f070035;
         /**  Toast after turning single repeat on 
          */
-        public static final int repeat_current_notif=0x7f070033;
+        public static final int repeat_current_notif=0x7f070034;
         /**  Toast after turning repeat off 
          */
-        public static final int repeat_off_notif=0x7f070032;
+        public static final int repeat_off_notif=0x7f070033;
         /**  Individual song context menu item 
          */
-        public static final int ringtone_menu=0x7f070035;
+        public static final int ringtone_menu=0x7f070036;
         /**  Menu item 
          */
-        public static final int ringtone_menu_short=0x7f070036;
+        public static final int ringtone_menu_short=0x7f070037;
         /**  Toast after setting a song as phone ringtone 
          */
-        public static final int ringtone_set=0x7f070037;
+        public static final int ringtone_set=0x7f070038;
         /**  menu item to save the current list as a new playlist 
          */
-        public static final int save_as_playlist=0x7f070045;
+        public static final int save_as_playlist=0x7f070046;
         /**  shown in dialog while the media scanner is starting up 
          */
         public static final int scanning=0x7f07000e;
         /**  label underneath icon used to indicate sd card is mounted to your computer via USB 
          */
-        public static final int sdcard_busy_message=0x7f07002b;
+        public static final int sdcard_busy_message=0x7f07002c;
         /**  label underneath icon used to indicate that the sd card is present, but currently unavailable 
          */
-        public static final int sdcard_busy_title=0x7f07002a;
+        public static final int sdcard_busy_title=0x7f07002b;
         /**  label underneath icon used to indicate there was an error accessing the sd card 
          */
-        public static final int sdcard_error_message=0x7f07002d;
+        public static final int sdcard_error_message=0x7f07002e;
         /**  Title of screen when there was an error accessing the sd card 
          */
-        public static final int sdcard_error_title=0x7f07002c;
+        public static final int sdcard_error_title=0x7f07002d;
         /**  label underneath icon used to indicate that no sd card is present 
          */
-        public static final int sdcard_missing_message=0x7f070029;
+        public static final int sdcard_missing_message=0x7f07002a;
         /**  Title of screen when no sd card is present 
          */
-        public static final int sdcard_missing_title=0x7f070028;
+        public static final int sdcard_missing_title=0x7f070029;
         /**  Shown in the search box as a hint 
          */
-        public static final int search_hint=0x7f07005d;
+        public static final int search_hint=0x7f07005e;
         /**  The string used to describe Music as a searchable item within system search settings. 
          */
-        public static final int search_settings_description=0x7f07005c;
+        public static final int search_settings_description=0x7f07005d;
         /**  Library screen, menu item 
          */
         public static final int search_title=0x7f07001b;
         /**  Dialog box button 
          */
-        public static final int service_start_error_button=0x7f070042;
+        public static final int service_start_error_button=0x7f070043;
         /**  Dialog box message 
          */
-        public static final int service_start_error_msg=0x7f070041;
+        public static final int service_start_error_msg=0x7f070042;
         /**  Dialog box title 
          */
-        public static final int service_start_error_title=0x7f070040;
+        public static final int service_start_error_title=0x7f070041;
         /**  Menu item to play back all the songs in the currently showing list in shuffle mode 
          */
         public static final int shuffle_all=0x7f070008;
         /**  Toast after turning shuffle off 
          */
-        public static final int shuffle_off_notif=0x7f070031;
+        public static final int shuffle_off_notif=0x7f070032;
         /**  Toast after turning shuffle on 
          */
-        public static final int shuffle_on_notif=0x7f070030;
-        public static final int song_label=0x7f07006b;
+        public static final int shuffle_on_notif=0x7f070031;
+        public static final int song_label=0x7f07006c;
         /**  Menu in music picker to sort the list by album name. 
          */
-        public static final int sort_by_album=0x7f070057;
+        public static final int sort_by_album=0x7f070058;
         /**  Menu in music picker to sort the list by artist name. 
          */
-        public static final int sort_by_artist=0x7f070058;
+        public static final int sort_by_artist=0x7f070059;
         /**  Menu in music picker to sort the list by track/song name. 
          */
-        public static final int sort_by_track=0x7f070056;
+        public static final int sort_by_track=0x7f070057;
         /**  shown when connecting to a music stream, before it starts playing 
          */
-        public static final int streamloadingtext=0x7f07004f;
+        public static final int streamloadingtext=0x7f070050;
         /**  Category label on Library screen 
          */
         public static final int tracks_menu=0x7f070014;
         /**  Songs screen title 
          */
         public static final int tracks_title=0x7f070015;
-        public static final int tweet=0x7f070066;
-        public static final int twitter_callback_url=0x7f070065;
-        public static final int twitter_consumer_key=0x7f070063;
-        public static final int twitter_consumer_secret=0x7f070064;
+        public static final int tweet=0x7f070067;
+        public static final int twitter_callback_url=0x7f070066;
+        public static final int twitter_consumer_key=0x7f070064;
+        public static final int twitter_consumer_secret=0x7f070065;
         /**  Default name of album that doesn't have a name in the metadata 
          */
-        public static final int unknown_album_name=0x7f07002f;
+        public static final int unknown_album_name=0x7f070030;
         /**  Default name of artist that doesn't have a name in the metadata 
          */
-        public static final int unknown_artist_name=0x7f07002e;
-        public static final int unknown_song_name=0x7f070068;
+        public static final int unknown_artist_name=0x7f07002f;
+        public static final int unknown_song_name=0x7f070069;
+        /**  Update 
+         */
+        public static final int update_menu=0x7f07001c;
         /**  Activity label. This might show up in the activity-picker 
          */
-        public static final int videobrowserlabel=0x7f07004a;
+        public static final int videobrowserlabel=0x7f07004b;
         /**  Videos screen title 
          */
         public static final int videos_title=0x7f070018;
         /**  Button name in time span picker 
          */
-        public static final int weekpicker_set=0x7f070043;
+        public static final int weekpicker_set=0x7f070044;
         /**  Title of time span picker 
          */
-        public static final int weekpicker_title=0x7f070044;
+        public static final int weekpicker_title=0x7f070045;
         /**  Text shown on widget when first loaded 
          */
-        public static final int widget_initial_text=0x7f07005f;
+        public static final int widget_initial_text=0x7f070060;
         /**  Shown in the title bar while the list of albums is being retrieved in the background 
          */
-        public static final int working_albums=0x7f070052;
+        public static final int working_albums=0x7f070053;
         /**  Shown in the title bar while the list of artists is being retrieved in the background 
          */
-        public static final int working_artists=0x7f070051;
+        public static final int working_artists=0x7f070052;
         /**  Shown in the title bar while the list of playlists is being retrieved in the background 
          */
-        public static final int working_playlists=0x7f070054;
+        public static final int working_playlists=0x7f070055;
         /**  Shown in the title bar while the list of songs is being retrieved in the background 
          */
-        public static final int working_songs=0x7f070053;
+        public static final int working_songs=0x7f070054;
     }
     public static final class style {
         /** 

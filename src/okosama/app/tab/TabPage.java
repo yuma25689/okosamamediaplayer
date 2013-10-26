@@ -1,13 +1,9 @@
 package okosama.app.tab;
 // import android.R;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.R;
 
 /**
  * タブの１つのページを模倣したクラス

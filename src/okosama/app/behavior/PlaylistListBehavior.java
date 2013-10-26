@@ -15,24 +15,6 @@ public class PlaylistListBehavior extends IListBehavior {
 	}
 
 	@Override
-	public void onCreateOptionsMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onPrepareOptionsMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onOptionsItemSelected() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfoIn) {
 		// TODO Auto-generated method stub
 

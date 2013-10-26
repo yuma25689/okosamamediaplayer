@@ -1,8 +1,6 @@
 package okosama.app.adapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.service.MediaPlayerUtil;
@@ -254,7 +252,8 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> {
         			data.setAlbumArtist(cursor.getString(mArtistIdx));
         			data.setAlbumArt(cursor.getString(mAlbumArtIndex));
         			items.add(data);
-        		} while( cursor.moveToNext() );
+        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false 
+        			&& cursor.moveToNext() );
                 return 0;
             }
 

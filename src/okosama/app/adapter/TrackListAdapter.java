@@ -1,7 +1,5 @@
 package okosama.app.adapter;
 
-import java.util.ArrayList;
-
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;

@@ -357,6 +357,10 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
             	// カーソルをループする
             	Cursor cursor = params[0];
             	
+        		if( cursor == null || cursor.isClosed() )
+        		{
+        			return -1;
+        		}
         		if( 0 > getColumnIndices(cursor) )
         		{
         			return -1;
@@ -378,7 +382,8 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
         			data.setTrackAlbumArt(mActivity.getAlbumAdp().getAlbumArtFromId(Integer.parseInt(data.getTrackAlbumId())));
           		// Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
             	    allItems.add(data);
-        		} while( cursor.moveToNext() );
+        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
+        				cursor.moveToNext() );
                 return 0;
             }
 

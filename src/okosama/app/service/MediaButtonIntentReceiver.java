@@ -16,7 +16,6 @@
 
 package okosama.app.service;
 
-import okosama.app.OkosamaMediaPlayerActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

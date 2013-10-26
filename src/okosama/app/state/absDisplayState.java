@@ -7,10 +7,22 @@ import java.util.Map.Entry;
 import android.content.BroadcastReceiver;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.tab.Tab;
 
 public abstract class absDisplayState implements IDisplayState {
+	
+	public static final int MENU_UPDATE = 333;
+	
+	// TODO: 子クラスからのアクセサ
+	double prevAzimuth = 0;
+	double prevPitch = 0;
+	double prevRoll = 0;
+	double azimuth = 0;
+	double pitch = 0;
+	double roll = 0;
 	
 	protected HashMap< String, BroadcastReceiver > receivers;
 	protected HashMap< String, Handler > handlers;
@@ -57,6 +69,33 @@ public abstract class absDisplayState implements IDisplayState {
 			return;
 		}
 		clearReceivers();
+	}
+	
+	@Override
+	public int onCreateOptionsMenu(Menu menu)
+	{
+		return MENU_OK;
+	}
+	@Override
+	public int onPrepareOptionsMenu(Menu menu)
+	{
+		return MENU_OK;		
+	}
+	@Override
+	public int onOptionsItemSelected(MenuItem menu)
+	{
+		return MENU_OK;
+	}
+	
+	@Override
+	public int ChangeMotion()
+	{
+		// TODO:このクラスでは不要かもしれない
+//		OkosamaMediaPlayerActivity.getResourceAccessor().motionObserver.
+//		azimuth = OkosamaMediaPlayerActivity.getResourceAccessor().motionObserver.getAzimuth();
+//		pitch = OkosamaMediaPlayerActivity.getResourceAccessor().motionObserver.getPitch();
+//		roll = OkosamaMediaPlayerActivity.getResourceAccessor().motionObserver.getRoll();
+		return 0;
 	}
 
 }

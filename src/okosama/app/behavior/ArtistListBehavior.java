@@ -22,8 +22,9 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
-import okosama.app.adapter.ArtistAlbumListAdapter;
+import okosama.app.adapter.ArtistAlbumListRawAdapter;
 import okosama.app.service.MediaPlayerUtil;
+import okosama.app.storage.ArtistChildData;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
 
@@ -35,15 +36,17 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	public void onItemClick(ExpandableListView parent, View v, int grouppos, int childpos, long id)
 	{
 		// これがchildclickとして使われる
-		mCurrentAlbumId = Long.valueOf(id).toString();
 		
-		Cursor c = (Cursor) parent.getExpandableListAdapter().getChild(grouppos, childpos);
-		String album = c.getString(c.getColumnIndex(AlbumColumns.ALBUM));
+		ArtistChildData data = 
+				(ArtistChildData)
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getArtistAdp().getChild(grouppos, childpos);
+		mCurrentAlbumId = data.getAlbumId(); // Long.valueOf(id).toString();
+		String album = data.getAlbumName(); // c.getString(c.getColumnIndex(AlbumColumns.ALBUM));
 		if (album == null || album.equals(MediaStore.UNKNOWN_STRING)) {
 		    // unknown album, so we should include the artist ID to limit the songs to songs only by that artist
-			Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()).getCursor(Database.ArtistCursorName);
-			cursor.moveToPosition(grouppos);
-			mCurrentArtistId = cursor.getString(cursor.getColumnIndex(BaseColumns._ID));
+			// Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()).getCursor(Database.ArtistCursorName);
+			// cursor.moveToPosition(grouppos);
+			mCurrentArtistId = data.getArtistId(); // cursor.getString(cursor.getColumnIndex(BaseColumns._ID));
 			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(mCurrentArtistId);
 		}
 		// OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
@@ -61,23 +64,6 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 	}
 
-	@Override
-	public void onCreateOptionsMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onPrepareOptionsMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onOptionsItemSelected() {
-		// TODO Auto-generated method stub
-
-	}
     private String mCurrentArtistId;
     private String mCurrentArtistName;
     private String mCurrentAlbumId;
@@ -89,7 +75,7 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfoIn) {
 		
 		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-		// TODO: ここにExpandableListViewが入っているかどうかは美容。要確認。
+		// TODO: ここにExpandableListViewが入っているかどうかは微妙。要確認。
 		ExpandableListView v = (ExpandableListView) view;
         Cursor artistCursor = Database.getInstance(activity).getCursor(Database.ArtistCursorName);
         if( artistCursor == null )
@@ -97,7 +83,8 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
         	Log.w("onCreateContextMenu - Artist","cursor is null");
         	return;
         }
-		ArtistAlbumListAdapter adapter = activity.getArtistAdp();
+		// ArtistAlbumListAdapter adapter = activity.getArtistAdp();
+        ArtistAlbumListRawAdapter adapter = activity.getArtistAdp();
 		if( adapter == null )
 		{
         	Log.w("onCreateContextMenu - Artist","adapter is null");
@@ -147,11 +134,11 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
                 Log.d("Artist/Album", "no child");
                 return;
             }
-            Cursor c = adapter.getChild(gpos, cpos);
-            c.moveToPosition(cpos);
+            ArtistChildData data = (ArtistChildData) adapter.getChild(gpos, cpos);
+            // c.moveToPosition(cpos);
             mCurrentArtistId = null;
             mCurrentAlbumId = Long.valueOf(mi.id).toString();
-            mCurrentAlbumName = c.getString(c.getColumnIndexOrThrow(AlbumColumns.ALBUM));
+            mCurrentAlbumName = data.getAlbumName(); //c.getString(c.getColumnIndexOrThrow(AlbumColumns.ALBUM));
             gpos = gpos - v.getHeaderViewsCount();
             artistCursor.moveToPosition(gpos);
             mCurrentArtistNameForAlbum = artistCursor.getString(

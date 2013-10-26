@@ -13,6 +13,7 @@ import java.util.Locale;
 import okosama.app.tab.TabChangeAnimation;
 import okosama.app.widget.Button;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -38,7 +39,15 @@ public final class ResourceAccessor {
 	public TabChangeAnimation tabAnim = new TabChangeAnimation();
 	// ここに、アプリケーションの状態を格納する
 	public AppStatus appStatus = new AppStatus();
-
+	public MotionObserver motionObserver = new MotionObserver();
+	public void initMotionSenser(Activity act)
+	{
+		motionObserver.init(act);
+	}
+	public void rereaseMotionSenser()
+	{
+		motionObserver.release();
+	}	
 	public ArrayList<Button> commonBtns = null;
 
 	public static final int SOUND_MAX_COUNT = 9;
@@ -58,18 +67,6 @@ public final class ResourceAccessor {
 	private int iSoundLoadCnt = 0;
 	private SoundPool soundPool;
 	
-//	// 解放のために、Drawableを保持するマップ
-//	// マップのキーには、画像を利用するTabpageのIDを利用する
-//	// NONEの場合、各画面共通リソースとし、解放しないようにする
-//	HashMap<Integer,Drawable> drawableMap = new HashMap<Integer,Drawable>();
-//	
-//	public void clearDrawable()
-//	{
-//		for( Map.Entry<Integer,Drawable> e : drawableMap.entrySet() )
-//		{
-//			e.getValue().
-//		}
-//	}
 	
 	// リソースを取得するためのアクティビティを設定
 	// TODO: しかし、ここに保持しておくと、
@@ -190,18 +187,7 @@ public final class ResourceAccessor {
 	    StringBuilder songs_albums = new StringBuilder();
 	
 	    Resources r = context.getResources();
-	    if (isUnknown) {
-	    	// おそらく、アルバムが分からない場合
-	    	// 曲数を設定
-	        if (numsongs == 1) {
-	            songs_albums.append(context.getString(R.string.onesong));
-	        } else {
-	            String f = r.getQuantityText(R.plurals.Nsongs, numsongs).toString();
-	            sFormatBuilder.setLength(0);
-	            sFormatter.format(f, Integer.valueOf(numsongs));
-	            songs_albums.append(sFormatBuilder);
-	        }
-	    } else {
+	    if (false == isUnknown) {
 	    	// アルバム数を設定
 	        String f = r.getQuantityText(R.plurals.Nalbums, numalbums).toString();
 	        sFormatBuilder.setLength(0);
@@ -209,6 +195,15 @@ public final class ResourceAccessor {
 	        songs_albums.append(sFormatBuilder);
 	        songs_albums.append(context.getString(R.string.albumsongseparator));
 	    }
+    	// 曲数を設定
+        if (numsongs == 1) {
+            songs_albums.append(context.getString(R.string.onesong));
+        } else {
+            String f = r.getQuantityText(R.plurals.Nsongs, numsongs).toString();
+            sFormatBuilder.setLength(0);
+            sFormatter.format(f, Integer.valueOf(numsongs));
+            songs_albums.append(sFormatBuilder);
+        }
 	    return songs_albums.toString();
 	}	
 	/**

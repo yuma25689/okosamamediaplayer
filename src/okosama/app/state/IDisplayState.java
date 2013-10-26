@@ -1,5 +1,7 @@
 package okosama.app.state;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import okosama.app.tab.Tab;
 
 public interface IDisplayState {
@@ -38,4 +40,11 @@ public interface IDisplayState {
 	 */
 	public long updateDisplay();
 	
+	public static final int MENU_OK = 0;
+	public static final int MENU_NEXT_STATE = 1;
+	public int onCreateOptionsMenu(Menu menu);
+	public int onPrepareOptionsMenu(Menu menu);
+	public int onOptionsItemSelected(MenuItem menu);
+	
+	public int ChangeMotion();
 }

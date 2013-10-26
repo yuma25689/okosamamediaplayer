@@ -8,7 +8,6 @@ import okosama.app.storage.Database;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.view.ContextMenu;
@@ -55,23 +54,6 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
         		list, position, false);
 	}
 
-	@Override
-	public void onCreateOptionsMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onPrepareOptionsMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onOptionsItemSelected() {
-		// TODO Auto-generated method stub
-
-	}
     private int mSelectedPosition;
     private long mSelectedId;
     private String mCurrentTrackName;
