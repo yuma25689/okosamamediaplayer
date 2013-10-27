@@ -2,9 +2,12 @@ package okosama.app.tab;
 
 // import java.util.HashMap;
 
+import java.util.ArrayList;
+
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.action.IViewAction;
 import okosama.app.behavior.IBehavior;
+import okosama.app.widget.absWidget;
 
 import android.app.Activity;
 import android.util.SparseArray;
@@ -49,14 +52,52 @@ public abstract class TabComponentParent implements ITabComponent {
 		active = b;
 	}
 
-	protected ViewGroup tabBaseLayout;
+	protected ViewGroup tabBaseLayout = null;
+	protected ViewGroup updateProgressPanel = null;
+	protected ArrayList<absWidget> widgets = new ArrayList<absWidget>();
 
+	public void startUpdate()
+	{
+		if( null != updateProgressPanel )
+		{
+			updateProgressPanel.setVisibility(View.VISIBLE);
+			for( absWidget widget : widgets )
+			{
+				if( widget.getView() != null )
+				{
+					if( widget.getVisibleFlag() == View.VISIBLE )
+					{
+						widget.getView().setVisibility(View.GONE);
+					}
+				}
+			}
+		}
+	}
+	public void endUpdate()
+	{
+		if( null != updateProgressPanel )
+		{
+			updateProgressPanel.setVisibility(View.GONE);
+			for( absWidget widget : widgets )
+			{
+				if( widget.getView() != null )
+				{
+					if( widget.getVisibleFlag() == View.VISIBLE )
+					{
+						widget.setVisible(View.VISIBLE);
+					}
+				}
+			}
+		}
+	}
+	
 	protected void resetPanelViews(int iPanelLayoutId)
 	{
 		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		LayoutInflater inflator = act.getLayoutInflater();
 		tabBaseLayout = (ViewGroup)inflator.inflate(iPanelLayoutId, null, false);	
-		tabBaseLayout.removeAllViews();
+		// tabBaseLayout.removeAllViews();
+		widgets.clear();
 	}
 
 	// 子項目のリスト
@@ -128,6 +169,16 @@ public abstract class TabComponentParent implements ITabComponent {
 		children.put(ID,child);
 	}
 
+	public ITabComponent getChild( int ID )
+	{
+		if( -1 != children.indexOfKey(ID) )
+		{
+			return children.get(ID);
+		}
+		return null;
+	}
+	
+	
 	/**
 	 * 外部オブジェクトに設定を委譲する
 	 * 子のオブジェクトには適用しない

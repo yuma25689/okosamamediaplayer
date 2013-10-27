@@ -83,7 +83,6 @@ public class TabPagePlay extends TabPage {
 		
 		// ---- action
 		// Stopボタン
-		// Stopボタン
 		SparseArray< IViewAction > actMapStop 
 			= new SparseArray< IViewAction >();
 		actMapStop.put( IViewAction.ACTION_ID_ONCLICK, new MediaStopAction() );

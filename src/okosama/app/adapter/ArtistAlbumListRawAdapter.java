@@ -5,6 +5,7 @@ import okosama.app.R;
 import okosama.app.ResourceAccessor;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.*;
+import okosama.app.tab.TabPage;
 import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.database.Cursor;
@@ -37,6 +38,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
 
 	int iGroupLayoutId = 0;
 	int iChildLayoutId = 0;
+    private final Drawable mNowListOverlay;
 	
 	// 多分現在プレイ中の時に表示する画像
     private final Drawable mNowPlayingOverlay;
@@ -105,6 +107,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
         
         // Resources r = context.getResources();
         mNowPlayingOverlay = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.indicator_ic_mp_playing_list);
+        mNowListOverlay = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.playlist_press);
         mDefaultAlbumIcon =  (BitmapDrawable)OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.albumart_mp_unknown_list);
         // Filterとディザを未指定にして、ビットマップを高速にする
         // no filter or dither, it's a lot faster and we can't tell the difference
@@ -551,67 +554,72 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
             	
             	// カーソルをループする
             	Cursor cursor = params[0];
-                groupDataTmp.clear();
-                childDataTmp.clear();
-            	
-        		if( 0 != getColumnIndices(cursor) )
-        		{
-        			return -1;
-        		}
-                Log.i("doInBackground","moveToFirst");
-            	int i=0;
-        		cursor.moveToFirst();
-        		do 
-        		{
-                    ArtistGroupData data = new ArtistGroupData();
-                    
-            		// 全ての要素をループする
-                    data.setGroupId(i);
-                    data.setArtistName( cursor.getString(mGroupArtistIdx) );
-                    data.setNumOfAlbums( cursor.getInt(mGroupAlbumIdx) );
-                    data.setNumOfTracks( cursor.getInt(mGroupSongIdx) );
-                    data.setArtistId( cursor.getString(mGroupArtistIdIdx));
-            		groupDataTmp.put( i, data );
-
-            		Cursor childCursor = getChildrenCursor(cursor);
-            		if( childCursor != null && 0 < childCursor.getCount() )
-            		{
-            			ArtistChildData[] childList = new ArtistChildData[childCursor.getCount()];
-            			int j = 0;
-	            		childCursor.moveToFirst();
-	            		do 
+            	synchronized(cursor)
+            	{
+	                groupDataTmp.clear();
+	                childDataTmp.clear();
+	            	
+	        		if( 0 != getColumnIndices(cursor) )
+	        		{
+	        			return -1;
+	        		}
+	                Log.i("doInBackground","moveToFirst");
+	            	int i=0;
+	        		cursor.moveToFirst();
+	        		do 
+	        		{
+	                    ArtistGroupData data = new ArtistGroupData();
+	                    
+	            		// 全ての要素をループする
+	                    data.setGroupId(i);
+	                    data.setArtistName( cursor.getString(mGroupArtistIdx) );
+	                    data.setNumOfAlbums( cursor.getInt(mGroupAlbumIdx) );
+	                    data.setNumOfTracks( cursor.getInt(mGroupSongIdx) );
+	                    data.setArtistId( cursor.getString(mGroupArtistIdIdx));
+	            		groupDataTmp.put( i, data );
+	
+	            		Cursor childCursor = getChildrenCursor(cursor);
+	            		synchronized( childCursor )
 	            		{
-	                        ArtistChildData dataChild = new ArtistChildData();
-	                        dataChild.setAlbumName(
-	                        	childCursor.getString(childCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM) ) 
-	                        );
-	                        dataChild.setNumOfSongs(
-	                        	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS))
-	                        );
-	                        dataChild.setNumOfSongsForArtist( 
-	                        	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS_FOR_ARTIST))
-	                        );
-	                        dataChild.setArtistName(
-	                        	childCursor.getString(childCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST))
-	                        );	                        
-	                        dataChild.setAlbumArt(
-	                        		childCursor.getString(childCursor.getColumnIndexOrThrow(
-                                AlbumColumns.ALBUM_ART))
-	                        );
-	                        dataChild.setAlbumId( childCursor.getString(0) );
-	                        
-	                        childList[j] = dataChild; 
-	                        		
-	                        j++;
-	            		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
-	            				childCursor.moveToNext() );
-	            		
-	            		childDataTmp.put( i, childList);
-            		}
-            		
-            		i++;
-        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
-        				cursor.moveToNext() );
+		            		if( childCursor != null && 0 < childCursor.getCount() )
+		            		{
+		            			ArtistChildData[] childList = new ArtistChildData[childCursor.getCount()];
+		            			int j = 0;
+			            		childCursor.moveToFirst();
+			            		do 
+			            		{
+			                        ArtistChildData dataChild = new ArtistChildData();
+			                        dataChild.setAlbumName(
+			                        	childCursor.getString(childCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM) ) 
+			                        );
+			                        dataChild.setNumOfSongs(
+			                        	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS))
+			                        );
+			                        dataChild.setNumOfSongsForArtist( 
+			                        	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS_FOR_ARTIST))
+			                        );
+			                        dataChild.setArtistName(
+			                        	childCursor.getString(childCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST))
+			                        );	                        
+			                        dataChild.setAlbumArt(
+			                        		childCursor.getString(childCursor.getColumnIndexOrThrow(
+		                                AlbumColumns.ALBUM_ART))
+			                        );
+			                        dataChild.setAlbumId( childCursor.getString(0) );
+			                        
+			                        childList[j] = dataChild; 
+			                        		
+			                        j++;
+			            		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
+			            				childCursor.moveToNext() );
+			            		
+			            		childDataTmp.put( i, childList);
+		            		}
+	            		}
+	            		i++;
+	        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
+	        				cursor.moveToNext() );
+            	}
                 return 0;
             }
 
@@ -623,6 +631,11 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateData( groupDataTmp, childDataTmp );
+            	TabPage page = (TabPage) mActivity.getMediaTab().getChild(TabPage.TABPAGE_ID_ARTIST);
+            	if( page != null )
+            	{
+            		page.endUpdate();
+            	}
             	bDataUpdating = false;            	
             }
         };

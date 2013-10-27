@@ -1,6 +1,7 @@
 package okosama.app.tab.media;
 
 import okosama.app.AppStatus;
+import okosama.app.ControlDefs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.behavior.PlaylistListBehavior;
@@ -10,6 +11,8 @@ import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.tab.TabPage;
 import okosama.app.widget.List;
+import okosama.app.widget.absWidget;
+import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
@@ -30,7 +33,7 @@ public class TabPagePlayList extends TabPage {
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_PLAYLIST;
 		
-		create(R.layout.tab_layout_content_generic);
+		create(R.layout.tab_layout_content_generic_progress);
 		// componentContainer.addView(tabButton.getView());
 	}
 	/* (non-Javadoc)
@@ -45,6 +48,7 @@ public class TabPagePlayList extends TabPage {
         		0, 0
         );
 		tabBaseLayout.setLayoutParams(lp);
+		updateProgressPanel = (ViewGroup)tabBaseLayout.findViewById(R.id.TabCommonProgressPanel ); 
 		
 		//////////////////// list //////////////////////////
 		TabComponentPropertySetter creationData[] = {
@@ -53,33 +57,26 @@ public class TabPagePlayList extends TabPage {
 				List.LISTID_PLAYLIST, ComponentType.LIST_PLAYLIST, 
 				//0, 260, 480, 599
 				0, 0//150 + 2 // + 90
-				, 480, AppStatus.LIST_HEIGHT_1//637 + 70 //- 90//599
+				, 480, ControlDefs.LIST_HEIGHT_1//637 + 70 //- 90//599
 				, null, null,//R.drawable.tab_4_list_bk,
 				"", ScaleType.FIT_XY
 			)
 		};
-		List lsts[] = {
-			DroidWidgetKit.getInstance().MakeList( new PlaylistListBehavior() )
-//			,DroidWidgetKit.getInstance().MakeButton()
-//			,DroidWidgetKit.getInstance().MakeButton()
-//			,DroidWidgetKit.getInstance().MakeButton()
-//			,DroidWidgetKit.getInstance().MakeButton()
-//			,DroidWidgetKit.getInstance().MakeButton()
-//			,DroidWidgetKit.getInstance().MakeButton()
-//			,DroidWidgetKit.getInstance().MakeButton()
-		};
+		List lst = DroidWidgetKit.getInstance().MakeList( new PlaylistListBehavior() );
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;
-		for( List lst : lsts )
+		widgets.add(lst);
+		
+		for( absWidget widget : widgets )
 		{
-			lst.acceptConfigurator(creationData[i]);
+			widget.acceptConfigurator(creationData[i]);
 			// TODO:ボタンのアクションを設定
 			
-			// lst.getView().setBackgroundColor(Color.MAGENTA);
+			widget.getView().setBackgroundColor(Color.MAGENTA);
 			
 			// ボタンをこのタブ子項目として追加
 			// addChild( creationData[i].getInternalID(), lst );
-			tabBaseLayout.addView( lst.getView() );
+			tabBaseLayout.addView( widget.getView() );
 			
 			// ボタンを配置
 			// これは、setActivateで行う

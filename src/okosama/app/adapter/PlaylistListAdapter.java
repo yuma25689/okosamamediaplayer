@@ -3,6 +3,7 @@ package okosama.app.adapter;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.storage.Database;
+import okosama.app.tab.TabPage;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -143,6 +144,12 @@ public class PlaylistListAdapter extends SimpleCursorAdapter {
             getColumnIndices(cursor);
         //}
         super.changeCursor(cursor);
+    	TabPage page = (TabPage) mActivity.getMediaTab().getChild(TabPage.TABPAGE_ID_PLAYLIST);
+    	if( page != null )
+    	{
+    		page.endUpdate();
+    	}
+        
     }
     /**
      * カーソルの内容が一致するかどうか調べる この場合、数と_ID列のみ確認

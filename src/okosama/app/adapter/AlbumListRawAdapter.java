@@ -7,6 +7,7 @@ import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.AlbumData;
 import okosama.app.storage.Database;
 import okosama.app.storage.QueryHandler;
+import okosama.app.tab.TabPage;
 import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.database.Cursor;
@@ -47,6 +48,7 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> {
 	private int iLayoutId;
 	private ArrayList<AlbumData> items = new ArrayList<AlbumData>();
     private final Drawable mNowPlayingOverlay;
+    private final Drawable mNowListOverlay;
     private final BitmapDrawable mDefaultAlbumIcon;
     private OkosamaMediaPlayerActivity mActivity;
     //private final StringBuilder mStringBuilder = new StringBuilder();
@@ -92,8 +94,14 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> {
         // nowplayingのオーバーレイ？
         // mResources = mActivity.getResources();
         mNowPlayingOverlay 
-        = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.indicator_ic_mp_playing_list);
+        = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
+        		R.drawable.indicator_ic_mp_playing_list);
 
+        mNowListOverlay
+        = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
+        		R.drawable.playlist_selected
+        );
+        
         // アルバムアイコンの作成？
         // TODO: ARGB4444を利用する
         Bitmap b = OkosamaMediaPlayerActivity.getResourceAccessor().createBitmapFromDrawableId( R.drawable.albumart_mp_unknown_list);
@@ -227,33 +235,36 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> {
 //            cursor = null;
 //        }
         Database.getInstance(mActivity).setCursor( Database.AlbumCursorName, cursor );
-            	
+ 
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
             protected Integer doInBackground(Cursor... params) {
             	Log.i("doInBackground","start");
             	items.clear();
-            	
+            		
             	// カーソルをループする
             	Cursor cursor = params[0];
             	
-        		if( 0 != getColumnIndices(cursor) )
-        		{
-        			return -1;
-        		}
-            	Log.i("doInBackground","moveToFirst");
-        		cursor.moveToFirst();
-        		do 
-        		{
-            		AlbumData data = new AlbumData();
-        			// 全ての要素をループする
-            		data.setAlbumId(cursor.getInt(0));
-        			data.setAlbumName(cursor.getString(mAlbumIdx));
-        			data.setAlbumArtist(cursor.getString(mArtistIdx));
-        			data.setAlbumArt(cursor.getString(mAlbumArtIndex));
-        			items.add(data);
-        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false 
-        			&& cursor.moveToNext() );
+            	synchronized( cursor )
+            	{
+	        		if( 0 != getColumnIndices(cursor) )
+	        		{
+	        			return -1;
+	        		}
+	            	Log.i("doInBackground","moveToFirst");
+	        		cursor.moveToFirst();
+	        		do 
+	        		{
+	            		AlbumData data = new AlbumData();
+	        			// 全ての要素をループする
+	            		data.setAlbumId(cursor.getInt(0));
+	        			data.setAlbumName(cursor.getString(mAlbumIdx));
+	        			data.setAlbumArtist(cursor.getString(mArtistIdx));
+	        			data.setAlbumArt(cursor.getString(mAlbumArtIndex));
+	        			items.add(data);
+	        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false 
+	        			&& cursor.moveToNext() );
+            	}
                 return 0;
             }
 
@@ -265,6 +276,12 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> {
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateData( items );
+            	TabPage page = (TabPage) mActivity.getMediaTab().getChild(TabPage.TABPAGE_ID_ALBUM);
+            	if( page != null )
+            	{
+            		page.endUpdate();
+            	}
+            	
             	bDataUpdating = false;            	
             }
         };

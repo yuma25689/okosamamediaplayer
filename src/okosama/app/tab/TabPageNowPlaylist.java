@@ -1,12 +1,14 @@
 package okosama.app.tab;
 
 import okosama.app.AppStatus;
+import okosama.app.ControlDefs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.behavior.TrackListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.List;
+import okosama.app.widget.absWidget;
 import android.graphics.Color;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,7 +24,7 @@ public class TabPageNowPlaylist extends TabPage {
 		this.componentContainer = rl;
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_NOW_PLAYLIST;
-		create(R.layout.tab_layout_content_generic);
+		create(R.layout.tab_layout_content_generic_progress);
 //		componentContainer.addView(tabButton.getView());
 	}
 	@Override
@@ -51,26 +53,25 @@ public class TabPageNowPlaylist extends TabPage {
 				List.LISTID_NOW_PLAYLIST, ComponentType.LIST_NOWPLAYLIST, 
 				// 0, 260, 480, 599
 				0, 0,//150 + 2
-				480, AppStatus.LIST_HEIGHT_1//637 //599
+				480, ControlDefs.LIST_HEIGHT_2//637 //599
 				, null, null//R.drawable.tab_3_list_bk
 				, "", ScaleType.FIT_XY
 			)
 		};
-		List lsts[] = {
-			DroidWidgetKit.getInstance().MakeList( new TrackListBehavior() )
-		};
+		List lst = DroidWidgetKit.getInstance().MakeList( new TrackListBehavior() );
+		widgets.add(lst);
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;
-		for( List lst : lsts )
+		for( absWidget widget : widgets )
 		{
-			lst.acceptConfigurator(creationData[i]);
+			widget.acceptConfigurator(creationData[i]);
 			// TODO:ボタンのアクションを設定
 			
 			
-			lst.getView().setBackgroundColor(Color.DKGRAY);
+			//lst.getView().setBackgroundColor(Color.DKGRAY);
 			// ボタンをこのタブ子項目として追加
 			// addChild( creationData[i].getInternalID(), lst );
-			tabBaseLayout.addView( lst.getView() );
+			tabBaseLayout.addView( widget.getView() );
 			// tabContent = OkosamaMediaPlayerActivity.createMediaTab(pageContainer, componentContainer);//new TabMediaSelect(pageContainer, componentContainer);
 			// ボタンを配置
 			// これは、setActivateで行う

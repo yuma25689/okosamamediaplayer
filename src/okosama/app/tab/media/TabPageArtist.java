@@ -1,6 +1,7 @@
 package okosama.app.tab.media;
 
 import okosama.app.AppStatus;
+import okosama.app.ControlDefs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.behavior.ArtistListBehavior;
@@ -10,6 +11,7 @@ import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.tab.TabPage;
 import okosama.app.widget.ExpList;
+import okosama.app.widget.absWidget;
 import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
@@ -31,7 +33,7 @@ public class TabPageArtist extends TabPage {
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_ARTIST;
 		
-		create(R.layout.tab_layout_content_generic);
+		create(R.layout.tab_layout_content_generic_progress);
 		// componentContainer.addView(tabButton.getView());
 	}
 	/* (non-Javadoc)
@@ -46,6 +48,7 @@ public class TabPageArtist extends TabPage {
         		0, 0
         );
 		tabBaseLayout.setLayoutParams(lp);
+		updateProgressPanel = (ViewGroup)tabBaseLayout.findViewById(R.id.TabCommonProgressPanel ); 
 
 		// タブのボタンだけはここで作る？
 		//tabButton = DroidWidgetKit.getInstance().MakeButton();
@@ -68,34 +71,26 @@ public class TabPageArtist extends TabPage {
 				ExpList.LISTID_ARTIST, ComponentType.LIST_ARTIST, 
 				//0, 260, 480, 599
 				0, 0//150 + 2 // + 90
-				, 480, AppStatus.LIST_HEIGHT_1//637 + 70 // - 90//599
+				, 480, ControlDefs.LIST_HEIGHT_1//637 + 70 // - 90//599
 				, null, null,//R.drawable.tab_2_list_bk
 				"", ScaleType.FIT_XY
 			)
 		};
-		ExpList lsts[] = {
-			DroidWidgetKit.getInstance().MakeExpList( new ArtistListBehavior() )
-//			,DroidWidgetKit.getInstance().MakeButton()
-//			,DroidWidgetKit.getInstance().MakeButton()
-//			,DroidWidgetKit.getInstance().MakeButton()
-//			,DroidWidgetKit.getInstance().MakeButton()
-//			,DroidWidgetKit.getInstance().MakeButton()
-//			,DroidWidgetKit.getInstance().MakeButton()
-//			,DroidWidgetKit.getInstance().MakeButton()
-		};
+		ExpList lst = DroidWidgetKit.getInstance().MakeExpList( new ArtistListBehavior() );
 		
+		widgets.add(lst);
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;
-		for( ExpList lst : lsts )
+		for( absWidget widget : widgets )
 		{
-			lst.acceptConfigurator(creationData[i]);
+			widget.acceptConfigurator(creationData[i]);
 			// TODO:ボタンのアクションを設定
 			
-			lst.getView().setBackgroundColor(Color.CYAN);
+			widget.getView().setBackgroundColor(Color.CYAN);
 			//lst.getView().sendToBack();
 			// ボタンをこのタブ子項目として追加
 			// addChild( creationData[i].getInternalID(), lst );
-			tabBaseLayout.addView( lst.getView() );
+			tabBaseLayout.addView( widget.getView() );
 			// ボタンを配置
 			// これは、setActivateで行う
 			// componentContainer.addView( btn.getView() );

@@ -12,8 +12,8 @@ import android.widget.ProgressBar;
 public class ProgressBarImpl extends ProgressBar {
 
 	public ProgressBarImpl(Context context) {
-		super(context,null,android.R.attr.progressBarStyleHorizontal);
+		super(context,null,android.R.attr.progressBarStyleSmallInverse);
 		// このアプリケーション特有の設定
-		setPadding(0,0,0,0);
+		setPadding(5,5,5,5);
 	}
 }

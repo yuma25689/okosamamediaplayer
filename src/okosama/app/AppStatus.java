@@ -14,7 +14,6 @@ package okosama.app;
  *
  */
 public final class AppStatus {
-	public static int LIST_HEIGHT_1 = 859;
 	
 	public void clearSrchCondition()
 	{

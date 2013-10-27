@@ -32,4 +32,6 @@ public interface ControlIDs {
 	public static final int TIME_ARTIST_LABEL = 158;
 	public static final int TIME_ALBUM_LABEL = 159;
 	public static final int TIME_PROGRESS = 160;
+	
+	public static final int COMMON_PROGRESS = 200;	
 }

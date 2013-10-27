@@ -11,6 +11,7 @@ import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
 import okosama.app.storage.QueryHandler;
 import okosama.app.storage.TrackData;
+import okosama.app.tab.TabPage;
 //import okosama.app.storage.TrackQueryHandler;
 import android.content.Context;
 import android.database.CharArrayBuffer;
@@ -45,8 +46,11 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
 //implements SectionIndexer {
 
 	private ArrayList<TrackData> allItems = new ArrayList<TrackData>();
+	// TODO:次へボタン等
 	int maxShowCount = 80;
     	
+    private final Drawable mNowListOverlay;
+
 	long [] playlist = null;
     private final BitmapDrawable mDefaultAlbumIcon;
 	boolean bDataUpdating = false;	// 内部データを更新中かどうか
@@ -126,6 +130,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
         mActivity = currentactivity;
         this.iLayoutId = layout;
         this.inflater = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mNowListOverlay = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.playlist_press);
         
         mActivity = currentactivity;
         // mQueryHandler = new QueryHandler( mActivity.getContentResolver() );
@@ -361,29 +366,32 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
         		{
         			return -1;
         		}
-        		if( 0 > getColumnIndices(cursor) )
-        		{
-        			return -1;
-        		}
-            	Log.i("doInBackground","moveToFirst");
-        		cursor.moveToFirst();
-        		do 
-        		{
-            		TrackData data = new TrackData();
-        			// 全ての要素をループする
-            		data.setTrackId( cursor.getLong(0));
-            		data.setTrackTitle(cursor.getString(mTitleIdx));
-            		data.setTrackArtist(cursor.getString(mArtistIdx));
-            		data.setTrackDuration(cursor.getLong(mDurationIdx));
-            		data.setTrackAudioId(cursor.getLong(mAudioIdIdx));
-            		data.setTrackAlbum(cursor.getString(mAlbumIdx));
-            		data.setTrackAlbumId(cursor.getString(mAlbumIdIdx));
-            		data.setTrackArtistId(cursor.getString(mArtistIdIdx));
-        			data.setTrackAlbumArt(mActivity.getAlbumAdp().getAlbumArtFromId(Integer.parseInt(data.getTrackAlbumId())));
-          		// Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
-            	    allItems.add(data);
-        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
-        				cursor.moveToNext() );
+            	synchronized(cursor)
+            	{
+	        		if( 0 > getColumnIndices(cursor) )
+	        		{
+	        			return -1;
+	        		}
+	            	Log.i("doInBackground","moveToFirst");
+	        		cursor.moveToFirst();
+	        		do 
+	        		{
+	            		TrackData data = new TrackData();
+	        			// 全ての要素をループする
+	            		data.setTrackId( cursor.getLong(0));
+	            		data.setTrackTitle(cursor.getString(mTitleIdx));
+	            		data.setTrackArtist(cursor.getString(mArtistIdx));
+	            		data.setTrackDuration(cursor.getLong(mDurationIdx));
+	            		data.setTrackAudioId(cursor.getLong(mAudioIdIdx));
+	            		data.setTrackAlbum(cursor.getString(mAlbumIdx));
+	            		data.setTrackAlbumId(cursor.getString(mAlbumIdIdx));
+	            		data.setTrackArtistId(cursor.getString(mArtistIdIdx));
+	        			data.setTrackAlbumArt(mActivity.getAlbumAdp().getAlbumArtFromId(Integer.parseInt(data.getTrackAlbumId())));
+	          		// Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
+	            	    allItems.add(data);
+	        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
+	        				cursor.moveToNext() );
+            	}
                 return 0;
             }
 
@@ -395,6 +403,18 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateList();
+            	TabPage page = (TabPage) mActivity.getMediaTab().getChild(TabPage.TABPAGE_ID_SONG);
+            	if( page != null )
+            	{
+            		page.endUpdate();
+            	}
+            	TabPage page2 = (TabPage) mActivity.getTabMain().getChild(TabPage.TABPAGE_ID_NOW_PLAYLIST);
+            	if( page2 != null )
+            	{
+            		page2.endUpdate();
+            	}
+            	
+            	// TODO: フラグ削除
             	bDataUpdating = false;            	
             }
         };

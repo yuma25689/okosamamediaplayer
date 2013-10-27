@@ -6,6 +6,7 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.storage.PlaylistData;
 import okosama.app.storage.Database;
+import okosama.app.tab.TabPage;
 // import okosama.app.storage.QueryHandler;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
@@ -283,6 +284,12 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> {
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateData( items );
+            	TabPage page = (TabPage) mActivity.getMediaTab().getChild(TabPage.TABPAGE_ID_PLAYLIST);
+            	if( page != null )
+            	{
+            		page.endUpdate();
+            	}
+            	
             	bDataUpdating = false;            	
             }
         };

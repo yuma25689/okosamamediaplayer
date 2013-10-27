@@ -12,7 +12,9 @@ import okosama.app.storage.AlbumData;
 import okosama.app.storage.ArtistChildData;
 import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.TrackData;
+import okosama.app.widget.absWidget;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.provider.MediaStore.Audio.PlaylistsColumns;
 import android.util.Log;
@@ -99,6 +101,16 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 	Integer bkImageId;
 	String text;
 	ScaleType scaleType = null;
+	int visibleFlag = View.VISIBLE;
+	public void setVisibleFlag( int f ) 
+	{
+		visibleFlag = f;
+	}
+	int clrBack = -1;
+	public void setColorBack( int clrCode )
+	{
+		clrBack = clrCode;
+	}
 	
 	public Integer getInternalID()
 	{
@@ -436,7 +448,16 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			// TODO: できたら後で自力実装？
 			// v.setBackgroundResource(bkImageId);
 		}
-        v.setLayoutParams(lp);
+		if( clrBack != -1 )
+		{
+			v.setBackgroundColor(clrBack);
+		}
+		if( component instanceof absWidget )
+		{
+			((absWidget)component).setVisibleFlag(visibleFlag);
+			((absWidget)component).setVisible(visibleFlag);
+	    }
+		v.setLayoutParams(lp);
         
         // レイアウトへの配置は、上位で
         // m_RLmain.addView(m_musicPlayTabButton);

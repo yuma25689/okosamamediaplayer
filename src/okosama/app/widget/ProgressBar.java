@@ -54,16 +54,16 @@ public class ProgressBar extends absWidget {
 		}
 		else
 		{
-			impl.setVisibility(View.INVISIBLE);
+			impl.setVisibility(View.GONE);
 		}
 	}
 	@Override
 	public int create() {
 		// TODO ‚à‚Á‚Æ”Ä—p«‚Ì‚ ‚é‚â‚è•û‚É‚Å‚«‚é‚Í‚¸
 		impl = new ProgressBarImpl(activity);
-		impl.setProgressDrawable(activity.getResources().getDrawable(R.drawable.progress_image));
-		impl.setIndeterminate(false);
-		impl.setClickable(true);
+		//impl.setProgressDrawable(activity.getResources().getDrawable(R.drawable.progress_image));
+		// impl.setIndeterminate(false);
+		// impl.setClickable(true);
 		return 0;
 	}
 

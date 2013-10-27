@@ -36,7 +36,7 @@ public class TabAnimationFactory {
 		MagneticFieldValue mag =
 		OkosamaMediaPlayerActivity.getResourceAccessor().motionObserver. getNowMagnetic();
 	    float rate = ((float)mag.getPitch()) / 360f;
-	    float toY = rate * 100;
+	    float toY = -1 * rate * 100;
 	    // float toY = (float) mag.getPitch();
 	    Log.d("animin","pitchY=" + toY );
 		
