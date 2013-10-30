@@ -20,6 +20,7 @@ import android.provider.MediaStore.Audio.PlaylistsColumns;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -85,6 +86,18 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		this.text = text;
 		this.scaleType = scaleType;
 	}
+	public TabComponentPropertySetter(Integer internalID,
+			ComponentType type, ViewGroup.LayoutParams layoutParams, Integer imageId,
+			Integer bkImageId, String text, ScaleType scaleType) 
+	{
+		this.internalID = internalID;
+		this.type = type;
+		this.layoutParams = layoutParams;
+		this.imageId = imageId;
+		this.bkImageId = bkImageId;
+		this.text = text;
+		this.scaleType = scaleType;
+	}
 	public static enum ComponentType {
 		NONE, TAB, TAB_PAGE, BUTTON, LIST_ALBUM, 
 		LIST_ARTIST, LIST_SONG, LIST_PLAYLIST, LIST_NOWPLAYLIST,
@@ -96,6 +109,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 	// String internalName;
 	Integer internalID;
 	ComponentType type = ComponentType.NONE;
+	ViewGroup.LayoutParams layoutParams = null;
 	Integer left, top, width, height;
 	Integer imageId;
 	Integer bkImageId;
@@ -129,10 +143,19 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		{
 			return -1;
 		}
-		RelativeLayout.LayoutParams lp 
-		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-        		left, top, width, height 
-        );
+		v.setId(this.internalID);
+		
+		if( layoutParams != null )
+		{
+			v.setLayoutParams(layoutParams);
+		}
+		else if( left != null && top != null && width != null && height != null )
+		{
+			layoutParams = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+	        		left, top, width, height 
+	        );
+			v.setLayoutParams(layoutParams);
+		}
 		if( type == ComponentType.BUTTON )
 		{
 			// この辺のソースは、最悪です。
@@ -457,7 +480,6 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			((absWidget)component).setVisibleFlag(visibleFlag);
 			((absWidget)component).setVisible(visibleFlag);
 	    }
-		v.setLayoutParams(lp);
         
         // レイアウトへの配置は、上位で
         // m_RLmain.addView(m_musicPlayTabButton);

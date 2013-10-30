@@ -37,4 +37,12 @@ public class ControlPanel extends TabComponentParent {
 	public View getView() {
 		return tabBaseLayout;
 	}
+	
+	public void setLayoutParams( ViewGroup.LayoutParams lp )
+	{
+		if( tabBaseLayout != null )
+		{
+			tabBaseLayout.setLayoutParams(lp);
+		}
+	}
 }

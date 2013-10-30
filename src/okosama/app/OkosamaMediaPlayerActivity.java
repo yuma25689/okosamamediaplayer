@@ -50,6 +50,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -313,10 +314,12 @@ implements ServiceConnection {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        // タイトルバーを非表示に？
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+      
         // ビューの設定
         setContentView(R.layout.main);
-
+        
         // Databaseクラスにアクティビティ格納
         Database.setActivity( this );
         // ボリュームを音楽用に設定する
@@ -544,10 +547,38 @@ implements ServiceConnection {
 	createLayoutParamForAbsolutePosOnBk(
 			int left, int top, int width, int height )
 	{
-		int widthCorrect = dispInfo.getCorrectionXConsiderDensity(width);
-		int heightCorrect = dispInfo.getCorrectionYConsiderDensity(height);
+		int widthCorrect = 0;
+		if( width == RelativeLayout.LayoutParams.FILL_PARENT
+		|| width == RelativeLayout.LayoutParams.WRAP_CONTENT )
+		{
+			widthCorrect = width;
+		}
+		else
+		{
+			widthCorrect = dispInfo.getCorrectionXConsiderDensity(width);
+		}
+		int heightCorrect = 0;
+		if( height == RelativeLayout.LayoutParams.FILL_PARENT
+		|| height == RelativeLayout.LayoutParams.WRAP_CONTENT )
+		{
+			heightCorrect = height;
+		}
+		else
+		{
+			heightCorrect = dispInfo.getCorrectionYConsiderDensity(height);
+		}
 		int xCorrect = dispInfo.getCorrectionXConsiderDensity(left);
-		int yCorrect = dispInfo.getCorrectionYConsiderDensity(top);
+		int yCorrect = 0;
+		int topRule = RelativeLayout.ALIGN_PARENT_TOP;
+		if( yCorrect < 0 )
+		{
+			yCorrect = -1 * dispInfo.getCorrectionYConsiderDensity(top);
+			topRule = RelativeLayout.ALIGN_PARENT_BOTTOM;
+		}
+		else
+		{
+			yCorrect = dispInfo.getCorrectionYConsiderDensity(top);
+		}
 		
 		RelativeLayout.LayoutParams lp = 
 				new RelativeLayout.LayoutParams(
@@ -558,7 +589,7 @@ implements ServiceConnection {
         // このアプリケーションでは、bottomとrightのmarginはゼロだが・・・。
         lp.bottomMargin = 0;
         lp.rightMargin = 0;
-        lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        lp.addRule(topRule);//RelativeLayout.ALIGN_PARENT_TOP);
         lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         
         return lp;
@@ -658,31 +689,40 @@ implements ServiceConnection {
         Cursor cTmp = Database.getInstance(this).getCursor( Database.AlbumCursorName );
         if( cTmp != null && cTmp.isClosed() == false )
         {
-        	cTmp.close();
-        	Database.getInstance(this).setCursor(Database.AlbumCursorName, null);
+            synchronized( cTmp ) {
+	        	cTmp.close();
+	        	Database.getInstance(this).setCursor(Database.AlbumCursorName, null);
+	        }
         }
         // Artist
         cTmp = Database.getInstance(this).getCursor( Database.ArtistCursorName );
         if( cTmp != null && cTmp.isClosed() == false )
         {
-        	cTmp.close();
-        	Database.getInstance(this).setCursor(Database.ArtistCursorName, null);
+            synchronized( cTmp ) {
+	        	cTmp.close();
+	        	Database.getInstance(this).setCursor(Database.ArtistCursorName, null);
+	        }
         }
         // Song
         cTmp = Database.getInstance(this).getCursor( Database.SongCursorName );
+
         if( cTmp != null && cTmp.isClosed() == false )
         {
-        	cTmp.close();
-        	Database.getInstance(this).setCursor(Database.SongCursorName, null);
+            synchronized( cTmp ) {
+	        	cTmp.close();
+	        	Database.getInstance(this).setCursor(Database.SongCursorName, null);
+	        }
         }
         // Playlist
         cTmp = Database.getInstance(this).getCursor( Database.PlaylistCursorName );
         if( cTmp != null && cTmp.isClosed() == false )
         {
-        	cTmp.close();
-        	Database.getInstance(this).setCursor(Database.PlaylistCursorName, null);
+            synchronized( cTmp ) {	        	
+	        	cTmp.close();
+	        	Database.getInstance(this).setCursor(Database.PlaylistCursorName, null);
+            }
         }
-        
+
 		// bTabInitEnd = false;
 		// System.gc();
         getResourceAccessor().rereaseMotionSenser();
@@ -971,7 +1011,6 @@ implements ServiceConnection {
 			// NOWPLAYLIST
 			// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
 			getTrackAdp().setQueueView(true);
-			getTrackAdp().clear();
 	    	TabPage page2 = (TabPage) getTabMain().getChild(currentMainTabId);
 	    	if( page2 != null )
 	    	{
@@ -1136,14 +1175,16 @@ implements ServiceConnection {
 	    @Override
 	    public boolean onCreateOptionsMenu(Menu menu) {
 	        super.onCreateOptionsMenu(menu);
-			if( stateMain == null 
-			|| stateSub == null )
+			if( stateMain == null )
 			{
 				return false;
 			}
 			int iRet = stateMain.onCreateOptionsMenu(menu);
 			if( iRet == IDisplayState.MENU_NEXT_STATE )
 			{
+				if( stateSub == null )
+					return false;
+				
 				iRet = stateSub.onCreateOptionsMenu(menu);
 			}
 	        return true;

@@ -19,6 +19,11 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="updateing">Reading library now...</string>
+    <string name="empty_data">Now playing queue is empty.</string>
+    <string name="effect_menu">音響効果</string>
+    <string name="setting_menu">設定</string>
+    
     <string name="twitter_consumer_key">Zeg3AGGq1muwWgcZ9Qrw</string>
     <string name="twitter_consumer_secret">oMLphzSbP54JCZroFm9x9Y2l4IFvpAOWIpjZsdek</string>
 	<string name="twitter_callback_url">yuma25689://twitter</string>    

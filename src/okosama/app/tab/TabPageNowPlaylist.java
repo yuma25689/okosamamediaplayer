@@ -24,7 +24,7 @@ public class TabPageNowPlaylist extends TabPage {
 		this.componentContainer = rl;
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_NOW_PLAYLIST;
-		create(R.layout.tab_layout_content_generic_progress);
+		create(R.layout.tab_layout_content_empty_show );//tab_layout_content_generic_progress);
 //		componentContainer.addView(tabButton.getView());
 	}
 	@Override

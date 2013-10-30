@@ -40,6 +40,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
 import android.provider.BaseColumns;
@@ -282,6 +283,33 @@ public class MediaPlaybackService extends Service {
             	// 特定のwidgetをリフレッシュする。widgetのidを取得し、performUpdateに渡す？
                 int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
                 mAppWidgetProvider.performUpdate(MediaPlaybackService.this, appWidgetIds);
+            } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+            	
+            	int iCon = intent.getIntExtra("state",0);
+            	if( iCon == 1 )
+            	{
+            		// ヘッドホン接続
+            		if( mPlayListLen <= 0 )
+            		{
+            			Toast.makeText(context, "headset connect", Toast.LENGTH_SHORT).show();	
+            		}
+            		else
+            		{
+	            		Toast.makeText(context, "headset connect - play", Toast.LENGTH_SHORT).show();
+	                    play();
+            		}
+            	}
+            	else if( iCon == 0 )
+            	{
+            		// ヘッドホン切断
+            		Toast.makeText(context, "headset disconnect - pause", Toast.LENGTH_SHORT).show();
+                    pause();
+                    mPausedByTransientLossOfFocus = false;
+            	}
+//            	intent.setClass(context, OkosamaMediaPlayerActivity.class);
+//            	intent.setAction(Intent.ACTION_HEADSET_PLUG);
+//            	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            	context.startActivity(intent);
             }
         }
     };
@@ -382,6 +410,7 @@ public class MediaPlaybackService extends Service {
         commandFilter.addAction(PAUSE_ACTION);
         commandFilter.addAction(NEXT_ACTION);
         commandFilter.addAction(PREVIOUS_ACTION);
+        commandFilter.addAction(Intent.ACTION_HEADSET_PLUG);
         registerReceiver(mIntentReceiver, commandFilter);
         
         // 電源管理？
@@ -1463,6 +1492,12 @@ public class MediaPlaybackService extends Service {
             // This is mostly so that if you press 'play' on a bluetooth headset
             // without every having played anything before, it will still play
             // something.
+            if (!mQuietMode) {
+            	// 出していい場合は、ユーザにエラーメッセージ出力？
+            	// TODO: resouce利用
+                Toast.makeText(this, "auto shuffleで再生します！", Toast.LENGTH_SHORT).show();
+            }
+        	
             setShuffleMode(SHUFFLE_AUTO);
         }
     }
@@ -2173,7 +2208,14 @@ public class MediaPlaybackService extends Service {
         }
         return -1;
     }
-
+    /**
+     * Returns the audio session ID.
+     */
+    public int getAudioSessionId() {
+        synchronized (this) {
+            return mPlayer.getAudioSessionId();
+        }
+    }
     /**
      * Provides a unified interface for dealing with midi files and
      * other media files.
@@ -2352,6 +2394,12 @@ public class MediaPlaybackService extends Service {
         public void setVolume(float vol) {
             mMediaPlayer.setVolume(vol, vol);
         }
+        public void setAudioSessionId(int sessionId) {
+            mMediaPlayer.setAudioSessionId(sessionId);
+        }
+        public int getAudioSessionId() {
+            return mMediaPlayer.getAudioSessionId();
+        }        
     }
 
     /*
@@ -2493,6 +2541,18 @@ public class MediaPlaybackService extends Service {
             return mService.get().getMediaMountedCount();
         }
 
+		@Override
+		public void setAudioSessionId(int sessionId) throws RemoteException {
+			// TODO Auto-generated method stub
+			mService.get().setAudioSessionId(sessionId);
+		}
+
+		@Override
+		public int getAudioSessionId() throws RemoteException {
+			// TODO Auto-generated method stub
+			return mService.get().getAudioSessionId();
+		}
+
     }
 
     @Override
@@ -2509,5 +2569,10 @@ public class MediaPlaybackService extends Service {
         //MusicUtils.debugDump(writer);
     }
 
-    private final IBinder mBinder = new ServiceStub(this);
+    public void setAudioSessionId(int sessionId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private final IBinder mBinder = new ServiceStub(this);
 }

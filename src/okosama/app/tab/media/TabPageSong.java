@@ -103,4 +103,11 @@ public class TabPageSong extends TabPage {
 
 		return 0;
 	}
+	
+	@Override
+	public void setActivate( boolean bActivate )
+	{
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().setQueueView(false);
+		super.setActivate(bActivate);
+	}
 }

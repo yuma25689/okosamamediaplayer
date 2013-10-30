@@ -29,15 +29,6 @@ public class DisplayStateAlbum extends absDisplayStateMediaTab {
 		return ret;
 	}
 
-	@Override
-	public int onCreateOptionsMenu(Menu menu)
-	{
-		MenuItem item = menu.add(Menu.NONE, MENU_UPDATE, Menu.NONE, R.string.update_menu);
-		// TODO: アイコンを更新に ic_menu_refreshが本当はあるはず？
-		item.setIcon(android.R.drawable.ic_popup_sync );
-		
-		return 0;
-	}
 //	public int onPrepareOptionsMenu(Menu menu);
 	@Override
 	public int onOptionsItemSelected(MenuItem item)

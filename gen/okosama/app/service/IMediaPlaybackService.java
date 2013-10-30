@@ -309,6 +309,23 @@ reply.writeNoException();
 reply.writeInt(_result);
 return true;
 }
+case TRANSACTION_setAudioSessionId:
+{
+data.enforceInterface(DESCRIPTOR);
+int _arg0;
+_arg0 = data.readInt();
+this.setAudioSessionId(_arg0);
+reply.writeNoException();
+return true;
+}
+case TRANSACTION_getAudioSessionId:
+{
+data.enforceInterface(DESCRIPTOR);
+int _result = this.getAudioSessionId();
+reply.writeNoException();
+reply.writeInt(_result);
+return true;
+}
 }
 return super.onTransact(code, data, reply, flags);
 }
@@ -831,6 +848,38 @@ _data.recycle();
 }
 return _result;
 }
+@Override public void setAudioSessionId(int sessionId) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeInt(sessionId);
+mRemote.transact(Stub.TRANSACTION_setAudioSessionId, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
+@Override public int getAudioSessionId() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+int _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_getAudioSessionId, _data, _reply, 0);
+_reply.readException();
+_result = _reply.readInt();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
+}
 }
 static final int TRANSACTION_openFile = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
 static final int TRANSACTION_openFileAsync = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
@@ -863,6 +912,8 @@ static final int TRANSACTION_removeTrack = (android.os.IBinder.FIRST_CALL_TRANSA
 static final int TRANSACTION_setRepeatMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 28);
 static final int TRANSACTION_getRepeatMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 29);
 static final int TRANSACTION_getMediaMountedCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 30);
+static final int TRANSACTION_setAudioSessionId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 31);
+static final int TRANSACTION_getAudioSessionId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 32);
 }
 public void openFile(java.lang.String path, boolean oneShot) throws android.os.RemoteException;
 public void openFileAsync(java.lang.String path) throws android.os.RemoteException;
@@ -895,4 +946,6 @@ public int removeTrack(long id) throws android.os.RemoteException;
 public void setRepeatMode(int repeatmode) throws android.os.RemoteException;
 public int getRepeatMode() throws android.os.RemoteException;
 public int getMediaMountedCount() throws android.os.RemoteException;
+public void setAudioSessionId(int sessionId) throws android.os.RemoteException;
+public int getAudioSessionId() throws android.os.RemoteException;
 }

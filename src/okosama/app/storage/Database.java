@@ -156,7 +156,7 @@ public class Database {
             if (limit > 0) {
                 uri = uri.buildUpon().appendQueryParameter("limit", "" + limit).build();
             }
-            Log.d("query uri", "uri :" +uri);
+            // Log.d("query uri", "uri :" +uri);
             return resolver.query(uri, projection, selection, selectionArgs, sortOrder);
          } catch (UnsupportedOperationException ex) {
         	String msg = ex.getMessage();
@@ -225,7 +225,7 @@ public class Database {
         Cursor ret = null;
         if (async != null) {
         	// 非同期ならば、非同期でクエリ発行
-        	Log.d("query uri", "uri :" + uri);
+        	// Log.d("query uri", "uri :" + uri);
             async.startQuery(TabPage.TABPAGE_ID_ARTIST, null, uri,
                     cols, whereclause , keywords, ArtistColumns.ARTIST_KEY);
         } else {

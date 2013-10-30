@@ -357,13 +357,13 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
             @Override
             protected Integer doInBackground(Cursor... params) {
             	Log.i("doInBackground","start");
-            	allItems.clear();
             	
             	// カーソルをループする
             	Cursor cursor = params[0];
             	
         		if( cursor == null || cursor.isClosed() )
         		{
+        			Log.w("TrackListAdp - doInBk", "cursor closed!");
         			return -1;
         		}
             	synchronized(cursor)
@@ -372,6 +372,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
 	        		{
 	        			return -1;
 	        		}
+	            	allItems.clear();
 	            	Log.i("doInBackground","moveToFirst");
 	        		cursor.moveToFirst();
 	        		do 
@@ -497,6 +498,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
      */
     // @Override
     public void updateList() {
+    	Log.d("trackadp - update list","");
     	ArrayList<TrackData> items = allItems;
     	clear();
     	
