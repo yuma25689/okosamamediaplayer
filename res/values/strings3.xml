@@ -32,5 +32,9 @@
 	<string name="unknown_song_name">不明</string>		
 	<string name="artist_label">[artist]</string>		
 	<string name="album_label">[album]</string>		
-	<string name="song_label">[track]</string>		
+	<string name="song_label">[track]</string>
+			
+    <string name="enable_headset_plug_and_play_title">ヘッドホン接続で再生</string>
+    <string name="enable_headset_plug_and_play_summary">キューに曲があり、サービスが有効なときにヘッドホンがさされたら、即時再生する</string>
+		
 </resources>

@@ -13,6 +13,7 @@ public class MusicSettingsActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
     static final String KEY_ENABLE_FOCUS_LOSS_DUCKING = "enable_focus_loss_ducking";
+    public static final String KEY_ENABLE_HEADSET_PLUG_AND_PLAY = "enable_headset_plug_and_play";
     static final String KEY_DUCK_ATTENUATION_DB = "duck_attenuation_db";
     static final String KEY_ENABLE_GESTURES = "enable_gestures";
     static final String KEY_ENABLE_HAPTIC_FEEDBACK = "enable_haptic_feedback";
@@ -26,7 +27,7 @@ public class MusicSettingsActivity extends PreferenceActivity implements
     static final String ACTION_ENABLE_GESTURES_CHANGED = "com.android.music.enablegestureschanged";
     static final String ACTION_GESTURES_CHANGED = "com.android.music.gestureschanged";
 
-    static final String PREFERENCES_FILE = "settings";
+    public static final String PREFERENCES_FILE = "settings";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

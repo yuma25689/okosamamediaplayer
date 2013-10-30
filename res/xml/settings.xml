@@ -27,7 +27,11 @@
             android:title="@string/enable_focus_loss_ducking_title"
             android:summary="@string/enable_focus_loss_ducking_summary"
             android:defaultValue="false" />
-
+        <CheckBoxPreference android:key="enable_headset_plug_and_play"
+            android:title="@string/enable_headset_plug_and_play_title"
+            android:summary="@string/enable_headset_plug_and_play_summary"
+            android:defaultValue="false" />
+        
         <ListPreference android:key="duck_attenuation_db"
             android:title="@string/duck_attenuation_db_title"
             android:summary="@string/duck_attenuation_db_summary"

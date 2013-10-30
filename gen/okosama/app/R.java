@@ -457,6 +457,8 @@ public final class R {
         /**  Title and summary for 'enable haptic feedback' preference checkbox 
          */
         public static final int enable_haptic_feedback_title=0x7f08006b;
+        public static final int enable_headset_plug_and_play_summary=0x7f08008f;
+        public static final int enable_headset_plug_and_play_title=0x7f08008e;
         /**  Toast after streamStarter activity receives PLAYBACK_COMPLETE in case of an error 
          */
         public static final int fail_to_start_stream=0x7f08005c;

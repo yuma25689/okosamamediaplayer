@@ -43,6 +43,7 @@ import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AudioColumns;
@@ -60,6 +61,7 @@ import java.lang.ref.WeakReference;
 import java.util.Random;
 import java.util.Vector;
 
+import okosama.app.MusicSettingsActivity;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 
@@ -289,7 +291,12 @@ public class MediaPlaybackService extends Service {
             	if( iCon == 1 )
             	{
             		// ÉwÉbÉhÉzÉìê⁄ë±
-            		if( mPlayListLen <= 0 )
+            		boolean bPlugAndPlay = false;
+                    SharedPreferences prefs = getSharedPreferences(
+                            MusicSettingsActivity.PREFERENCES_FILE, MODE_PRIVATE);
+                    bPlugAndPlay = prefs.getBoolean(MusicSettingsActivity.KEY_ENABLE_HEADSET_PLUG_AND_PLAY, false);
+            	             		
+            		if( mPlayListLen <= 0 || bPlugAndPlay == false )
             		{
             			Toast.makeText(context, "headset connect", Toast.LENGTH_SHORT).show();	
             		}
