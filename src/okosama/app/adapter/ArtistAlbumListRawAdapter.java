@@ -431,7 +431,11 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
         }
         // カーソルに、アーティスト名を追加したカーソルを返却？
         // おそらく、アーティストはどのレコードでも同じで良いので、この作りで良い
-        return new MyCursorWrapper(c, groupCursor.getString(mGroupArtistIdx));
+        if( c != null )
+        {
+        	return new MyCursorWrapper(c, groupCursor.getString(mGroupArtistIdx));
+        }
+        return null;
     }
 
     
@@ -579,6 +583,11 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
 	            		groupDataTmp.put( i, data );
 	
 	            		Cursor childCursor = getChildrenCursor(cursor);
+	            		if( childCursor == null )
+	            		{
+	            			Log.e("doInBackGround - ArtistAlbumListAdapter", "child cursor取得エラー");
+	            			return -1;
+	            		}
 	            		synchronized( childCursor )
 	            		{
 		            		if( childCursor != null && 0 < childCursor.getCount() )
@@ -627,7 +636,11 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
             protected void onPostExecute(Integer ret) 
             {
             	Log.i("onPostExecute","ret=" + ret );
-            	
+            	if( ret < 0 )
+            	{
+            		groupDataTmp.clear();
+            		childDataTmp.clear();
+            	}
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateData( groupDataTmp, childDataTmp );

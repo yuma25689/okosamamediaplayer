@@ -453,7 +453,7 @@ implements ServiceConnection {
 			           	{
 			           		TimeControlPanel.getInstance().setDurationLabel(0);
 			           	}
-			           	reScanMedia(ControlIDs.ID_NOT_SPECIFIED, true);
+			           	// reScanMedia(ControlIDs.ID_NOT_SPECIFIED, true);
 			    				           	
 	//	           		if( 1 == setTabSelection( currentMainTabId, currentSubTabId ) )
 	//	           		{
@@ -911,8 +911,7 @@ implements ServiceConnection {
 		{
 		case TabPage.TABPAGE_ID_ALBUM:
 			// Listにカーソルを設定
-            Log.i("test", "rescan album 2");
-			Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );
+            Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );
 			break;
 		case TabPage.TABPAGE_ID_ARTIST:			
 			// Listにカーソルを設定
@@ -942,65 +941,58 @@ implements ServiceConnection {
 	public void reScanMedia(int tabID, boolean bForce)
 	{
 		// 現在選択中のタブによって操作を変更
-		if( //tabName == tabNameMedia && 
+		boolean bUpdateOccur = false;
+		if( 
 			( true == bForce
 			|| ControlIDs.TAB_ID_MEDIA == tabID ) )
-			//&& currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
 		{
 			// メディアタブならば
 			// メディアを再度クエリ発行して更新する
 			switch( currentSubTabId )
 			{
-//			case TabPage.TABPAGE_ID_ALBUM:
-//				if( bForce == false 
-//				&& 0 < getAlbumAdp().getCount() ) { //null != Database.getInstance(this).getCursor( Database.AlbumCursorName )) {
-//					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
-//		            Log.i("test", "rescan escape album");
-//		            // 再更新もしない
-//					// getAlbumAdp().updateList();
-//					break;
-//				}
-//				// Listにカーソルを設定
-//	            Log.i("test", "rescan album");
-//				Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );//, null);
-//				break;
-//			case TabPage.TABPAGE_ID_ARTIST:
-//				if( bForce == false 
-//				&& null != Database.getInstance(this).getCursor( Database.ArtistCursorName )) {
-//					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
-//					break;
-//				}
-//				
-//				// Listにカーソルを設定
-//				Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);			
-//				break;
-//			case TabPage.TABPAGE_ID_SONG:
-//				getTrackAdp().setQueueView(false);
-//				if( bForce == false 
-//				&& null != Database.getInstance(this).getCursor( Database.SongCursorName )) {
-//					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンはしない
-//					getTrackAdp().updateList();
-//					break;
-//				}
-//				OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );
-//				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);			
-//				break;
+			case TabPage.TABPAGE_ID_ALBUM:
+				if( 0 < getAlbumAdp().getCount() )
+				{
+					break;
+				}
+				// Listにカーソルを設定
+	            Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );
+	            bUpdateOccur = true;
+				break;
+			case TabPage.TABPAGE_ID_ARTIST:			
+				if( 0 < getArtistAdp().getGroupCount() )
+				{
+					Log.d("artist","artist escape count=" + getArtistAdp().getGroupCount() );
+					break;
+				}
+				Log.d("artist","artist rescan" );
+				// Listにカーソルを設定
+				Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);			
+	            bUpdateOccur = true;
+				break;
+			case TabPage.TABPAGE_ID_SONG:
+				if( 0 < getTrackAdp().getCount() )
+				{
+					break;
+				}
+				
+				OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
+				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);			
+	            bUpdateOccur = true;
+				break;
+			
 			case TabPage.TABPAGE_ID_PLAYLIST:
-//				if( bForce == false 
-//				&& null != Database.getInstance(this).getCursor( Database.PlaylistCursorName )) {
-//					// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンしない
-//					break;
-//				}
+				Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);						
+	            bUpdateOccur = true;
+				break;
+			}
+			if( bUpdateOccur )
+			{
 		    	TabPage page = (TabPage) getMediaTab().getChild(currentSubTabId);
 		    	if( page != null )
 		    	{
 		    		page.startUpdate();
 		    	}
-				Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);						
-				break;
-//			case TabPage.TABPAGE_ID_NONE:
-//				// TODO: クリア処理を入れた方がいいかも
-//				break;
 			}
 		}
 		else	

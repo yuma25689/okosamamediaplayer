@@ -1438,11 +1438,13 @@ public class MediaPlaybackService extends Service {
             RemoteViews views = new RemoteViews(getPackageName(), R.layout.statusbar);
             // イメージを設定？
             views.setImageViewResource(R.id.icon, R.drawable.stat_notify_musicplayer);
+            String ticket;
             if (getAudioId() < 0) {
                 // streaming
             	// ストリーミング
                 views.setTextViewText(R.id.trackname, getPath());
                 views.setTextViewText(R.id.artistalbum, null);
+                ticket = getPath();
             } else {
             	// 普通のメディア？
                 String artist = getArtistName();
@@ -1463,14 +1465,18 @@ public class MediaPlaybackService extends Service {
                 views.setTextViewText(R.id.artistalbum,
                         getString(R.string.notification_artist_album, artist, album)
                         );
+                ticket = getTrackName() + "-" + artist; //+ "[" + album + "]" + " - " + artist;
             }
             
             // Notificationクラスの作成
             Notification status = new Notification();
+            // 
+            status.tickerText = ticket;
             // Notificationクラスに、ビューを設定
             status.contentView = views;
             // Notificationを常駐させる？
-            status.flags |= Notification.FLAG_ONGOING_EVENT;
+            //status.flags |= Notification.FLAG_ONGOING_EVENT;
+            status.flags |= Notification.DEFAULT_LIGHTS;
             // Notificationのアイコンを設定
             status.icon = R.drawable.stat_notify_musicplayer;
             // クリック時に発行されるインテント？だろうか？

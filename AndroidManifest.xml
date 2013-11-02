@@ -40,6 +40,7 @@
             </intent-filter>
         </receiver>
         
+        <activity android:name="MusicSettingsActivity"></activity>
         <activity android:name="DeleteItems"></activity>
     </application>
 

@@ -40,8 +40,8 @@
             </intent-filter>
         </receiver>
         
-        <activity android:name="DeleteItems"></activity>
         <activity android:name="MusicSettingsActivity"></activity>
- 	</application>
+        <activity android:name="DeleteItems"></activity>
+    </application>
 
 </manifest>

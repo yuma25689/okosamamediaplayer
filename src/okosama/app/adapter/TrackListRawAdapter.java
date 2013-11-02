@@ -372,26 +372,29 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
 	        		{
 	        			return -1;
 	        		}
-	            	allItems.clear();
-	            	Log.i("doInBackground","moveToFirst");
-	        		cursor.moveToFirst();
-	        		do 
+	        		synchronized(allItems)
 	        		{
-	            		TrackData data = new TrackData();
-	        			// 全ての要素をループする
-	            		data.setTrackId( cursor.getLong(0));
-	            		data.setTrackTitle(cursor.getString(mTitleIdx));
-	            		data.setTrackArtist(cursor.getString(mArtistIdx));
-	            		data.setTrackDuration(cursor.getLong(mDurationIdx));
-	            		data.setTrackAudioId(cursor.getLong(mAudioIdIdx));
-	            		data.setTrackAlbum(cursor.getString(mAlbumIdx));
-	            		data.setTrackAlbumId(cursor.getString(mAlbumIdIdx));
-	            		data.setTrackArtistId(cursor.getString(mArtistIdIdx));
-	        			data.setTrackAlbumArt(mActivity.getAlbumAdp().getAlbumArtFromId(Integer.parseInt(data.getTrackAlbumId())));
-	          		// Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
-	            	    allItems.add(data);
-	        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
-	        				cursor.moveToNext() );
+		            	allItems.clear();
+		            	Log.i("doInBackground","moveToFirst");
+		        		cursor.moveToFirst();
+		        		do 
+		        		{
+		            		TrackData data = new TrackData();
+		        			// 全ての要素をループする
+		            		data.setTrackId( cursor.getLong(0));
+		            		data.setTrackTitle(cursor.getString(mTitleIdx));
+		            		data.setTrackArtist(cursor.getString(mArtistIdx));
+		            		data.setTrackDuration(cursor.getLong(mDurationIdx));
+		            		data.setTrackAudioId(cursor.getLong(mAudioIdIdx));
+		            		data.setTrackAlbum(cursor.getString(mAlbumIdx));
+		            		data.setTrackAlbumId(cursor.getString(mAlbumIdIdx));
+		            		data.setTrackArtistId(cursor.getString(mArtistIdIdx));
+		        			data.setTrackAlbumArt(mActivity.getAlbumAdp().getAlbumArtFromId(Integer.parseInt(data.getTrackAlbumId())));
+		          		// Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
+		            	    allItems.add(data);
+		        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
+		        				cursor.moveToNext() );
+	        		}
             	}
                 return 0;
             }
@@ -499,8 +502,6 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
     // @Override
     public void updateList() {
     	Log.d("trackadp - update list","");
-    	ArrayList<TrackData> items = allItems;
-    	clear();
     	
     	// 検索条件のリセット
     	playlist = null;
@@ -513,22 +514,28 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
     	setArtistId( OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID() );
 				
     	currentAllAudioIds.clear();
-		// Log.d("id", "itemCount:" + allItems.size() + " albumID:" + albumId );
-		for (TrackData data : items) {
-    		// ここでフィルタをかけてしまう？
-    		if( false == isShowData( data ) )
-    		{
-    			continue;
-    		}
-    	    add(data);
-    	    currentAllAudioIds.add(data.getTrackAudioId());
-        	// Log.d("updateData - add","data" + data.getTrackId() + " name:" + data.getTrackTitle() + " albumId:" + data.getTrackAlbumId() );    	    
-    		if( maxShowCount < this.getCount() )
-    		{
-    			// maxの表示件数以上は、表示しない
-    			// TODO:ページきりかえ未対応なので、最初の80件しか表示できていない
-    			break;
-    		}
+    	ArrayList<TrackData> items = allItems;
+    	clear();
+    	
+    	synchronized( allItems )
+    	{
+			// Log.d("id", "itemCount:" + allItems.size() + " albumID:" + albumId );
+			for (TrackData data : items) {
+	    		// ここでフィルタをかけてしまう？
+	    		if( false == isShowData( data ) )
+	    		{
+	    			continue;
+	    		}
+	    	    add(data);
+	    	    currentAllAudioIds.add(data.getTrackAudioId());
+	        	// Log.d("updateData - add","data" + data.getTrackId() + " name:" + data.getTrackTitle() + " albumId:" + data.getTrackAlbumId() );    	    
+	    		if( maxShowCount < this.getCount() )
+	    		{
+	    			// maxの表示件数以上は、表示しない
+	    			// TODO:ページきりかえ未対応なので、最初の80件しか表示できていない
+	    			break;
+	    		}
+	    	}
     	}
     	notifyDataSetChanged();
     }
