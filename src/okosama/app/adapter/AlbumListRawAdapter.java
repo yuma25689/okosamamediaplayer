@@ -31,7 +31,7 @@ import android.widget.TextView;
  * @author 25689
  *
  */
-public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> {
+public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> implements IAdapterUpdate {
     
 	SparseArray<String> mapIdAndArt = new SparseArray<String>();
 	public String getAlbumArtFromId(int id)
@@ -85,7 +85,7 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> {
         // アクティビティの設定
         // クエリハンドラの作成
         mActivity = currentactivity;
-        mQueryHandler = new QueryHandler(mActivity.getContentResolver(), mActivity);
+        mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
 
         // albumとartistを表す文字列
         mUnknownAlbum = mActivity.getString(R.string.unknown_album_name);
@@ -234,7 +234,7 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> {
 //            cursor.close();
 //            cursor = null;
 //        }
-        Database.getInstance(mActivity).setCursor( Database.AlbumCursorName, cursor );
+        // Database.getInstance(mActivity).setCursor( Database.AlbumCursorName, cursor );
  
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
@@ -244,10 +244,13 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> {
             		
             	// カーソルをループする
             	Cursor cursor = params[0];
-            	
-            	synchronized( cursor )
-            	{
-	        		if( 0 != getColumnIndices(cursor) )
+        		if( cursor == null || cursor.isClosed() )
+        		{
+        			Log.w("AlbumListAdp - doInBk", "cursor closed!");
+        			return -1;
+        		}
+        		try {
+            		if( 0 != getColumnIndices(cursor) )
 	        		{
 	        			return -1;
 	        		}
@@ -264,6 +267,8 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> {
 	        			items.add(data);
 	        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false 
 	        			&& cursor.moveToNext() );
+            	} finally {
+            		cursor.close();
             	}
                 return 0;
             }

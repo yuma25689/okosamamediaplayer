@@ -9,7 +9,7 @@ import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.AlbumListRawAdapter;
 //import okosama.app.adapter.ArtistAlbumListAdapter;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
-import okosama.app.adapter.PlaylistListAdapter;
+import okosama.app.adapter.PlaylistListRawAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.factory.DroidWidgetKit;
 import android.app.Activity;
@@ -70,39 +70,6 @@ implements ServiceConnection {
     {
     	return paused;
     }
-//	// 時間パネル
-//	static TimeControlPanel timeCP = null;
-//	private void createTimeCP()
-//	{
-//		if( timeCP == null )
-//		{
-//			timeCP = new TimeControlPanel(this);
-//		}
-//	}
-//	public TimeControlPanel getTimeCP()
-//	{
-//		return timeCP;
-//	}
-//	// Playパネル
-//	static PlayControlPanel playCP = null;
-//	public PlayControlPanel getPlayCP()
-//	{
-//		if( playCP == null )
-//		{
-//			playCP = new PlayControlPanel(this);
-//		}
-//		return playCP;
-//	}	
-//	// Playパネル
-//	static SubControlPanel subCP = null;
-//	public SubControlPanel getSubCP()
-//	{
-//		if( subCP == null )
-//		{
-//			subCP = new SubControlPanel(this);
-//		}
-//		return subCP;
-//	}
 	public void updatePlayStateButtonImage()
 	{
 		if( PlayControlPanel.getInstance() != null ) 
@@ -166,7 +133,7 @@ implements ServiceConnection {
     // private ArtistAlbumListAdapter artistAdp;
 	private ArtistAlbumListRawAdapter artistAdp;
     // private ExpandableListView artistList;
-    private PlaylistListAdapter playlistAdp;
+    private PlaylistListRawAdapter playlistAdp;
     //private ListView songList;
     private TrackListRawAdapter tracklistAdp;
     //private ListView playlistList;
@@ -187,11 +154,11 @@ implements ServiceConnection {
 		this.artistAdp = artistAdp;
 	}
 
-	public PlaylistListAdapter getPlaylistAdp() {
+	public PlaylistListRawAdapter getPlaylistAdp() {
 		return playlistAdp;
 	}
 
-	public void setPlaylistAdp(PlaylistListAdapter playlistAdp) {
+	public void setPlaylistAdp(PlaylistListRawAdapter playlistAdp) {
 		this.playlistAdp = playlistAdp;
 	}
 
@@ -208,14 +175,13 @@ implements ServiceConnection {
      */
     @Override
     public Object onRetainNonConfigurationInstance() {
-    	// TODO: できたらadapterを返却
+    	// TODO: ■■■■■■■■■■■　できたらadapterまたはadapterに格納しているデータを返却 ■■■■■■■■■■■■■
         return null;// adapters;
     }
     // TrackAdapter用？
     // editmodeかどうか。
     // preference保存対象
     private boolean editMode = false;
-    
 	public boolean isEditMode() {
 		return editMode;
 	}
@@ -686,42 +652,44 @@ implements ServiceConnection {
         
         // カーソルクローズ
         // Album
-        Cursor cTmp = Database.getInstance(this).getCursor( Database.AlbumCursorName );
-        if( cTmp != null && cTmp.isClosed() == false )
-        {
-            synchronized( cTmp ) {
-	        	cTmp.close();
-	        	Database.getInstance(this).setCursor(Database.AlbumCursorName, null);
-	        }
-        }
-        // Artist
-        cTmp = Database.getInstance(this).getCursor( Database.ArtistCursorName );
-        if( cTmp != null && cTmp.isClosed() == false )
-        {
-            synchronized( cTmp ) {
-	        	cTmp.close();
-	        	Database.getInstance(this).setCursor(Database.ArtistCursorName, null);
-	        }
-        }
-        // Song
-        cTmp = Database.getInstance(this).getCursor( Database.SongCursorName );
-
-        if( cTmp != null && cTmp.isClosed() == false )
-        {
-            synchronized( cTmp ) {
-	        	cTmp.close();
-	        	Database.getInstance(this).setCursor(Database.SongCursorName, null);
-	        }
-        }
-        // Playlist
-        cTmp = Database.getInstance(this).getCursor( Database.PlaylistCursorName );
-        if( cTmp != null && cTmp.isClosed() == false )
-        {
-            synchronized( cTmp ) {	        	
-	        	cTmp.close();
-	        	Database.getInstance(this).setCursor(Database.PlaylistCursorName, null);
-            }
-        }
+        // 2013/11/03 del ->
+//        Cursor cTmp = Database.getInstance(this).getCursor( Database.AlbumCursorName );
+//        if( cTmp != null && cTmp.isClosed() == false )
+//        {
+//            synchronized( cTmp ) {
+//	        	cTmp.close();
+//	        	Database.getInstance(this).setCursor(Database.AlbumCursorName, null);
+//	        }
+//        }
+//        // Artist
+//        cTmp = Database.getInstance(this).getCursor( Database.ArtistCursorName );
+//        if( cTmp != null && cTmp.isClosed() == false )
+//        {
+//            synchronized( cTmp ) {
+//	        	cTmp.close();
+//	        	Database.getInstance(this).setCursor(Database.ArtistCursorName, null);
+//	        }
+//        }
+//        // Song
+//        cTmp = Database.getInstance(this).getCursor( Database.SongCursorName );
+//
+//        if( cTmp != null && cTmp.isClosed() == false )
+//        {
+//            synchronized( cTmp ) {
+//	        	cTmp.close();
+//	        	Database.getInstance(this).setCursor(Database.SongCursorName, null);
+//	        }
+//        }
+//        // Playlist
+//        cTmp = Database.getInstance(this).getCursor( Database.PlaylistCursorName );
+//        if( cTmp != null && cTmp.isClosed() == false )
+//        {
+//            synchronized( cTmp ) {	        	
+//	        	cTmp.close();
+//	        	Database.getInstance(this).setCursor(Database.PlaylistCursorName, null);
+//            }
+//        }
+        // 2013/11/03 del <-
 
 		// bTabInitEnd = false;
 		// System.gc();
@@ -859,42 +827,45 @@ implements ServiceConnection {
 	/**
 	 * adapterの準備が終わったときに、adapterからコールバックする感じの関数
 	 */
-	public void initAdapter(int id,Cursor cursor)
-	{
-		initAdapter(id,cursor,false);
-	}
-	public void initAdapter(int id,Cursor cursor, boolean isLimited)
-	{
-		if( cursor == null )
-		{
-			Log.w("Warning","cursor is null");
-			// nullのままでcursor設定されても特に問題はない
-			// return;
-		}
-		
-		switch( id )
-		{
-		// TODO:nullの場合、表示するビューを変更した方がいいかもしれない
-		case TabPage.TABPAGE_ID_ALBUM:
-			// Listにカーソルを設定
-			getAlbumAdp().insertAllDataFromCursor(cursor);//changeCursor(cursor);
-			break;
-		case TabPage.TABPAGE_ID_ARTIST:
-			// Listにカーソルを設定
-			getArtistAdp().insertAllDataFromCursor(cursor);
-			break;
-		case TabPage.TABPAGE_ID_SONG:
-			// Listにカーソルを設定
-			getTrackAdp().insertAllDataFromCursor(cursor);
-			break;
-		case TabPage.TABPAGE_ID_PLAYLIST:
-			Cursor c = null;
-			c = Database.getInstance(isExternalRef()).mergedCursor(cursor, false);//createShortCut);
-			// Listにカーソルを設定
-			getPlaylistAdp().changeCursor(c);
-			break;
-		}
-	}
+//	public void initAdapter(int id,Cursor cursor)
+//	{
+//		initAdapter(id,cursor,false);
+//	}
+	// 2013/11/03 del ->
+//	public void initAdapter(int id,Cursor cursor, boolean isLimited)
+//	{
+//		if( cursor == null )
+//		{
+//			Log.w("Warning","cursor is null");
+//			// nullのままでcursor設定されても特に問題はない
+//			// return;
+//		}
+//		
+//		switch( id )
+//		{
+//		// TODO:nullの場合、表示するビューを変更した方がいいかもしれない
+//		case TabPage.TABPAGE_ID_ALBUM:
+//			// Listにカーソルを設定
+//			getAlbumAdp().insertAllDataFromCursor(cursor);//changeCursor(cursor);
+//			break;
+//		case TabPage.TABPAGE_ID_ARTIST:
+//			// Listにカーソルを設定
+//			getArtistAdp().insertAllDataFromCursor(cursor);
+//			break;
+//		case TabPage.TABPAGE_ID_SONG:
+//			// Listにカーソルを設定
+//			getTrackAdp().insertAllDataFromCursor(cursor);
+//			break;
+//		case TabPage.TABPAGE_ID_PLAYLIST:
+//			Cursor c = null;
+//			c = Database.getInstance(isExternalRef()).mergedCursor(cursor, false);//createShortCut);
+//			// Listにカーソルを設定
+//			getPlaylistAdp().changeCursor(c);
+//			break;
+//		}
+//	}
+	// 2013/11/03 del <-
+
 	
 	/**
 	 * 強制リスキャン
@@ -1009,7 +980,7 @@ implements ServiceConnection {
 	    		page2.startUpdate();
 	    	}			
 			if( bForce == false 
-			&& null != Database.getInstance(this).getCursor( Database.SongCursorName )) {
+			&& 0 < getTrackAdp().getCount() ) {
 				// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンはしない
 				getTrackAdp().updateList();
 			}

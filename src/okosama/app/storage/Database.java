@@ -74,11 +74,14 @@ public class Database {
 	static OkosamaMediaPlayerActivity ctx = null;
 	
 	// Cursors保存用
-	public static final String AlbumCursorName ="AlbumCursor";
-	public static final String ArtistCursorName ="ArtistCursor";
-	public static final String SongCursorName ="SongCursor";
-	public static final String PlaylistCursorName ="PlaylistCursor";
-	HashMap<String,Cursor> CursorMap = new HashMap<String,Cursor>();
+	// 2013/11/02 del ->
+	// カーソルの保持を削除
+//	public static final String AlbumCursorName ="AlbumCursor";
+//	public static final String ArtistCursorName ="ArtistCursor";
+//	public static final String SongCursorName ="SongCursor";
+//	public static final String PlaylistCursorName ="PlaylistCursor";
+//	HashMap<String,Cursor> CursorMap = new HashMap<String,Cursor>();
+	// 2013/11/02 del <-
 	
 	
 	// playlist定数
@@ -86,54 +89,56 @@ public class Database {
 	public static final String PlaylistName_Podcasts = "podcasts";
 	public static final String PlaylistName_RecentlyAdded = "recentlyadded";
 
-	/**
-	 * 指定された名前のカーソルを返却する
-	 * @param cursorName
-	 * @return
-	 */
-	public Cursor getCursor(String cursorName)
-	{
-		if( CursorMap.containsKey(cursorName) == false)
-		{
-			return null;
-		}
-		return CursorMap.get(cursorName);
-	}
+	// 2013/11/02 del ->	
+//	/**
+//	 * 指定された名前のカーソルを返却する
+//	 * @param cursorName
+//	 * @return
+//	 */
+//	public Cursor getCursor(String cursorName)
+//	{
+//		if( CursorMap.containsKey(cursorName) == false)
+//		{
+//			return null;
+//		}
+//		return CursorMap.get(cursorName);
+//	}
 	/**
 	 * 指定された名前のカーソルを設定する
 	 * @param cursorName
 	 * @param cursor
 	 */
-	public void setCursor(String cursorName, Cursor cursor )
-	{
-		if( CursorMap.containsKey(cursorName) == true )
-		{
-			if( cursor == CursorMap.get(cursorName) )
-			{
-				return;
-			}
-			if( CursorMap.get(cursorName) != null 
-			&& false == CursorMap.get(cursorName).isClosed() )
-			{
-				CursorMap.get(cursorName).close();
-			}
-		}		
-		CursorMap.put( cursorName, cursor );
-	}
-	/**
-	 * 全てのカーソルをクリアする
-	 */
-	public void clearCursor()
-	{
-		for( Map.Entry<String, Cursor> e : CursorMap.entrySet() )
-		{
-			if( false == e.getValue().isClosed() )
-			{
-				e.getValue().close();
-			}
-		}
-		CursorMap.clear();
-	}
+//	public void setCursor(String cursorName, Cursor cursor )
+//	{
+//		if( CursorMap.containsKey(cursorName) == true )
+//		{
+//			if( cursor == CursorMap.get(cursorName) )
+//			{
+//				return;
+//			}
+//			if( CursorMap.get(cursorName) != null 
+//			&& false == CursorMap.get(cursorName).isClosed() )
+//			{
+//				CursorMap.get(cursorName).close();
+//			}
+//		}		
+//		CursorMap.put( cursorName, cursor );
+//	}
+//	/**
+//	 * 全てのカーソルをクリアする
+//	 */
+//	public void clearCursor()
+//	{
+//		for( Map.Entry<String, Cursor> e : CursorMap.entrySet() )
+//		{
+//			if( false == e.getValue().isClosed() )
+//			{
+//				e.getValue().close();
+//			}
+//		}
+//		CursorMap.clear();
+//	}
+	// 2013/11/02 del <-	
 	
 	/**
 	 * 同期でクエリを発行する

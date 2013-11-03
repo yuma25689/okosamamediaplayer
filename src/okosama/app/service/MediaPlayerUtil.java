@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.storage.Database;
 
@@ -450,27 +451,27 @@ public class MediaPlayerUtil {
         }
         return -1;
     }
-    public static void shuffleAll(Context context, Cursor cursor) {
-        playAll(context, cursor, 0, true);
-    }
-
-    public static void playAll(Context context, Cursor cursor) {
-        playAll(context, cursor, 0, false);
-    }
-    
-    public static void playAll(Context context, Cursor cursor, int position) {
-        playAll(context, cursor, position, false);
-    }
+//    public static void shuffleAll(Context context, Cursor cursor) {
+//        playAll(context, cursor, 0, true);
+//    }
+//
+//    public static void playAll(Context context, Cursor cursor) {
+//        playAll(context, cursor, 0, false);
+//    }
+//    
+//    public static void playAll(Context context, Cursor cursor, int position) {
+//        playAll(context, cursor, position, false);
+//    }
     
     public static void playAll(Context context, long [] list, int position) {
         playAll(context, list, position, false);
     }
     
-    private static void playAll(Context context, Cursor cursor, int position, boolean force_shuffle) {
-    
-        long [] list = Database.getSongListForCursor(cursor);
-        playAll(context, list, position, force_shuffle);
-    }
+//    private static void playAll(Context context, Cursor cursor, int position, boolean force_shuffle) {
+//    
+//        long [] list = Database.getSongListForCursor(cursor);
+//        playAll(context, list, position, force_shuffle);
+//    }
     
     public static void playAll(Context context, long [] list, int position, boolean force_shuffle) {
         if (list.length == 0 || sService == null) {
@@ -525,30 +526,32 @@ public class MediaPlayerUtil {
     // Cursor should be positioned on the entry to be checked
     // Returns false if the entry matches the naming pattern used for recordings,
     // or if it is marked as not music in the database.
-    public static boolean isMusic(Cursor c) {
-        int titleidx = c.getColumnIndex(MediaColumns.TITLE);
-        int albumidx = c.getColumnIndex(AudioColumns.ALBUM);
-        int artistidx = c.getColumnIndex(AudioColumns.ARTIST);
-
-        String title = c.getString(titleidx);
-        String album = c.getString(albumidx);
-        String artist = c.getString(artistidx);
-        if (MediaStore.UNKNOWN_STRING.equals(album) &&
-                MediaStore.UNKNOWN_STRING.equals(artist) &&
-                title != null &&
-                title.startsWith("recording")) {
-            // not music
-            return false;
-        }
-
-        int ismusic_idx = c.getColumnIndex(AudioColumns.IS_MUSIC);
-        boolean ismusic = true;
-        if (ismusic_idx >= 0) {
-        	Cursor trackCursor = Database.getInstance(false).getCursor(Database.SongCursorName);
-            ismusic = trackCursor.getInt(ismusic_idx) != 0;
-        }
-        return ismusic;
-    }
+//    public static boolean isMusic(Cursor c) {
+//        int titleidx = c.getColumnIndex(MediaColumns.TITLE);
+//        int albumidx = c.getColumnIndex(AudioColumns.ALBUM);
+//        int artistidx = c.getColumnIndex(AudioColumns.ARTIST);
+//
+//        String title = c.getString(titleidx);
+//        String album = c.getString(albumidx);
+//        String artist = c.getString(artistidx);
+//        if (MediaStore.UNKNOWN_STRING.equals(album) &&
+//                MediaStore.UNKNOWN_STRING.equals(artist) &&
+//                title != null &&
+//                title.startsWith("recording")) {
+//            // not music
+//            return false;
+//        }
+//
+//        int ismusic_idx = c.getColumnIndex(AudioColumns.IS_MUSIC);
+//        boolean ismusic = true;
+//        if (ismusic_idx >= 0) {
+//        	// TODO: ébíËî≈ Ç∆Ç¢Ç§Ç©ÅAëSÇ≠å©ÇƒÇ¢Ç»Ç¢
+//        	// Cursor trackCursor = Database.getInstance(false).getCursor(Database.SongCursorName);
+//        	// OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().getItem(position)
+//            ismusic = c.getInt(ismusic_idx) != 0;
+//        }
+//        return ismusic;
+//    }
     public static void clearQueue() {
         try {
             sService.removeTracks(0, Integer.MAX_VALUE);

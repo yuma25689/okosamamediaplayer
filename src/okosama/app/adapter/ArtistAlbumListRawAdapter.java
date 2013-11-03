@@ -31,7 +31,7 @@ import android.widget.TextView;
  * @author 25689
  *
  */
-public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<ArtistGroupData,ArtistChildData> {
+public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter implements IAdapterUpdate {//<ArtistGroupData,ArtistChildData> {
 	
 	boolean bDataUpdating = false;
 	private LayoutInflater inflater;
@@ -97,7 +97,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
         this.inflater 
         = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        mQueryHandler = new QueryHandler(mActivity.getContentResolver(), mActivity);
+        mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
 
         // this.rowId = rowId;
         this.groupData = groupData;
@@ -336,10 +336,10 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
      * 子ビューのカーソルを取得？
      */
     // @Override
-    protected Cursor getChildrenCursor(Cursor groupCursor) {
+    protected Cursor getChildrenCursor(long groupId, String artistId ) { //Cursor groupCursor) {
         
     	// グループカーソルから、そのアーティストのidを取得する
-        long id = groupCursor.getLong(groupCursor.getColumnIndexOrThrow(BaseColumns._ID));
+        // long id = groupCursor.getLong(groupCursor.getColumnIndexOrThrow(BaseColumns._ID));
         
         // カラム名の設定
         String[] cols = new String[] {
@@ -359,7 +359,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
         }        
         // クエリ発行
         Cursor c = Database.query(mActivity,
-                MediaStore.Audio.Artists.Albums.getContentUri(external_string, id),
+                MediaStore.Audio.Artists.Albums.getContentUri(external_string, groupId),
                 cols, null, null, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
         
         // カーソルのラッバ？
@@ -433,7 +433,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
         // おそらく、アーティストはどのレコードでも同じで良いので、この作りで良い
         if( c != null )
         {
-        	return new MyCursorWrapper(c, groupCursor.getString(mGroupArtistIdx));
+        	return new MyCursorWrapper(c, artistId );//groupCursor.getString(mGroupArtistIdx));
         }
         return null;
     }
@@ -549,7 +549,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
 //            cursor.close();
 //            cursor = null;
 //        }
-        Database.getInstance(mActivity).setCursor( Database.ArtistCursorName, cursor );
+        // Database.getInstance(mActivity).setCursor( Database.ArtistCursorName, cursor );
             	
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
@@ -558,8 +558,13 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
             	
             	// カーソルをループする
             	Cursor cursor = params[0];
-            	synchronized(cursor)
-            	{
+        		if( cursor == null || cursor.isClosed() )
+        		{
+        			Log.w("ArtistAlbumListAdp - doInBk", "cursor closed!");
+        			return -1;
+        		}
+        		try 
+        		{
 	                groupDataTmp.clear();
 	                childDataTmp.clear();
 	            	
@@ -582,7 +587,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
 	                    data.setArtistId( cursor.getString(mGroupArtistIdIdx));
 	            		groupDataTmp.put( i, data );
 	
-	            		Cursor childCursor = getChildrenCursor(cursor);
+	            		Cursor childCursor = getChildrenCursor(cursor.getLong(mGroupArtistIdIdx),data.getArtistId());
 	            		if( childCursor == null )
 	            		{
 	            			Log.e("doInBackGround - ArtistAlbumListAdapter", "child cursor取得エラー");
@@ -628,7 +633,10 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter {//<Art
 	            		i++;
 	        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
 	        				cursor.moveToNext() );
+            	} finally {
+            		cursor.close();
             	}
+            	
                 return 0;
             }
 

@@ -1,6 +1,7 @@
 package okosama.app.storage;
 
 import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.adapter.IAdapterUpdate;
 import okosama.app.tab.TabPage;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
@@ -14,6 +15,8 @@ import android.net.Uri;
  */
 public class TrackQueryHandler extends AsyncQueryHandler {
 
+	IAdapterUpdate adapter;
+	
 	// 引数
     class QueryArgs {
         public Uri uri;
@@ -23,8 +26,9 @@ public class TrackQueryHandler extends AsyncQueryHandler {
         public String orderBy;
     }
 
-    public TrackQueryHandler(ContentResolver res) {
+    public TrackQueryHandler(ContentResolver res, IAdapterUpdate adapter ) {
         super(res);
+        this.adapter = adapter;
         // ctx = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
     }
     
@@ -69,8 +73,11 @@ public class TrackQueryHandler extends AsyncQueryHandler {
     @Override
     protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
         //Log.i("@@@", "query complete: " + cursor.getCount() + "   " + mActivity);
-        OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().initAdapter(TabPage.TABPAGE_ID_SONG, cursor, cookie != null);
-        if (token == TabPage.TABPAGE_ID_SONG && cookie != null && cursor != null && cursor.getCount() >= 100) {
+//        OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().initAdapter(
+//        		TabPage.TABPAGE_ID_SONG, cursor, cookie != null);
+    	adapter.insertAllDataFromCursor(cursor);
+        if (token == TabPage.TABPAGE_ID_SONG && cookie != null 
+        		&& cursor != null && cursor.getCount() >= 100) {
         	// 件数が100件以上の時？だろうか？
         	// tokenを100にして再発行か？
             QueryArgs args = (QueryArgs) cookie;

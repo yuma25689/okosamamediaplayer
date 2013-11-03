@@ -31,7 +31,7 @@ import android.widget.TextView;
  * @author 25689
  *
  */
-public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> {
+public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implements IAdapterUpdate {
     private static final long RECENTLY_ADDED_PLAYLIST = -1;
     //private static final long ALL_SONGS_PLAYLIST = -2;
     //private static final long PODCASTS_PLAYLIST = -3;
@@ -76,8 +76,13 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> {
      *
      */
     class QueryHandler extends AsyncQueryHandler {
-        QueryHandler(ContentResolver res) {
+    	
+    	IAdapterUpdate adapter;
+    	
+        QueryHandler(ContentResolver res, IAdapterUpdate adapter) {
+        	// TODO: もう一個にまとめる
             super(res);
+            this.adapter = adapter; 
         }
         
         @Override
@@ -87,7 +92,8 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> {
                 cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).mergedCursor(
                 		cursor, createShortcut);
             }
-            mActivity.initAdapter(token,cursor);
+            // mActivity.initAdapter(token,cursor);
+            insertAllDataFromCursor(cursor);
         }
     }
    
@@ -115,7 +121,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> {
         // mList = list;
         mActivity = currentactivity;
         //mQueryHandler = new QueryHandler(mActivity.getContentResolver(), mActivity);
-        mQueryHandler = new QueryHandler(mActivity.getContentResolver());
+        mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
 
         
         // albumとartistを表す文字列
@@ -229,7 +235,8 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> {
     	clear();
     	for (PlaylistData data : items) {
     	    add(data);
-        	Log.i("updateData - add","id" + data.getPlaylistId() + " name:" + data.getPlaylistName() );    	    
+        	Log.i("updateData - add","id" + data.getPlaylistId() 
+        			+ " name:" + data.getPlaylistName() );    	    
     	}
     	notifyDataSetChanged();
     }
@@ -248,7 +255,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> {
 //            cursor.close();
 //            cursor = null;
 //        }
-        Database.getInstance(mActivity).setCursor( Database.AlbumCursorName, cursor );
+        //Database.getInstance(mActivity).setCursor( Database.AlbumCursorName, cursor );
             	
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
@@ -258,21 +265,31 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> {
             	
             	// カーソルをループする
             	Cursor cursor = params[0];
-            	
-        		if( 0 != getColumnIndices(cursor) )
+
+        		if( cursor == null || cursor.isClosed() )
         		{
+        			Log.w("TrackListAdp - doInBk", "cursor closed!");
         			return -1;
         		}
-            	Log.i("doInBackground","moveToFirst");
-        		cursor.moveToFirst();
-        		do 
-        		{
-            		PlaylistData data = new PlaylistData();
-        			// 全ての要素をループする
-            		data.setPlaylistId(cursor.getLong(mIdIdx));
-        			data.setPlaylistName(cursor.getString(mTitleIdx));
-        			items.add(data);
-        		} while( cursor.moveToNext() );
+        		try {
+
+	        		if( 0 != getColumnIndices(cursor) )
+	        		{
+	        			return -1;
+	        		}
+	            	Log.i("doInBackground","moveToFirst");
+	        		cursor.moveToFirst();
+	        		do 
+	        		{
+	            		PlaylistData data = new PlaylistData();
+	        			// 全ての要素をループする
+	            		data.setPlaylistId(cursor.getLong(mIdIdx));
+	        			data.setPlaylistName(cursor.getString(mTitleIdx));
+	        			items.add(data);
+	        		} while( cursor.moveToNext() );
+        		} finally {
+        			cursor.close();
+        		}
                 return 0;
             }
 

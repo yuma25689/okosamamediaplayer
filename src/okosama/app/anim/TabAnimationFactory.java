@@ -18,8 +18,15 @@ public class TabAnimationFactory {
 	    float rate = ((float)mag.getAzimuth()) / 360f;
 	    float fromY = rate * 100;
 	    Log.d("animin","azimuthY=" + fromY );
+	    int iRate = (int)fromY;
+	    boolean direction = (iRate % 2 == 0);
+	    int iFromX = -100;
+	    if( direction )
+	    {
+	    	iFromX = 100;
+	    }
 	    //float fromY = (float) mag.getAzimuth();
-		TranslateAnimation translate1 = new TranslateAnimation(-100, 0, fromY, 0);
+		TranslateAnimation translate1 = new TranslateAnimation(iFromX, 0, fromY, 0);
 		translate1.setDuration(100);
 //		TranslateAnimation translate2 = new TranslateAnimation(-50, 0, -50, 0);
 //		translate2.setDuration(50);
@@ -39,10 +46,17 @@ public class TabAnimationFactory {
 	    float toY = -1 * rate * 100;
 	    // float toY = (float) mag.getPitch();
 	    Log.d("animin","pitchY=" + toY );
+	    int iRate = (int)toY;
+	    boolean direction = (iRate % 2 == 0);
+	    int iToX = 100;
+	    if( direction )
+	    {
+	    	iToX = -100;
+	    }
 		
 	    AnimationSet set = new AnimationSet(true);
 	    
-		TranslateAnimation translate1 = new TranslateAnimation(0, 100, 0, toY);
+		TranslateAnimation translate1 = new TranslateAnimation(0, iToX, 0, toY);
 		translate1.setDuration(100);
 		set.addAnimation(translate1); 
 		

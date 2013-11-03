@@ -4,6 +4,7 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
+import okosama.app.storage.TrackData;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -75,37 +76,39 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 		menu.add(0, DELETE_ITEM, 0, R.string.delete_item);
 		AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfoIn;
 		mSelectedPosition =  mi.position;
-		Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).getCursor(Database.SongCursorName);
-		cursor.moveToPosition(mSelectedPosition);
-		try {
-		    int id_idx = cursor.getColumnIndexOrThrow(
-		            MediaStore.Audio.Playlists.Members.AUDIO_ID);
-		    mSelectedId = cursor.getLong(id_idx);
-		} catch (IllegalArgumentException ex) {
-		    mSelectedId = mi.id;
-		}
+		// Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).getCursor(Database.SongCursorName);
+		// cursor.moveToPosition(mSelectedPosition);
+		TrackData data = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().getItem(mSelectedPosition);
+		//try {
+		    //int id_idx = cursor.getColumnIndexOrThrow(
+		    //        MediaStore.Audio.Playlists.Members.AUDIO_ID);
+		    mSelectedId = data.getTrackAudioId();//cursor.getLong(id_idx);
+//		} catch (IllegalArgumentException ex) {
+//		    mSelectedId = mi.id;
+//		}
 		// only add the 'search' menu if the selected item is music
-		if (MediaPlayerUtil.isMusic(cursor)) {
+		if (data.isMusic()) {// MediaPlayerUtil.isMusic(cursor)) {
 		    menu.add(0, SEARCH, 0, R.string.search_title);
 		}
 //		mCurrentAlbumName = cursor.getString(cursor.getColumnIndexOrThrow(
 //		        MediaStore.Audio.Media.ALBUM));
 //		mCurrentArtistNameForAlbum = cursor.getString(cursor.getColumnIndexOrThrow(
 //		        MediaStore.Audio.Media.ARTIST));
-		mCurrentTrackName = cursor.getString(cursor.getColumnIndexOrThrow(
-		        MediaColumns.TITLE));
+		mCurrentTrackName = data.getTrackTitle(); //cursor.getString(cursor.getColumnIndexOrThrow(
+		        //MediaColumns.TITLE));
 		menu.setHeaderTitle(mCurrentTrackName);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-		Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).getCursor(Database.SongCursorName);
+		// Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).getCursor(Database.SongCursorName);
+		long[] lngAudioIds = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().getCurrentAllAudioIds();
 		switch (item.getItemId()) {
 		case PLAY_SELECTION: {
 			// play the track
 			int position = mSelectedPosition;
-			MediaPlayerUtil.playAll(activity, cursor, position);
+			MediaPlayerUtil.playAll(activity, lngAudioIds, position);
 			return true;
 		}
 	

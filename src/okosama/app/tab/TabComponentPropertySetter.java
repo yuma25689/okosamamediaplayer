@@ -6,11 +6,13 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
-import okosama.app.adapter.PlaylistListAdapter;
+// import okosama.app.adapter.PlaylistListAdapter;
+import okosama.app.adapter.PlaylistListRawAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.storage.AlbumData;
 import okosama.app.storage.ArtistChildData;
 import okosama.app.storage.ArtistGroupData;
+import okosama.app.storage.PlaylistData;
 import okosama.app.storage.TrackData;
 import okosama.app.widget.absWidget;
 import android.graphics.Bitmap;
@@ -363,14 +365,16 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			// Adapter�̍쐬
 			if( activity.getPlaylistAdp() == null )
 			{
+				ArrayList<PlaylistData> data = new ArrayList<PlaylistData>();
 				activity.setPlaylistAdp(
-					new PlaylistListAdapter(
-						activity.getApplication(),
+					new PlaylistListRawAdapter(
+						// activity.getApplication(),
 						activity,
 						R.layout.track_list_item,
-						null,//Cursor cursor,
-						new String[] { PlaylistsColumns.NAME},
-	                    new int[] { android.R.id.text1 }
+						data
+						//null,//Cursor cursor,
+						//new String[] { PlaylistsColumns.NAME},
+	                    //new int[] { android.R.id.text1 }
 					)
 				);
 			}

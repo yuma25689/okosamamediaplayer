@@ -42,7 +42,7 @@ import android.widget.TextView;
  * @author 25689
  *
  */
-public class TrackListRawAdapter extends ArrayAdapter<TrackData> { 
+public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAdapterUpdate { 
 //implements SectionIndexer {
 
 	private ArrayList<TrackData> allItems = new ArrayList<TrackData>();
@@ -152,7 +152,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
         // 色の少ない(8bit/色以下)デバイスに表示するときに、ディザをかけるかどうかを指定する。trueでディザする。遅い。
         mDefaultAlbumIcon.setDither(false);
         
-        mQueryHandler = new QueryHandler(currentactivity.getContentResolver(), currentactivity );
+        mQueryHandler = new QueryHandler(currentactivity.getContentResolver(), this );
     }
     
 //    public void setActivity(OkosamaMediaPlayerActivity newactivity) {
@@ -351,7 +351,8 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
 //            cursor.close();
 //            cursor = null;
 //        }
-        Database.getInstance(mActivity).setCursor( Database.SongCursorName, cursor );
+        //Database.getInstance(mActivity).setCursor( Database.SongCursorName, cursor );
+    	
             	
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
@@ -366,8 +367,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
         			Log.w("TrackListAdp - doInBk", "cursor closed!");
         			return -1;
         		}
-            	synchronized(cursor)
-            	{
+        		try {
 	        		if( 0 > getColumnIndices(cursor) )
 	        		{
 	        			return -1;
@@ -395,7 +395,9 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> {
 		        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
 		        				cursor.moveToNext() );
 	        		}
-            	}
+        		} finally {
+        			cursor.close();
+        		}
                 return 0;
             }
 

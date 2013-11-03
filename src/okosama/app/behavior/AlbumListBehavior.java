@@ -6,6 +6,8 @@ import okosama.app.R;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.service.MediaPlayerUtil;
+import okosama.app.storage.AlbumData;
+import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
 import android.database.Cursor;
@@ -64,12 +66,15 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 //        menu.add(0, DELETE_ITEM, 0, R.string.delete_item);
 
         AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfoIn;
-        Cursor albumCursor = Database.getInstance(activity).getCursor(Database.AlbumCursorName);
-        albumCursor.moveToPosition(mi.position);
-        mCurrentAlbumId = albumCursor.getString(albumCursor.getColumnIndexOrThrow(BaseColumns._ID));
-        mCurrentAlbumName = albumCursor.getString(albumCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM));
-        mCurrentArtistNameForAlbum = albumCursor.getString(
-        		albumCursor.getColumnIndexOrThrow(AlbumColumns.ARTIST));
+        // Cursor albumCursor = Database.getInstance(activity).getCursor(Database.AlbumCursorName);
+        AlbumData data 
+        = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getAlbumAdp().getItem(mi.position);
+
+        // albumCursor.moveToPosition(mi.position);
+        mCurrentAlbumId = String.valueOf(data.getAlbumId());//albumCursor.getString(albumCursor.getColumnIndexOrThrow(BaseColumns._ID));
+        mCurrentAlbumName = data.getAlbumName();//albumCursor.getString(albumCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM));
+        mCurrentArtistNameForAlbum = data.getAlbumName();// albumCursor.getString(
+        		//albumCursor.getColumnIndexOrThrow(AlbumColumns.ARTIST));
         mIsUnknownArtist = mCurrentArtistNameForAlbum == null ||
                 mCurrentArtistNameForAlbum.equals(MediaStore.UNKNOWN_STRING);
         mIsUnknownAlbum = mCurrentAlbumName == null ||

@@ -1,13 +1,9 @@
 package okosama.app.behavior;
 
 import android.content.Intent;
-import android.database.Cursor;
 //import android.net.Uri;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Audio.AlbumColumns;
-import android.provider.MediaStore.Audio.ArtistColumns;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -25,6 +21,7 @@ import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.ArtistChildData;
+import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
 
@@ -79,12 +76,12 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		// TODO: ここにExpandableListViewが入っているかどうかは微妙。要確認。
 		ExpandableListView v = (ExpandableListView) view;
-        Cursor artistCursor = Database.getInstance(activity).getCursor(Database.ArtistCursorName);
-        if( artistCursor == null )
-        {
-        	Log.w("onCreateContextMenu - Artist","cursor is null");
-        	return;
-        }
+//        Cursor artistCursor = Database.getInstance(activity).getCursor(Database.ArtistCursorName);
+//        if( artistCursor == null )
+//        {
+//        	Log.w("onCreateContextMenu - Artist","cursor is null");
+//        	return;
+//        }
 		// ArtistAlbumListAdapter adapter = activity.getArtistAdp();
         ArtistAlbumListRawAdapter adapter = activity.getArtistAdp();
 		if( adapter == null )
@@ -116,9 +113,14 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
             }
             
             gpos = gpos - v.getHeaderViewsCount();
-            artistCursor.moveToPosition(gpos);
-            mCurrentArtistId = artistCursor.getString(artistCursor.getColumnIndexOrThrow(BaseColumns._ID));
-            mCurrentArtistName = artistCursor.getString(artistCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST));
+            // artistCursor.moveToPosition(gpos);
+            ArtistGroupData data 
+            = (ArtistGroupData)adapter.getGroup(gpos);
+    		
+            mCurrentArtistId = data.getArtistId();
+            //artistCursor.getString(artistCursor.getColumnIndexOrThrow(BaseColumns._ID));
+            mCurrentArtistName = data.getArtistName(); 
+            		//artistCursor.getString(artistCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST));
             mCurrentAlbumId = null;
             mIsUnknownArtist = mCurrentArtistName == null ||
                     mCurrentArtistName.equals(MediaStore.UNKNOWN_STRING);
@@ -142,9 +144,10 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
             mCurrentAlbumId = Long.valueOf(mi.id).toString();
             mCurrentAlbumName = data.getAlbumName(); //c.getString(c.getColumnIndexOrThrow(AlbumColumns.ALBUM));
             gpos = gpos - v.getHeaderViewsCount();
-            artistCursor.moveToPosition(gpos);
-            mCurrentArtistNameForAlbum = artistCursor.getString(
-            		artistCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST));
+            
+            // artistCursor.moveToPosition(gpos);
+            mCurrentArtistNameForAlbum = data.getArtistName();//artistCursor.getString(
+            		// artistCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST));
             mIsUnknownArtist = mCurrentArtistNameForAlbum == null ||
                     mCurrentArtistNameForAlbum.equals(MediaStore.UNKNOWN_STRING);
             mIsUnknownAlbum = mCurrentAlbumName == null ||
