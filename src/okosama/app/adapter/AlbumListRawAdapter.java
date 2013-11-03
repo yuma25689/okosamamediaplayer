@@ -6,9 +6,9 @@ import okosama.app.R;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.AlbumData;
 import okosama.app.storage.Database;
-import okosama.app.storage.QueryHandler;
+// import okosama.app.storage.QueryHandler;
 import okosama.app.tab.TabPage;
-import android.content.AsyncQueryHandler;
+// import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -48,13 +48,13 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> implements IAda
 	private int iLayoutId;
 	private ArrayList<AlbumData> items = new ArrayList<AlbumData>();
     private final Drawable mNowPlayingOverlay;
-    private final Drawable mNowListOverlay;
+    // private final Drawable mNowListOverlay;
     private final BitmapDrawable mDefaultAlbumIcon;
     private OkosamaMediaPlayerActivity mActivity;
     //private final StringBuilder mStringBuilder = new StringBuilder();
     private final String mUnknownAlbum;
     private final String mUnknownArtist;
-    private AsyncQueryHandler mQueryHandler;
+    // private AsyncQueryHandler mQueryHandler;
     private int mAlbumIdx;
     private int mArtistIdx;
     private int mAlbumArtIndex;
@@ -85,7 +85,7 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> implements IAda
         // アクティビティの設定
         // クエリハンドラの作成
         mActivity = currentactivity;
-        mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
+        // mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
 
         // albumとartistを表す文字列
         mUnknownAlbum = mActivity.getString(R.string.unknown_album_name);
@@ -97,10 +97,10 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> implements IAda
         = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
         		R.drawable.indicator_ic_mp_playing_list);
 
-        mNowListOverlay
-        = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
-        		R.drawable.playlist_selected
-        );
+//        mNowListOverlay
+//        = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
+//        		R.drawable.playlist_selected
+//        );
         
         // アルバムアイコンの作成？
         // TODO: ARGB4444を利用する
@@ -119,9 +119,9 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> implements IAda
      * クエリハンドラの取得
      * @return
      */
-    public AsyncQueryHandler getQueryHandler() {
-        return mQueryHandler;
-    }
+//    public AsyncQueryHandler getQueryHandler() {
+//        return mQueryHandler;
+//    }
 
     /**
      * 新しいビューの作成？
@@ -220,14 +220,13 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> implements IAda
     	notifyDataSetChanged();
     }
     
-    public int insertAllDataFromCursor(Cursor cursor)
+    public int stockMediaDataFromDevice()	//Cursor cursor)
     {
     	if( bDataUpdating == true )
     	{
     		return -1;
     	}
     	bDataUpdating = true;
-    	Log.i("insertAllDataFromCursor","start");
     	
 //    	if (mActivity.isFinishing() && cursor != null ) {
 //        	// アクティビティが終了中で、まだカーソルが残っている場合、カーソルをクローズ
@@ -241,9 +240,13 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> implements IAda
             protected Integer doInBackground(Cursor... params) {
             	Log.i("doInBackground","start");
             	items.clear();
-            		
+            	
+            	Cursor cursor = Database.getInstance(
+            			OkosamaMediaPlayerActivity.isExternalRef()
+            	).createAlbumCursor(null, null);
+	            
             	// カーソルをループする
-            	Cursor cursor = params[0];
+            	// Cursor cursor = params[0];
         		if( cursor == null || cursor.isClosed() )
         		{
         			Log.w("AlbumListAdp - doInBk", "cursor closed!");
@@ -290,11 +293,7 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> implements IAda
             	bDataUpdating = false;            	
             }
         };
-        if( cursor != null && 0 < cursor.getCount() 
-        && cursor.isClosed() == false )
-        {
-        	task.execute(cursor);
-        }
+        task.execute();
         return 0;
     }
     private int getColumnIndices(Cursor cursor) {

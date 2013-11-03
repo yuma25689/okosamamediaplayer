@@ -882,20 +882,24 @@ implements ServiceConnection {
 		{
 		case TabPage.TABPAGE_ID_ALBUM:
 			// Listにカーソルを設定
-            Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );
+            // Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );
+			getAlbumAdp().stockMediaDataFromDevice();
 			break;
 		case TabPage.TABPAGE_ID_ARTIST:			
 			// Listにカーソルを設定
-			Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);			
+			// Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);
+			getArtistAdp().stockMediaDataFromDevice();
 			break;
 		case TabPage.TABPAGE_ID_SONG:
 			
-			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
-			Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);			
+//			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
+//			Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);			
+			getTrackAdp().stockMediaDataFromDevice();
 			break;
 		case TabPage.TABPAGE_ID_PLAYLIST:
 			
-			Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);						
+			// Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);
+			getPlaylistAdp().stockMediaDataFromDevice();
 			break;
 		case TabPage.TABPAGE_ID_NONE:
 			break;
@@ -927,7 +931,8 @@ implements ServiceConnection {
 					break;
 				}
 				// Listにカーソルを設定
-	            Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );
+				getAlbumAdp().stockMediaDataFromDevice();
+	            // Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );
 	            bUpdateOccur = true;
 				break;
 			case TabPage.TABPAGE_ID_ARTIST:			
@@ -938,7 +943,8 @@ implements ServiceConnection {
 				}
 				Log.d("artist","artist rescan" );
 				// Listにカーソルを設定
-				Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);			
+				getArtistAdp().stockMediaDataFromDevice();				
+				// Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);			
 	            bUpdateOccur = true;
 				break;
 			case TabPage.TABPAGE_ID_SONG:
@@ -947,13 +953,15 @@ implements ServiceConnection {
 					break;
 				}
 				
-				OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
-				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);			
+				getTrackAdp().stockMediaDataFromDevice();				
+//				OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
+//				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);			
 	            bUpdateOccur = true;
 				break;
 			
 			case TabPage.TABPAGE_ID_PLAYLIST:
-				Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);						
+				// Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);
+				getPlaylistAdp().stockMediaDataFromDevice();								
 	            bUpdateOccur = true;
 				break;
 			}
@@ -978,7 +986,7 @@ implements ServiceConnection {
 	    	if( page2 != null )
 	    	{
 	    		page2.startUpdate();
-	    	}			
+	    	}
 			if( bForce == false 
 			&& 0 < getTrackAdp().getCount() ) {
 				// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンはしない
@@ -987,7 +995,8 @@ implements ServiceConnection {
 			else
 			{
 				// getTrackAdp().setQueueView(true);
-				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);
+				getTrackAdp().stockMediaDataFromDevice();
+				// Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);
 			}
 		}
 	}

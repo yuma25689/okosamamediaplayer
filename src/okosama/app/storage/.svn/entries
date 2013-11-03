@@ -60,26 +60,12 @@ has-props
 
 26884
 
-QueryHandler.java
-file
-0
-
-
-add
-
-
-
-
-
-has-props
-has-prop-mods
-
 TrackQueryHandler.java
 file
 11
 
 
-
+delete
 2013-06-15T06:10:20.000000Z
 559f7d907b68fa7ee15cbab1cdccf4eb
 2013-06-15T12:49:07.156250Z

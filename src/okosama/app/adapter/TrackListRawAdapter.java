@@ -9,7 +9,7 @@ import okosama.app.ResourceAccessor;
 import okosama.app.service.MediaPlayerUtil;
 //import okosama.app.storage.AlbumData;
 import okosama.app.storage.Database;
-import okosama.app.storage.QueryHandler;
+// import okosama.app.storage.QueryHandler;
 import okosama.app.storage.TrackData;
 import okosama.app.tab.TabPage;
 //import okosama.app.storage.TrackQueryHandler;
@@ -49,11 +49,15 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	// TODO:次へボタン等
 	int maxShowCount = 80;
     	
-    private final Drawable mNowListOverlay;
+    // private final Drawable mNowListOverlay;
 
 	long [] playlist = null;
     private final BitmapDrawable mDefaultAlbumIcon;
 	boolean bDataUpdating = false;	// 内部データを更新中かどうか
+	public boolean isDataUpdating()
+	{
+		return bDataUpdating;
+	}
 	private LayoutInflater inflater;
 	private int iLayoutId;
     ArrayList<Long> currentAllAudioIds = new ArrayList<Long>();
@@ -106,7 +110,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     
     private OkosamaMediaPlayerActivity mActivity = null;
     //private TrackQueryHandler mQueryHandler;
-    private QueryHandler mQueryHandler;
+    // private QueryHandler mQueryHandler;
     //private String mConstraint = null;
     //private boolean mConstraintIsValid = false;
     
@@ -130,7 +134,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
         mActivity = currentactivity;
         this.iLayoutId = layout;
         this.inflater = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mNowListOverlay = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.playlist_press);
+        // mNowListOverlay = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.playlist_press);
         
         mActivity = currentactivity;
         // mQueryHandler = new QueryHandler( mActivity.getContentResolver() );
@@ -152,16 +156,16 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
         // 色の少ない(8bit/色以下)デバイスに表示するときに、ディザをかけるかどうかを指定する。trueでディザする。遅い。
         mDefaultAlbumIcon.setDither(false);
         
-        mQueryHandler = new QueryHandler(currentactivity.getContentResolver(), this );
+        // mQueryHandler = new QueryHandler(currentactivity.getContentResolver(), this );
     }
     
 //    public void setActivity(OkosamaMediaPlayerActivity newactivity) {
 //        mActivity = newactivity;
 //    }
     
-    public QueryHandler getQueryHandler() {
-        return mQueryHandler;
-    }
+//    public QueryHandler getQueryHandler() {
+//        return mQueryHandler;
+//    }
     
     /**
      * カラムのインデックスを設定
@@ -337,14 +341,14 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
      * @param cursor
      * @return
      */
-    public int insertAllDataFromCursor(Cursor cursor)
+    public int stockMediaDataFromDevice()
     {
     	if( bDataUpdating == true )
     	{
     		return -1;
     	}
     	bDataUpdating = true;
-    	Log.i("insertAllDataFromCursor","start");
+    	Log.i("stockMediaDataFromDevice","start");
     	
 //    	if (mActivity.isFinishing() && cursor != null ) {
 //        	// アクティビティが終了中で、まだカーソルが残っている場合、カーソルをクローズ
@@ -360,7 +364,11 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
             	Log.i("doInBackground","start");
             	
             	// カーソルをループする
-            	Cursor cursor = params[0];
+            	// Cursor cursor = params[0];
+    			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
+    			Cursor cursor = Database.getInstance(
+    					OkosamaMediaPlayerActivity.isExternalRef()
+    			).createTrackCursor(null, null);			
             	
         		if( cursor == null || cursor.isClosed() )
         		{
@@ -420,15 +428,10 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
             		page2.endUpdate();
             	}
             	
-            	// TODO: フラグ削除
             	bDataUpdating = false;            	
             }
         };
-        if( cursor != null && 0 < cursor.getCount() 
-        && cursor.isClosed() == false )
-        {
-        	task.execute(cursor);
-        }
+        task.execute();
         return 0;
     }
     

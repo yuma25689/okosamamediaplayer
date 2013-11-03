@@ -8,7 +8,7 @@ import okosama.app.storage.PlaylistData;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
 // import okosama.app.storage.QueryHandler;
-import android.content.AsyncQueryHandler;
+// import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -47,7 +47,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
     //private final StringBuilder mStringBuilder = new StringBuilder();
     private final String mUnknownAlbum;
     private final String mUnknownArtist;
-    private AsyncQueryHandler mQueryHandler;
+    // private AsyncQueryHandler mQueryHandler;
     int mTitleIdx;
     int mIdIdx;
     // ショートカット作成フラグ？
@@ -75,27 +75,27 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
      * @author 25689
      *
      */
-    class QueryHandler extends AsyncQueryHandler {
-    	
-    	IAdapterUpdate adapter;
-    	
-        QueryHandler(ContentResolver res, IAdapterUpdate adapter) {
-        	// TODO: もう一個にまとめる
-            super(res);
-            this.adapter = adapter; 
-        }
-        
-        @Override
-        protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-            //Log.i("@@@", "query complete: " + cursor.getCount() + "   " + mActivity);
-            if (cursor != null) {
-                cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).mergedCursor(
-                		cursor, createShortcut);
-            }
-            // mActivity.initAdapter(token,cursor);
-            insertAllDataFromCursor(cursor);
-        }
-    }
+//    class QueryHandler extends AsyncQueryHandler {
+//    	
+//    	IAdapterUpdate adapter;
+//    	
+//        QueryHandler(ContentResolver res, IAdapterUpdate adapter) {
+//        	// TODO: もう一個にまとめる
+//            super(res);
+//            this.adapter = adapter; 
+//        }
+//        
+//        @Override
+//        protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+//            //Log.i("@@@", "query complete: " + cursor.getCount() + "   " + mActivity);
+//            if (cursor != null) {
+//                cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).mergedCursor(
+//                		cursor, createShortcut);
+//            }
+//            // mActivity.initAdapter(token,cursor);
+//            stockMediaDataFromDevice();
+//        }
+//    }
    
     /**
      * アダプタのコンストラクタ
@@ -121,7 +121,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
         // mList = list;
         mActivity = currentactivity;
         //mQueryHandler = new QueryHandler(mActivity.getContentResolver(), mActivity);
-        mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
+        // mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
 
         
         // albumとartistを表す文字列
@@ -149,9 +149,9 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
      * クエリハンドラの取得
      * @return
      */
-    public AsyncQueryHandler getQueryHandler() {
-        return mQueryHandler;
-    }
+//    public AsyncQueryHandler getQueryHandler() {
+//        return mQueryHandler;
+//    }
 
     /**
      * 新しいビューの作成？
@@ -241,14 +241,14 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
     	notifyDataSetChanged();
     }
     
-    public int insertAllDataFromCursor(Cursor cursor)
+    public int stockMediaDataFromDevice()
     {
     	if( bDataUpdating == true )
     	{
     		return -1;
     	}
     	bDataUpdating = true;
-    	Log.i("insertAllDataFromCursor","start");
+    	// Log.i("insertAllDataFromCursor","start");
     	
 //    	if (mActivity.isFinishing() && cursor != null ) {
 //        	// アクティビティが終了中で、まだカーソルが残っている場合、カーソルをクローズ
@@ -264,11 +264,15 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
             	items.clear();
             	
             	// カーソルをループする
-            	Cursor cursor = params[0];
+            	Cursor cursor = Database.getInstance(
+            			OkosamaMediaPlayerActivity.isExternalRef()
+            	).createPlaylistCursor(null, null, false);
+            	
+            	// Cursor cursor = params[0];
 
         		if( cursor == null || cursor.isClosed() )
         		{
-        			Log.w("TrackListAdp - doInBk", "cursor closed!");
+        			Log.w("PlaylistAdp - doInBk", "cursor closed!");
         			return -1;
         		}
         		try {
@@ -310,11 +314,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
             	bDataUpdating = false;            	
             }
         };
-        if( cursor != null && 0 < cursor.getCount() 
-        && cursor.isClosed() == false )
-        {
-        	task.execute(cursor);
-        }
+        task.execute();
         return 0;
     }
     private int getColumnIndices(Cursor cursor) {

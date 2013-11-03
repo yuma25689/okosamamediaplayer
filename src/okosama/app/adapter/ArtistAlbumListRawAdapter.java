@@ -6,7 +6,7 @@ import okosama.app.ResourceAccessor;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.*;
 import okosama.app.tab.TabPage;
-import android.content.AsyncQueryHandler;
+// import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorWrapper;
@@ -38,7 +38,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 
 	int iGroupLayoutId = 0;
 	int iChildLayoutId = 0;
-    private final Drawable mNowListOverlay;
+    // private final Drawable mNowListOverlay;
 	
 	// 多分現在プレイ中の時に表示する画像
     private final Drawable mNowPlayingOverlay;
@@ -61,7 +61,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
     // private MusicAlphabetIndexer mIndexer;
     // アクティビティ
     private OkosamaMediaPlayerActivity mActivity;
-    private AsyncQueryHandler mQueryHandler;
+    // private AsyncQueryHandler mQueryHandler;
 //    private String mConstraint = null;
 //    private boolean mConstraintIsValid = false;
     // viewの保持用
@@ -97,7 +97,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
         this.inflater 
         = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
+        // mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
 
         // this.rowId = rowId;
         this.groupData = groupData;
@@ -107,7 +107,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
         
         // Resources r = context.getResources();
         mNowPlayingOverlay = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.indicator_ic_mp_playing_list);
-        mNowListOverlay = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.playlist_press);
+        // mNowListOverlay = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.playlist_press);
         mDefaultAlbumIcon =  (BitmapDrawable)OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.albumart_mp_unknown_list);
         // Filterとディザを未指定にして、ビットマップを高速にする
         // no filter or dither, it's a lot faster and we can't tell the difference
@@ -130,9 +130,9 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
      * 内部のクエリハンドラを返却
      * @return
      */
-    public AsyncQueryHandler getQueryHandler() {
-        return mQueryHandler;
-    }
+//    public AsyncQueryHandler getQueryHandler() {
+//        return mQueryHandler;
+//    }
     /**
      * 現在のカラムのインデックスを内部に設定
      * @param cursor
@@ -535,14 +535,14 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
     	notifyDataSetChanged();
     }
     
-    public int insertAllDataFromCursor(Cursor cursor)
+    public int stockMediaDataFromDevice()
     {
     	if( bDataUpdating == true )
     	{
     		return -1;
     	}
     	bDataUpdating = true;
-    	Log.i("insertAllDataFromCursor","start");
+    	// Log.i("insertAllDataFromCursor","start");
     	
 //    	if (mActivity.isFinishing() && cursor != null ) {
 //        	// アクティビティが終了中で、まだカーソルが残っている場合、カーソルをクローズ
@@ -557,7 +557,10 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
             	Log.i("doInBackground","start");
             	
             	// カーソルをループする
-            	Cursor cursor = params[0];
+            	Cursor cursor = Database.getInstance(
+            			OkosamaMediaPlayerActivity.isExternalRef()
+            	).createArtistCursor(null, null);            	
+            	// Cursor cursor = params[0];
         		if( cursor == null || cursor.isClosed() )
         		{
         			Log.w("ArtistAlbumListAdp - doInBk", "cursor closed!");
@@ -660,11 +663,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
             	bDataUpdating = false;            	
             }
         };
-        if( cursor != null 
-        && cursor.isClosed() == false )
-        {
-        	task.execute(cursor);
-        }
+        task.execute();
         return 0;
     }
 	
