@@ -1,5 +1,6 @@
 package okosama.app;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -22,7 +23,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.database.Cursor;
+// import android.database.Cursor;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,6 +38,11 @@ import okosama.app.service.MediaPlayerUtil;
 import okosama.app.service.MediaPlayerUtil.ServiceToken;
 import okosama.app.state.DisplayStateFactory;
 import okosama.app.state.IDisplayState;
+import okosama.app.storage.AlbumData;
+import okosama.app.storage.ArtistChildData;
+import okosama.app.storage.ArtistGroupData;
+import okosama.app.storage.PlaylistData;
+import okosama.app.storage.TrackData;
 // import okosama.app.state.absDisplayState;
 import okosama.app.storage.Database;
 import okosama.app.tab.*;
@@ -60,6 +66,8 @@ public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection {
 	public static final String MEDIA_SERVICE_NOTIFY = "MediaServiceNotify";
 
+	private boolean bDataRestored = false;
+	
 	// 強制リフレッシュフラグ？
 	public boolean bForceRefresh = false;
 	// リフレッシュ用メッセージID
@@ -127,6 +135,7 @@ implements ServiceConnection {
     // HashMap< String, Object > mapAdapter;
     // AdapterStocker adapters;
     // 暫定版
+	// TODO: backupDataと二重管理と化しているが・・・
     // private AlbumListAdapter albumAdp;
 	private AlbumListRawAdapter albumAdp;
     // private ListView albumList;
@@ -170,13 +179,18 @@ implements ServiceConnection {
 		this.tracklistAdp = tracklistAdp;
 	}
 
+	private TempBackupData backupData = new TempBackupData();
 	/**
      * 果たしてmapごと保存してうまくいくのか・・・。TODO 要確認
      */
     @Override
     public Object onRetainNonConfigurationInstance() {
-    	// TODO: ■■■■■■■■■■■　できたらadapterまたはadapterに格納しているデータを返却 ■■■■■■■■■■■■■
-        return null;// adapters;
+    	Log.d("onRetainNonConfigrationInstance","come");
+    	backupData.setAlbumAdp(getAlbumAdp());
+    	backupData.setArtistAdp(getArtistAdp());
+    	backupData.setTracklistAdp(getTrackAdp());
+    	backupData.setPlaylistAdp(getPlaylistAdp());
+        return backupData;
     }
     // TrackAdapter用？
     // editmodeかどうか。
@@ -282,9 +296,27 @@ implements ServiceConnection {
         super.onCreate(savedInstanceState);
         // タイトルバーを非表示に？
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-      
+ 
         // ビューの設定
         setContentView(R.layout.main);
+ 
+		bDataRestored = false;
+
+        TempBackupData backup = (TempBackupData)getLastNonConfigurationInstance();
+        if( backup != null )
+        {
+        	setAlbumAdp( backup.getAlbumAdp() );
+        	setArtistAdp( backup.getArtistAdp() );
+        	setTrackAdp( backup.getTracklistAdp() );
+        	setPlaylistAdp( backup.getPlaylistAdp() );
+        	Log.d("onCreate","adapter resume!");
+        }
+        else if( savedInstanceState != null )
+		{
+			
+			Log.d("onCreate","data restored");
+			bDataRestored = true;
+		}
         
         // Databaseクラスにアクティビティ格納
         Database.setActivity( this );
@@ -429,9 +461,12 @@ implements ServiceConnection {
 			            //bTabInitEnd = true;
 			           	
 			           	// 初期化時に、全てのメディアを取得する
-			           	reScanMedia(TabPage.TABPAGE_ID_ALBUM);
-			           	reScanMedia(TabPage.TABPAGE_ID_ARTIST);
-			           	reScanMedia(TabPage.TABPAGE_ID_SONG);
+			           	if( bDataRestored == false )
+			           	{
+				           	reScanMedia(TabPage.TABPAGE_ID_ALBUM);
+				           	reScanMedia(TabPage.TABPAGE_ID_ARTIST);
+				           	reScanMedia(TabPage.TABPAGE_ID_SONG);
+			           	}
 			    		break;
 		        	}
 		        	case TabSelectAction.MSG_ID_TAB_SELECT:
@@ -450,9 +485,13 @@ implements ServiceConnection {
 		        		}
 		        		else if( ControlIDs.TAB_ID_MEDIA == (Integer)message.obj )
 		        		{
-			        		setMediaTabSelection(
-			        			OkosamaMediaPlayerActivity.getCurrentDisplayId( ControlIDs.TAB_ID_MEDIA )
-			        		);
+		        			int id = OkosamaMediaPlayerActivity.getCurrentDisplayId( ControlIDs.TAB_ID_MEDIA );
+		        			if( TabPage.TABPAGE_ID_NONE == id 
+		        			|| TabPage.TABPAGE_ID_UNKNOWN == id )
+		        			{
+		        				id = TabPage.TABPAGE_ID_ARTIST;
+		        			}
+				        	setMediaTabSelection( id );
 		        		}
 		            	// 共通部分再描画
 		            	updateCommonCtrls();
@@ -574,6 +613,12 @@ implements ServiceConnection {
         
         return lp;
 	}
+	public static final String ALBUM_KEY = "Album";
+	public static final String ARTIST_GROUP_KEY = "ArtistGroup";
+	public static final String ARTIST_CHILD_KEY = "ArtistChild";
+	public static final String TRACK_KEY = "Track";
+	public static final String PLAYLIST_KEY = "Playlist";
+	
 	@Override
     public void onSaveInstanceState(Bundle outcicle) {
 		// TODO:マップをループして、全部の設定を保存
@@ -582,9 +627,49 @@ implements ServiceConnection {
 //		for(Entry<String, Integer> e : tabCurrentDisplayIdMap.entrySet()) {
 //		    outcicle.putInt( e.getKey(), e.getValue() );
 //		}
+//		outcicle.putSerializable(ALBUM_KEY, getAlbumAdp().getItems() );
+//		outcicle.putSerializable(ARTIST_GROUP_KEY, getArtistAdp().getGroupData() );
+//		outcicle.putSerializable(ARTIST_CHILD_KEY, getArtistAdp().getChildData() );
+//		outcicle.putSerializable(TRACK_KEY, getTrackAdp().getAllItems() );
+//		outcicle.putSerializable(PLAYLIST_KEY, getPlaylistAdp().getItems() );
         super.onSaveInstanceState(outcicle);
     }
 
+	
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+	 */
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+//		if( savedInstanceState != null )
+//		{
+//			ArrayList<AlbumData> albumData 
+//			= (ArrayList<AlbumData>) savedInstanceState.getSerializable(ALBUM_KEY);
+//			// getAlbumAdp().setItems(albumData);
+//			HashMap<Integer,ArtistGroupData> artistGroupData 
+//			= (HashMap<Integer, ArtistGroupData>) savedInstanceState.getSerializable(ARTIST_GROUP_KEY);
+//			// getArtistAdp().setGroupData(artistGroupData);
+//			HashMap<Integer,ArtistChildData[]> artistChildData 
+//			= (HashMap<Integer, ArtistChildData[]>) savedInstanceState.getSerializable(ARTIST_CHILD_KEY);
+//			// getArtistAdp().setChildData(artistChildData);
+//			ArrayList<TrackData> trackData 
+//			= (ArrayList<TrackData>) savedInstanceState.getSerializable(TRACK_KEY);
+//			ArrayList<PlaylistData> playlistData 
+//			= (ArrayList<PlaylistData>) savedInstanceState.getSerializable(PLAYLIST_KEY);
+//			//getPlaylistAdp().setItems(playlistData);
+//			getAlbumAdp().updateData(albumData);
+//			getArtistAdp().updateData(artistGroupData, artistChildData);
+//			getTrackAdp().setAllItems(trackData);
+//			getTrackAdp().updateList();
+//			getPlaylistAdp().updateData(playlistData);
+//			bDataRestored = true;
+//			Log.e("onRestoreInstanceState","data restored");
+//			
+//		}
+		super.onRestoreInstanceState(savedInstanceState);
+	}
 	IntentFilter intentFilter;
 	BroadcastReceiver receiver;
 	class MediaServiceNotifyReceiver extends BroadcastReceiver {

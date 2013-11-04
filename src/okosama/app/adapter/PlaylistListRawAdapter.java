@@ -9,7 +9,7 @@ import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
 // import okosama.app.storage.QueryHandler;
 // import android.content.AsyncQueryHandler;
-import android.content.ContentResolver;
+// import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -331,5 +331,17 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
         }
         return -1;
     }
+	/**
+	 * @return the items
+	 */
+	public ArrayList<PlaylistData> getItems() {
+		return items;
+	}
+	/**
+	 * @param items the items to set
+	 */
+	public void setItems(ArrayList<PlaylistData> items) {
+		this.items = items;
+	}
     
  }

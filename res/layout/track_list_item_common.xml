@@ -49,8 +49,7 @@
         android:layout_alignWithParentIfMissing="true"
         android:layout_toRightOf="@id/icon"
         android:layout_toLeftOf="@id/duration"
-        android:ellipsize="marquee"
-        android:singleLine="true" />
+        android:maxLines="1" />
 
     <!-- The height is set to half the height of the parent, which is 64 dip -->
     <TextView android:id="@+id/line2" android:visibility="visible"

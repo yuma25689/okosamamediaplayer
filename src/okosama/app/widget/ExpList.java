@@ -28,6 +28,8 @@ public class ExpList extends absWidget {
 	public int create() {
 		impl = new ExpListImpl(activity);
 		impl.setDivider(OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.list_divider_tesuri));
+		impl.setFastScrollEnabled(true);
+		
 		impl.setOnChildClickListener(new OnChildClickListener() {
 			
 			@Override

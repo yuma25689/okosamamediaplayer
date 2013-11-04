@@ -1,11 +1,14 @@
 package okosama.app.adapter;
 
+import java.util.HashMap;
+
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.*;
 import okosama.app.tab.TabPage;
+import android.annotation.SuppressLint;
 // import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.database.Cursor;
@@ -73,10 +76,16 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
     }
 
     // private int[] rowId = null;
-    private SparseArray<ArtistGroupData> groupData = new SparseArray<ArtistGroupData>(); 
-    private SparseArray<ArtistChildData[]> childData = new SparseArray<ArtistChildData[]>(); 
-    private SparseArray<ArtistGroupData> groupDataTmp = new SparseArray<ArtistGroupData>(); 
-    private SparseArray<ArtistChildData[]> childDataTmp = new SparseArray<ArtistChildData[]>(); 
+//    private SparseArray<ArtistGroupData> groupData = new SparseArray<ArtistGroupData>(); 
+//    private SparseArray<ArtistChildData[]> childData = new SparseArray<ArtistChildData[]>(); 
+    @SuppressLint("UseSparseArrays")
+    private HashMap<Integer,ArtistGroupData> groupData = new HashMap<Integer,ArtistGroupData>(); 
+    @SuppressLint("UseSparseArrays")
+	private HashMap<Integer,ArtistChildData[]> childData = new HashMap<Integer,ArtistChildData[]>(); 
+    // private SparseArray<ArtistGroupData> groupDataTmp = new SparseArray<ArtistGroupData>();
+	private HashMap<Integer,ArtistGroupData> groupDataTmp = new HashMap<Integer,ArtistGroupData>();
+	private HashMap<Integer,ArtistChildData[]> childDataTmp = new HashMap<Integer,ArtistChildData[]>(); 
+    // private SparseArray<ArtistChildData[]> childDataTmp = new SparseArray<ArtistChildData[]>(); 
 //    private ArtistGroupData[] group = null;
 //    private ArtistChildData[][] child = null;
 //    private ArtistGroupData[] groupTmp = null;
@@ -85,10 +94,10 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
     public ArtistAlbumListRawAdapter(OkosamaMediaPlayerActivity currentactivity,
     		// int[] rowId,
     		// ArtistGroupData[] listGroup,
-    		SparseArray<ArtistGroupData> groupData,
+    		//SparseArray<ArtistGroupData> groupData,
     		int glayout, 
     		// ArtistChildData[][] listChild, 
-    		SparseArray<ArtistChildData[]> childData,
+    		//SparseArray<ArtistChildData[]> childData,
     		int clayout ) {
         // super(currentactivity, listGroup, glayout, listChild, clayout );
         // activityの作成
@@ -100,8 +109,8 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
         // mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
 
         // this.rowId = rowId;
-        this.groupData = groupData;
-        this.childData = childData;
+        //this.groupData = groupData;
+        //this.childData = childData;
         iGroupLayoutId = glayout;
         iChildLayoutId = clayout;
         
@@ -334,6 +343,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 
     /**
      * 子ビューのカーソルを取得？
+     * TODO:不要なので、もっと軽い処理に置き換えること
      */
     // @Override
     protected Cursor getChildrenCursor(long groupId, String artistId ) { //Cursor groupCursor) {
@@ -441,7 +451,8 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
     
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
-		if( childData.get(groupPosition,null) != null 
+		if( // childData.get(groupPosition,null) != null
+				childData.containsKey(groupPosition) == true
 				&& childPosition < childData.get(groupPosition).length )
 		{
 			return childData.get(groupPosition)[childPosition];
@@ -469,7 +480,9 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		if( childData.get(groupPosition,null) == null )
+		if( // childData.get(groupPosition,null) == null
+				childData.containsKey(groupPosition) == false				
+				)
 		{
 			return 0;
 		}
@@ -478,7 +491,9 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 
 	@Override
 	public Object getGroup(int groupPosition) {
-		if( groupData.get(groupPosition,null) != null )
+		if( // groupData.get(groupPosition,null) != null )
+				groupData.containsKey(groupPosition) == true
+				)
 		{
 			return groupData.get(groupPosition);
 		}
@@ -527,8 +542,11 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
      */
     // @Override
     public void updateData(
-    		SparseArray<ArtistGroupData> group,
-    		SparseArray<ArtistChildData[]> child ) {
+    		//SparseArray<ArtistGroupData> group,
+    		//SparseArray<ArtistChildData[]> child
+    	    HashMap<Integer,ArtistGroupData> group, 
+    		HashMap<Integer,ArtistChildData[]> child
+    		) {
     	// mapIdAndArt.clear();
     	this.groupData = group;
     	this.childData = child;
@@ -589,16 +607,15 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 	                    data.setNumOfTracks( cursor.getInt(mGroupSongIdx) );
 	                    data.setArtistId( cursor.getString(mGroupArtistIdIdx));
 	            		groupDataTmp.put( i, data );
-	
+
 	            		Cursor childCursor = getChildrenCursor(cursor.getLong(mGroupArtistIdIdx),data.getArtistId());
 	            		if( childCursor == null )
 	            		{
 	            			Log.e("doInBackGround - ArtistAlbumListAdapter", "child cursor取得エラー");
 	            			return -1;
 	            		}
-	            		synchronized( childCursor )
-	            		{
-		            		if( childCursor != null && 0 < childCursor.getCount() )
+	            		try {
+	            			if( 0 < childCursor.getCount() )
 		            		{
 		            			ArtistChildData[] childList = new ArtistChildData[childCursor.getCount()];
 		            			int j = 0;
@@ -606,22 +623,29 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 			            		do 
 			            		{
 			                        ArtistChildData dataChild = new ArtistChildData();
+			                       
+			                        // album名
 			                        dataChild.setAlbumName(
 			                        	childCursor.getString(childCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM) ) 
 			                        );
+			                        // album 曲数
 			                        dataChild.setNumOfSongs(
 			                        	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS))
 			                        );
+			                        // artist 曲数
 			                        dataChild.setNumOfSongsForArtist( 
 			                        	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS_FOR_ARTIST))
 			                        );
+			                        // artist名
 			                        dataChild.setArtistName(
 			                        	childCursor.getString(childCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST))
-			                        );	                        
+			                        );
+			                        // album art
 			                        dataChild.setAlbumArt(
 			                        		childCursor.getString(childCursor.getColumnIndexOrThrow(
 		                                AlbumColumns.ALBUM_ART))
 			                        );
+			                        // album id
 			                        dataChild.setAlbumId( childCursor.getString(0) );
 			                        
 			                        childList[j] = dataChild; 
@@ -629,11 +653,12 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 			                        j++;
 			            		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
 			            				childCursor.moveToNext() );
-			            		
 			            		childDataTmp.put( i, childList);
 		            		}
+	            		} finally {
+	            			childCursor.close();
 	            		}
-	            		i++;
+                		i++;
 	        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
 	        				cursor.moveToNext() );
             	} finally {
@@ -666,5 +691,37 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
         task.execute();
         return 0;
     }
+
+	/**
+	 * @return the groupData
+	 */
+	//public SparseArray<ArtistGroupData> getGroupData() {
+	public HashMap<Integer,ArtistGroupData> getGroupData() {
+		return groupData;
+	}
+
+	/**
+	 * @param groupData the groupData to set
+	 */
+	//public void setGroupData(SparseArray<ArtistGroupData> groupData) {
+	public void setGroupData(HashMap<Integer,ArtistGroupData> groupData) {
+		this.groupData = groupData;
+	}
+
+	/**
+	 * @return the childData
+	 */
+	// public SparseArray<ArtistChildData[]> getChildData() {
+	public HashMap<Integer, ArtistChildData[]> getChildData() {
+		return childData;
+	}
+
+	/**
+	 * @param childData the childData to set
+	 */
+	//public void setChildData(SparseArray<ArtistChildData[]> childData) {
+	public void setChildData(HashMap<Integer,ArtistChildData[]> childData) {
+		this.childData = childData;
+	}
 	
 }

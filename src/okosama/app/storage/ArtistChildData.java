@@ -1,6 +1,12 @@
 package okosama.app.storage;
 
-public class ArtistChildData {
+import java.io.Serializable;
+
+public class ArtistChildData implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1041793939399943281L;
 	long childId;
 	String albumId;
 	/**

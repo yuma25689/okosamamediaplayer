@@ -1,6 +1,12 @@
 package okosama.app.storage;
 
-public class ArtistGroupData {
+import java.io.Serializable;
+
+public class ArtistGroupData implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1551599762543511030L;
 	long groupId;
 	String artistId;
 	String artistName;

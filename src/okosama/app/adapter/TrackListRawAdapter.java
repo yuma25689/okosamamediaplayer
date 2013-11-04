@@ -243,7 +243,6 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
      */
     // @Override
     public void bindView(View view, Context context, int pos ) { // TrackData data) {
-        
     	TrackData data = getItem( pos );
     	if( data == null )
     	{
@@ -256,6 +255,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
         // data.getTrackTitle();
         // cursor.copyStringToBuffer(mTitleIdx, vh.buffer1);
         vh.line1.setText(data.getTrackTitle());
+       
         
         // 時間を取得、設定
         int secs = (int) (data.getTrackDuration()) / 1000; // .getInt(mDurationIdx) / 1000;
@@ -333,6 +333,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
         	// プレイリストのイメージを非表示に？
         	ivInd.setVisibility(View.GONE);
         }
+        
     }
     
     
@@ -544,6 +545,20 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     	}
     	notifyDataSetChanged();
     }
+
+	/**
+	 * @return the allItems
+	 */
+	public ArrayList<TrackData> getAllItems() {
+		return allItems;
+	}
+
+	/**
+	 * @param allItems the allItems to set
+	 */
+	public void setAllItems(ArrayList<TrackData> allItems) {
+		this.allItems = allItems;
+	}
     
 //    /**
 //     * 背景でクエリを発行するとき

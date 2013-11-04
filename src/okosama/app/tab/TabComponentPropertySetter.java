@@ -279,11 +279,11 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 				activity.setArtistAdp(
 						new ArtistAlbumListRawAdapter(
 						activity,
-						new SparseArray<ArtistGroupData>(),
+						//new SparseArray<ArtistGroupData>(),
 	                    R.layout.track_list_item_group,
 //	                    new String[] {},
 //	                    new int[] {},
-						new SparseArray<ArtistChildData[]>(),
+						//new SparseArray<ArtistChildData[]>(),
 	                    R.layout.track_list_item_child
 //	                    new String[] {},
 //	                    new int[] {}

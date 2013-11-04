@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 /**
@@ -31,7 +32,8 @@ import android.widget.TextView;
  * @author 25689
  *
  */
-public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> implements IAdapterUpdate {
+public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> 
+implements IAdapterUpdate, SectionIndexer {
     
 	SparseArray<String> mapIdAndArt = new SparseArray<String>();
 	public String getAlbumArtFromId(int id)
@@ -311,5 +313,37 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> implements IAda
         }
         return -1;
     }
+
+	/**
+	 * @return the items
+	 */
+	public ArrayList<AlbumData> getItems() {
+		return items;
+	}
+
+	/**
+	 * @param items the items to set
+	 */
+	public void setItems(ArrayList<AlbumData> items) {
+		this.items = items;
+	}
+
+	@Override
+	public int getPositionForSection(int section) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getSectionForPosition(int position) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Object[] getSections() {
+		// TODO Auto-generated method stub
+		return null;
+	}
     
  }

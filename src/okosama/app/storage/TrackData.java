@@ -1,7 +1,15 @@
 package okosama.app.storage;
 
-public class TrackData {
+import java.io.Serializable;
+
+public class TrackData implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8254196509016146397L;
+
+
 	@Override
 	public String toString()
 	{

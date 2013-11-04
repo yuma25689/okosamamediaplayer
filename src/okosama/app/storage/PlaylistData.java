@@ -1,6 +1,12 @@
 package okosama.app.storage;
 
-public class PlaylistData {
+import java.io.Serializable;
+
+public class PlaylistData implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6339969296530048661L;
 	long playlistId;
 	String playlistName;
 	/**
