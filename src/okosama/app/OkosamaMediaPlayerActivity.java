@@ -311,12 +311,12 @@ implements ServiceConnection {
         	setPlaylistAdp( backup.getPlaylistAdp() );
         	Log.d("onCreate","adapter resume!");
         }
-        else if( savedInstanceState != null )
-		{
-			
-			Log.d("onCreate","data restored");
-			bDataRestored = true;
-		}
+//        else if( savedInstanceState != null )
+//		{
+//			
+//			Log.d("onCreate","data restored");
+//			bDataRestored = true;
+//		}
         
         // Databaseクラスにアクティビティ格納
         Database.setActivity( this );
@@ -401,6 +401,14 @@ implements ServiceConnection {
 			        	}
 			        	else
 			        	{
+			                receiver = new MediaServiceNotifyReceiver();
+			                intentFilter = new IntentFilter();
+			                intentFilter.addAction(MEDIA_SERVICE_NOTIFY);
+			                registerReceiver(receiver,intentFilter);
+			                
+			                getResourceAccessor().initMotionSenser(OkosamaMediaPlayerActivity.this);
+			                getResourceAccessor().initSound();
+			        		
 			        		TimeControlPanel.createInstance(OkosamaMediaPlayerActivity.this);
 			        		PlayControlPanel.createInstance(OkosamaMediaPlayerActivity.this);
 			        		SubControlPanel.createInstance(OkosamaMediaPlayerActivity.this);
@@ -442,7 +450,7 @@ implements ServiceConnection {
 //			           		pref.getInt(tabNameMedia + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN)
 //			           	);
 			           	sendUpdateMessage(ControlIDs.TAB_ID_MAIN);
-			           	sendUpdateMessage(ControlIDs.TAB_ID_MEDIA);
+			           				           	
 //			           	TabSelectAction selAct = new TabSelectAction(tab, currentMainTabId);
 //			           	selAct.doAction(null);
 //			           	TabSelectAction selActMedia = new TabSelectAction( tab.getTabPageMedia().getTabContent(), currentSubTabId );
@@ -463,6 +471,7 @@ implements ServiceConnection {
 			           	// 初期化時に、全てのメディアを取得する
 			           	if( bDataRestored == false )
 			           	{
+			           		Log.d("msg_init_end","force rescan");
 				           	reScanMedia(TabPage.TABPAGE_ID_ALBUM);
 				           	reScanMedia(TabPage.TABPAGE_ID_ARTIST);
 				           	reScanMedia(TabPage.TABPAGE_ID_SONG);
@@ -684,16 +693,10 @@ implements ServiceConnection {
 	}
 	@Override
 	protected void onResume() {
+		Log.e("onResume","resume!");
     	// 画面のサイズ等の情報を更新する
         dispInfo.init(this, componentContainer, handler);
         
-        receiver = new MediaServiceNotifyReceiver();
-        intentFilter = new IntentFilter();
-        intentFilter.addAction(MEDIA_SERVICE_NOTIFY);
-        registerReceiver(receiver,intentFilter);
-        
-        getResourceAccessor().initMotionSenser(this);
-        getResourceAccessor().initSound();
         bForceRefresh = true;
         paused = false;        
 		super.onResume();
@@ -792,6 +795,8 @@ implements ServiceConnection {
 	 */
 	public int setMainTabSelection( int mainTab )//, boolean bForceUpd )
 	{
+		Log.w("setMainTabSelection", "come");
+		
 		IDisplayState stateMainTmp = DisplayStateFactory.createDisplayState(mainTab);
 		if( stateMainTmp == null )
 		{
@@ -815,6 +820,11 @@ implements ServiceConnection {
         		stateMain.ChangeDisplayBasedOnThisState(tab);
         	}
         }
+        // 2013/11/05 add
+        if( mainTab == TabPage.TABPAGE_ID_MEDIA )
+        {
+           	sendUpdateMessage(ControlIDs.TAB_ID_MEDIA);
+        }
         return iRet;
 	}
 	/**
@@ -826,6 +836,8 @@ implements ServiceConnection {
 	 */
 	public int setMediaTabSelection( int subTab )//, boolean bForceUpd )
 	{
+		Log.w("setMediaTabSelection", "come tabid=" + subTab);
+		
 		IDisplayState stateSubTmp = DisplayStateFactory.createDisplayState(subTab);        		
         if( stateSubTmp == null )
         {
@@ -835,8 +847,12 @@ implements ServiceConnection {
 		int iRet = 0;
         if( stateSubTmp != null )
         {
+    		Log.w("setMediaTabSelection", "stateSubTmp != null" );
+        	
         	if( currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
         	{
+        		Log.w("setMediaTabSelection", "stateMain = MEDIA" );
+        		
 	        	if( currentSubTabId != subTab || bForceRefresh == true )
 	        	{   	   
 	        		currentSubTabId = subTab;
@@ -848,6 +864,7 @@ implements ServiceConnection {
 	                stateSub = DisplayStateFactory.createDisplayState(subTab);        		
 	                if( stateSub != null && tabMedia != null)
 	                {
+	            		Log.w("stateSub.ChangeDisplayBasedOnThisState", "come");
 	                	stateSub.ChangeDisplayBasedOnThisState(tabMedia);
 	                }
 	        	}

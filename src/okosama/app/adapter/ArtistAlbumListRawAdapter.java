@@ -346,7 +346,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
      * TODO:不要なので、もっと軽い処理に置き換えること
      */
     // @Override
-    protected Cursor getChildrenCursor(long groupId, String artistId ) { //Cursor groupCursor) {
+    protected Cursor getChildrenCursor(long groupId, String artistName ) { //Cursor groupCursor) {
         
     	// グループカーソルから、そのアーティストのidを取得する
         // long id = groupCursor.getLong(groupCursor.getColumnIndexOrThrow(BaseColumns._ID));
@@ -443,7 +443,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
         // おそらく、アーティストはどのレコードでも同じで良いので、この作りで良い
         if( c != null )
         {
-        	return new MyCursorWrapper(c, artistId );//groupCursor.getString(mGroupArtistIdx));
+        	return new MyCursorWrapper(c, artistName );//groupCursor.getString(mGroupArtistIdx));
         }
         return null;
     }
@@ -608,7 +608,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 	                    data.setArtistId( cursor.getString(mGroupArtistIdIdx));
 	            		groupDataTmp.put( i, data );
 
-	            		Cursor childCursor = getChildrenCursor(cursor.getLong(mGroupArtistIdIdx),data.getArtistId());
+	            		Cursor childCursor = getChildrenCursor(cursor.getLong(mGroupArtistIdIdx),data.getArtistName());
 	            		if( childCursor == null )
 	            		{
 	            			Log.e("doInBackGround - ArtistAlbumListAdapter", "child cursor取得エラー");

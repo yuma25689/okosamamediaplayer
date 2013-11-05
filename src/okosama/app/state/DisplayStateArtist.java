@@ -1,5 +1,6 @@
 package okosama.app.state;
 
+import android.util.Log;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.tab.Tab;
@@ -9,6 +10,7 @@ public class DisplayStateArtist extends absDisplayStateMediaTab {
 
 	@Override
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
+		Log.w("ChangeDisplayBasedOnThisState", "come");
 		// アーティスト別選択画面への切り替え
 		tab.setCurrentTab(TabPage.TABPAGE_ID_ARTIST, true);
 //		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_ARTIST );
