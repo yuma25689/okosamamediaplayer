@@ -13,6 +13,7 @@ public class MusicSettingsActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
     static final String KEY_ENABLE_FOCUS_LOSS_DUCKING = "enable_focus_loss_ducking";
+    public static final String KEY_ENABLE_MEDIA_CHANGE_VIBRATE = "enable_media_change_vibrate";
     public static final String KEY_ENABLE_HEADSET_PLUG_AND_PLAY = "enable_headset_plug_and_play";
     static final String KEY_DUCK_ATTENUATION_DB = "duck_attenuation_db";
     static final String KEY_ENABLE_GESTURES = "enable_gestures";

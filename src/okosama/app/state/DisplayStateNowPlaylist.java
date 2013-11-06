@@ -1,5 +1,6 @@
 package okosama.app.state;
 
+import android.view.MenuItem;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.tab.Tab;
@@ -22,5 +23,20 @@ public class DisplayStateNowPlaylist extends absDisplayStateMediaTab {
 		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(ControlIDs.TAB_ID_MAIN, false);
 		return ret;
 	}
+	@Override
+	public int onOptionsItemSelected(MenuItem item)
+	{
+		switch( item.getItemId() )
+		{
+		case MENU_UPDATE:
+			// AlbumÇçƒìxí[ññÇ©ÇÁì«Ç›íºÇ∑
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(
+				TabPage.TABPAGE_ID_NOW_PLAYLIST
+			);
+			break;
+		}
+		return 0;
+	}
+	
 	
 }

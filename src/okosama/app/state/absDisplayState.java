@@ -92,9 +92,9 @@ public abstract class absDisplayState implements IDisplayState {
 	{
 		menu.clear();	// TODO: 微妙
 		MenuItem item = null;
-		//item = menu.add(Menu.NONE, MENU_UPDATE, Menu.NONE, R.string.update_menu);
+		item = menu.add(Menu.NONE, MENU_UPDATE, Menu.NONE, R.string.update_menu);
 		// TODO: アイコンを更新に ic_menu_refreshが本当はあるはず？
-		//item.setIcon(android.R.drawable.ic_popup_sync );
+		item.setIcon(android.R.drawable.ic_popup_sync );
 		item = menu.add(Menu.NONE, MENU_SETTING, Menu.NONE, R.string.setting_menu);
 		item.setIcon(android.R.drawable.ic_menu_preferences );
         Intent i = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);

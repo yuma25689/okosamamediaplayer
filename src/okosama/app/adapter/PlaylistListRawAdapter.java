@@ -68,34 +68,6 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
         ImageView play_indicator;
         ImageView icon;
     }
-
-    /**
-     * クエリハンドラ
-     * 少しだけ、他のとは違うので注意する
-     * @author 25689
-     *
-     */
-//    class QueryHandler extends AsyncQueryHandler {
-//    	
-//    	IAdapterUpdate adapter;
-//    	
-//        QueryHandler(ContentResolver res, IAdapterUpdate adapter) {
-//        	// TODO: もう一個にまとめる
-//            super(res);
-//            this.adapter = adapter; 
-//        }
-//        
-//        @Override
-//        protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-//            //Log.i("@@@", "query complete: " + cursor.getCount() + "   " + mActivity);
-//            if (cursor != null) {
-//                cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).mergedCursor(
-//                		cursor, createShortcut);
-//            }
-//            // mActivity.initAdapter(token,cursor);
-//            stockMediaDataFromDevice();
-//        }
-//    }
    
     /**
      * アダプタのコンストラクタ
@@ -217,7 +189,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
         // TODO: 意味ないように感じる・・・
         ViewGroup.LayoutParams p = iv.getLayoutParams();
         p.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-        p.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        //p.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
         // 他は使わない
         iv = vh.play_indicator; //view.findViewById(R.id.play_indicator);
@@ -235,8 +207,8 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
     	clear();
     	for (PlaylistData data : items) {
     	    add(data);
-        	Log.i("updateData - add","id" + data.getPlaylistId() 
-        			+ " name:" + data.getPlaylistName() );    	    
+//        	Log.i("updateData - add","id" + data.getPlaylistId() 
+//        			+ " name:" + data.getPlaylistName() );    	    
     	}
     	notifyDataSetChanged();
     }

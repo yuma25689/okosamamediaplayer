@@ -36,5 +36,7 @@
 			
     <string name="enable_headset_plug_and_play_title">ヘッドホン接続で再生</string>
     <string name="enable_headset_plug_and_play_summary">キューに曲があり、サービスが有効なときにヘッドホンがさされたら、即時再生する</string>
-		
+    <string name="enable_media_change_vibrate_title">曲の変更時にバイブレーション</string>
+    <string name="enable_media_change_vibrate_summary">曲が新しく再生される、次の曲へ行くなどしたとき、バイブレーションで通知する</string>
+    		
 </resources>

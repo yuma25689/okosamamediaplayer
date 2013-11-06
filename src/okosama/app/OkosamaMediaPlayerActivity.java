@@ -1268,14 +1268,17 @@ implements ServiceConnection {
 	    public boolean onPrepareOptionsMenu(Menu menu) {
 //	        MusicUtils.setPartyShuffleMenuIcon(menu);
 	        boolean b = super.onPrepareOptionsMenu(menu);
-			if( stateMain == null 
-			|| stateSub == null )
+			if( stateMain == null )
 			{
 				return false;
 			}
 			int iRet = stateMain.onPrepareOptionsMenu(menu);
 			if( iRet == IDisplayState.MENU_NEXT_STATE )
 			{
+				if( stateSub == null )
+				{
+					return false;
+				}
 				iRet = stateSub.onPrepareOptionsMenu(menu);
 			}
 	        return b;
@@ -1284,14 +1287,17 @@ implements ServiceConnection {
 	    @Override
 	    public boolean onOptionsItemSelected(MenuItem item) {
 	    	boolean b = super.onOptionsItemSelected(item);
-			if( stateMain == null 
-			|| stateSub == null )
+			if( stateMain == null )
 			{
 				return false;
 			}
 			int iRet = stateMain.onOptionsItemSelected(item);
 			if( iRet == IDisplayState.MENU_NEXT_STATE )
 			{
+				if( stateSub == null )
+				{
+					return false;
+				}
 				iRet = stateSub.onOptionsItemSelected(item);
 			}
 			return b;

@@ -27,6 +27,10 @@
             android:title="@string/enable_focus_loss_ducking_title"
             android:summary="@string/enable_focus_loss_ducking_summary"
             android:defaultValue="false" />
+        <CheckBoxPreference android:key="enable_media_change_vibrate"
+            android:title="@string/enable_media_change_vibrate_title"
+            android:summary="@string/enable_media_change_vibrate_summary"
+            android:defaultValue="true" />
         <CheckBoxPreference android:key="enable_headset_plug_and_play"
             android:title="@string/enable_headset_plug_and_play_title"
             android:summary="@string/enable_headset_plug_and_play_summary"

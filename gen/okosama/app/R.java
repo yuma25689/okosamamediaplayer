@@ -459,6 +459,8 @@ public final class R {
         public static final int enable_haptic_feedback_title=0x7f08006b;
         public static final int enable_headset_plug_and_play_summary=0x7f08008f;
         public static final int enable_headset_plug_and_play_title=0x7f08008e;
+        public static final int enable_media_change_vibrate_summary=0x7f080091;
+        public static final int enable_media_change_vibrate_title=0x7f080090;
         /**  Toast after streamStarter activity receives PLAYBACK_COMPLETE in case of an error 
          */
         public static final int fail_to_start_stream=0x7f08005c;

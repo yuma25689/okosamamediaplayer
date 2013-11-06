@@ -1476,9 +1476,24 @@ public class MediaPlaybackService extends Service {
             status.contentView = views;
             // Notificationを常駐させる？
             //status.flags |= Notification.FLAG_ONGOING_EVENT;
-            status.flags |= Notification.DEFAULT_LIGHTS;
+//            status.ledARGB = 0xffffff00;
+//            status.ledOnMS = 300;
+//            status.ledOffMS = 1000;
+            // status.flags |= Notification.DEFAULT_LIGHTS;
+                        
             // Notificationのアイコンを設定
             status.icon = R.drawable.stat_notify_musicplayer;
+            SharedPreferences prefs = getSharedPreferences(
+                    MusicSettingsActivity.PREFERENCES_FILE, MODE_PRIVATE);            
+            boolean bVib = prefs.getBoolean(MusicSettingsActivity.KEY_ENABLE_MEDIA_CHANGE_VIBRATE, false);
+
+            if( bVib )
+            {
+	            // バイブすれば再生中であることに気づくので
+                status.flags |= Notification.DEFAULT_VIBRATE;
+                status.vibrate = new long[]{250,50,750,10};
+                Log.d("MediaServ","vib");
+            }
             // クリック時に発行されるインテント？だろうか？
             // タイミングを指定して発行できるインテント
             // 今回は多分、Notificationがクリックされたとき
