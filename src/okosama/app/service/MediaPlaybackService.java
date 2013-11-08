@@ -43,6 +43,7 @@ import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
@@ -88,13 +89,13 @@ public class MediaPlaybackService extends Service {
     public static final int REPEAT_CURRENT = 1;
     public static final int REPEAT_ALL = 2;
 
-    public static final String PLAYSTATE_CHANGED = "com2.android.music.playstatechanged";
-    public static final String META_CHANGED = "com2.android.music.metachanged";
-    public static final String QUEUE_CHANGED = "com2.android.music.queuechanged";
-    public static final String PLAYBACK_COMPLETE = "com2.android.music.playbackcomplete";
-    public static final String ASYNC_OPEN_COMPLETE = "com2.android.music.asyncopencomplete";
+    public static final String PLAYSTATE_CHANGED = "okosama.app.playstatechanged";
+    public static final String META_CHANGED = "okosama.app.metachanged";
+    public static final String QUEUE_CHANGED = "okosama.app.queuechanged";
+    public static final String PLAYBACK_COMPLETE = "okosama.app.playbackcomplete";
+    public static final String ASYNC_OPEN_COMPLETE = "okosama.app.asyncopencomplete";
 
-    public static final String SERVICECMD = "com2.android.music.musicservicecommand";
+    public static final String SERVICECMD = "okosama.app.musicservicecommand";
     public static final String CMDNAME = "command";
     public static final String CMDTOGGLEPAUSE = "togglepause";
     public static final String CMDSTOP = "stop";
@@ -102,10 +103,10 @@ public class MediaPlaybackService extends Service {
     public static final String CMDPREVIOUS = "previous";
     public static final String CMDNEXT = "next";
 
-    public static final String TOGGLEPAUSE_ACTION = "com2.android.music.musicservicecommand.togglepause";
-    public static final String PAUSE_ACTION = "com2.android.music.musicservicecommand.pause";
-    public static final String PREVIOUS_ACTION = "com2.android.music.musicservicecommand.previous";
-    public static final String NEXT_ACTION = "com2.android.music.musicservicecommand.next";
+    public static final String TOGGLEPAUSE_ACTION = "okosama.app.musicservicecommand.togglepause";
+    public static final String PAUSE_ACTION = "okosama.app.musicservicecommand.pause";
+    public static final String PREVIOUS_ACTION = "okosama.app.musicservicecommand.previous";
+    public static final String NEXT_ACTION = "okosama.app.musicservicecommand.next";
 
     private static final int TRACK_ENDED = 1;
     private static final int RELEASE_WAKELOCK = 2;
@@ -1490,8 +1491,10 @@ public class MediaPlaybackService extends Service {
             if( bVib )
             {
 	            // バイブすれば再生中であることに気づくので
-                status.flags |= Notification.DEFAULT_VIBRATE;
-                status.vibrate = new long[]{250,50,750,10};
+//                status.flags |= Notification.DEFAULT_VIBRATE;
+//                status.vibrate = new long[]{250,50,750,10};
+                Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                vibrator.vibrate(100);
                 Log.d("MediaServ","vib");
             }
             // クリック時に発行されるインテント？だろうか？
@@ -2203,7 +2206,7 @@ public class MediaPlaybackService extends Service {
      * MIDIの場合、-1らしい
      */
     public long duration() {
-        if (mPlayer.isInitialized()) {
+        if (mPlayer != null && mPlayer.isInitialized()) {
             return mPlayer.duration();
         }
         return -1;

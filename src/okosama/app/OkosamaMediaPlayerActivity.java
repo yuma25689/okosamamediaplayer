@@ -1,6 +1,5 @@
 package okosama.app;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -38,11 +37,6 @@ import okosama.app.service.MediaPlayerUtil;
 import okosama.app.service.MediaPlayerUtil.ServiceToken;
 import okosama.app.state.DisplayStateFactory;
 import okosama.app.state.IDisplayState;
-import okosama.app.storage.AlbumData;
-import okosama.app.storage.ArtistChildData;
-import okosama.app.storage.ArtistGroupData;
-import okosama.app.storage.PlaylistData;
-import okosama.app.storage.TrackData;
 // import okosama.app.state.absDisplayState;
 import okosama.app.storage.Database;
 import okosama.app.tab.*;
@@ -482,7 +476,8 @@ implements ServiceConnection {
 		        	{
 		        		// タブが選択された通知
 		        		// リスナを更新
-		            	updateListeners();
+		            	updateListeners(IDisplayState.STATUS_ON_CREATE);
+		            	updateListeners(IDisplayState.STATUS_ON_RESUME);
 		            	// メディアを更新
 		            	reScanMedia((Integer)message.obj,false);
 		        		if( ControlIDs.TAB_ID_MAIN == (Integer)message.obj )
@@ -905,17 +900,20 @@ implements ServiceConnection {
 	/**
 	 * 現在の状況に合わせて、リスナを登録し直す
 	 */
-	void updateListeners()
+	void updateListeners(int status)
 	{
-		if( stateMain == null 
-				|| stateSub == null )
+		if( stateMain == null )
 		{
 			return;
 		}
-		int iRet = stateMain.registerReceivers(IDisplayState.STATUS_ON_CREATE);
+		int iRet = stateMain.registerReceivers(status);
 		if( iRet == 1 )
 		{
-			iRet = stateSub.registerReceivers(IDisplayState.STATUS_ON_CREATE);
+			if( stateSub == null )
+			{
+				return;
+			}
+			iRet = stateSub.registerReceivers(status);//);
 		}		
 		if( iRet == 1 )
 		{
@@ -1146,7 +1144,7 @@ implements ServiceConnection {
 			Log.i("tabstate=null","tab state is null on the service connected.");
 			return;
 		}
-		updateListeners();
+		updateListeners(IDisplayState.STATUS_ON_CREATE);
 	}
 
 	/**

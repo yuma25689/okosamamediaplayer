@@ -39,10 +39,10 @@ public class absDisplayStateMediaTab extends absDisplayState {
 			f = new IntentFilter();
 	        f.addAction(MediaPlaybackService.META_CHANGED);
 	        f.addAction(MediaPlaybackService.QUEUE_CHANGED);
-	        BroadcastReceiver trackListListener = ListenerFactory.createTrackListener();
-	        receivers.put( LSNER_NAME_TRACK, trackListListener );
-	        OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().registerReceiver(trackListListener, f);
-	        trackListListener.onReceive(null, null);
+	        BroadcastReceiver mediaChangeListener = ListenerFactory.createMediaChangeListener(this);
+	        receivers.put( LSNER_NAME_MEDIACHG, mediaChangeListener );
+	        OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().registerReceiver(mediaChangeListener, f);
+	        mediaChangeListener.onReceive(null, null);
 	
 	        // MusicUtils.setSpinnerState(this);
 	        break;
@@ -55,11 +55,11 @@ public class absDisplayStateMediaTab extends absDisplayState {
 		{
 		case STATUS_ON_PAUSE:
 			// TODO: ä÷êîâª
-			if( receivers.containsKey( LSNER_NAME_TRACK ))
+			if( receivers.containsKey( LSNER_NAME_MEDIACHG ))
 			{
-				BroadcastReceiver brTrack = receivers.get( LSNER_NAME_TRACK );
+				BroadcastReceiver brTrack = receivers.get( LSNER_NAME_MEDIACHG );
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().unregisterReceiver(brTrack);
-		        receivers.remove(LSNER_NAME_TRACK);
+		        receivers.remove(LSNER_NAME_MEDIACHG);
 			}
 			if( handlers.containsKey( HDLER_NAME_RESCAN ))
 			{

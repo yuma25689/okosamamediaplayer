@@ -30,7 +30,7 @@ public class DisplayStatePlay extends absDisplayState {
 	public long updateDisplay() {
 		long ret =  OkosamaMediaPlayerActivity.NO_REFRESH;
 		boolean bPlaying = false;
-        if(MediaPlayerUtil.sService == null)
+        if(MediaPlayerUtil.sService == null )
         {
             return ret;
 		}
@@ -43,21 +43,23 @@ public class DisplayStatePlay extends absDisplayState {
 				// 再生中かどうかで、処理を振り分ける
 	        	ret = 1000; //	再生中は、1000msごとに画面更新
 	        }
-		    
-			act.updateTimeDisplayVisible(MediaPlayerUtil.sService.duration() / 1000);
-			long pos = MediaPlayerUtil.sService.position();
-			if( TimeControlPanel.getInstance() != null )
-			{
-				TimeControlPanel.getInstance().setDurationLabel(MediaPlayerUtil.sService.duration() / 1000);
-				TimeControlPanel.getInstance().setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
-				TimeControlPanel.getInstance().setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
-				TimeControlPanel.getInstance().setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
-				TimeControlPanel.getInstance().getProgressBar().setMax((int)(MediaPlayerUtil.sService.duration()));
-				TimeControlPanel.getInstance().getProgressBar().setProgress((int)(pos));
-				TimeControlPanel.getInstance().getProgressBar().setVisibility(View.VISIBLE);
-			}
-			// act.setPlayPauseButtonImage();
-			act.updateTimeDisplay(pos/1000);
+		    if( MediaPlayerUtil.sService.duration() != -1 )
+		    {
+				act.updateTimeDisplayVisible(MediaPlayerUtil.sService.duration() / 1000);
+				long pos = MediaPlayerUtil.sService.position();
+				if( TimeControlPanel.getInstance() != null )
+				{
+					TimeControlPanel.getInstance().setDurationLabel(MediaPlayerUtil.sService.duration() / 1000);
+					TimeControlPanel.getInstance().setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
+					TimeControlPanel.getInstance().setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
+					TimeControlPanel.getInstance().setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
+					TimeControlPanel.getInstance().getProgressBar().setMax((int)(MediaPlayerUtil.sService.duration()));
+					TimeControlPanel.getInstance().getProgressBar().setProgress((int)(pos));
+					TimeControlPanel.getInstance().getProgressBar().setVisibility(View.VISIBLE);
+				}
+				// act.setPlayPauseButtonImage();
+				act.updateTimeDisplay(pos/1000);
+		    }
 //	        }
 //	        else
 //	        {
@@ -80,4 +82,10 @@ public class DisplayStatePlay extends absDisplayState {
         }
 		return ret;
 	}
+	@Override
+	public int updateStatus() {
+		// TODO: ボタン等？
+		return 0;
+	}
+	
 }

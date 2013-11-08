@@ -14,7 +14,7 @@ public interface IDisplayState {
 	 */
 	public int ChangeDisplayBasedOnThisState(Tab tab);
 	
-	public static String LSNER_NAME_TRACK = "TRACK_LSN";
+	public static String LSNER_NAME_MEDIACHG = "MEDIA_CHG_LSN";
 	public static String LSNER_NAME_SCAN = "SCAN_LSN";
 	public static String HDLER_NAME_RESCAN = "RESCAN_HDL";
 	
@@ -39,6 +39,7 @@ public interface IDisplayState {
 	 * @return 次の更新へのカウントダウン(ms) NO_REFRESHならば、継続的には更新しない
 	 */
 	public long updateDisplay();
+	public int updateStatus();
 	
 	public static final int MENU_OK = 0;
 	public static final int MENU_NEXT_STATE = 1;

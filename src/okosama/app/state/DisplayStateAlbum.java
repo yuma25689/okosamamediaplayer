@@ -44,5 +44,10 @@ public class DisplayStateAlbum extends absDisplayStateMediaTab {
 		}
 		return 0;
 	}
+	@Override
+	public int updateStatus() {
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getAlbumAdp().updateStatus();
+		return 0;
+	}
 
 }

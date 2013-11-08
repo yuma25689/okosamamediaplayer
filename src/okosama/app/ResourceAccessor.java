@@ -138,7 +138,10 @@ public final class ResourceAccessor {
 	public void releaseSound()
 	{
 		iSoundLoadCnt = 0;
-		soundPool.release();
+		if( soundPool != null )
+		{
+			soundPool.release();
+		}
 	}
 	public Bitmap createBitmapFromDrawableId( int id )
 	{

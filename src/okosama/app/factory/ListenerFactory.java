@@ -3,6 +3,8 @@ package okosama.app.factory;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.service.MediaPlayerUtil;
+import okosama.app.state.IDisplayState;
+import okosama.app.state.absDisplayState;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,13 +13,17 @@ import android.os.Message;
 
 public class ListenerFactory {
 	/////////////////////// ƒŠƒXƒi
-	public static BroadcastReceiver createTrackListener() 
+	public static BroadcastReceiver createMediaChangeListener(IDisplayState state) 
 	{
 		return new BroadcastReceiver() {
-	        @Override
+			IDisplayState mState = null;
+			@Override
 	        public void onReceive(Context context, Intent intent) {
 	            //getListView().invalidateViews();
 	            //MusicUtils.updateNowPlaying(AlbumBrowserActivity.this);
+	        	//OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(
+	        	//		ControlIDs.ID_NOT_SPECIFIED, false);
+				mState.up();
 	        }
 	    };
 	}

@@ -144,5 +144,10 @@ public abstract class absDisplayState implements IDisplayState {
 //		roll = OkosamaMediaPlayerActivity.getResourceAccessor().motionObserver.getRoll();
 		return 0;
 	}
+	@Override
+	public int updateStatus() {
+		// OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getAlbumAdp().updateStatus();
+		return 0;
+	}
 
 }

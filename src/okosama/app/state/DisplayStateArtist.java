@@ -38,12 +38,11 @@ public class DisplayStateArtist extends absDisplayStateMediaTab {
 		}
 		return 0;
 	}
+
+	@Override
+	public int updateStatus() {
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getArtistAdp().updateStatus();
+		return 0;
+	}
 	
-//	@Override
-//	public int registerReceivers(int status) {
-//		// TODO Auto-generated method stub
-//		
-//		
-//		return 0;
-//	}
 }

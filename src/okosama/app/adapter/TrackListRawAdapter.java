@@ -607,5 +607,14 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 //    @Override
 //	public int getSectionForPosition(int position) {
 //        return 0;
-//    }        
+//    }       
+    @Override
+    // 曲の変更時など、状態が変わったときに、外部から表示を更新させる
+	public int updateStatus()
+    {
+    	// 表示を更新?
+    	notifyDataSetChanged();
+    	return 0;
+    }
+	
 }

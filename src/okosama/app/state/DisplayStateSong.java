@@ -36,6 +36,11 @@ public class DisplayStateSong extends absDisplayStateMediaTab {
 		}
 		return 0;
 	}
+	@Override
+	public int updateStatus() {
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().updateStatus();
+		return 0;
+	}
 	
 //	@Override
 //	public int registerReceivers(int status) {
