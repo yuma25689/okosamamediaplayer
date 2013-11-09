@@ -44,7 +44,13 @@ implements IAdapterUpdate, SectionIndexer {
 		}
 		return mapIdAndArt.get(id);
 	}
+	boolean bLastError = false;
+	
 	boolean bDataUpdating = false;	// 内部データを更新中かどうか
+	public boolean IsDataUpdating()
+	{
+		return bDataUpdating;
+	}
 	private LayoutInflater inflater;
 	// private ArrayList<AlbumData> items;
 	private int iLayoutId;
@@ -242,6 +248,7 @@ implements IAdapterUpdate, SectionIndexer {
             protected Integer doInBackground(Cursor... params) {
             	Log.i("doInBackground","start");
             	items.clear();
+            	bLastError = false;
             	
             	Cursor cursor = Database.getInstance(
             			OkosamaMediaPlayerActivity.isExternalRef()
@@ -275,6 +282,10 @@ implements IAdapterUpdate, SectionIndexer {
             	} finally {
             		cursor.close();
             	}
+        		if( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() )
+        		{
+        			return -2;
+        		}
                 return 0;
             }
 
@@ -283,6 +294,10 @@ implements IAdapterUpdate, SectionIndexer {
             {
             	Log.i("onPostExecute","ret=" + ret );
             	
+            	if( ret < 0 )
+            	{
+                	bLastError = true;            		
+            	}
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateData( items );
@@ -353,4 +368,9 @@ implements IAdapterUpdate, SectionIndexer {
     	notifyDataSetChanged();
     	return 0;
     }
+
+	@Override
+	public boolean isLastErrored() {
+		return bLastError;
+	}
  }

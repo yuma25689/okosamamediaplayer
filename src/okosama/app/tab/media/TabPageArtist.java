@@ -4,6 +4,7 @@ import okosama.app.AppStatus;
 import okosama.app.ControlDefs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.behavior.AlbumListBehavior;
 import okosama.app.behavior.ArtistListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.Tab;
@@ -11,9 +12,11 @@ import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.tab.TabPage;
 import okosama.app.widget.ExpList;
+import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
 import android.graphics.Color;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -76,9 +79,19 @@ public class TabPageArtist extends TabPage {
 				"", ScaleType.FIT_XY
 			)
 		};
-		ExpList lst = DroidWidgetKit.getInstance().MakeExpList( new ArtistListBehavior() );
-		
-		widgets.add(lst);
+		ExpList lst = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getExpList(ExpList.LISTID_ARTIST);
+		if( lst == null )
+		{
+			lst = DroidWidgetKit.getInstance().MakeExpList( new ArtistListBehavior() );
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().setExpList(ExpList.LISTID_ARTIST,lst);
+			widgets.add(lst);
+		}
+		else
+		{
+			ExpandableListView view = ((ExpandableListView) lst.getView());
+			view.setAdapter(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getArtistAdp());
+			view.invalidateViews();
+		}
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;
 		for( absWidget widget : widgets )

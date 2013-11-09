@@ -35,8 +35,13 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
     private static final long RECENTLY_ADDED_PLAYLIST = -1;
     //private static final long ALL_SONGS_PLAYLIST = -2;
     //private static final long PODCASTS_PLAYLIST = -3;
+	boolean bLastError = false;    	
     
 	boolean bDataUpdating = false;	// 内部データを更新中かどうか
+	public boolean IsDataUpdating()
+	{
+		return bDataUpdating;
+	}
 	private LayoutInflater inflater;
 	// private ArrayList<PlaylistData> items;
 	private int iLayoutId;
@@ -221,7 +226,6 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
     	}
     	bDataUpdating = true;
     	// Log.i("insertAllDataFromCursor","start");
-    	
 //    	if (mActivity.isFinishing() && cursor != null ) {
 //        	// アクティビティが終了中で、まだカーソルが残っている場合、カーソルをクローズ
 //            cursor.close();
@@ -234,6 +238,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
             protected Integer doInBackground(Cursor... params) {
             	Log.i("doInBackground","start");
             	items.clear();
+            	bLastError = false;
             	
             	// カーソルをループする
             	Cursor cursor = Database.getInstance(
@@ -274,6 +279,10 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
             {
             	Log.i("onPostExecute","ret=" + ret );
             	
+            	if( ret < 0 )
+            	{
+                	bLastError = true;
+            	}
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateData( items );
@@ -323,5 +332,9 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
     	notifyDataSetChanged();
     	return 0;
     }
+	@Override
+	public boolean isLastErrored() {
+		return bLastError;
+	}
    
  }

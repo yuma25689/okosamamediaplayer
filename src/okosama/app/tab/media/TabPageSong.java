@@ -4,6 +4,7 @@ import okosama.app.AppStatus;
 import okosama.app.ControlDefs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.behavior.PlaylistListBehavior;
 import okosama.app.behavior.TrackListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.Tab;
@@ -76,9 +77,14 @@ public class TabPageSong extends TabPage {
 				, "", ScaleType.FIT_XY
 			)
 		};
-		List lst = DroidWidgetKit.getInstance().MakeList( new TrackListBehavior() );
+		List lst = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getList(List.LISTID_SONG);
+		if( lst == null )
+		{
+			lst = DroidWidgetKit.getInstance().MakeList( new TrackListBehavior() );
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().setList(List.LISTID_SONG,lst);
 		
-		widgets.add(lst);
+			widgets.add(lst);
+		}
 		
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;

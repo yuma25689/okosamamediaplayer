@@ -240,12 +240,13 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			// Adapter�̍쐬
 			if( activity.getAlbumAdp() == null )
 			{
-				ArrayList<AlbumData> data = new ArrayList<AlbumData>();
+				Log.e("AlbumAdapter","re create");
+				// ArrayList<AlbumData> data = null;//new ArrayList<AlbumData>();
 				activity.setAlbumAdp(
 					new AlbumListRawAdapter(
 						activity,
 						R.layout.track_list_item,//,
-						data//,//Cursor cursor,
+						new ArrayList<AlbumData>()//,//Cursor cursor,
 //						new String[] {}, 
 //						new int[] {}
 					)
@@ -324,7 +325,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			// Adapter�̍쐬
 			if( activity.getTrackAdp() == null )
 			{
-				ArrayList<TrackData> data = new ArrayList<TrackData>();
+				//ArrayList<TrackData> data = null;//new ArrayList<TrackData>();
 				activity.setTrackAdp(
 					new TrackListRawAdapter(
 						activity,
@@ -332,7 +333,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 //						null,//Cursor cursor,
 //						new String[] {}, 
 //						new int[] {},
-						data,
+						new ArrayList<TrackData>(),//data,
 						isnowplaying,
 						disablenowplayingindicator,
 						genre,
@@ -365,13 +366,13 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			// Adapter�̍쐬
 			if( activity.getPlaylistAdp() == null )
 			{
-				ArrayList<PlaylistData> data = new ArrayList<PlaylistData>();
+				//ArrayList<PlaylistData> data = //new ArrayList<PlaylistData>();
 				activity.setPlaylistAdp(
 					new PlaylistListRawAdapter(
 						// activity.getApplication(),
 						activity,
 						R.layout.track_list_item,
-						data
+						new ArrayList<PlaylistData>()//data
 						//null,//Cursor cursor,
 						//new String[] { PlaylistsColumns.NAME},
 	                    //new int[] { android.R.id.text1 }

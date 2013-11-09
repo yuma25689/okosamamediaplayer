@@ -42,7 +42,10 @@ import okosama.app.storage.Database;
 import okosama.app.tab.*;
 import okosama.app.tab.media.TabMediaSelect;
 import okosama.app.widget.Button;
+import okosama.app.widget.ExpList;
+import okosama.app.widget.List;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +54,7 @@ import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -60,7 +64,7 @@ public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection {
 	public static final String MEDIA_SERVICE_NOTIFY = "MediaServiceNotify";
 
-	private boolean bDataRestored = false;
+	// private boolean bDataRestored = false;
 	
 	// 強制リフレッシュフラグ？
 	public boolean bForceRefresh = false;
@@ -172,6 +176,33 @@ implements ServiceConnection {
 	public void setTrackAdp(TrackListRawAdapter tracklistAdp) {
 		this.tracklistAdp = tracklistAdp;
 	}
+	
+	SparseArray<List> lists = new SparseArray<List>();
+	public void setList(int id, List lst)
+	{
+		lists.put(id, lst);
+	}
+	public List getList(int id)
+	{
+		if( lists.indexOfKey(id) != -1 )
+		{
+			return lists.get(id);
+		}
+		return null;
+	}
+	SparseArray<ExpList> explists = new SparseArray<ExpList>();
+	public void setExpList(int id, ExpList lst)
+	{
+		explists.put(id, lst);
+	}
+	public ExpList getExpList(int id)
+	{
+		if( explists.indexOfKey(id) != -1 )
+		{
+			return explists.get(id);
+		}
+		return null;
+	}
 
 	private TempBackupData backupData = new TempBackupData();
 	/**
@@ -179,7 +210,7 @@ implements ServiceConnection {
      */
     @Override
     public Object onRetainNonConfigurationInstance() {
-    	Log.d("onRetainNonConfigrationInstance","come");
+    	Log.e("onRetainNonConfigrationInstance","come");
     	backupData.setAlbumAdp(getAlbumAdp());
     	backupData.setArtistAdp(getArtistAdp());
     	backupData.setTracklistAdp(getTrackAdp());
@@ -234,10 +265,10 @@ implements ServiceConnection {
 	{
 		return res;
 	}
-	private Tab tab = null;
+	private Tab tabMain = null;
 	public Tab getTabMain()
 	{
-		return tab;
+		return tabMain;
 	}
 	private static TabMediaSelect tabMedia = null;
 	public static TabMediaSelect createMediaTab(
@@ -294,7 +325,7 @@ implements ServiceConnection {
         // ビューの設定
         setContentView(R.layout.main);
  
-		bDataRestored = false;
+		// bDataRestored = false;
 
         TempBackupData backup = (TempBackupData)getLastNonConfigurationInstance();
         if( backup != null )
@@ -409,12 +440,15 @@ implements ServiceConnection {
 				            
 			        		// 初期化されていなければ、タブを作成
 			        		// このアクティビティのレイアウトクラスを渡す
-				            tab = new Tab(
-				            	ControlIDs.TAB_ID_MAIN
-				            	,pageContainer
-				            	,componentContainer 
-				            );
-				            tab.create(R.layout.tab_layout_header);
+			        		if( tabMain == null )
+			        		{
+					            tabMain = new Tab(
+					            	ControlIDs.TAB_ID_MAIN
+					            	,pageContainer
+					            	,componentContainer 
+					            );
+					            tabMain.create(R.layout.tab_layout_header);
+			        		}
 			        	}
 			    		bInitEnd = true;
 			        	
@@ -463,13 +497,46 @@ implements ServiceConnection {
 			            //bTabInitEnd = true;
 			           	
 			           	// 初期化時に、全てのメディアを取得する
-			           	if( bDataRestored == false )
-			           	{
-			           		Log.d("msg_init_end","force rescan");
-				           	reScanMedia(TabPage.TABPAGE_ID_ALBUM);
-				           	reScanMedia(TabPage.TABPAGE_ID_ARTIST);
-				           	reScanMedia(TabPage.TABPAGE_ID_SONG);
-			           	}
+			           	// if( bDataRestored == false )
+		           		//Log.d("msg_init_end","force rescan");
+	           			Log.d("album","" + getAlbumAdp().getCount() + getAlbumAdp().IsDataUpdating());
+			           	
+		           		if( 0 < getAlbumAdp().getCount() 
+		           		&& false == getAlbumAdp().isLastErrored() )
+		           		{
+		           			getAlbumAdp().updateStatus();
+		           		}
+		           		else
+		           		{
+		           			reScanMedia(TabPage.TABPAGE_ID_ALBUM);
+		           		}
+		           		if( 0 < getArtistAdp().getGroupCount() 
+		           		&& false == getArtistAdp().isLastErrored() )
+		           		{
+		           			getArtistAdp().updateStatus();
+		           		}
+		           		else
+		           		{
+		           			reScanMedia(TabPage.TABPAGE_ID_ARTIST);
+		           		}
+		           		if( 0 < getTrackAdp().getCount() 
+		           		&& false == getTrackAdp().isLastErrored() )
+		           		{
+		           			getTrackAdp().updateStatus();
+		           		}
+		           		else
+		           		{
+		           			reScanMedia(TabPage.TABPAGE_ID_SONG);
+		           		}
+		           		if( 0 < getPlaylistAdp().getCount() 
+		           		&& false == getPlaylistAdp().isLastErrored() )
+		           		{
+		           			getPlaylistAdp().updateStatus();
+		           		}
+		           		else
+		           		{
+		           			reScanMedia(TabPage.TABPAGE_ID_PLAYLIST);
+		           		}		           		
 			    		break;
 		        	}
 		        	case TabSelectAction.MSG_ID_TAB_SELECT:
@@ -478,8 +545,6 @@ implements ServiceConnection {
 		        		// リスナを更新
 		            	updateListeners(IDisplayState.STATUS_ON_CREATE);
 		            	updateListeners(IDisplayState.STATUS_ON_RESUME);
-		            	// メディアを更新
-		            	reScanMedia((Integer)message.obj,false);
 		        		if( ControlIDs.TAB_ID_MAIN == (Integer)message.obj )
 		        		{
 			        		// Activityのタブidを更新
@@ -500,6 +565,9 @@ implements ServiceConnection {
 		            	// 共通部分再描画
 		            	updateCommonCtrls();
 		            	updatePlayStateButtonImage();
+		            	// メディアを更新
+		            	reScanMedia((Integer)message.obj,false);
+		            	
 		        		break;
 		        	}
         		}
@@ -689,6 +757,11 @@ implements ServiceConnection {
 	@Override
 	protected void onResume() {
 		Log.e("onResume","resume!");
+		if( albumAdp == null )
+		{
+			Log.e("onResume","album adp is null!");
+				
+		}
     	// 画面のサイズ等の情報を更新する
         dispInfo.init(this, componentContainer, handler);
         
@@ -699,6 +772,11 @@ implements ServiceConnection {
 
 	@Override
 	protected void onPause() {
+    	TabPage page = (TabPage) getMediaTab().getChild(currentSubTabId);
+    	if( page != null )
+    	{
+    		page.startUpdate();
+    	}	
 		// マップをループして、全部の設定を保存
 		//tabCurrentDisplayIdMap.
         //outcicle.putInt("displayid", iCurrentDisplayId);
@@ -710,7 +788,7 @@ implements ServiceConnection {
 		
 		paused = true;
 		
-		componentContainer.removeAllViews();
+		// componentContainer.removeAllViews();
 		bInitEnd = false;
 		bForceRefresh = true;
         getResourceAccessor().releaseSound();
@@ -812,7 +890,7 @@ implements ServiceConnection {
         	if( iRet == 1 )
         	{
         		//iRet2 = 
-        		stateMain.ChangeDisplayBasedOnThisState(tab);
+        		stateMain.ChangeDisplayBasedOnThisState(tabMain);
         	}
         }
         // 2013/11/05 add
@@ -1028,6 +1106,7 @@ implements ServiceConnection {
 			case TabPage.TABPAGE_ID_ALBUM:
 				if( 0 < getAlbumAdp().getCount() )
 				{
+					getAlbumAdp().updateStatus();//updateData(getAlbumAdp().getItems());
 					break;
 				}
 				// Listにカーソルを設定
@@ -1039,6 +1118,7 @@ implements ServiceConnection {
 				if( 0 < getArtistAdp().getGroupCount() )
 				{
 					Log.d("artist","artist escape count=" + getArtistAdp().getGroupCount() );
+					getArtistAdp().updateStatus();
 					break;
 				}
 				Log.d("artist","artist rescan" );
@@ -1050,6 +1130,7 @@ implements ServiceConnection {
 			case TabPage.TABPAGE_ID_SONG:
 				if( 0 < getTrackAdp().getCount() )
 				{
+					getTrackAdp().updateList();					
 					break;
 				}
 				
@@ -1072,6 +1153,14 @@ implements ServiceConnection {
 		    	{
 		    		page.startUpdate();
 		    	}
+			}
+			else
+			{
+		    	TabPage page = (TabPage) getMediaTab().getChild(currentSubTabId);
+		    	if( page != null )
+		    	{
+		    		page.endUpdate();
+		    	}	
 			}
 		}
 		else	

@@ -37,6 +37,7 @@ public abstract class TabPage extends TabComponentParent {
 	public static final int TABPAGE_ID_NOW_PLAYLIST = 8;
 	public static final int TABPAGE_ID_MEDIA_IMPL = 12;
 	
+	private boolean bPrevActivate = false;
 	
 	@Override
 	public void setActivate( boolean bActivate )
@@ -53,6 +54,7 @@ public abstract class TabPage extends TabComponentParent {
 					TabChangeAnimation.TAB_OUT, tabBaseLayout, componentContainer, this.tabId);			
 	
 		}
+		bPrevActivate = bActivate;
 		super.setActivate(bActivate);
 	}
 

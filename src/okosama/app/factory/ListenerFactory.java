@@ -23,7 +23,7 @@ public class ListenerFactory {
 	            //MusicUtils.updateNowPlaying(AlbumBrowserActivity.this);
 	        	//OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(
 	        	//		ControlIDs.ID_NOT_SPECIFIED, false);
-				mState.up();
+				mState.updateStatus();
 	        }
 	    };
 	}

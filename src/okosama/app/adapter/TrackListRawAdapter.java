@@ -54,6 +54,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	long [] playlist = null;
     private final BitmapDrawable mDefaultAlbumIcon;
 	boolean bDataUpdating = false;	// 内部データを更新中かどうか
+	boolean bLastError = false;
 	public boolean isDataUpdating()
 	{
 		return bDataUpdating;
@@ -407,6 +408,9 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
         		} finally {
         			cursor.close();
         		}
+        		if( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() )
+        			return -2;
+        		
                 return 0;
             }
 
@@ -415,6 +419,10 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
             {
             	Log.d("onPostExecute","ret=" + ret );
             	
+            	if( ret < 0 )
+            	{
+            		bLastError = true;
+            	}
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateList();
@@ -616,5 +624,9 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     	notifyDataSetChanged();
     	return 0;
     }
+	@Override
+	public boolean isLastErrored() {
+		return bLastError;
+	}
 	
 }

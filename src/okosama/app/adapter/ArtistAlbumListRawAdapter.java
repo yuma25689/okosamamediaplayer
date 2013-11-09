@@ -37,6 +37,11 @@ import android.widget.TextView;
 public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter implements IAdapterUpdate {//<ArtistGroupData,ArtistChildData> {
 	
 	boolean bDataUpdating = false;
+	boolean bLastError = false;
+	public boolean IsDataUpdating()
+	{
+		return bDataUpdating;
+	}
 	private LayoutInflater inflater;
 
 	int iGroupLayoutId = 0;
@@ -491,6 +496,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 
 	@Override
 	public Object getGroup(int groupPosition) {
+		// Log.e("arsit","getGroup" + groupPosition + " " + groupData.containsKey(groupPosition));
 		if( // groupData.get(groupPosition,null) != null )
 				groupData.containsKey(groupPosition) == true
 				)
@@ -506,6 +512,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 		{
 			return 0;
 		}
+		//.e("arsit","getGroupCount" + groupData.size());
 		return groupData.size();
 	}
 
@@ -517,6 +524,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
+		//Log.e("getGroup","artist");
 		View v = convertView;
 		if( v == null )
 		{
@@ -550,6 +558,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
     	// mapIdAndArt.clear();
     	this.groupData = group;
     	this.childData = child;
+    	Log.d("updateData","artist" + group.size());
     	notifyDataSetChanged();
     }
     
@@ -573,7 +582,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
             @Override
             protected Integer doInBackground(Cursor... params) {
             	Log.i("doInBackground","start");
-            	
+            	bLastError = false;
             	// カーソルをループする
             	Cursor cursor = Database.getInstance(
             			OkosamaMediaPlayerActivity.isExternalRef()
@@ -664,7 +673,10 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
             	} finally {
             		cursor.close();
             	}
-            	
+        		if( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() )
+        		{
+        			return -2;
+        		}
                 return 0;
             }
 
@@ -676,6 +688,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
             	{
             		groupDataTmp.clear();
             		childDataTmp.clear();
+            		bLastError = true;
             	}
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
@@ -731,5 +744,9 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
     	notifyDataSetChanged();
     	return 0;
     }
+	@Override
+	public boolean isLastErrored() {
+		return bLastError;
+	}
 	
 }

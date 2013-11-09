@@ -122,7 +122,10 @@ public class MotionObserver implements SensorEventListener {
 	 */
 	public void release()
 	{
-		sensorManager.unregisterListener(this);
+		if( sensorManager != null )
+		{
+			sensorManager.unregisterListener(this);
+		}
 	}
 
 	/**

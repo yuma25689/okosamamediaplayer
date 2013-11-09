@@ -19,6 +19,7 @@ import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
@@ -59,9 +60,9 @@ public class TabPageAlbum extends TabPage {
         );
 		tabBaseLayout.setLayoutParams(lp);
 		View v = tabBaseLayout.findViewById(R.id.top_info_bar);
-		TextView line1 = (TextView) v.findViewById(R.id.line1);
-		TextView line2 = (TextView) v.findViewById(R.id.line2);
-	    ImageView play_indicator = (ImageView) v.findViewById(R.id.play_indicator);
+//		TextView line1 = (TextView) v.findViewById(R.id.line1);
+//		TextView line2 = (TextView) v.findViewById(R.id.line2);
+//	    ImageView play_indicator = (ImageView) v.findViewById(R.id.play_indicator);
 	    ImageView icon = (ImageView) v.findViewById(R.id.icon);
 	    BitmapDrawable albumIcon 
 	    =  (BitmapDrawable)OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
@@ -93,14 +94,21 @@ public class TabPageAlbum extends TabPage {
 				"", ScaleType.FIT_XY
 			),
 		};
-		List lst = DroidWidgetKit.getInstance().MakeList( new AlbumListBehavior() );
+		List lst = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getList(List.LISTID_ALBUM);
+		if( lst == null )
+		{
+			lst = DroidWidgetKit.getInstance().MakeList( new AlbumListBehavior() );
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().setList(List.LISTID_ALBUM,lst);
+		
 		// okosama.app.widget.ProgressBar prog = DroidWidgetKit.getInstance().MakeProgressBar();
 //		absWidget widgets[] = {
 //			lst
 			//prog
 //			,DroidWidgetKit.getInstance().MakeButton()
 //		};
-		widgets.add(lst);
+			widgets.add(lst);
+		}
+		
 		// ---- action
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		creationData[0].setColorBack(Color.WHITE);
