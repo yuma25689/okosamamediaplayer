@@ -18,12 +18,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:background="@drawable/appwidget_bg">
+    android:background="@drawable/okosama_app_widget_bg">
 
    <LinearLayout
         android:id="@+id/album_appwidget"
         android:layout_width="0dip"
-        android:layout_weight="3"
+        android:layout_weight="2"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_vertical"
@@ -59,7 +59,24 @@
             android:ellipsize="none"
             />
     </LinearLayout>
-    
+
+ 	<ImageView
+        android:layout_width="1dip"
+        android:layout_height="match_parent"
+        android:background="@drawable/appwidget_divider"
+        />
+        
+    <ImageButton
+        android:id="@+id/control_back"
+        android:layout_width="0dip"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:src="@drawable/back_button_image"
+        android:background="@drawable/appwidget_button_center"
+        android:scaleType="centerInside"
+        android:padding="3dip"
+        />
+   
  	<ImageView
         android:layout_width="1dip"
         android:layout_height="match_parent"
@@ -71,9 +88,10 @@
         android:layout_width="0dip"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_appwidget_music_play"
+        android:src="@drawable/play_button_image"
         android:background="@drawable/appwidget_button_center"
-        android:scaleType="center"
+        android:scaleType="centerInside"
+        android:padding="3dip"
         />
 
  	<ImageView
@@ -87,9 +105,10 @@
         android:layout_width="0dip"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/nestbtn_normal"
+        android:src="@drawable/next_button_image"
         android:background="@drawable/appwidget_button_right"
-        android:scaleType="center"
+        android:scaleType="centerInside"
+        android:padding="3dip"
         />
 
 </LinearLayout>

@@ -252,7 +252,7 @@ implements IAdapterUpdate, SectionIndexer {
             	
             	Cursor cursor = Database.getInstance(
             			OkosamaMediaPlayerActivity.isExternalRef()
-            	).createAlbumCursor(null, null);
+            	).createAlbumCursor();//null, null);
 	            
             	// カーソルをループする
             	// Cursor cursor = params[0];

@@ -351,7 +351,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
      * TODO:不要なので、もっと軽い処理に置き換えること
      */
     // @Override
-    protected Cursor getChildrenCursor(long groupId, String artistName ) { //Cursor groupCursor) {
+    protected Cursor getChildrenCursor(long groupId) { //, String artistName ) { //Cursor groupCursor) {
         
     	// グループカーソルから、そのアーティストのidを取得する
         // long id = groupCursor.getLong(groupCursor.getColumnIndexOrThrow(BaseColumns._ID));
@@ -378,79 +378,79 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
                 cols, null, null, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
         
         // カーソルのラッバ？
-        class MyCursorWrapper extends CursorWrapper {
-        	// アーティスト名
-            String mArtistName;
-            // マジックカラムのインデックス？
-            // どうやら、このカーソルからアーティスト名を取得するためのインデックス
-            // 本来、アーティスト名は格納されていないが、コンストラクタで格納し、取得のときにこのindexが指定されたらそれを返す
-            int mMagicColumnIdx;
-            /**
-             * コンストラクタ
-             * @param c
-             * @param artist
-             */
-            MyCursorWrapper(Cursor c, String artist) {
-                super(c);
-                // アーティスト名
-                mArtistName = artist;
-                // アーティスト名がなかったら、不明を設定
-                if (mArtistName == null || mArtistName.equals(MediaStore.UNKNOWN_STRING)) {
-                    mArtistName = mUnknownArtist;
-                }
-                // マジックカラムとして、カラム数を設定？
-                mMagicColumnIdx = c.getColumnCount();
-            }
-            
-            @Override
-            public String getString(int columnIndex) {
-            	// カラムindexがマジックカラムでなければ、その文字列を取得？
-                if (columnIndex != mMagicColumnIdx) {
-                    return super.getString(columnIndex);
-                }
-                // マジックカラムならば、アーティスト名を取得
-                return mArtistName;
-            }
-            
-            /**
-             * 指定されたカラム名のカラムのindexを取得
-             * ただし、マジックカラムならば、アーティスト名を取得
-             */
-            @Override
-            public int getColumnIndexOrThrow(String name) {
-                if (AlbumColumns.ARTIST.equals(name)) {
-                    return mMagicColumnIdx;
-                }
-                return super.getColumnIndexOrThrow(name); 
-            }
-            
-            /**
-             * インデックスに対応したカラムのindexを返却する
-             */
-            @Override
-            public String getColumnName(int idx) {
-                if (idx != mMagicColumnIdx) {
-                    return super.getColumnName(idx);
-                }
-                return AlbumColumns.ARTIST;
-            }
-            
-            /**
-             * カラムのカウントを返却する
-             * 自前で一個追加しているので、カラム数+1を返却する
-             */
-            @Override
-            public int getColumnCount() {
-                return super.getColumnCount() + 1;
-            }
-        }
-        // カーソルに、アーティスト名を追加したカーソルを返却？
-        // おそらく、アーティストはどのレコードでも同じで良いので、この作りで良い
-        if( c != null )
-        {
-        	return new MyCursorWrapper(c, artistName );//groupCursor.getString(mGroupArtistIdx));
-        }
-        return null;
+//        class MyCursorWrapper extends CursorWrapper {
+//        	// アーティスト名
+//            String mArtistName;
+//            // マジックカラムのインデックス？
+//            // どうやら、このカーソルからアーティスト名を取得するためのインデックス
+//            // 本来、アーティスト名は格納されていないが、コンストラクタで格納し、取得のときにこのindexが指定されたらそれを返す
+//            int mMagicColumnIdx;
+//            /**
+//             * コンストラクタ
+//             * @param c
+//             * @param artist
+//             */
+//            MyCursorWrapper(Cursor c, String artist) {
+//                super(c);
+//                // アーティスト名
+//                mArtistName = artist;
+//                // アーティスト名がなかったら、不明を設定
+//                if (mArtistName == null || mArtistName.equals(MediaStore.UNKNOWN_STRING)) {
+//                    mArtistName = mUnknownArtist;
+//                }
+//                // マジックカラムとして、カラム数を設定？
+//                mMagicColumnIdx = c.getColumnCount();
+//            }
+//            
+//            @Override
+//            public String getString(int columnIndex) {
+//            	// カラムindexがマジックカラムでなければ、その文字列を取得？
+//                if (columnIndex != mMagicColumnIdx) {
+//                    return super.getString(columnIndex);
+//                }
+//                // マジックカラムならば、アーティスト名を取得
+//                return mArtistName;
+//            }
+//            
+//            /**
+//             * 指定されたカラム名のカラムのindexを取得
+//             * ただし、マジックカラムならば、アーティスト名を取得
+//             */
+//            @Override
+//            public int getColumnIndexOrThrow(String name) {
+//                if (AlbumColumns.ARTIST.equals(name)) {
+//                    return mMagicColumnIdx;
+//                }
+//                return super.getColumnIndexOrThrow(name); 
+//            }
+//            
+//            /**
+//             * インデックスに対応したカラムのindexを返却する
+//             */
+//            @Override
+//            public String getColumnName(int idx) {
+//                if (idx != mMagicColumnIdx) {
+//                    return super.getColumnName(idx);
+//                }
+//                return AlbumColumns.ARTIST;
+//            }
+//            
+//            /**
+//             * カラムのカウントを返却する
+//             * 自前で一個追加しているので、カラム数+1を返却する
+//             */
+//            @Override
+//            public int getColumnCount() {
+//                return super.getColumnCount() + 1;
+//            }
+//        }
+//        // カーソルに、アーティスト名を追加したカーソルを返却？
+//        // おそらく、アーティストはどのレコードでも同じで良いので、この作りで良い
+//        if( c != null )
+//        {
+//        	return new MyCursorWrapper(c, artistName );//groupCursor.getString(mGroupArtistIdx));
+//        }
+        return c;
     }
 
     
@@ -586,7 +586,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
             	// カーソルをループする
             	Cursor cursor = Database.getInstance(
             			OkosamaMediaPlayerActivity.isExternalRef()
-            	).createArtistCursor(null, null);            	
+            	).createArtistCursor();//null, null);            	
             	// Cursor cursor = params[0];
         		if( cursor == null || cursor.isClosed() )
         		{
@@ -617,7 +617,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 	                    data.setArtistId( cursor.getString(mGroupArtistIdIdx));
 	            		groupDataTmp.put( i, data );
 
-	            		Cursor childCursor = getChildrenCursor(cursor.getLong(mGroupArtistIdIdx),data.getArtistName());
+	            		Cursor childCursor = getChildrenCursor(cursor.getLong(mGroupArtistIdIdx));//,data.getArtistName());
 	            		if( childCursor == null )
 	            		{
 	            			Log.e("doInBackGround - ArtistAlbumListAdapter", "child cursor取得エラー");
@@ -647,7 +647,8 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 			                        );
 			                        // artist名
 			                        dataChild.setArtistName(
-			                        	childCursor.getString(childCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST))
+			                        	data.getArtistName()
+			                        	//childCursor.getString(childCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST))
 			                        );
 			                        // album art
 			                        dataChild.setAlbumArt(

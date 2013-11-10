@@ -180,11 +180,11 @@ public class Database {
      * @param filter
      * @return
      */
-    public Cursor createArtistCursor(AsyncQueryHandler async, String filter) {
+    public Cursor createArtistCursor() {//AsyncQueryHandler async, String filter) {
 
     	// アーティスト名が空でない、という条件を付け加える
         StringBuilder where = new StringBuilder();
-        where.append(ArtistColumns.ARTIST + " != ''");
+//        where.append(ArtistColumns.ARTIST + " != ''");
         String whereclause = where.toString();
         
         // アーティストのコンテントプロバイダのuriを設定
@@ -199,24 +199,24 @@ public class Database {
         // 引数で指定されたfilter用の単語で、SQLのwhere句を指定？
         // アーティスト名の一部の配列
         String [] keywords = null;
-        if (filter != null) {
-        	// 半角スペースでsplit
-            String [] searchWords = filter.split(" ");
-            keywords = new String[searchWords.length];
-            Collator col = Collator.getInstance();
-            col.setStrength(Collator.PRIMARY);
-            for (int i = 0; i < searchWords.length; i++) {
-                String key = MediaStore.Audio.keyFor(searchWords[i]);
-                key = key.replace("\\", "\\\\");
-                key = key.replace("%", "\\%");
-                key = key.replace("_", "\\_");
-                keywords[i] = '%' + key + '%';
-            }
-            for (int i = 0; i < searchWords.length; i++) {
-                where.append(" AND ");
-                where.append(AudioColumns.ARTIST_KEY + " LIKE ? ESCAPE '\\'");
-            }
-        }
+//        if (filter != null) {
+//        	// 半角スペースでsplit
+//            String [] searchWords = filter.split(" ");
+//            keywords = new String[searchWords.length];
+//            Collator col = Collator.getInstance();
+//            col.setStrength(Collator.PRIMARY);
+//            for (int i = 0; i < searchWords.length; i++) {
+//                String key = MediaStore.Audio.keyFor(searchWords[i]);
+//                key = key.replace("\\", "\\\\");
+//                key = key.replace("%", "\\%");
+//                key = key.replace("_", "\\_");
+//                keywords[i] = '%' + key + '%';
+//            }
+//            for (int i = 0; i < searchWords.length; i++) {
+//                where.append(" AND ");
+//                where.append(AudioColumns.ARTIST_KEY + " LIKE ? ESCAPE '\\'");
+//            }
+//        }
         
         // カラムの設定
         String[] cols = new String[] {
@@ -226,16 +226,16 @@ public class Database {
                 ArtistColumns.NUMBER_OF_TRACKS
         };
         Cursor ret = null;
-        if (async != null) {
-        	// 非同期ならば、非同期でクエリ発行
-        	// Log.d("query uri", "uri :" + uri);
-            async.startQuery(TabPage.TABPAGE_ID_ARTIST, null, uri,
-                    cols, whereclause , keywords, ArtistColumns.ARTIST_KEY);
-        } else {
+//        if (async != null) {
+//        	// 非同期ならば、非同期でクエリ発行
+//        	// Log.d("query uri", "uri :" + uri);
+//            async.startQuery(TabPage.TABPAGE_ID_ARTIST, null, uri,
+//                    cols, whereclause , keywords, ArtistColumns.ARTIST_KEY);
+//        } else {
         	// 同期ならば、同期でクエリ発行
             ret = query(ctx, uri,
                     cols, whereclause, keywords, ArtistColumns.ARTIST_KEY);
-        }
+        //}
         // 得られたカーソルを返却
         return ret;	
     }
@@ -247,11 +247,11 @@ public class Database {
      * @param artistId
      * @return
      */
-    public Cursor createAlbumCursor(AsyncQueryHandler async, String filter ) { // , String artistId) {
+    public Cursor createAlbumCursor() { //AsyncQueryHandler async, String filter ) { // , String artistId) {
     	String artistId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID();
     	// where句を設定する
         StringBuilder where = new StringBuilder();
-        where.append(AlbumColumns.ALBUM + "!=''");
+//        where.append(AlbumColumns.ALBUM + "!=''");
         String whereclause = where.toString();
         
         // アルバムのコンテントプロバイダのuriを設定
@@ -267,24 +267,24 @@ public class Database {
         // これは、アーティストかアルバムどちらでもよい
         // Add in the filtering constraints
         String [] keywords = null;
-        if (filter != null) {
-            String [] searchWords = filter.split(" ");
-            keywords = new String[searchWords.length];
-            Collator col = Collator.getInstance();
-            col.setStrength(Collator.PRIMARY);
-            for (int i = 0; i < searchWords.length; i++) {
-                String key = MediaStore.Audio.keyFor(searchWords[i]);
-                key = key.replace("\\", "\\\\");
-                key = key.replace("%", "\\%");
-                key = key.replace("_", "\\_");
-                keywords[i] = '%' + key + '%';
-            }
-            for (int i = 0; i < searchWords.length; i++) {
-                where.append(" AND ");
-                where.append(AudioColumns.ARTIST_KEY + "||");
-                where.append(AudioColumns.ALBUM_KEY + " LIKE ? ESCAPE '\\'");
-            }
-        }
+//        if (filter != null) {
+//            String [] searchWords = filter.split(" ");
+//            keywords = new String[searchWords.length];
+//            Collator col = Collator.getInstance();
+//            col.setStrength(Collator.PRIMARY);
+//            for (int i = 0; i < searchWords.length; i++) {
+//                String key = MediaStore.Audio.keyFor(searchWords[i]);
+//                key = key.replace("\\", "\\\\");
+//                key = key.replace("%", "\\%");
+//                key = key.replace("_", "\\_");
+//                keywords[i] = '%' + key + '%';
+//            }
+//            for (int i = 0; i < searchWords.length; i++) {
+//                where.append(" AND ");
+//                where.append(AudioColumns.ARTIST_KEY + "||");
+//                where.append(AudioColumns.ALBUM_KEY + " LIKE ? ESCAPE '\\'");
+//            }
+//        }
         
         // 取得カラムの設定
         String[] cols = new String[] {
@@ -299,29 +299,29 @@ public class Database {
         if (artistId != null) {
         	// artistIDが入力されている場合
         	// uriに、artistを含める
-            if (async != null) {
-                async.startQuery(TabPage.TABPAGE_ID_ALBUM, null,
-                        MediaStore.Audio.Artists.Albums.getContentUri(external_string,//"external",
-                                Long.valueOf(artistId)),
-                        cols, whereclause, keywords, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
-            } else {
+//            if (async != null) {
+//                async.startQuery(TabPage.TABPAGE_ID_ALBUM, null,
+//                        MediaStore.Audio.Artists.Albums.getContentUri(external_string,//"external",
+//                                Long.valueOf(artistId)),
+//                        cols, whereclause, keywords, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
+//            } else {
                 ret = query(ctx,
                         MediaStore.Audio.Artists.Albums.getContentUri(external_string,//"external",
                                 Long.valueOf(artistId)),
                         cols, whereclause, keywords, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
-            }
+//            }
         } else {
         	// artistIdがnull
         	// uriは、albumを利用する
-            if (async != null) {
-            	Log.i("uri:", uri.toString());
-            	//async.startQuery(TabPage.TABPAGE_ID_ALBUM, null, uri, null, null, null, null );
-                async.startQuery(TabPage.TABPAGE_ID_ALBUM, null, uri,
-                        cols, whereclause, keywords, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
-            } else {
+//            if (async != null) {
+//            	Log.i("uri:", uri.toString());
+//            	//async.startQuery(TabPage.TABPAGE_ID_ALBUM, null, uri, null, null, null, null );
+//                async.startQuery(TabPage.TABPAGE_ID_ALBUM, null, uri,
+//                        cols, whereclause, keywords, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
+//            } else {
                 ret = query(ctx, uri,
                         cols, whereclause, keywords, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
-            }
+            //}
         }
         return ret;
     }
@@ -494,10 +494,10 @@ public class Database {
     public Cursor createTrackCursor(AsyncQueryHandler async, String filter //String playlist, String filter,
         ) { //, String genre, String albumId, String artistId) {
 
-    	String playlist = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getPlaylistName();
-    	String genre = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getGenre();
-    	String albumId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getAlbumID();
-    	String artistId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID();
+//    	String playlist = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getPlaylistName();
+//    	String genre = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getGenre();
+//    	String albumId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getAlbumID();
+//    	String artistId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID();
     	
     	// TODO: 条件はadapterの方に設定する
     	
@@ -511,7 +511,7 @@ public class Database {
         mSortOrder = AudioColumns.TITLE_KEY;
         // タイトルが空でないものを条件に
         StringBuilder where = new StringBuilder();
-        where.append(MediaColumns.TITLE + " != ''");
+        // where.append(MediaColumns.TITLE + " != ''");
 
         // フィルタを設定
         // この場合、アーティストとトラック？
@@ -622,7 +622,7 @@ public class Database {
 //            }
         	mSortOrder = AudioColumns.TRACK + ", " + mSortOrder;
             // 音楽指定
-            where.append(" AND " + AudioColumns.IS_MUSIC + "=1");
+            // where.append(" AND " + AudioColumns.IS_MUSIC + "=1");
             // クエリ発行
             // Log.i("query1","query1");
 //            ret = queryhandler.doQuery(ctx, uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,

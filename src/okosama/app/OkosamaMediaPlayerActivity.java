@@ -419,6 +419,7 @@ implements ServiceConnection {
         			}
 		        	case DisplayInfo.MSG_INIT_END:
 		        	{
+		        		boolean bTabSelectReset = true;
 		        		// 現状、これがOnResume時のディスプレイ初期化後に飛んでくる
 			        	if( bInitEnd == true )
 			        	{
@@ -449,12 +450,16 @@ implements ServiceConnection {
 					            );
 					            tabMain.create(R.layout.tab_layout_header);
 			        		}
+			        		else
+			        		{
+			        			bTabSelectReset = false;
+			        		}
 			        	}
 			    		bInitEnd = true;
 			        	
 			            // 時間表示等の初期化
-			    		updateTimeDisplayVisible(0);
-			    		updateTimeDisplay(0);
+//			    		updateTimeDisplayVisible(0);
+//			    		updateTimeDisplay(0);
 			    		updatePlayStateButtonImage();
 
 			    		// 現在選択中のタブの情報をクリアする
@@ -477,7 +482,12 @@ implements ServiceConnection {
 //			           	setMediaTabSelection(
 //			           		pref.getInt(tabNameMedia + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN)
 //			           	);
-			           	sendUpdateMessage(ControlIDs.TAB_ID_MAIN);
+			    		if(bTabSelectReset == true )
+			    		{
+				    		updateTimeDisplayVisible(0);
+				    		updateTimeDisplay(0);			    			
+			    			sendUpdateMessage(ControlIDs.TAB_ID_MAIN);
+			    		}
 			           				           	
 //			           	TabSelectAction selAct = new TabSelectAction(tab, currentMainTabId);
 //			           	selAct.doAction(null);
@@ -772,11 +782,11 @@ implements ServiceConnection {
 
 	@Override
 	protected void onPause() {
-    	TabPage page = (TabPage) getMediaTab().getChild(currentSubTabId);
-    	if( page != null )
-    	{
-    		page.startUpdate();
-    	}	
+//    	TabPage page = (TabPage) getMediaTab().getChild(currentSubTabId);
+//    	if( page != null )
+//    	{
+//    		page.startUpdate();
+//    	}	
 		// マップをループして、全部の設定を保存
 		//tabCurrentDisplayIdMap.
         //outcicle.putInt("displayid", iCurrentDisplayId);
@@ -792,18 +802,18 @@ implements ServiceConnection {
 		bInitEnd = false;
 		bForceRefresh = true;
         getResourceAccessor().releaseSound();
-        if( TimeControlPanel.getInstance() != null )
-        {
-        	TimeControlPanel.getInstance().removeViewFromParent();
-        }
-        if( PlayControlPanel.getInstance() != null )
-        {
-        	PlayControlPanel.getInstance().removeViewFromParent();
-        }
-        if( SubControlPanel.getInstance() != null )
-        {
-        	SubControlPanel.getInstance().removeViewFromParent();
-        }
+//        if( TimeControlPanel.getInstance() != null )
+//        {
+//        	TimeControlPanel.getInstance().removeViewFromParent();
+//        }
+//        if( PlayControlPanel.getInstance() != null )
+//        {
+//        	PlayControlPanel.getInstance().removeViewFromParent();
+//        }
+//        if( SubControlPanel.getInstance() != null )
+//        {
+//        	SubControlPanel.getInstance().removeViewFromParent();
+//        }
         
         if( null != receiver )
         {
@@ -909,7 +919,7 @@ implements ServiceConnection {
 	 */
 	public int setMediaTabSelection( int subTab )//, boolean bForceUpd )
 	{
-		Log.w("setMediaTabSelection", "come tabid=" + subTab);
+		// Log.w("setMediaTabSelection", "come tabid=" + subTab);
 		
 		IDisplayState stateSubTmp = DisplayStateFactory.createDisplayState(subTab);        		
         if( stateSubTmp == null )
@@ -920,11 +930,11 @@ implements ServiceConnection {
 		int iRet = 0;
         if( stateSubTmp != null )
         {
-    		Log.w("setMediaTabSelection", "stateSubTmp != null" );
+    		// Log.w("setMediaTabSelection", "stateSubTmp != null" );
         	
         	if( currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
         	{
-        		Log.w("setMediaTabSelection", "stateMain = MEDIA" );
+        		// Log.w("setMediaTabSelection", "stateMain = MEDIA" );
         		
 	        	if( currentSubTabId != subTab || bForceRefresh == true )
 	        	{   	   

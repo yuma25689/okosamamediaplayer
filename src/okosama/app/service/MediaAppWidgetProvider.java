@@ -16,6 +16,7 @@
 
 package okosama.app.service;
 
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -195,18 +196,15 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
         
         final ComponentName serviceName = new ComponentName(context, MediaPlaybackService.class);
         
-        // FIXME: 実装する
-//        
-//        if (playerActive) {
-//        	// playerがActiveの時、クリックでサービスを起動する
-//            intent = new Intent(context, MediaPlaybackActivity.class);
-//            pendingIntent = PendingIntent.getActivity(context,
-//                    0 /* no requestCode */, intent, 0 /* no flags */);
-//            views.setOnClickPendingIntent(R.id.album_appwidget, pendingIntent);
+        //if (playerActive) {
+            intent = new Intent(context, OkosamaMediaPlayerActivity.class);
+            pendingIntent = PendingIntent.getActivity(context,
+                    0 /* no requestCode */, intent, 0 /* no flags */);
+            views.setOnClickPendingIntent(R.id.album_appwidget, pendingIntent);
 //        } else {
 //        	// TODO:
 //        	// playerがactiveでなければ、アプリを起動
-//            intent = new Intent(context, MusicBrowserActivity.class);
+//            intent = new Intent(context, OkosamaMediaPlayerActivity.class);
 //            pendingIntent = PendingIntent.getActivity(context,
 //                    0 /* no requestCode */, intent, 0 /* no flags */);
 //            views.setOnClickPendingIntent(R.id.album_appwidget, pendingIntent);
@@ -225,5 +223,12 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
         pendingIntent = PendingIntent.getService(context,
                 0 /* no requestCode */, intent, 0 /* no flags */);
         views.setOnClickPendingIntent(R.id.control_next, pendingIntent);
+        
+        // サービスに、次へアクションを送信？
+        intent = new Intent(MediaPlaybackService.PREVIOUS_ACTION);
+        intent.setComponent(serviceName);
+        pendingIntent = PendingIntent.getService(context,
+                0 /* no requestCode */, intent, 0 /* no flags */);
+        views.setOnClickPendingIntent(R.id.control_back, pendingIntent);        
     }
 }
