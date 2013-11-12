@@ -11,6 +11,7 @@ import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
 import okosama.app.adapter.PlaylistListRawAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
+import okosama.app.behavior.IBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -24,6 +25,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 // import android.database.Cursor;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -44,6 +46,7 @@ import okosama.app.tab.media.TabMediaSelect;
 import okosama.app.widget.Button;
 import okosama.app.widget.ExpList;
 import okosama.app.widget.List;
+import okosama.app.widget.absWidget;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.ContextMenu;
@@ -61,7 +64,7 @@ import android.widget.Toast;
 import okosama.app.widget.ButtonImpl;
 
 public class OkosamaMediaPlayerActivity extends Activity
-implements ServiceConnection {
+implements ServiceConnection, Database.Defs {
 	public static final String MEDIA_SERVICE_NOTIFY = "MediaServiceNotify";
 
 	// private boolean bDataRestored = false;
@@ -177,6 +180,23 @@ implements ServiceConnection {
 		this.tracklistAdp = tracklistAdp;
 	}
 	
+	public absWidget getListFromTabID(int tabID)
+	{
+		switch( tabID )
+		{
+		case TabPage.TABPAGE_ID_ALBUM:
+			return getList( List.LISTID_ALBUM );
+		case TabPage.TABPAGE_ID_ARTIST:
+			return getExpList( ExpList.LISTID_ARTIST );
+		case TabPage.TABPAGE_ID_SONG:
+			return getList( List.LISTID_SONG );
+		case TabPage.TABPAGE_ID_PLAYLIST:
+			return getList( List.LISTID_PLAYLIST );
+			
+		}
+		return null;
+	}
+	
 	SparseArray<List> lists = new SparseArray<List>();
 	public void setList(int id, List lst)
 	{
@@ -235,8 +255,8 @@ implements ServiceConnection {
 	public static int TIMECHAR_WIDTH = 80;
 	public static int TIMECHAR_HEIGHT = 100;
 
-	static int currentMainTabId = TabPage.TABPAGE_ID_UNKNOWN;
-	static int currentSubTabId = TabPage.TABPAGE_ID_UNKNOWN;
+	int currentMainTabId = TabPage.TABPAGE_ID_UNKNOWN;
+	int currentSubTabId = TabPage.TABPAGE_ID_UNKNOWN;
 	
 	IDisplayState stateMain = null;
 //	int mainTabId = TabPage.TABPAGE_ID_UNKNOWN;
@@ -244,7 +264,7 @@ implements ServiceConnection {
 //	int subTabId = TabPage.TABPAGE_ID_UNKNOWN;
 //	public static final String tabNameMain = "maintab";
 //	public static final String tabNameMedia = "mediatab";
-	public static int getCurrentSubTabId()
+	public int getCurrentSubTabId()
 	{
 		return currentSubTabId;
 	}
@@ -1180,7 +1200,7 @@ implements ServiceConnection {
 			// TODO: 現在、トラックと同じカーソルになっているが、考えた方がいいかもしれない
 			// NOWPLAYLIST
 			// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
-			getTrackAdp().setQueueView(true);
+			getTrackAdp().setFilterType(TrackListRawAdapter.FILTER_NOW_QUEUE);
 	    	TabPage page2 = (TabPage) getTabMain().getChild(currentMainTabId);
 	    	if( page2 != null )
 	    	{
@@ -1498,4 +1518,32 @@ implements ServiceConnection {
 	        mToast.setText(resid);
 	        mToast.show();
 	    }
+//	    @Override
+//	    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+//	    	Log.w("■on activity result","come");
+//	        switch (requestCode) {
+////	            case SCAN_DONE:
+////	                if (resultCode == RESULT_CANCELED) {
+////	                    finish();
+////	                } else {
+////	                    getAlbumCursor(mAdapter.getQueryHandler(), null);
+////	                }
+////	                break;
+//
+//	            case NEW_PLAYLIST:
+//                	Log.w("■new playlist","come");
+//	                if (resultCode == RESULT_OK) {
+//                    	Log.w("■new playlist","result ok");
+//	                    Uri uri = intent.getData();
+//	                    if (uri != null) {
+//	                    	Log.d("■new playlist","tabid=" + getCurrentSubTabId());
+//	                    	IBehavior behavior = getList(getCurrentSubTabId()).getBehavior();
+//	                        long [] list = behavior.getCurrentSongList(); //Database.getSongListForAlbum(this, Long.parseLong(mCurrentAlbumId));
+//	                        Database.addToPlaylist(this, list, Long.parseLong(uri.getLastPathSegment()));
+//	                    }
+//	                }
+//	                break;
+//	        }
+//	    }
+	    
 }

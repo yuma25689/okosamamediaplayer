@@ -47,7 +47,12 @@
 		     </intent-filter>
 		     <meta-data android:name="android.appwidget.provider" 
 		         android:resource="@xml/appwidget4x1_info" />
-		</receiver>        
+		</receiver>
+		<activity android:name="okosama.app.action.CreatePlaylist"
+            android:theme="@android:style/Theme.Dialog" android:exported="false" />
+        <activity android:name="okosama.app.action.RenamePlaylist"
+            android:theme="@android:style/Theme.Dialog" android:exported="false" />
+		
         <activity android:name="MusicSettingsActivity"></activity>
         <activity android:name="DeleteItems"></activity>
     </application>

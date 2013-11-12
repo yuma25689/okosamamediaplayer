@@ -3,13 +3,16 @@ package okosama.app.behavior;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.action.CreatePlaylist;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
+import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.AlbumData;
 import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
+import android.content.Intent;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
@@ -42,7 +45,7 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 		}
 		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(String.valueOf(act.getAlbumAdp().getItem(position).getAlbumId() ) );
 		// act.getTrackAdp().setAlbumId(String.valueOf(act.getAlbumAdp().getItem(position).getAlbumId() ) );
-		act.getTrackAdp().setQueueView(false);
+		act.getTrackAdp().setFilterType(TrackListRawAdapter.FILTER_NORMAL);
 		act.getTrackAdp().updateList();
 		//Long.valueOf(id).toString());
 		// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(
@@ -109,12 +112,13 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
             return true;
         }
 
-//        case NEW_PLAYLIST: {
-//            Intent intent = new Intent();
-//            intent.setClass(this, CreatePlaylist.class);
-//            startActivityForResult(intent, NEW_PLAYLIST);
-//            return true;
-//        }
+        case NEW_PLAYLIST: {
+            Intent intent = new Intent();
+            OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+            intent.setClass(act, CreatePlaylist.class);
+            act.startActivityForResult(intent, NEW_PLAYLIST);
+            return true;
+        }        
 
         case PLAYLIST_SELECTED: {
             long [] list = Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
@@ -147,6 +151,12 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 	public void doSearch() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public long[] getCurrentSongList() {
+		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		return Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
 	}
 
 }

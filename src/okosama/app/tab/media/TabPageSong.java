@@ -4,6 +4,7 @@ import okosama.app.AppStatus;
 import okosama.app.ControlDefs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.behavior.PlaylistListBehavior;
 import okosama.app.behavior.TrackListBehavior;
 import okosama.app.factory.DroidWidgetKit;
@@ -113,7 +114,7 @@ public class TabPageSong extends TabPage {
 	@Override
 	public void setActivate( boolean bActivate )
 	{
-		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().setQueueView(false);
+		// OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().setFilterType(TrackListRawAdapter.FILTER_NORMAL);
 		super.setActivate(bActivate);
 	}
 }

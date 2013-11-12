@@ -17,4 +17,5 @@ public interface IBehavior {
 	void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfoIn);
 	boolean onContextItemSelected(MenuItem item);
 	void doSearch();
+	long[] getCurrentSongList();	
 }

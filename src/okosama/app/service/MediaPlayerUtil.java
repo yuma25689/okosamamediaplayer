@@ -586,4 +586,12 @@ public class MediaPlayerUtil {
         } catch (RemoteException ex) {
         }    	
     }
+    
+    public static void playPlaylist(Context context, long plid) {
+        long [] list = Database.getSongListForPlaylist(context, plid);
+        if (list != null) {
+            playAll(context, list, -1, false);
+        }
+    }
+    
 }

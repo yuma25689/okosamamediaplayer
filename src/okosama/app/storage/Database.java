@@ -1118,6 +1118,12 @@ public class Database {
             //mLastPlaylistSelected = playlistid;
         }
     }
+    public static void clearPlaylist(Context context, int plid) {
+        
+        Uri uri = MediaStore.Audio.Playlists.Members.getContentUri("external", plid);
+        context.getContentResolver().delete(uri, null, null);
+        return;
+    }    
     public static void deleteTracks(Context context, long [] list) {
         
         String [] cols = new String [] { BaseColumns._ID, 
@@ -1183,5 +1189,17 @@ public class Database {
         // We deleted a number of tracks, which could affect any number of things
         // in the media content domain, so update everything.
         context.getContentResolver().notifyChange(Uri.parse("content://media"), null);
+    }
+    public static long [] getSongListForPlaylist(Context context, long plid) {
+        final String[] ccols = new String[] { MediaStore.Audio.Playlists.Members.AUDIO_ID };
+        Cursor cursor = query(context, MediaStore.Audio.Playlists.Members.getContentUri("external", plid),
+                ccols, null, null, MediaStore.Audio.Playlists.Members.DEFAULT_SORT_ORDER);
+        
+        if (cursor != null) {
+            long [] list = getSongListForCursor(cursor);
+            cursor.close();
+            return list;
+        }
+        return sEmptyList;
     }    
 }

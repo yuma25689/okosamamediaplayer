@@ -20,7 +20,7 @@ public final class AppStatus {
 		artistID = null;
 		albumID = null;
 		genre = null;
-		playlistName = null;
+		playlistID = null;
 	}
 	public void clearModeFlag()
 	{
@@ -54,7 +54,7 @@ public final class AppStatus {
 	private String genre = null;
 	
 	// プレイリスト名？
-	private String playlistName = null;
+	private String playlistID = null;
 
 	/**
 	 * @return the shuffleMode
@@ -115,15 +115,15 @@ public final class AppStatus {
 	/**
 	 * @return the playlistName
 	 */
-	public String getPlaylistName() {
-		return playlistName;
+	public String getPlaylistID() {
+		return playlistID;
 	}
 
 	/**
 	 * @param playlistName the playlistName to set
 	 */
-	public void setPlaylistName(String playlistName) {
-		this.playlistName = playlistName;
+	public void setPlaylistID(String playlistID) {
+		this.playlistID = playlistID;
 	}
 	
 }

@@ -87,10 +87,14 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     // 外部からの設定値保持用
 	// TODO: 意味の調査
     boolean mIsNowPlaying;
-    boolean mIsQueueView;
-    public void setQueueView( boolean b )
+    //boolean mIsQueueView;
+    public static final int FILTER_NORMAL = 1;
+    public static final int FILTER_NOW_QUEUE = 2;
+    public static final int FILTER_PLAYLIST = 3;
+    int mFilterType = FILTER_NORMAL;
+    public void setFilterType( int b )
     {
-    	mIsQueueView = b;
+    	mFilterType = b;
     }
     boolean mDisableNowPlayingIndicator;
     private String genre;
@@ -367,7 +371,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
             	
             	// カーソルをループする
             	// Cursor cursor = params[0];
-    			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
+    			// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistID( null );        	
     			Cursor cursor = Database.getInstance(
     					OkosamaMediaPlayerActivity.isExternalRef()
     			).createTrackCursor(null, null);			
@@ -462,7 +466,8 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 //    		Log.d("debug","queue exists");
 //    	}
     	
-    	if( mIsQueueView == true )
+    	if( mFilterType == this.FILTER_NOW_QUEUE 
+    	|| mFilterType == this.FILTER_PLAYLIST )
     	// if( bQueueExists == true )
     	{
     		if( playlist != null )
@@ -478,33 +483,34 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     		}
 			return false;
     	}
-    	
-    	
-    	// albumIDのチェック
-    	if( albumId != null && 0 < albumId.length() ) 
+    	else if( mFilterType == this.FILTER_NORMAL )
     	{
-    		// Log.d("isShowData"," albumId:" + data.getTrackAlbumId() );     		
-    		if( albumId.equals(data.getTrackAlbumId()) )
-    		{
-    			// return true;
-    		}
-    		else
-    		{
-    			return false;
-    		}
-    	}
-    	// アーティストIDのチェック
-    	if( artistId != null && 0 < artistId.length() ) 
-    	{
-    		//Log.d("isShowData"," artistId:" + data.getTrackArtistId() );     		
-    		if( artistId.equals(data.getTrackArtistId()) )
-    		{
-    			// return true;
-    		}
-    		else
-    		{
-    			return false;
-    		}
+	    	// albumIDのチェック
+	    	if( albumId != null && 0 < albumId.length() ) 
+	    	{
+	    		// Log.d("isShowData"," albumId:" + data.getTrackAlbumId() );     		
+	    		if( albumId.equals(data.getTrackAlbumId()) )
+	    		{
+	    			// return true;
+	    		}
+	    		else
+	    		{
+	    			return false;
+	    		}
+	    	}
+	    	// アーティストIDのチェック
+	    	if( artistId != null && 0 < artistId.length() ) 
+	    	{
+	    		//Log.d("isShowData"," artistId:" + data.getTrackArtistId() );     		
+	    		if( artistId.equals(data.getTrackArtistId()) )
+	    		{
+	    			// return true;
+	    		}
+	    		else
+	    		{
+	    			return false;
+	    		}
+	    	}
     	}
     	return true;
     	
@@ -519,11 +525,20 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     	
     	// 検索条件のリセット
     	playlist = null;
-       	try {
-    		playlist = MediaPlayerUtil.sService.getQueue();
-    	} catch( RemoteException ex ) {
-    		Log.e("Error", "sService getQueue RemoteException occured!");
-    	}    	
+    	if( mFilterType == this.FILTER_NOW_QUEUE ) 
+    	{
+	       	try {
+	    		playlist = MediaPlayerUtil.sService.getQueue();
+	    	} catch( RemoteException ex ) {
+	    		Log.e("Error", "sService getQueue RemoteException occured!");
+	    	}
+    	}
+    	else if( mFilterType == this.FILTER_PLAYLIST )
+    	{
+    		Log.d("parseLong",OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getPlaylistID());
+    		playlist = Database.getSongListForPlaylist(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
+    				, Long.parseLong(OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getPlaylistID()));
+    	}
     	setAlbumId( OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getAlbumID() );
     	setArtistId( OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID() );
 				
@@ -568,54 +583,6 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 		this.allItems = allItems;
 	}
     
-//    /**
-//     * 背景でクエリを発行するとき
-//     */
-//    @Override
-//    public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
-//        String s = constraint.toString();
-//        if (mConstraintIsValid && (
-//                (s == null && mConstraint == null) ||
-//                (s != null && s.equals(mConstraint)))) {
-//        	// フィルタが変わっていなければ、現在のカーソルを取得
-//            return getCursor();
-//        }
-//        //String playlist = null;
-//        if( mIsNowPlaying )
-//        {
-//        	OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
-//        }
-//        else
-//        {
-//        	OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
-//        }
-//        Cursor c = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).createTrackCursor(mQueryHandler, s, false );//,genre, albumId, artistId );
-//        mConstraint = s;
-//        mConstraintIsValid = true;
-//        return c;
-//    }
-    
-    // SectionIndexer methods
-    
-//    @Override
-//	public Object[] getSections() {
-//        if (mIndexer != null) { 
-//            return mIndexer.getSections();
-//        } else {
-//            return null;
-//        }
-//    }
-//    
-//    @Override
-//	public int getPositionForSection(int section) {
-//        int pos = mIndexer.getPositionForSection(section);
-//        return pos;
-//    }
-//    
-//    @Override
-//	public int getSectionForPosition(int position) {
-//        return 0;
-//    }       
     @Override
     // 曲の変更時など、状態が変わったときに、外部から表示を更新させる
 	public int updateStatus()

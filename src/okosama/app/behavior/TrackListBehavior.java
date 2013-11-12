@@ -172,4 +172,10 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 
 	}
 
+	@Override
+	public long[] getCurrentSongList() {
+        long [] list = new long[] { mSelectedId };
+        return list;
+	}
+
 }
