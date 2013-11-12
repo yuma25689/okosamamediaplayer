@@ -33,7 +33,8 @@ public class CreatePlaylist extends Activity
     private EditText mPlaylist;
     private TextView mPrompt;
     private Button mSaveButton;
-
+    private String defaultname;
+ 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -43,7 +44,11 @@ public class CreatePlaylist extends Activity
         setContentView(R.layout.create_playlist);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
                                     WindowManager.LayoutParams.WRAP_CONTENT);
-
+        // インテントを取得
+        Intent intent = getIntent();
+        // インテントに保存されたデータを取得
+        defaultname = intent.getStringExtra("defaultname");
+        
         mPrompt = (TextView)findViewById(R.id.prompt);
         mPlaylist = (EditText)findViewById(R.id.playlist);
         mPlaylist.setVisibility(View.VISIBLE);        
@@ -122,6 +127,10 @@ public class CreatePlaylist extends Activity
     private String makePlaylistName() {
 
         String template = getString(R.string.new_playlist_name_template);
+        if( defaultname != null && defaultname.isEmpty() == false )
+        {
+        	template = defaultname;
+        }
         int num = 1;
 
         String[] cols = new String[] {

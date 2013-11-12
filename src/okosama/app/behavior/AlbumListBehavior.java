@@ -116,6 +116,7 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
             Intent intent = new Intent();
             OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
             intent.setClass(act, CreatePlaylist.class);
+            intent.putExtra("defaultname", mCurrentAlbumName);            
             act.startActivityForResult(intent, NEW_PLAYLIST);
             return true;
         }        

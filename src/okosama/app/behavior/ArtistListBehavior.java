@@ -193,6 +193,7 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	            Intent intent = new Intent();
 	            OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 	            intent.setClass(act, CreatePlaylist.class);
+	            intent.putExtra("defaultname", mCurrentArtistName);
 	            act.startActivityForResult(intent, NEW_PLAYLIST);
 	            return true;
 	        }

@@ -9,6 +9,19 @@ public class PlaylistData implements Serializable {
 	private static final long serialVersionUID = 6339969296530048661L;
 	long playlistId;
 	String playlistName;
+	String playlistCount;
+	/**
+	 * @return the playlistCount
+	 */
+	public String getPlaylistCount() {
+		return playlistCount;
+	}
+	/**
+	 * @param playlistCount the playlistCount to set
+	 */
+	public void setPlaylistCount(String playlistCount) {
+		this.playlistCount = playlistCount;
+	}
 	/**
 	 * @return the playlistId
 	 */

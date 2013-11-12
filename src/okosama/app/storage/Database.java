@@ -440,7 +440,7 @@ public class Database {
         if (async != null) {
         	// 非同期の場合
         	// TODO: 受け先でマージカーソルにする必要有り
-            async.startQuery(TabPage.TABPAGE_ID_PLAYLIST, null, uri,//MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI,
+            async.startQuery(TabPage.TABPAGE_ID_PLAYLIST, null, uri,
             		playlistCols, whereclause, keywords, PlaylistsColumns.NAME);
             return null;
         }

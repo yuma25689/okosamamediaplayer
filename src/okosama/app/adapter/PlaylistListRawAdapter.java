@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.ResourceAccessor;
 import okosama.app.storage.PlaylistData;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
@@ -55,6 +56,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
     // private AsyncQueryHandler mQueryHandler;
     int mTitleIdx;
     int mIdIdx;
+    int mCountIdx;
     // ショートカット作成フラグ？
     // TODO:どういうときに作成するのか不明
     // 下手したら、アクセサもメンバ変数もいらないかも
@@ -99,7 +101,6 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
         mActivity = currentactivity;
         //mQueryHandler = new QueryHandler(mActivity.getContentResolver(), mActivity);
         // mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
-
         
         // albumとartistを表す文字列
         mUnknownAlbum = mActivity.getString(R.string.unknown_album_name);
@@ -201,7 +202,17 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
         iv.setVisibility(View.GONE);
 
         // view.findViewById(R.id.line2).setVisibility(View.GONE);
-        vh.line2.setVisibility(View.GONE);
+        //vh.line2.setVisibility(View.GONE);
+        if(data.getPlaylistCount() != null )
+        {
+	        int i = Integer.parseInt(data.getPlaylistCount());
+	       	vh.line2.setText(ResourceAccessor.makeNumSongsLabel(mActivity, i));
+	       	vh.line2.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+        	vh.line2.setVisibility(View.GONE);
+        }
     }
     
     /**
@@ -266,6 +277,17 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
 	        			// 全ての要素をループする
 	            		data.setPlaylistId(cursor.getLong(mIdIdx));
 	        			data.setPlaylistName(cursor.getString(mTitleIdx));
+	        	        if( 0 <= data.getPlaylistId() ) {
+	        		        long[] songlists = Database.getSongListForPlaylist( 
+	        		        		mActivity, data.getPlaylistId() );
+	        		        if( songlists != null )
+	        		        {
+	        		        	data.setPlaylistCount(String.valueOf(songlists.length));
+	        		        }
+	        	        }
+	        			
+	        			// そんなカラムはない
+	        			// data.setPlaylistCount(cursor.getString(mCountIdx));
 	        			items.add(data);
 	        		} while( cursor.moveToNext() );
         		} finally {
@@ -305,6 +327,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
 	        	// カーソルから、各カラムのindexを取得し、メンバ変数に格納する
                 mTitleIdx = cursor.getColumnIndexOrThrow(PlaylistsColumns.NAME);
                 mIdIdx = cursor.getColumnIndexOrThrow(BaseColumns._ID);
+                // mCountIdx = cursor.getColumnIndexOrThrow(BaseColumns._COUNT);
         	} catch( IllegalArgumentException ex ) {
         		return -1;
         	}

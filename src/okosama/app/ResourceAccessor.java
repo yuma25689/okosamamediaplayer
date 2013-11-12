@@ -209,6 +209,32 @@ public final class ResourceAccessor {
         }
 	    return songs_albums.toString();
 	}	
+    /**
+     * アルバムのラベルを作成する
+     * @param context
+     * @param numsongs
+     * @return
+     */
+	public static String makeNumSongsLabel(Context context, int numsongs )
+	{
+		// There are two formats for the albums/songs information:
+	    // "N Song(s)"  - used for unknown artist/album
+	    // "N Album(s)" - used for known albums
+	    
+	    StringBuilder songs_albums = new StringBuilder();
+	
+	    Resources r = context.getResources();
+    	// 曲数を設定
+        if (numsongs == 1) {
+            songs_albums.append(context.getString(R.string.onesong));
+        } else {
+            String f = r.getQuantityText(R.plurals.Nsongs, numsongs).toString();
+            sFormatBuilder.setLength(0);
+            sFormatter.format(f, Integer.valueOf(numsongs));
+            songs_albums.append(sFormatBuilder);
+        }
+	    return songs_albums.toString();
+	}	
 	/**
 	 * 指定された秒数の時間を、～時間という表示に変える
 	 * TODO:このアプリケーションでは、文字列での時間表時は行わない、すなわち、暫定版であり、いつか不要になるので、削除する
