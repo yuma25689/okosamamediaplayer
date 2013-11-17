@@ -35,8 +35,8 @@ public abstract class absDisplayState implements IDisplayState {
 	double pitch = 0;
 	double roll = 0;
 	
-	protected HashMap< String, BroadcastReceiver > receivers;
-	protected HashMap< String, Handler > handlers;
+	protected HashMap< String, BroadcastReceiver > receivers = new HashMap< String, BroadcastReceiver >();
+	protected HashMap< String, Handler > handlers = new HashMap< String, Handler >();
 //	protected OkosamaMediaPlayerActivity act;
 //	void setActivity( OkosamaMediaPlayerActivity _act )
 //	{

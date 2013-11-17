@@ -257,7 +257,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
             vh.play_indicator.setImageDrawable(mNowPlayingOverlay);
         } else {
             vh.play_indicator.setImageDrawable(null);
-        }
+        }        
     }
 
     /**
@@ -377,79 +377,6 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
                 MediaStore.Audio.Artists.Albums.getContentUri(external_string, groupId),
                 cols, null, null, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
         
-        // カーソルのラッバ？
-//        class MyCursorWrapper extends CursorWrapper {
-//        	// アーティスト名
-//            String mArtistName;
-//            // マジックカラムのインデックス？
-//            // どうやら、このカーソルからアーティスト名を取得するためのインデックス
-//            // 本来、アーティスト名は格納されていないが、コンストラクタで格納し、取得のときにこのindexが指定されたらそれを返す
-//            int mMagicColumnIdx;
-//            /**
-//             * コンストラクタ
-//             * @param c
-//             * @param artist
-//             */
-//            MyCursorWrapper(Cursor c, String artist) {
-//                super(c);
-//                // アーティスト名
-//                mArtistName = artist;
-//                // アーティスト名がなかったら、不明を設定
-//                if (mArtistName == null || mArtistName.equals(MediaStore.UNKNOWN_STRING)) {
-//                    mArtistName = mUnknownArtist;
-//                }
-//                // マジックカラムとして、カラム数を設定？
-//                mMagicColumnIdx = c.getColumnCount();
-//            }
-//            
-//            @Override
-//            public String getString(int columnIndex) {
-//            	// カラムindexがマジックカラムでなければ、その文字列を取得？
-//                if (columnIndex != mMagicColumnIdx) {
-//                    return super.getString(columnIndex);
-//                }
-//                // マジックカラムならば、アーティスト名を取得
-//                return mArtistName;
-//            }
-//            
-//            /**
-//             * 指定されたカラム名のカラムのindexを取得
-//             * ただし、マジックカラムならば、アーティスト名を取得
-//             */
-//            @Override
-//            public int getColumnIndexOrThrow(String name) {
-//                if (AlbumColumns.ARTIST.equals(name)) {
-//                    return mMagicColumnIdx;
-//                }
-//                return super.getColumnIndexOrThrow(name); 
-//            }
-//            
-//            /**
-//             * インデックスに対応したカラムのindexを返却する
-//             */
-//            @Override
-//            public String getColumnName(int idx) {
-//                if (idx != mMagicColumnIdx) {
-//                    return super.getColumnName(idx);
-//                }
-//                return AlbumColumns.ARTIST;
-//            }
-//            
-//            /**
-//             * カラムのカウントを返却する
-//             * 自前で一個追加しているので、カラム数+1を返却する
-//             */
-//            @Override
-//            public int getColumnCount() {
-//                return super.getColumnCount() + 1;
-//            }
-//        }
-//        // カーソルに、アーティスト名を追加したカーソルを返却？
-//        // おそらく、アーティストはどのレコードでも同じで良いので、この作りで良い
-//        if( c != null )
-//        {
-//        	return new MyCursorWrapper(c, artistName );//groupCursor.getString(mGroupArtistIdx));
-//        }
         return c;
     }
 
@@ -461,7 +388,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 				&& childPosition < childData.get(groupPosition).length )
 		{
 			return childData.get(groupPosition)[childPosition];
-		}
+		}		
 		return null;
 	}
 
@@ -485,6 +412,63 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
+		if( childData.containsKey(groupPosition) == true )
+		{
+			return childData.get(groupPosition).length;
+		}
+		ArtistGroupData data = (ArtistGroupData) getGroup(groupPosition);
+		Cursor childCursor = getChildrenCursor(Long.parseLong(data.getArtistId()));
+		if( childCursor == null )
+		{
+			return 0;
+		}
+		try {
+			if( 0 < childCursor.getCount() )
+    		{
+    			ArtistChildData[] childList = new ArtistChildData[childCursor.getCount()];
+    			int j = 0;
+        		childCursor.moveToFirst();
+        		do 
+        		{
+                    ArtistChildData dataChild = new ArtistChildData();
+                   
+                    // album名
+                    dataChild.setAlbumName(
+                    	childCursor.getString(childCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM) ) 
+                    );
+                    // album 曲数
+                    dataChild.setNumOfSongs(
+                    	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS))
+                    );
+                    // artist 曲数
+                    dataChild.setNumOfSongsForArtist( 
+                    	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS_FOR_ARTIST))
+                    );
+                    // artist名
+                    dataChild.setArtistName(
+                    	data.getArtistName()
+                    	//childCursor.getString(childCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST))
+                    );
+                    // album art
+                    dataChild.setAlbumArt(
+                    		childCursor.getString(childCursor.getColumnIndexOrThrow(
+                        AlbumColumns.ALBUM_ART))
+                    );
+                    // album id
+                    dataChild.setAlbumId( childCursor.getString(0) );
+                    
+                    childList[j] = dataChild; 
+                    		
+                    j++;
+        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
+        				childCursor.moveToNext() );
+        		childDataTmp.put( groupPosition, childList);
+        		childData.put(groupPosition, childList );
+    		}
+		} finally {
+			childCursor.close();
+		}
+		
 		if( // childData.get(groupPosition,null) == null
 				childData.containsKey(groupPosition) == false				
 				)
@@ -617,57 +601,57 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 	                    data.setArtistId( cursor.getString(mGroupArtistIdIdx));
 	            		groupDataTmp.put( i, data );
 
-	            		Cursor childCursor = getChildrenCursor(cursor.getLong(mGroupArtistIdIdx));//,data.getArtistName());
-	            		if( childCursor == null )
-	            		{
-	            			Log.e("doInBackGround - ArtistAlbumListAdapter", "child cursor取得エラー");
-	            			return -1;
-	            		}
-	            		try {
-	            			if( 0 < childCursor.getCount() )
-		            		{
-		            			ArtistChildData[] childList = new ArtistChildData[childCursor.getCount()];
-		            			int j = 0;
-			            		childCursor.moveToFirst();
-			            		do 
-			            		{
-			                        ArtistChildData dataChild = new ArtistChildData();
-			                       
-			                        // album名
-			                        dataChild.setAlbumName(
-			                        	childCursor.getString(childCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM) ) 
-			                        );
-			                        // album 曲数
-			                        dataChild.setNumOfSongs(
-			                        	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS))
-			                        );
-			                        // artist 曲数
-			                        dataChild.setNumOfSongsForArtist( 
-			                        	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS_FOR_ARTIST))
-			                        );
-			                        // artist名
-			                        dataChild.setArtistName(
-			                        	data.getArtistName()
-			                        	//childCursor.getString(childCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST))
-			                        );
-			                        // album art
-			                        dataChild.setAlbumArt(
-			                        		childCursor.getString(childCursor.getColumnIndexOrThrow(
-		                                AlbumColumns.ALBUM_ART))
-			                        );
-			                        // album id
-			                        dataChild.setAlbumId( childCursor.getString(0) );
-			                        
-			                        childList[j] = dataChild; 
-			                        		
-			                        j++;
-			            		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
-			            				childCursor.moveToNext() );
-			            		childDataTmp.put( i, childList);
-		            		}
-	            		} finally {
-	            			childCursor.close();
-	            		}
+//	            		Cursor childCursor = getChildrenCursor(cursor.getLong(mGroupArtistIdIdx));//,data.getArtistName());
+//	            		if( childCursor == null )
+//	            		{
+//	            			Log.e("doInBackGround - ArtistAlbumListAdapter", "child cursor取得エラー");
+//	            			return -1;
+//	            		}
+//	            		try {
+//	            			if( 0 < childCursor.getCount() )
+//		            		{
+//		            			ArtistChildData[] childList = new ArtistChildData[childCursor.getCount()];
+//		            			int j = 0;
+//			            		childCursor.moveToFirst();
+//			            		do 
+//			            		{
+//			                        ArtistChildData dataChild = new ArtistChildData();
+//			                       
+//			                        // album名
+//			                        dataChild.setAlbumName(
+//			                        	childCursor.getString(childCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM) ) 
+//			                        );
+//			                        // album 曲数
+//			                        dataChild.setNumOfSongs(
+//			                        	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS))
+//			                        );
+//			                        // artist 曲数
+//			                        dataChild.setNumOfSongsForArtist( 
+//			                        	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS_FOR_ARTIST))
+//			                        );
+//			                        // artist名
+//			                        dataChild.setArtistName(
+//			                        	data.getArtistName()
+//			                        	//childCursor.getString(childCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST))
+//			                        );
+//			                        // album art
+//			                        dataChild.setAlbumArt(
+//			                        		childCursor.getString(childCursor.getColumnIndexOrThrow(
+//		                                AlbumColumns.ALBUM_ART))
+//			                        );
+//			                        // album id
+//			                        dataChild.setAlbumId( childCursor.getString(0) );
+//			                        
+//			                        childList[j] = dataChild; 
+//			                        		
+//			                        j++;
+//			            		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
+//			            				childCursor.moveToNext() );
+//			            		childDataTmp.put( i, childList);
+//		            		}
+//	            		} finally {
+//	            			childCursor.close();
+//	            		}
                 		i++;
 	        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
 	        				cursor.moveToNext() );

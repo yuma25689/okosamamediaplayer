@@ -511,7 +511,7 @@ public class Database {
         mSortOrder = AudioColumns.TITLE_KEY;
         // タイトルが空でないものを条件に
         StringBuilder where = new StringBuilder();
-        // where.append(MediaColumns.TITLE + " != ''");
+        where.append(MediaColumns.TITLE + " != ''");
 
         // フィルタを設定
         // この場合、アーティストとトラック？
@@ -622,7 +622,7 @@ public class Database {
 //            }
         	mSortOrder = AudioColumns.TRACK + ", " + mSortOrder;
             // 音楽指定
-            // where.append(" AND " + AudioColumns.IS_MUSIC + "=1");
+            where.append(" AND " + AudioColumns.IS_MUSIC + "=1");
             // クエリ発行
             // Log.i("query1","query1");
 //            ret = queryhandler.doQuery(ctx, uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,

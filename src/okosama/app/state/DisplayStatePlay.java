@@ -60,21 +60,6 @@ public class DisplayStatePlay extends absDisplayState {
 				// act.setPlayPauseButtonImage();
 				act.updateTimeDisplay(pos/1000);
 		    }
-//	        }
-//	        else
-//	        {
-//				//act.updateTimeDisplayVisible(0);
-//				//act.setDurationLabel(0);
-////				act.setNowPlayingSongLabel("");
-////				act.setNowPlayingArsistLabel("");
-////				act.setNowPlayingAlbumLabel("");
-//				act.setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
-//				act.setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
-//				act.setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
-//				act.setPlayPauseButtonImage();
-//	        	
-//	        }
-//			act.setPlayPauseButtonImage();
         }
         catch( RemoteException ex )
         {

@@ -11,7 +11,6 @@ import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
 import okosama.app.adapter.PlaylistListRawAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
-import okosama.app.behavior.IBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -25,7 +24,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 // import android.database.Cursor;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -43,6 +41,7 @@ import okosama.app.state.IDisplayState;
 import okosama.app.storage.Database;
 import okosama.app.tab.*;
 import okosama.app.tab.media.TabMediaSelect;
+import okosama.app.tab.play.TabPlayContent;
 import okosama.app.widget.Button;
 import okosama.app.widget.ExpList;
 import okosama.app.widget.List;
@@ -57,7 +56,6 @@ import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
-import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -66,8 +64,6 @@ import okosama.app.widget.ButtonImpl;
 public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection, Database.Defs {
 	public static final String MEDIA_SERVICE_NOTIFY = "MediaServiceNotify";
-
-	// private boolean bDataRestored = false;
 	
 	// 強制リフレッシュフラグ？
 	public boolean bForceRefresh = false;
@@ -301,6 +297,18 @@ implements ServiceConnection, Database.Defs {
 	public TabMediaSelect getMediaTab()
 	{
 		return tabMedia;
+	}
+	private static TabPlayContent tabPlayCont = null;
+	public static TabPlayContent createPlayTab(
+		LinearLayout pageContainer, ViewGroup componentContainer )
+	{
+		tabPlayCont = new TabPlayContent( ControlIDs.TAB_ID_PLAY, pageContainer, componentContainer );
+		tabPlayCont.create(R.layout.tab_layout_hooter);
+		return tabPlayCont;
+	}
+	public TabPlayContent getPlayTab()
+	{
+		return tabPlayCont;
 	}
 	
 	// 初期化時に、スクリーンサイズ取得にスレッドが必要になるため、スレッドとの同期が必要に・・・

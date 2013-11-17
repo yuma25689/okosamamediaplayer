@@ -52,20 +52,6 @@ public class TabPageArtist extends TabPage {
         );
 		tabBaseLayout.setLayoutParams(lp);
 		updateProgressPanel = (ViewGroup)tabBaseLayout.findViewById(R.id.TabCommonProgressPanel ); 
-
-		// タブのボタンだけはここで作る？
-		//tabButton = DroidWidgetKit.getInstance().MakeButton();
-		// TAB_BUTTON
-//		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
-//			"artisttabbtn", ComponentType.BUTTON, 
-//			//0, 859 - 150 + 2, 90, 70,
-//			120 + 5, 859 - 100, 120, 100,
-//			R.drawable.music_select_artist_image,
-//			R.drawable.no_image,//R.drawable.tab2_btn_select_2, 
-//			"", ScaleType.FIT_XY 
-//		);
-//		tabButton.acceptConfigurator(tabBtnCreationData);
-
 		
 		//////////////////// list //////////////////////////
 		TabComponentPropertySetter creationData[] = {

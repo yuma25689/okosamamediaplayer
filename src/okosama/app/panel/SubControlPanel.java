@@ -69,13 +69,13 @@ public class SubControlPanel extends ControlPanel {
 				// --------------------- SHUFFLE
 				new TabComponentPropertySetter(
 					ControlIDs.SHUFFLE_BUTTON, ComponentType.BUTTON, 
-					20, 520, 100, 100
+					20, 420, 100, 100
 					, null, drawable.no_image, "", ScaleType.FIT_XY
 				),
 				// --------------------- REPEAT
 				new TabComponentPropertySetter(
 					ControlIDs.REPEAT_BUTTON, ComponentType.BUTTON, 
-					200, 490, 100, 100
+					200, 390, 100, 100
 					, null, drawable.no_image, "", ScaleType.FIT_XY
 				),
 		};

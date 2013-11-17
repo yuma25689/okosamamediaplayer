@@ -59,13 +59,13 @@ public class TabPagePlay extends TabPage {
 			// --------------------- STOP
 			new TabComponentPropertySetter(
 				ControlIDs.STOP_BUTTON, ComponentType.BUTTON, 
-				150, 590, 100, 100
+				150, 500, 100, 100
 				, null, R.drawable.stop_button_image, "", ScaleType.FIT_XY
 			),
 			// --------------------- TWITTER
 			new TabComponentPropertySetter(
 				ControlIDs.TWEET_BUTTON, ComponentType.BUTTON, 
-				370, 550, 80, 80
+				370, 450, 80, 80
 				, null, R.drawable.internal_btn_image, "", ScaleType.FIT_XY
 			),
 		};

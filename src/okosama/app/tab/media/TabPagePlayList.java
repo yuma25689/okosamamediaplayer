@@ -1,10 +1,8 @@
 package okosama.app.tab.media;
 
-import okosama.app.AppStatus;
 import okosama.app.ControlDefs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.behavior.AlbumListBehavior;
 import okosama.app.behavior.PlaylistListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.Tab;

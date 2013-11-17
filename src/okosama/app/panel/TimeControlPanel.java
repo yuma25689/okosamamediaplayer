@@ -129,19 +129,19 @@ public class TimeControlPanel extends ControlPanel {
 			// --------------------- SONG
 			new TabComponentPropertySetter(
 				ControlIDs.TIME_SONG_LABEL, ComponentType.LABEL, 
-				30, 160, 400, 50
+				30, 150, 400, 50
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),		
 			// --------------------- ARTIST
 			new TabComponentPropertySetter(
 				ControlIDs.TIME_ARTIST_LABEL, ComponentType.LABEL, 
-				35, 350, 400, 50
+				35, 300, 400, 50
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),		
 			// --------------------- ALBUM
 			new TabComponentPropertySetter(
 				ControlIDs.TIME_ALBUM_LABEL, ComponentType.LABEL, 
-				35, 410, 400, 50
+				35, 360, 400, 50
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),			
 			// --------------------- PROGRESS

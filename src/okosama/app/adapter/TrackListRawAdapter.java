@@ -527,6 +527,10 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     	playlist = null;
     	if( mFilterType == this.FILTER_NOW_QUEUE ) 
     	{
+        	if (MediaPlayerUtil.sService == null) 
+        	{
+        		return;
+        	}
 	       	try {
 	    		playlist = MediaPlayerUtil.sService.getQueue();
 	    	} catch( RemoteException ex ) {

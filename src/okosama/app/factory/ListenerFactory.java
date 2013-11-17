@@ -15,8 +15,9 @@ public class ListenerFactory {
 	/////////////////////// ƒŠƒXƒi
 	public static BroadcastReceiver createMediaChangeListener(IDisplayState state) 
 	{
+		final IDisplayState state2 = state;
 		return new BroadcastReceiver() {
-			IDisplayState mState = null;
+			IDisplayState mState = state2;
 			@Override
 	        public void onReceive(Context context, Intent intent) {
 	            //getListView().invalidateViews();

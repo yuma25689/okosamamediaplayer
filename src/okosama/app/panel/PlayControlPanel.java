@@ -121,6 +121,8 @@ public class PlayControlPanel extends ControlPanel {
 			tabBaseLayout.addView( widget.getView() );
 			i++;
 		}
+		tabBaseLayout.setBackgroundResource(R.drawable.okosama_app_widget_bg);
+				
 		return;
 		
 	}

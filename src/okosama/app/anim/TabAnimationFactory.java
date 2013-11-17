@@ -5,6 +5,7 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.MotionObserver.MagneticFieldValue;
 import android.util.Log;
 import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 
 public class TabAnimationFactory {
@@ -27,11 +28,12 @@ public class TabAnimationFactory {
 	    }
 	    //float fromY = (float) mag.getAzimuth();
 		TranslateAnimation translate1 = new TranslateAnimation(iFromX, 0, fromY, 0);
-		translate1.setDuration(100);
 //		TranslateAnimation translate2 = new TranslateAnimation(-50, 0, -50, 0);
 //		translate2.setDuration(50);
+		RotateAnimation rotate = new RotateAnimation((float) mag.getAzimuth(),0);
 		set.addAnimation(translate1); 
-//		set.addAnimation(translate2);
+		set.addAnimation(rotate);
+		set.setDuration(200);
 		
 //		BounceInterpolator bound = new BounceInterpolator();
 //		set.setInterpolator(bound);
@@ -57,8 +59,11 @@ public class TabAnimationFactory {
 	    AnimationSet set = new AnimationSet(true);
 	    
 		TranslateAnimation translate1 = new TranslateAnimation(0, iToX, 0, toY);
-		translate1.setDuration(100);
-		set.addAnimation(translate1); 
+		RotateAnimation rotate = new RotateAnimation(0,(float) mag.getAzimuth());
+		
+		set.addAnimation(translate1);
+		set.addAnimation(rotate);
+		set.setDuration(200);
 		
 //		BounceInterpolator bound = new BounceInterpolator();
 //		set.setInterpolator(bound);

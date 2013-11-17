@@ -4,6 +4,7 @@ public interface ControlIDs {
 	public static final int ID_NOT_SPECIFIED = -1;
 	public static final int TAB_ID_MAIN = 1000;
 	public static final int TAB_ID_MEDIA = 1001;
+	public static final int TAB_ID_PLAY = 1002;
 	public static final int PLAY_TAB_BUTTON = 100;
 	public static final int MEDIA_TAB_BUTTON = 101;
 	public static final int NOW_PLAYLIST_TAB_BUTTON = 102;

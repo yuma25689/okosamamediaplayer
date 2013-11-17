@@ -61,7 +61,7 @@ public class CreatePlaylist extends Activity
             }
         });
         
-        String defaultname = icicle != null ? icicle.getString("defaultname") : makePlaylistName();
+        // String defaultname = icicle != null ? icicle.getString("defaultname") : makePlaylistName();
         if (defaultname == null) {
             finish();
             return;
@@ -127,7 +127,7 @@ public class CreatePlaylist extends Activity
     private String makePlaylistName() {
 
         String template = getString(R.string.new_playlist_name_template);
-        if( defaultname != null && defaultname.isEmpty() == false )
+        if( defaultname != null && 0 < defaultname.length() )
         {
         	template = defaultname;
         }

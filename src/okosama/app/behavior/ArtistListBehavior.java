@@ -35,7 +35,6 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	public void onItemClick(ExpandableListView parent, View v, int grouppos, int childpos, long id)
 	{
 		// ‚±‚ê‚ªchildclick‚Æ‚µ‚ÄŽg‚í‚ê‚é
-		
 		ArtistChildData data = 
 				(ArtistChildData)
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getArtistAdp().getChild(grouppos, childpos);
