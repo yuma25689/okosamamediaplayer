@@ -1,14 +1,13 @@
 package okosama.app;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-
 //import okosama.app.action.HideTabComponentAction;
 //import okosama.app.action.ShowTabComponentAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.AlbumListRawAdapter;
+import okosama.app.adapter.AdapterStocker;
 //import okosama.app.adapter.ArtistAlbumListAdapter;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
+import okosama.app.adapter.IAdapterUpdate;
 import okosama.app.adapter.PlaylistListRawAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.factory.DroidWidgetKit;
@@ -18,9 +17,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 //import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 // import android.database.Cursor;
 import android.media.AudioManager;
@@ -37,11 +36,10 @@ import okosama.app.service.MediaPlayerUtil;
 import okosama.app.service.MediaPlayerUtil.ServiceToken;
 import okosama.app.state.DisplayStateFactory;
 import okosama.app.state.IDisplayState;
+import okosama.app.state.StateStocker;
 // import okosama.app.state.absDisplayState;
 import okosama.app.storage.Database;
 import okosama.app.tab.*;
-import okosama.app.tab.media.TabMediaSelect;
-import okosama.app.tab.play.TabPlayContent;
 import okosama.app.widget.Button;
 import okosama.app.widget.ExpList;
 import okosama.app.widget.List;
@@ -52,7 +50,6 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
@@ -65,10 +62,25 @@ public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection, Database.Defs {
 	public static final String MEDIA_SERVICE_NOTIFY = "MediaServiceNotify";
 	
+	// タブ格納用
+	TabStocker tabStocker = new TabStocker();
+	public TabStocker getTabStocker()
+	{
+		return tabStocker;
+	}
+	// 状態格納用
+	StateStocker stateStocker = new StateStocker();
+	public StateStocker getStateStocker()
+	{
+		return stateStocker;
+	}
+	
 	// 強制リフレッシュフラグ？
 	public boolean bForceRefresh = false;
-	// リフレッシュ用メッセージID
-    public static final int REFRESH = 1001;
+	public void setForceRefreshFlag(boolean bForceRefresh)
+	{
+		this.bForceRefresh = bForceRefresh;
+	}
     // ポーズ中？
     private boolean paused = false;
     public boolean isPaused()
@@ -127,53 +139,34 @@ implements ServiceConnection, Database.Defs {
     
     
     // Adapter格納用マップ
-    // ObjectにAdapterを格納する
-    // うまくいくかどうか分からないが、今のところ、これをonRetainNonConfigurationInstanceで一時保存する対象にする
-    // HashMap< String, Object > mapAdapter;
-    // AdapterStocker adapters;
-    // 暫定版
-	// TODO: backupDataと二重管理と化しているが・・・
-    // private AlbumListAdapter albumAdp;
-	private AlbumListRawAdapter albumAdp;
-    // private ListView albumList;
-    // private ArtistAlbumListAdapter artistAdp;
-	private ArtistAlbumListRawAdapter artistAdp;
-    // private ExpandableListView artistList;
-    private PlaylistListRawAdapter playlistAdp;
-    //private ListView songList;
-    private TrackListRawAdapter tracklistAdp;
-    //private ListView playlistList;
-
-	public AlbumListRawAdapter getAlbumAdp() {
-		return albumAdp;
+	private AdapterStocker adpStocker = new AdapterStocker();
+	public AdapterStocker getAdpStocker()
+	{
+		return adpStocker;
 	}
-
-	public void setAlbumAdp(AlbumListRawAdapter albumAdp) {
-		this.albumAdp = albumAdp;
+	public IAdapterUpdate getAdapter(int id)
+	{
+		return adpStocker.get(id);
 	}
-
-	public ArtistAlbumListRawAdapter getArtistAdp() {
-		return artistAdp;
+	public void putAdapter(int key,IAdapterUpdate adp)
+	{
+		adpStocker.put(key, adp);
 	}
-
-	public void setArtistAdp(ArtistAlbumListRawAdapter artistAdp) {
-		this.artistAdp = artistAdp;
+	public TrackListRawAdapter getTrackAdp()
+	{
+		return (TrackListRawAdapter) getAdapter(TabPage.TABPAGE_ID_SONG);
 	}
-
-	public PlaylistListRawAdapter getPlaylistAdp() {
-		return playlistAdp;
+	public AlbumListRawAdapter getAlbumAdp()
+	{
+		return (AlbumListRawAdapter) getAdapter(TabPage.TABPAGE_ID_ALBUM);
 	}
-
-	public void setPlaylistAdp(PlaylistListRawAdapter playlistAdp) {
-		this.playlistAdp = playlistAdp;
+	public ArtistAlbumListRawAdapter getArtistAdp()
+	{
+		return (ArtistAlbumListRawAdapter) getAdapter(TabPage.TABPAGE_ID_ARTIST);
 	}
-
-	public TrackListRawAdapter getTrackAdp() {
-		return tracklistAdp;
-	}
-
-	public void setTrackAdp(TrackListRawAdapter tracklistAdp) {
-		this.tracklistAdp = tracklistAdp;
+	public PlaylistListRawAdapter getPlaylistAdp()
+	{
+		return (PlaylistListRawAdapter) getAdapter(TabPage.TABPAGE_ID_PLAYLIST);
 	}
 	
 	public absWidget getListFromTabID(int tabID)
@@ -213,26 +206,26 @@ implements ServiceConnection, Database.Defs {
 	}
 	public ExpList getExpList(int id)
 	{
-		if( explists.indexOfKey(id) != -1 )
+		if( 0 <= explists.indexOfKey(id) )
 		{
 			return explists.get(id);
 		}
 		return null;
 	}
 
-	private TempBackupData backupData = new TempBackupData();
+	// private TempBackupData backupData = new TempBackupData();
 	/**
      * 果たしてmapごと保存してうまくいくのか・・・。TODO 要確認
      */
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-    	Log.e("onRetainNonConfigrationInstance","come");
-    	backupData.setAlbumAdp(getAlbumAdp());
-    	backupData.setArtistAdp(getArtistAdp());
-    	backupData.setTracklistAdp(getTrackAdp());
-    	backupData.setPlaylistAdp(getPlaylistAdp());
-        return backupData;
-    }
+//    @Override
+//    public Object onRetainNonConfigurationInstance() {
+//    	Log.e("onRetainNonConfigrationInstance","come");
+//    	backupData.setAlbumAdp(getAlbumAdp());
+//    	backupData.setArtistAdp(getArtistAdp());
+//    	backupData.setTracklistAdp(getTrackAdp());
+//    	backupData.setPlaylistAdp(getPlaylistAdp());
+//        return backupData;
+//    }
     // TrackAdapter用？
     // editmodeかどうか。
     // preference保存対象
@@ -248,25 +241,19 @@ implements ServiceConnection, Database.Defs {
 	// onCreateとonResumeでの処理のダブりを回避する目的
 	// boolean bTabInitEnd = false;
 	
-	public static int TIMECHAR_WIDTH = 80;
-	public static int TIMECHAR_HEIGHT = 100;
+//	public static int TIMECHAR_WIDTH = 80;
+//	public static int TIMECHAR_HEIGHT = 100;
 
-	int currentMainTabId = TabPage.TABPAGE_ID_UNKNOWN;
-	int currentSubTabId = TabPage.TABPAGE_ID_UNKNOWN;
-	
-	IDisplayState stateMain = null;
-//	int mainTabId = TabPage.TABPAGE_ID_UNKNOWN;
-	IDisplayState stateSub = null;
-//	int subTabId = TabPage.TABPAGE_ID_UNKNOWN;
-//	public static final String tabNameMain = "maintab";
-//	public static final String tabNameMedia = "mediatab";
-	public int getCurrentSubTabId()
-	{
-		return currentSubTabId;
-	}
-	
 	LinearLayout pageContainer = null;
+	public LinearLayout getMainPageContainer()
+	{
+		return pageContainer;
+	}
 	RelativeLayout componentContainer = null;
+	public RelativeLayout getMainComponentContainer()
+	{
+		return componentContainer;
+	}
 	
 	// private static String dispIdKey = "_displayId";
 	
@@ -281,35 +268,6 @@ implements ServiceConnection, Database.Defs {
 	{
 		return res;
 	}
-	private Tab tabMain = null;
-	public Tab getTabMain()
-	{
-		return tabMain;
-	}
-	private static TabMediaSelect tabMedia = null;
-	public static TabMediaSelect createMediaTab(
-		LinearLayout pageContainer, ViewGroup componentContainer )
-	{
-		tabMedia = new TabMediaSelect( ControlIDs.TAB_ID_MEDIA, pageContainer, componentContainer );
-		tabMedia.create(R.layout.tab_layout_hooter);
-		return tabMedia;
-	}
-	public TabMediaSelect getMediaTab()
-	{
-		return tabMedia;
-	}
-	private static TabPlayContent tabPlayCont = null;
-	public static TabPlayContent createPlayTab(
-		LinearLayout pageContainer, ViewGroup componentContainer )
-	{
-		tabPlayCont = new TabPlayContent( ControlIDs.TAB_ID_PLAY, pageContainer, componentContainer );
-		tabPlayCont.create(R.layout.tab_layout_hooter);
-		return tabPlayCont;
-	}
-	public TabPlayContent getPlayTab()
-	{
-		return tabPlayCont;
-	}
 	
 	// 初期化時に、スクリーンサイズ取得にスレッドが必要になるため、スレッドとの同期が必要に・・・
 	private static Handler handler = null;
@@ -317,9 +275,31 @@ implements ServiceConnection, Database.Defs {
 	{
 		return handler;
 	}
-	boolean bInitEnd = false;
+    public void queueNextRefresh(long delay) {
+        if (!paused && delay != AppStatus.NO_REFRESH) {
+            Message msg = handler.obtainMessage(AppStatus.REFRESH);
+            handler.removeMessages(AppStatus.REFRESH);
+            handler.sendMessageDelayed(msg, delay);
+        }
+    }	
+	// boolean bInitEnd = false;
 	
-	private static HashMap<Integer,Integer> tabCurrentDisplayIdMap = new HashMap<Integer,Integer>();
+	// private static HashMap<Integer,Integer> tabCurrentDisplayIdMap = new HashMap<Integer,Integer>();
+	public void clearDisplayIdMap()
+	{
+		tabStocker.clearCurrentTabId();
+	}
+	public void reloadDisplayIdMap()
+	{
+		SharedPreferences pref = this.getPreferences(MODE_PRIVATE);
+		setCurrentDisplayId( ControlIDs.TAB_ID_MAIN, 
+				pref.getInt( String.valueOf( ControlIDs.TAB_ID_MAIN ), TabPage.TABPAGE_ID_MEDIA) );
+		setCurrentDisplayId( ControlIDs.TAB_ID_MEDIA, 
+				pref.getInt( String.valueOf( ControlIDs.TAB_ID_MEDIA ), TabPage.TABPAGE_ID_ARTIST ) );
+		setCurrentDisplayId( ControlIDs.TAB_ID_PLAY, 
+				pref.getInt( String.valueOf( ControlIDs.TAB_ID_PLAY ), TabPage.TABPAGE_ID_PLAY_SUB ) );
+		
+	}
 	/**
 	 * 現在の画面IDを設定する
 	 * 今のところ、画面IDというのは、タブIDに等しい
@@ -328,15 +308,19 @@ implements ServiceConnection, Database.Defs {
 	 * @param internalID
 	 * @param iDispId
 	 */
-	public static void setCurrentDisplayId( int internalID, int iDispId )
+	public void setCurrentDisplayId( int internalID, int iDispId )
 	{
-		tabCurrentDisplayIdMap.put( internalID, iDispId );
+		tabStocker.setCurrentTabId(internalID, iDispId);
+		// tabCurrentDisplayIdMap.put( internalID, iDispId );
 	}
-	public static int getCurrentDisplayId( int internalID )
+	public int getCurrentDisplayId( int internalID )
 	{
-		if( tabCurrentDisplayIdMap.containsKey( internalID ))
+		// tabStocker.setCurrentTabId(internalID, iDispId);
+		tabStocker.getTabIdMap().get(internalID);
+		
+		if( 0 <= tabStocker.getTabIdMap().indexOfKey( internalID ))
 		{
-			return tabCurrentDisplayIdMap.get( internalID );
+			return tabStocker.getCurrentTabId( internalID );
 		}
 		else
 		{
@@ -353,26 +337,10 @@ implements ServiceConnection, Database.Defs {
         // ビューの設定
         setContentView(R.layout.main);
  
-		// bDataRestored = false;
-
-        TempBackupData backup = (TempBackupData)getLastNonConfigurationInstance();
-        if( backup != null )
-        {
-        	setAlbumAdp( backup.getAlbumAdp() );
-        	setArtistAdp( backup.getArtistAdp() );
-        	setTrackAdp( backup.getTracklistAdp() );
-        	setPlaylistAdp( backup.getPlaylistAdp() );
-        	Log.d("onCreate","adapter resume!");
-        }
-//        else if( savedInstanceState != null )
-//		{
-//			
-//			Log.d("onCreate","data restored");
-//			bDataRestored = true;
-//		}
-        
         // Databaseクラスにアクティビティ格納
         Database.setActivity( this );
+        // handlerクラス作成
+        handler = new MainHandler( this );
         // ボリュームを音楽用に設定する
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         
@@ -417,209 +385,6 @@ implements ServiceConnection, Database.Defs {
 //    	currentSubTabId = pref.getInt(tabNameMedia + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN);
 
         // サイズが取得できたら、下記の処理実行されるようにする
-        handler =  new Handler(){
-	        //メッセージ受信
-	        @Override
-			public void handleMessage(Message message) {
-	        	switch( message.what )
-        		{
-	        		case REFRESH:
-	        		{
-		                long next = NO_REFRESH;
-		                if( currentMainTabId != TabPage.TABPAGE_ID_MEDIA )
-		                {
-		        			if( stateMain == null )
-		        			{
-		        				break;
-		        			}
-		        			next = stateMain.updateDisplay();
-		                }
-		                else
-		                {
-		        			if( stateSub == null )
-		        			{
-		        				break;
-		        			}
-		                	next = stateSub.updateDisplay();
-		                }
-		                queueNextRefresh(next);
-		                break;
-        			}
-		        	case DisplayInfo.MSG_INIT_END:
-		        	{
-		        		boolean bTabSelectReset = true;
-		        		// 現状、これがOnResume時のディスプレイ初期化後に飛んでくる
-			        	if( bInitEnd == true )
-			        	{
-			        		// もう既に初期化済ならば、何もしない？
-			        	}
-			        	else
-			        	{
-			                receiver = new MediaServiceNotifyReceiver();
-			                intentFilter = new IntentFilter();
-			                intentFilter.addAction(MEDIA_SERVICE_NOTIFY);
-			                registerReceiver(receiver,intentFilter);
-			                
-			                getResourceAccessor().initMotionSenser(OkosamaMediaPlayerActivity.this);
-			                getResourceAccessor().initSound();
-			        		
-			        		TimeControlPanel.createInstance(OkosamaMediaPlayerActivity.this);
-			        		PlayControlPanel.createInstance(OkosamaMediaPlayerActivity.this);
-			        		SubControlPanel.createInstance(OkosamaMediaPlayerActivity.this);
-				            
-			        		// 初期化されていなければ、タブを作成
-			        		// このアクティビティのレイアウトクラスを渡す
-			        		if( tabMain == null )
-			        		{
-					            tabMain = new Tab(
-					            	ControlIDs.TAB_ID_MAIN
-					            	,pageContainer
-					            	,componentContainer 
-					            );
-					            tabMain.create(R.layout.tab_layout_header);
-			        		}
-			        		else
-			        		{
-			        			bTabSelectReset = false;
-			        		}
-			        	}
-			    		bInitEnd = true;
-			        	
-			            // 時間表示等の初期化
-//			    		updateTimeDisplayVisible(0);
-//			    		updateTimeDisplay(0);
-			    		updatePlayStateButtonImage();
-
-			    		// 現在選択中のタブの情報をクリアする
-			            // TODO:場所微妙
-			           	tabCurrentDisplayIdMap.clear();
-			            // 必要であれば、設定を復元する
-			            // TODO:これが現在OnCreateのタイミングなのは要検討
-			            // OnResumeの方がいいかもしれない
-			            // 画面移動&初期化処理
-		//	           	if( bTabInitEnd == false )
-		//	           	{
-			    		SharedPreferences pref = getPreferences(MODE_PRIVATE);
-			    		setCurrentDisplayId( ControlIDs.TAB_ID_MAIN, 
-			    				pref.getInt( String.valueOf( ControlIDs.TAB_ID_MAIN ), TabPage.TABPAGE_ID_UNKNOWN) );
-			    		setCurrentDisplayId( ControlIDs.TAB_ID_MEDIA, 
-			    				pref.getInt( String.valueOf( ControlIDs.TAB_ID_MEDIA ), TabPage.TABPAGE_ID_ARTIST ) );//TabPage.TABPAGE_ID_UNKNOWN) );
-//			           	setMainTabSelection(
-//			           		pref.getInt(tabNameMain + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN)
-//			           	);
-//			           	setMediaTabSelection(
-//			           		pref.getInt(tabNameMedia + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN)
-//			           	);
-			    		if(bTabSelectReset == true )
-			    		{
-				    		updateTimeDisplayVisible(0);
-				    		updateTimeDisplay(0);			    			
-			    			sendUpdateMessage(ControlIDs.TAB_ID_MAIN);
-			    		}
-			           				           	
-//			           	TabSelectAction selAct = new TabSelectAction(tab, currentMainTabId);
-//			           	selAct.doAction(null);
-//			           	TabSelectAction selActMedia = new TabSelectAction( tab.getTabPageMedia().getTabContent(), currentSubTabId );
-//			           	selActMedia.doAction(null);
-			           	if( TimeControlPanel.getInstance() != null )
-			           	{
-			           		TimeControlPanel.getInstance().setDurationLabel(0);
-			           	}
-			           	// reScanMedia(ControlIDs.ID_NOT_SPECIFIED, true);
-			    				           	
-	//	           		if( 1 == setTabSelection( currentMainTabId, currentSubTabId ) )
-	//	           		{
-		    	           	// updateListeners();	           			
-	//	           		}
-		//	           	}
-			            //bTabInitEnd = true;
-			           	
-			           	// 初期化時に、全てのメディアを取得する
-			           	// if( bDataRestored == false )
-		           		//Log.d("msg_init_end","force rescan");
-	           			Log.d("album","" + getAlbumAdp().getCount() + getAlbumAdp().IsDataUpdating());
-			           	
-		           		if( 0 < getAlbumAdp().getCount() 
-		           		&& false == getAlbumAdp().isLastErrored() )
-		           		{
-		           			getAlbumAdp().updateStatus();
-		           		}
-		           		else
-		           		{
-		           			reScanMedia(TabPage.TABPAGE_ID_ALBUM);
-		           		}
-		           		if( 0 < getArtistAdp().getGroupCount() 
-		           		&& false == getArtistAdp().isLastErrored() )
-		           		{
-		           			getArtistAdp().updateStatus();
-		           		}
-		           		else
-		           		{
-		           			reScanMedia(TabPage.TABPAGE_ID_ARTIST);
-		           		}
-		           		if( 0 < getTrackAdp().getCount() 
-		           		&& false == getTrackAdp().isLastErrored() )
-		           		{
-		           			getTrackAdp().updateStatus();
-		           		}
-		           		else
-		           		{
-		           			reScanMedia(TabPage.TABPAGE_ID_SONG);
-		           		}
-		           		if( 0 < getPlaylistAdp().getCount() 
-		           		&& false == getPlaylistAdp().isLastErrored() )
-		           		{
-		           			getPlaylistAdp().updateStatus();
-		           		}
-		           		else
-		           		{
-		           			reScanMedia(TabPage.TABPAGE_ID_PLAYLIST);
-		           		}		           		
-			    		break;
-		        	}
-		        	case TabSelectAction.MSG_ID_TAB_SELECT:
-		        	{
-		        		// タブが選択された通知
-		        		// リスナを更新
-		            	updateListeners(IDisplayState.STATUS_ON_CREATE);
-		            	updateListeners(IDisplayState.STATUS_ON_RESUME);
-		        		if( ControlIDs.TAB_ID_MAIN == (Integer)message.obj )
-		        		{
-			        		// Activityのタブidを更新
-			        		setMainTabSelection(
-			        			OkosamaMediaPlayerActivity.getCurrentDisplayId( ControlIDs.TAB_ID_MAIN )
-			        		);
-		        		}
-		        		else if( ControlIDs.TAB_ID_MEDIA == (Integer)message.obj )
-		        		{
-		        			int id = OkosamaMediaPlayerActivity.getCurrentDisplayId( ControlIDs.TAB_ID_MEDIA );
-		        			if( TabPage.TABPAGE_ID_NONE == id 
-		        			|| TabPage.TABPAGE_ID_UNKNOWN == id )
-		        			{
-		        				id = TabPage.TABPAGE_ID_ARTIST;
-		        			}
-				        	setMediaTabSelection( id );
-		        		}
-		            	// 共通部分再描画
-		            	updateCommonCtrls();
-		            	updatePlayStateButtonImage();
-		            	// メディアを更新
-		            	reScanMedia((Integer)message.obj,false);
-		            	
-		        		break;
-		        	}
-        		}
-        	}
-        };
-    }
-    public static final int NO_REFRESH = -10;
-    public static final int DEFAULT_REFRESH_MS = 500;
-    public void queueNextRefresh(long delay) {
-        if (!paused && delay != NO_REFRESH) {
-            Message msg = handler.obtainMessage(REFRESH);
-            handler.removeMessages(REFRESH);
-            handler.sendMessageDelayed(msg, delay);
-        }
     }
     /**
      * ベース画像上での絶対座標を指定した位置を表すLayoutParamを作成する
@@ -795,53 +560,39 @@ implements ServiceConnection, Database.Defs {
 	@Override
 	protected void onResume() {
 		Log.e("onResume","resume!");
-		if( albumAdp == null )
-		{
-			Log.e("onResume","album adp is null!");
-				
-		}
     	// 画面のサイズ等の情報を更新する
         dispInfo.init(this, componentContainer, handler);
         
         bForceRefresh = true;
-        paused = false;        
+        paused = false;
+        receiver = new MediaServiceNotifyReceiver();
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(MEDIA_SERVICE_NOTIFY);
+        registerReceiver(receiver,intentFilter);
+        
 		super.onResume();
 	}
 
 	@Override
 	protected void onPause() {
-//    	TabPage page = (TabPage) getMediaTab().getChild(currentSubTabId);
-//    	if( page != null )
-//    	{
-//    		page.startUpdate();
-//    	}	
 		// マップをループして、全部の設定を保存
 		//tabCurrentDisplayIdMap.
         //outcicle.putInt("displayid", iCurrentDisplayId);
 		Editor editor = getPreferences(MODE_PRIVATE).edit();
-		for(Entry<Integer, Integer> e : tabCurrentDisplayIdMap.entrySet()) {
-			editor.putInt( String.valueOf( e.getKey() ), e.getValue() );
+		//for(Entry<Integer, Integer> e : tabCurrentDisplayIdMap.entrySet()) {
+		for(int i=0; i < tabStocker.getTabIdMap().size(); ++i ) {
+			editor.putInt( String.valueOf( tabStocker.getTabIdMap().keyAt(i) ),
+					tabStocker.getTabIdMap().valueAt(i) );
 		}
 		editor.commit();
 		
 		paused = true;
 		
 		// componentContainer.removeAllViews();
-		bInitEnd = false;
+		// bInitEnd = false;
 		bForceRefresh = true;
         getResourceAccessor().releaseSound();
-//        if( TimeControlPanel.getInstance() != null )
-//        {
-//        	TimeControlPanel.getInstance().removeViewFromParent();
-//        }
-//        if( PlayControlPanel.getInstance() != null )
-//        {
-//        	PlayControlPanel.getInstance().removeViewFromParent();
-//        }
-//        if( SubControlPanel.getInstance() != null )
-//        {
-//        	SubControlPanel.getInstance().removeViewFromParent();
-//        }
+        stateStocker.unResisterReceiverAll();
         
         if( null != receiver )
         {
@@ -849,50 +600,10 @@ implements ServiceConnection, Database.Defs {
         	receiver = null;
         }
         
-        // カーソルクローズ
-        // Album
-        // 2013/11/03 del ->
-//        Cursor cTmp = Database.getInstance(this).getCursor( Database.AlbumCursorName );
-//        if( cTmp != null && cTmp.isClosed() == false )
-//        {
-//            synchronized( cTmp ) {
-//	        	cTmp.close();
-//	        	Database.getInstance(this).setCursor(Database.AlbumCursorName, null);
-//	        }
-//        }
-//        // Artist
-//        cTmp = Database.getInstance(this).getCursor( Database.ArtistCursorName );
-//        if( cTmp != null && cTmp.isClosed() == false )
-//        {
-//            synchronized( cTmp ) {
-//	        	cTmp.close();
-//	        	Database.getInstance(this).setCursor(Database.ArtistCursorName, null);
-//	        }
-//        }
-//        // Song
-//        cTmp = Database.getInstance(this).getCursor( Database.SongCursorName );
-//
-//        if( cTmp != null && cTmp.isClosed() == false )
-//        {
-//            synchronized( cTmp ) {
-//	        	cTmp.close();
-//	        	Database.getInstance(this).setCursor(Database.SongCursorName, null);
-//	        }
-//        }
-//        // Playlist
-//        cTmp = Database.getInstance(this).getCursor( Database.PlaylistCursorName );
-//        if( cTmp != null && cTmp.isClosed() == false )
-//        {
-//            synchronized( cTmp ) {	        	
-//	        	cTmp.close();
-//	        	Database.getInstance(this).setCursor(Database.PlaylistCursorName, null);
-//            }
-//        }
-        // 2013/11/03 del <-
-
-		// bTabInitEnd = false;
-		// System.gc();
         getResourceAccessor().rereaseMotionSenser();
+
+        // bTabInitEnd = false;
+		// System.gc();
         
 		super.onPause();
 	}
@@ -916,26 +627,36 @@ implements ServiceConnection, Database.Defs {
 		
 		int iRet = 0;
 		//int iRet2 = 0;
-		if( currentMainTabId != mainTab || bForceRefresh == true )
+		if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) != mainTab 
+				|| bForceRefresh == true )
         {
-    	   currentMainTabId = mainTab;
-    	   stateMain = stateMainTmp;
-    	   iRet = 1;
+			if( stateStocker.getState(ControlIDs.TAB_ID_MAIN) != null )
+			{
+				stateStocker.getState(ControlIDs.TAB_ID_MAIN).unregisterReceivers(IDisplayState.STATUS_ON_PAUSE);
+			}
+			tabStocker.setCurrentTabId(ControlIDs.TAB_ID_MAIN, mainTab );
+			stateStocker.putState(ControlIDs.TAB_ID_MAIN, stateMainTmp);
+			iRet = 1;
         }
-        if( stateMain != null )
+        if( stateStocker.getState(ControlIDs.TAB_ID_MAIN) != null )
         {
         	// 画面IDから状態が取得できた
         	if( iRet == 1 )
         	{
         		//iRet2 = 
-        		stateMain.ChangeDisplayBasedOnThisState(tabMain);
+        		stateStocker.getState(ControlIDs.TAB_ID_MAIN).ChangeDisplayBasedOnThisState(
+        				tabStocker.getTab(ControlIDs.TAB_ID_MAIN));
         	}
         }
         // 2013/11/05 add
         if( mainTab == TabPage.TABPAGE_ID_MEDIA )
         {
-           	sendUpdateMessage(ControlIDs.TAB_ID_MEDIA);
+           	sendUpdateMessage(ControlIDs.TAB_ID_MEDIA, tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA));
         }
+        if( mainTab == TabPage.TABPAGE_ID_PLAY )
+        {
+           	sendUpdateMessage(ControlIDs.TAB_ID_PLAY, tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY));
+        }    
         return iRet;
 	}
 	/**
@@ -946,6 +667,62 @@ implements ServiceConnection, Database.Defs {
 	 * @return 0:変化なし 1:変化有り -1:エラー
 	 */
 	public int setMediaTabSelection( int subTab )//, boolean bForceUpd )
+	{
+		// Log.w("setMediaTabSelection", "come tabid=" + subTab);
+		IDisplayState stateSubTmp = DisplayStateFactory.createDisplayState(subTab);        		
+        if( stateSubTmp == null )
+        {
+        	return -1;
+        }
+		int iRet = 0;
+        if( stateSubTmp != null )
+        {
+    		// Log.w("setMediaTabSelection", "stateSubTmp != null" );
+        	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) 
+        			== TabPage.TABPAGE_ID_MEDIA )
+        	{
+        		// Log.w("setMediaTabSelection", "stateMain = MEDIA" );		
+	        	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA) != subTab 
+	        			|| bForceRefresh == true )
+	        	{
+	        		IDisplayState stateMedia = stateStocker.getState(
+	        				ControlIDs.TAB_ID_MEDIA);
+	    			if( stateMedia != null )
+	    			{
+	    				stateMedia.unregisterReceivers(IDisplayState.STATUS_ON_DESTROY);
+	    			}	        		
+	    			tabStocker.setCurrentTabId(ControlIDs.TAB_ID_MEDIA, subTab );
+	        		stateMedia = stateSubTmp;
+	    			stateStocker.putState(ControlIDs.TAB_ID_MEDIA, stateMedia);
+	        		iRet = 1;
+	        		// メディアタブであれば
+	        		// サブ画面をロードする
+	        		// 二段階に分けると二度画面更新が走るので無駄が多いと思われるが、とりあえずそれしか思いつかない
+	                // stateSub = DisplayStateFactory.createDisplayState(subTab);        		
+	                if( stateMedia != null && tabStocker.getTab(ControlIDs.TAB_ID_MEDIA) != null)
+	                {
+	            		Log.w("stateMedia.ChangeDisplayBasedOnThisState", "come");
+	                	stateMedia.ChangeDisplayBasedOnThisState(
+	                			tabStocker.getTab(ControlIDs.TAB_ID_MEDIA));
+	                }
+	        	}
+        	}
+        	else
+        	{
+        		// MediaTabでない場合、サブTabは擬似的にNoneで更新させる
+        		// DisplayStateFactory.createDisplayState(TabPage.TABPAGE_ID_NONE).ChangeDisplayBasedOnThisState(tabMedia);  
+        	}
+        }
+        return iRet;
+	}
+	/**
+	 * サブタブは、状況によって変化するので注意
+	 * まだこの関数は未完成（その、サブタブの選択部分)
+	 * @param subTab
+	 * @param bSndChgMsg 変化があったとき、メッセージを送信するか
+	 * @return 0:変化なし 1:変化有り -1:エラー
+	 */
+	public int setPlayTabSelection( int subTab )//, boolean bForceUpd )
 	{
 		// Log.w("setMediaTabSelection", "come tabid=" + subTab);
 		
@@ -960,23 +737,35 @@ implements ServiceConnection, Database.Defs {
         {
     		// Log.w("setMediaTabSelection", "stateSubTmp != null" );
         	
-        	if( currentMainTabId == TabPage.TABPAGE_ID_MEDIA )
+        	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) == TabPage.TABPAGE_ID_PLAY )
         	{
         		// Log.w("setMediaTabSelection", "stateMain = MEDIA" );
         		
-	        	if( currentSubTabId != subTab || bForceRefresh == true )
-	        	{   	   
-	        		currentSubTabId = subTab;
-	        		stateSub = stateSubTmp;
+	        	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY) != subTab 
+	        			|| bForceRefresh == true )
+	        	{
+	        		IDisplayState statePlayTab = stateStocker.getState(ControlIDs.TAB_ID_PLAY);
+	        		
+	        		if( statePlayTab != null )
+	        		{
+	        			statePlayTab.unregisterReceivers(IDisplayState.STATUS_ON_DESTROY);
+	        		}
+	        		tabStocker.setCurrentTabId(ControlIDs.TAB_ID_PLAY, subTab);
+	        		statePlayTab = stateSubTmp;
+	    			stateStocker.putState(ControlIDs.TAB_ID_PLAY, statePlayTab);
+	        		
 	        		iRet = 1;
-	        		// メディアタブであれば
+	        		// プレイタブであれば
 	        		// サブ画面をロードする
 	        		// 二段階に分けると二度画面更新が走るので無駄が多いと思われるが、とりあえずそれしか思いつかない
-	                stateSub = DisplayStateFactory.createDisplayState(subTab);        		
-	                if( stateSub != null && tabMedia != null)
+	        		// statePlayTab = DisplayStateFactory.createDisplayState(subTab);
+	        		
+	                if( statePlayTab != null 
+	                && tabStocker.getTab(ControlIDs.TAB_ID_PLAY) != null)
 	                {
-	            		Log.w("stateSub.ChangeDisplayBasedOnThisState", "come");
-	                	stateSub.ChangeDisplayBasedOnThisState(tabMedia);
+	            		Log.w("statePlayTab.ChangeDisplayBasedOnThisState", "come");
+	            		statePlayTab.ChangeDisplayBasedOnThisState(
+	            				tabStocker.getTab(ControlIDs.TAB_ID_PLAY));
 	                }
 	        	}
         	}
@@ -988,11 +777,12 @@ implements ServiceConnection, Database.Defs {
         }
         return iRet;
 	}
-	void sendUpdateMessage(int tabID)//String tabName)
+	void sendUpdateMessage(int tabID,int tabPageID)//String tabName)
 	{
     	Message msg = new Message();
     	msg.what = TabSelectAction.MSG_ID_TAB_SELECT;
     	msg.obj = tabID;
+    	msg.arg2 = tabPageID;
     	handler.sendMessage(msg);
 	}
 	void updateCommonCtrls()
@@ -1018,19 +808,36 @@ implements ServiceConnection, Database.Defs {
 	 */
 	void updateListeners(int status)
 	{
+		IDisplayState stateMain = stateStocker.getState(ControlIDs.TAB_ID_MAIN);
+	
 		if( stateMain == null )
 		{
 			return;
 		}
+		stateMain.unregisterReceivers(status);
 		int iRet = stateMain.registerReceivers(status);
 		if( iRet == 1 )
 		{
-			if( stateSub == null )
+			IDisplayState stateMedia = stateStocker.getState(ControlIDs.TAB_ID_MEDIA);
+			
+			if( stateMedia == null )
 			{
 				return;
 			}
-			iRet = stateSub.registerReceivers(status);//);
-		}		
+			stateMedia.unregisterReceivers(status);
+			iRet = stateMedia.registerReceivers(status);//);
+		}
+		else if( iRet == 2 )
+		{
+			IDisplayState statePlayTab = stateStocker.getState(ControlIDs.TAB_ID_PLAY);
+			
+			if( statePlayTab == null )
+			{
+				return;
+			}
+			statePlayTab.unregisterReceivers(status);
+			iRet = statePlayTab.registerReceivers(status);//);
+		}			
 		if( iRet == 1 )
 		{
 			// Log.w("registerReceivers=1","maybe listener not registered.");
@@ -1087,43 +894,20 @@ implements ServiceConnection, Database.Defs {
 	 * 強制リスキャン
 	 * @param tabID
 	 */
-	public void reScanMedia(int tabID)
+	public void reScanMediaOfMediaTab(int tabID)
 	{
-    	TabPage page = (TabPage) getMediaTab().getChild(tabID);
+		Tab tabMedia = tabStocker.getTab(ControlIDs.TAB_ID_MEDIA);
+		if( tabMedia == null )
+		{
+			return;
+		}
+    	TabPage page = (TabPage) tabMedia.getChild(tabID);
     	if( page != null )
     	{
     		page.startUpdate();
     	}
-		switch( tabID )
-		{
-		case TabPage.TABPAGE_ID_ALBUM:
-			// Listにカーソルを設定
-            // Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );
-			getAlbumAdp().stockMediaDataFromDevice();
-			break;
-		case TabPage.TABPAGE_ID_ARTIST:			
-			// Listにカーソルを設定
-			// Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);
-			getArtistAdp().stockMediaDataFromDevice();
-			break;
-		case TabPage.TABPAGE_ID_SONG:
-			
-//			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
-//			Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);			
-			getTrackAdp().stockMediaDataFromDevice();
-			break;
-		case TabPage.TABPAGE_ID_PLAYLIST:
-			
-			// Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);
-			getPlaylistAdp().stockMediaDataFromDevice();
-			break;
-		case TabPage.TABPAGE_ID_NONE:
-			break;
-		}
-		
+    	adpStocker.stockMediaDataFromDevice(tabID);
 	}
-	
-	
 	/**
 	 * メディアの再スキャン？TODO:スキャンのロジック自体に、見直し必要
 	 * @param tabID
@@ -1139,54 +923,13 @@ implements ServiceConnection, Database.Defs {
 		{
 			// メディアタブならば
 			// メディアを再度クエリ発行して更新する
-			switch( currentSubTabId )
-			{
-			case TabPage.TABPAGE_ID_ALBUM:
-				if( 0 < getAlbumAdp().getCount() )
-				{
-					getAlbumAdp().updateStatus();//updateData(getAlbumAdp().getItems());
-					break;
-				}
-				// Listにカーソルを設定
-				getAlbumAdp().stockMediaDataFromDevice();
-	            // Database.getInstance(externalRef).createAlbumCursor(getAlbumAdp().getQueryHandler(), null );
-	            bUpdateOccur = true;
-				break;
-			case TabPage.TABPAGE_ID_ARTIST:			
-				if( 0 < getArtistAdp().getGroupCount() )
-				{
-					Log.d("artist","artist escape count=" + getArtistAdp().getGroupCount() );
-					getArtistAdp().updateStatus();
-					break;
-				}
-				Log.d("artist","artist rescan" );
-				// Listにカーソルを設定
-				getArtistAdp().stockMediaDataFromDevice();				
-				// Database.getInstance(externalRef).createArtistCursor(getArtistAdp().getQueryHandler(), null);			
-	            bUpdateOccur = true;
-				break;
-			case TabPage.TABPAGE_ID_SONG:
-				if( 0 < getTrackAdp().getCount() )
-				{
-					getTrackAdp().updateList();					
-					break;
-				}
-				
-				getTrackAdp().stockMediaDataFromDevice();				
-//				OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( null );        	
-//				Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);			
-	            bUpdateOccur = true;
-				break;
-			
-			case TabPage.TABPAGE_ID_PLAYLIST:
-				// Database.getInstance(externalRef).createPlaylistCursor(getPlaylistAdp().getQueryHandler(), null, false);
-				getPlaylistAdp().stockMediaDataFromDevice();								
-	            bUpdateOccur = true;
-				break;
-			}
+			bUpdateOccur = adpStocker.stockMediaDataFromDevice( 
+					tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA), true );
+			Tab tabMedia = tabStocker.getTab(ControlIDs.TAB_ID_MEDIA);
 			if( bUpdateOccur )
 			{
-		    	TabPage page = (TabPage) getMediaTab().getChild(currentSubTabId);
+		    	TabPage page = (TabPage)tabMedia.getChild(
+		    			tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA));
 		    	if( page != null )
 		    	{
 		    		page.startUpdate();
@@ -1194,7 +937,8 @@ implements ServiceConnection, Database.Defs {
 			}
 			else
 			{
-		    	TabPage page = (TabPage) getMediaTab().getChild(currentSubTabId);
+		    	TabPage page = (TabPage) tabMedia.getChild(
+		    			tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA));
 		    	if( page != null )
 		    	{
 		    		page.endUpdate();
@@ -1202,28 +946,29 @@ implements ServiceConnection, Database.Defs {
 			}
 		}
 		else	
-		if( tabID == ControlIDs.TAB_ID_MAIN 
-				&& currentMainTabId == TabPage.TABPAGE_ID_NOW_PLAYLIST )
+		if( tabID == ControlIDs.TAB_ID_PLAY
+				&& tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY) == TabPage.TABPAGE_ID_NOW_PLAYLIST )
 		{
 			// TODO: 現在、トラックと同じカーソルになっているが、考えた方がいいかもしれない
 			// NOWPLAYLIST
 			// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
-			getTrackAdp().setFilterType(TrackListRawAdapter.FILTER_NOW_QUEUE);
-	    	TabPage page2 = (TabPage) getTabMain().getChild(currentMainTabId);
+			((TrackListRawAdapter)adpStocker.get(TabPage.TABPAGE_ID_SONG)).setFilterType(TrackListRawAdapter.FILTER_NOW_QUEUE);
+	    	TabPage page2 = (TabPage)tabStocker.getTab(ControlIDs.TAB_ID_PLAY).getChild(
+	    			tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY));
 	    	if( page2 != null )
 	    	{
 	    		page2.startUpdate();
 	    	}
-			if( bForce == false 
-			&& 0 < getTrackAdp().getCount() ) {
-				// 再スキャンは重いので、とりあえず、既にカーソルがある場合、強制でないなら再スキャンはしない
-				getTrackAdp().updateList();
+			if( bForce == false )
+			{
+				bUpdateOccur 
+				= adpStocker.stockMediaDataFromDevice( 
+						tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA), true );
 			}
 			else
 			{
-				// getTrackAdp().setQueueView(true);
-				getTrackAdp().stockMediaDataFromDevice();
-				// Database.getInstance(externalRef).createTrackCursor(getTrackAdp().getQueryHandler(), null );//, null, null, null);
+				adpStocker.stockMediaDataFromDevice( 
+						tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA) );
 			}
 		}
 	}
@@ -1233,7 +978,7 @@ implements ServiceConnection, Database.Defs {
 		// TODO Auto-generated method stub
 		// MediaPlayer.unbindFromService(mToken);
 		super.onStop();
-        handler.removeMessages(REFRESH);
+        handler.removeMessages(AppStatus.REFRESH);
 	}
 
 	@Override
@@ -1265,6 +1010,7 @@ implements ServiceConnection, Database.Defs {
 	@Override
 	public void onServiceConnected(ComponentName name, IBinder service) {
 		// TODO Auto-generated method stub
+		IDisplayState stateMain = stateStocker.getState(ControlIDs.TAB_ID_MAIN);
 		
 		if( stateMain == null )
 		{
@@ -1374,17 +1120,28 @@ implements ServiceConnection, Database.Defs {
 	    @Override
 	    public boolean onCreateOptionsMenu(Menu menu) {
 	        super.onCreateOptionsMenu(menu);
+			IDisplayState stateMain = stateStocker.getState(ControlIDs.TAB_ID_MAIN);
+	        
 			if( stateMain == null )
 			{
 				return false;
 			}
 			int iRet = stateMain.onCreateOptionsMenu(menu);
-			if( iRet == IDisplayState.MENU_NEXT_STATE )
+			if( iRet == IDisplayState.MENU_MEDIA_STATE )
 			{
-				if( stateSub == null )
+				IDisplayState stateMedia = stateStocker.getState(ControlIDs.TAB_ID_MEDIA);
+				if( stateMedia == null )
 					return false;
 				
-				iRet = stateSub.onCreateOptionsMenu(menu);
+				iRet = stateMedia.onCreateOptionsMenu(menu);
+			}
+			else if( iRet == IDisplayState.MENU_PLAY_STATE )
+			{
+				IDisplayState statePlay = stateStocker.getState(ControlIDs.TAB_ID_PLAY);
+				if( statePlay == null )
+					return false;
+				
+				iRet = statePlay.onCreateOptionsMenu(menu);
 			}
 	        return true;
 	    }
@@ -1393,38 +1150,64 @@ implements ServiceConnection, Database.Defs {
 	    public boolean onPrepareOptionsMenu(Menu menu) {
 //	        MusicUtils.setPartyShuffleMenuIcon(menu);
 	        boolean b = super.onPrepareOptionsMenu(menu);
+			IDisplayState stateMain = stateStocker.getState(ControlIDs.TAB_ID_MAIN);
+	        
 			if( stateMain == null )
 			{
 				return false;
 			}
 			int iRet = stateMain.onPrepareOptionsMenu(menu);
-			if( iRet == IDisplayState.MENU_NEXT_STATE )
+			if( iRet == IDisplayState.MENU_MEDIA_STATE )
 			{
-				if( stateSub == null )
+				IDisplayState stateMedia = stateStocker.getState(ControlIDs.TAB_ID_MEDIA);
+				
+				if( stateMedia == null )
 				{
 					return false;
 				}
-				iRet = stateSub.onPrepareOptionsMenu(menu);
+				iRet = stateMedia.onPrepareOptionsMenu(menu);
 			}
+			else if( iRet == IDisplayState.MENU_PLAY_STATE )
+			{
+				IDisplayState statePlay = stateStocker.getState(ControlIDs.TAB_ID_PLAY);
+				if( statePlay == null )
+					return false;
+				
+				iRet = statePlay.onCreateOptionsMenu(menu);
+			}
+			
 	        return b;
 	    }
 
 	    @Override
 	    public boolean onOptionsItemSelected(MenuItem item) {
 	    	boolean b = super.onOptionsItemSelected(item);
+			IDisplayState stateMain = stateStocker.getState(ControlIDs.TAB_ID_MAIN);
+	    	
 			if( stateMain == null )
 			{
 				return false;
 			}
 			int iRet = stateMain.onOptionsItemSelected(item);
-			if( iRet == IDisplayState.MENU_NEXT_STATE )
+			if( iRet == IDisplayState.MENU_MEDIA_STATE )
 			{
-				if( stateSub == null )
+				IDisplayState stateMedia = stateStocker.getState(ControlIDs.TAB_ID_MEDIA);
+				
+				if( stateMedia == null )
 				{
 					return false;
 				}
-				iRet = stateSub.onOptionsItemSelected(item);
+				iRet = stateMedia.onOptionsItemSelected(item);
 			}
+			else if( iRet == IDisplayState.MENU_PLAY_STATE )
+			{
+				IDisplayState statePlay = stateStocker.getState(ControlIDs.TAB_ID_PLAY);
+				if( statePlay == null )
+					return false;
+				
+				iRet = statePlay.onOptionsItemSelected(item);
+			}
+			
 			return b;
 			
 //	        Cursor cursor;

@@ -2,6 +2,7 @@ package okosama.app.adapter;
 
 import java.util.ArrayList;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
@@ -403,7 +404,8 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 		            		data.setTrackAlbum(cursor.getString(mAlbumIdx));
 		            		data.setTrackAlbumId(cursor.getString(mAlbumIdIdx));
 		            		data.setTrackArtistId(cursor.getString(mArtistIdIdx));
-		        			data.setTrackAlbumArt(mActivity.getAlbumAdp().getAlbumArtFromId(Integer.parseInt(data.getTrackAlbumId())));
+		        			data.setTrackAlbumArt(
+		        					((AlbumListRawAdapter)mActivity.getAdapter(TabPage.TABPAGE_ID_ALBUM)).getAlbumArtFromId(Integer.parseInt(data.getTrackAlbumId())));
 		          		// Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
 		            	    allItems.add(data);
 		        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
@@ -430,12 +432,12 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateList();
-            	TabPage page = (TabPage) mActivity.getMediaTab().getChild(TabPage.TABPAGE_ID_SONG);
+            	TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_SONG);
             	if( page != null )
             	{
             		page.endUpdate();
             	}
-            	TabPage page2 = (TabPage) mActivity.getTabMain().getChild(TabPage.TABPAGE_ID_NOW_PLAYLIST);
+            	TabPage page2 = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_PLAY).getChild(TabPage.TABPAGE_ID_NOW_PLAYLIST);
             	if( page2 != null )
             	{
             		page2.endUpdate();
@@ -591,6 +593,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     // 曲の変更時など、状態が変わったときに、外部から表示を更新させる
 	public int updateStatus()
     {
+    	updateList();    	
     	// 表示を更新?
     	notifyDataSetChanged();
     	return 0;
@@ -598,6 +601,24 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	@Override
 	public boolean isLastErrored() {
 		return bLastError;
+	}
+
+	@Override
+	public int getMainItemCount() {
+		return getCount();
+	}
+
+	@Override
+	public void initialize() {
+   		if( 0 < mActivity.getTrackAdp().getCount() 
+   		&& false == mActivity.getTrackAdp().isLastErrored() )
+   		{
+   			mActivity.getTrackAdp().updateStatus();
+   		}
+   		else
+   		{
+   			mActivity.reScanMediaOfMediaTab(TabPage.TABPAGE_ID_SONG);
+   		}
 	}
 	
 }

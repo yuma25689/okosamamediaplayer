@@ -7,8 +7,8 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle">
             <gradient
-                android:startColor="#231100"
-                android:endColor="#882222"
+                android:startColor="#FF231100"
+                android:endColor="#88882222"
                 android:angle="270" />
         </shape>
     </item>

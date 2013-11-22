@@ -73,13 +73,8 @@ public class TabPageMedia extends TabPage {
 		toggleEx.acceptConfigurator(actionSetter);
 
 		// tabBaseLayout.addView( toggleEx.getView() );
-		tabContent = OkosamaMediaPlayerActivity.createMediaTab(
-				pageContainer, tabBaseLayout);//new TabMediaSelect(pageContainer, componentContainer);
-		// addChild( TabPage.TABPAGE_ID_PLAY, new TabPagePlay( this, pageContainer, rlCont ) );
-		// componentContainer.addView( tabBaseLayout );
-		// tabContent.create();
-        // タブページをNoneに
-		// tabContent.setCurrentTab(TabPage.TABPAGE_ID_NONE, false);
+		tabContent = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabStocker().createMediaTab(
+				pageContainer, tabBaseLayout);
 		
 		return 0;
 	}

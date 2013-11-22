@@ -1,5 +1,6 @@
 package okosama.app.state;
 
+import okosama.app.AppStatus;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.factory.ListenerFactory;
 import okosama.app.service.MediaPlaybackService;
@@ -22,18 +23,20 @@ public class absDisplayStateMediaTab extends absDisplayState {
 		switch( status )
 		{
 		case STATUS_ON_CREATE:
-	        Handler reScanHdr = ListenerFactory.createRescanHandler();
-	        handlers.put( HDLER_NAME_RESCAN, reScanHdr );
-
-	        f = new IntentFilter();
-	        f.addAction(Intent.ACTION_MEDIA_SCANNER_STARTED);
-	        f.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
-	        f.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
-	        f.addDataScheme("file");
-	        BroadcastReceiver scanListener = ListenerFactory.createScanListener( reScanHdr );
-	        receivers.put( LSNER_NAME_SCAN, scanListener );
-	        OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().registerReceiver(scanListener, f);
-
+			if( receivers.containsKey( LSNER_NAME_SCAN ) == false )
+			{
+		        Handler reScanHdr = ListenerFactory.createRescanHandler();
+		        handlers.put( HDLER_NAME_RESCAN, reScanHdr );
+	
+		        f = new IntentFilter();
+		        f.addAction(Intent.ACTION_MEDIA_SCANNER_STARTED);
+		        f.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
+		        f.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
+		        f.addDataScheme("file");
+		        BroadcastReceiver scanListener = ListenerFactory.createScanListener( reScanHdr );
+		        receivers.put( LSNER_NAME_SCAN, scanListener );
+		        OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().registerReceiver(scanListener, f);
+			}
 			break;
 		case STATUS_ON_RESUME:
 			f = new IntentFilter();
@@ -54,6 +57,7 @@ public class absDisplayStateMediaTab extends absDisplayState {
 		switch( status )
 		{
 		case STATUS_ON_PAUSE:
+		case STATUS_ON_RESUME:
 			// TODO: ä÷êîâª
 			if( receivers.containsKey( LSNER_NAME_MEDIACHG ))
 			{
@@ -61,6 +65,7 @@ public class absDisplayStateMediaTab extends absDisplayState {
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().unregisterReceiver(brTrack);
 		        receivers.remove(LSNER_NAME_MEDIACHG);
 			}
+		case STATUS_ON_CREATE:			
 			if( handlers.containsKey( HDLER_NAME_RESCAN ))
 			{
 		        Handler hdrRescan = handlers.get( HDLER_NAME_RESCAN );
@@ -77,6 +82,6 @@ public class absDisplayStateMediaTab extends absDisplayState {
 	@Override
 	public long updateDisplay() {
 		// TODO Auto-generated method stub
-		return OkosamaMediaPlayerActivity.NO_REFRESH;
+		return AppStatus.NO_REFRESH;
 	}	
 }

@@ -5,6 +5,7 @@ import okosama.app.R;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
 import okosama.app.storage.TrackData;
+import okosama.app.tab.TabPage;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -34,7 +35,7 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 		// Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).getCursor(Database.SongCursorName);
 		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		
-		if (act.getTrackAdp().getCount() == 0) {
+		if (act.getAdapter(TabPage.TABPAGE_ID_SONG).getMainItemCount() == 0) {
             return;
         }
         // When selecting a track from the queue, just jump there instead of

@@ -103,24 +103,24 @@ public class Tab extends TabComponentParent {
 			null, R.drawable.now_playlist_button_image,
 			"", ScaleType.FIT_XY
 		);
-		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(tabBtnCreationData);		
-		actMapTemp
-		= new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( 
-				this.getInternalID(),
-				TabPage.TABPAGE_ID_NOW_PLAYLIST ) );
-		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
-		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).getView());				
+//		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(tabBtnCreationData);		
+//		actMapTemp
+//		= new SparseArray< IViewAction >();
+//		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( 
+//				this.getInternalID(),
+//				TabPage.TABPAGE_ID_NOW_PLAYLIST ) );
+//		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
+//		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).getView());				
 		
 		RelativeLayout rlCont = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_contents);
 		
 		// タブの追加
 		addChild( TabPage.TABPAGE_ID_PLAY, 
-				new TabPagePlay( this, pageContainer, rlCont ) );
+				new TabPagePlay2( this, pageContainer, rlCont ) );
 		addChild( TabPage.TABPAGE_ID_MEDIA, 
 				new TabPageMedia( this, pageContainer, rlCont ) );//new TabPageMedia( this, pageContainer, rlCont ) );
-		addChild( TabPage.TABPAGE_ID_NOW_PLAYLIST, 
-				new TabPageNowPlaylist( this, pageContainer, rlCont ));
+//		addChild( TabPage.TABPAGE_ID_NOW_PLAYLIST, 
+//				new TabPageNowPlaylist( this, pageContainer, rlCont ));
 		// タブページは、setCurrentTabを読んだ時、アクティブなものだけが作られる。
 		// なぜかタブページのcreateは呼んではいけないことになってしまった。
 		// また、create時のタブIDは不明なので、setCurrentTabはここでは呼ばず、上位に呼ばせる。
@@ -188,7 +188,9 @@ public class Tab extends TabComponentParent {
 		// この場所だけでいいかどうかは不明
         if( save == true )
         {
-        	OkosamaMediaPlayerActivity.setCurrentDisplayId(this.internalID,tabId);
+    		OkosamaMediaPlayerActivity act 
+    		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+        	act.setCurrentDisplayId(this.internalID,tabId);
         }
 		OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(false, internalID);
 		

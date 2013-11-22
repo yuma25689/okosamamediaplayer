@@ -42,7 +42,8 @@ public interface IDisplayState {
 	public int updateStatus();
 	
 	public static final int MENU_OK = 0;
-	public static final int MENU_NEXT_STATE = 1;
+	public static final int MENU_MEDIA_STATE = 1;
+	public static final int MENU_PLAY_STATE = 1;
 	public int onCreateOptionsMenu(Menu menu);
 	public int onPrepareOptionsMenu(Menu menu);
 	public int onOptionsItemSelected(MenuItem menu);

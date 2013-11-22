@@ -64,7 +64,8 @@ public final class DroidDisplayInfo {
 			// 割と強引だが、この画像をスクリーンと考えた位置に他のコンポーネントを配置する
 			// この画像内での他のコンポーネントの位置は分かるが、プログラム内ではdensityを考慮しなければならない
 			// densityを考慮した場合の、補正値を計算する
-	        backgroundImgBase = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.background_3);
+	        backgroundImgBase = OkosamaMediaPlayerActivity.getResourceAccessor()
+	        		.getResourceDrawable(R.drawable.background_3);
 		}
 		updateDisplayMetrics();
 	}
@@ -81,7 +82,6 @@ public final class DroidDisplayInfo {
 			return;
 		}
 
-		
 	    // ディスプレイ情報の取得
 	    activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 

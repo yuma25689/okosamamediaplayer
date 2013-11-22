@@ -1,6 +1,8 @@
 package okosama.app.adapter;
 
 import java.util.ArrayList;
+
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.service.MediaPlayerUtil;
@@ -38,7 +40,7 @@ implements IAdapterUpdate, SectionIndexer {
 	SparseArray<String> mapIdAndArt = new SparseArray<String>();
 	public String getAlbumArtFromId(int id)
 	{
-		if( mapIdAndArt.indexOfKey(id) == -1 )
+		if( mapIdAndArt.indexOfKey(id) < 0 )
 		{
 			return null;
 		}
@@ -301,7 +303,7 @@ implements IAdapterUpdate, SectionIndexer {
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateData( items );
-            	TabPage page = (TabPage) mActivity.getMediaTab().getChild(TabPage.TABPAGE_ID_ALBUM);
+            	TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_ALBUM);
             	if( page != null )
             	{
             		page.endUpdate();
@@ -372,5 +374,23 @@ implements IAdapterUpdate, SectionIndexer {
 	@Override
 	public boolean isLastErrored() {
 		return bLastError;
+	}
+
+	@Override
+	public int getMainItemCount() {
+		return getCount();
+	}
+
+	@Override
+	public void initialize() {
+   		if( 0 < mActivity.getAlbumAdp().getCount() 
+   		&& false == mActivity.getAlbumAdp().isLastErrored() )
+   		{
+   			mActivity.getAlbumAdp().updateStatus();
+   		}
+   		else
+   		{
+   			mActivity.reScanMediaOfMediaTab(TabPage.TABPAGE_ID_ALBUM);
+   		}		
 	}
  }

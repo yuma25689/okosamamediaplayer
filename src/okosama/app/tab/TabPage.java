@@ -36,6 +36,7 @@ public abstract class TabPage extends TabComponentParent {
 	public static final int TABPAGE_ID_PLAYLIST = 7;
 	public static final int TABPAGE_ID_NOW_PLAYLIST = 8;
 	public static final int TABPAGE_ID_MEDIA_IMPL = 12;
+	public static final int TABPAGE_ID_PLAY_SUB = 13;
 	
 	private boolean bPrevActivate = false;
 	

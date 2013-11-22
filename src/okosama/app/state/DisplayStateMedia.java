@@ -2,6 +2,7 @@ package okosama.app.state;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import okosama.app.AppStatus;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
@@ -26,22 +27,22 @@ public class DisplayStateMedia extends absDisplayState {
 	@Override
 	public long updateDisplay() {
 		// TODO Auto-generated method stub
-		return OkosamaMediaPlayerActivity.NO_REFRESH;
+		return AppStatus.NO_REFRESH;
 	}
 	@Override
 	public int onCreateOptionsMenu(Menu menu)
 	{
-		return MENU_NEXT_STATE;		
+		return MENU_MEDIA_STATE;		
 	}
 	@Override
 	public int onPrepareOptionsMenu(Menu menu)
 	{
-		return MENU_NEXT_STATE;		
+		return MENU_MEDIA_STATE;		
 	}
 	@Override
 	public int onOptionsItemSelected(MenuItem menu)
 	{
-		return MENU_NEXT_STATE;
+		return MENU_MEDIA_STATE;
 	}
 	
 }

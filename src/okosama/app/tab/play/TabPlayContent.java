@@ -55,30 +55,30 @@ public class TabPlayContent extends Tab {
 		tabBaseLayout.setLayoutParams(lp);
 		// タブボタンを置くヘッダとなるレイアウト
 		RelativeLayout rlHooter = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_hooter);
-		// アルバムタブボタン
 		
-		mapBtn.put( TabPage.TABPAGE_ID_PLAY, DroidWidgetKit.getInstance().MakeButton() );
+		mapBtn.put( TabPage.TABPAGE_ID_PLAY_SUB, DroidWidgetKit.getInstance().MakeButton() );
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
 			ControlIDs.PLAY_TAB_BUTTON, ComponentType.BUTTON, 
 			0, 0,
 			120, BUTTON_HEIGHT,
-			R.drawable.play_button_image,
-			R.drawable.no_image, 
+			R.drawable.music_tab_button_image,
+			R.drawable.no_image,
 			"", ScaleType.FIT_XY 
 		);
-		mapBtn.get(TabPage.TABPAGE_ID_PLAY).acceptConfigurator(tabBtnCreationData);
+		mapBtn.get(TabPage.TABPAGE_ID_PLAY_SUB).acceptConfigurator(tabBtnCreationData);
 		SparseArray< IViewAction > actMapTemp 
 		= new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( this.getInternalID(), TabPage.TABPAGE_ID_ALBUM ) );
+		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( 
+				this.getInternalID(), TabPage.TABPAGE_ID_PLAY_SUB ) );
 		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );			
-		mapBtn.get(TabPage.TABPAGE_ID_PLAY).acceptConfigurator(actionSetter);
-		rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_PLAY).getView());
+		mapBtn.get(TabPage.TABPAGE_ID_PLAY_SUB).acceptConfigurator(actionSetter);
+		rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_PLAY_SUB).getView());
 
 		// プレイリストタブ
 		mapBtn.put( TabPage.TABPAGE_ID_NOW_PLAYLIST, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData = new TabComponentPropertySetter(
 			ControlIDs.NOW_PLAYLIST_TAB_BUTTON, ComponentType.BUTTON, 
-			( 120 + 5 ) * 3, 0,//DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
+			( 120 + 5 ) * 1, 0,//DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
 			120, BUTTON_HEIGHT,
 			R.drawable.now_playlist_button_image,
 			R.drawable.no_image,//R.drawable.tab4_btn_not_select_no_shadow2, 
@@ -86,7 +86,7 @@ public class TabPlayContent extends Tab {
 		);
 		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(tabBtnCreationData);
 		actMapTemp = new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( this.getInternalID(), TabPage.TABPAGE_ID_PLAYLIST ) );
+		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( this.getInternalID(), TabPage.TABPAGE_ID_NOW_PLAYLIST ) );
 		actionSetter = new TabComponentActionSetter( actMapTemp );			
 		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(actionSetter);
 		rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).getView());

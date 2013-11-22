@@ -171,7 +171,7 @@ public abstract class TabComponentParent implements ITabComponent {
 
 	public ITabComponent getChild( int ID )
 	{
-		if( -1 != children.indexOfKey(ID) )
+		if( 0 <= children.indexOfKey(ID) )
 		{
 			return children.get(ID);
 		}

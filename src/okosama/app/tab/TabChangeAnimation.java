@@ -44,13 +44,18 @@ public class TabChangeAnimation {
 		}		
 		// タブのロック
 		Tab tab = null;
+		// TODO: タブIDからタブを取得する関数を作成
 		if( tabId == ControlIDs.TAB_ID_MAIN )
 		{
-			tab = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabMain();
+			tab = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabStocker().getTab(ControlIDs.TAB_ID_MAIN);
 		}
 		else if( tabId == ControlIDs.TAB_ID_MEDIA )
 		{
-			tab = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getMediaTab();
+			tab = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA);
+		}
+		else if( tabId == ControlIDs.TAB_ID_PLAY )
+		{
+			tab = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabStocker().getTab(ControlIDs.TAB_ID_PLAY);
 		}
 		if( tab != null )
 		{
@@ -162,7 +167,7 @@ public class TabChangeAnimation {
         			if( tabBaseLayout.getParent() instanceof ViewGroup )
         				((ViewGroup)tabBaseLayout.getParent()).removeView( tabBaseLayout );
         		}
-        		if( -1 == componentContainer.indexOfChild( tabBaseLayout ))
+        		if( 0 > componentContainer.indexOfChild( tabBaseLayout ))
             	{
         			componentContainer.addView( tabBaseLayout );
         			componentContainer.invalidate();
@@ -222,7 +227,7 @@ public class TabChangeAnimation {
 			componentContainer.post(new Runnable() {
 	            @Override
 				public void run() {
-	            	if( -1 != componentContainer.indexOfChild( tabBaseLayout ))
+	            	if( 0 <= componentContainer.indexOfChild( tabBaseLayout ))
 	            	{
                 		componentContainer.removeView( tabBaseLayout );
                 		Log.d("anim","remove:" + tabId);

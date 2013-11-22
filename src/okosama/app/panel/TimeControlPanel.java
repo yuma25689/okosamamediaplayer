@@ -1,5 +1,6 @@
 package okosama.app.panel;
 
+import okosama.app.ControlDefs;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
@@ -78,15 +79,15 @@ public class TimeControlPanel extends ControlPanel {
 			new TabComponentPropertySetter(
 				ControlIDs.TIME_HOUR10_BUTTON, ComponentType.BUTTON, 
 				22, 240, 
-				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
-				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
+				ControlDefs.TIMECHAR_WIDTH, 
+				ControlDefs.TIMECHAR_HEIGHT
 				, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 			),
 			new TabComponentPropertySetter(
 				ControlIDs.TIME_HOUR1_BUTTON, ComponentType.BUTTON, 
 				92, 240, 
-				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
-				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
+				ControlDefs.TIMECHAR_WIDTH, 
+				ControlDefs.TIMECHAR_HEIGHT
 				, R.drawable.num3_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 			),
 
@@ -94,30 +95,30 @@ public class TimeControlPanel extends ControlPanel {
 			new TabComponentPropertySetter(
 				ControlIDs.TIME_MINUTE10_BUTTON, ComponentType.BUTTON, 
 				167, 230, 
-				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
-				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
+				ControlDefs.TIMECHAR_WIDTH, 
+				ControlDefs.TIMECHAR_HEIGHT
 				, R.drawable.num4_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 			),
 			new TabComponentPropertySetter(
 				ControlIDs.TIME_MINUTE1_BUTTON, ComponentType.BUTTON, 
 				237, 215, 
-				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
-				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
+				ControlDefs.TIMECHAR_WIDTH, 
+				ControlDefs.TIMECHAR_HEIGHT
 				, R.drawable.num6_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 			),
 			// --------------------- SECOND
 			new TabComponentPropertySetter(
 				ControlIDs.TIME_SECOND10_BUTTON, ComponentType.BUTTON, 
 				303, 230, 
-				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
-				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
+				ControlDefs.TIMECHAR_WIDTH, 
+				ControlDefs.TIMECHAR_HEIGHT
 				, R.drawable.num8_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY 
 			),
 			new TabComponentPropertySetter(
 				ControlIDs.TIME_SECOND1_BUTTON, ComponentType.BUTTON, 
 				373, 215, 
-				OkosamaMediaPlayerActivity.TIMECHAR_WIDTH, 
-				OkosamaMediaPlayerActivity.TIMECHAR_HEIGHT
+				ControlDefs.TIMECHAR_WIDTH, 
+				ControlDefs.TIMECHAR_HEIGHT
 				, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 			),
 			// --------------------- DURATION
@@ -129,7 +130,7 @@ public class TimeControlPanel extends ControlPanel {
 			// --------------------- SONG
 			new TabComponentPropertySetter(
 				ControlIDs.TIME_SONG_LABEL, ComponentType.LABEL, 
-				30, 150, 400, 50
+				30, 160, 400, 50
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),		
 			// --------------------- ARTIST

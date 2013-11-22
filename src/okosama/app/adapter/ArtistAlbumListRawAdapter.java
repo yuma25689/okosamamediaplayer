@@ -2,6 +2,7 @@ package okosama.app.adapter;
 
 import java.util.HashMap;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
@@ -678,7 +679,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateData( groupDataTmp, childDataTmp );
-            	TabPage page = (TabPage) mActivity.getMediaTab().getChild(TabPage.TABPAGE_ID_ARTIST);
+            	TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_ARTIST);
             	if( page != null )
             	{
             		page.endUpdate();
@@ -732,6 +733,24 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 	@Override
 	public boolean isLastErrored() {
 		return bLastError;
+	}
+
+	@Override
+	public int getMainItemCount() {
+		return getGroupCount();
+	}
+
+	@Override
+	public void initialize() {
+   		if( 0 < mActivity.getArtistAdp().getGroupCount() 
+   		&& false == mActivity.getArtistAdp().isLastErrored() )
+   		{
+   			mActivity.getArtistAdp().updateStatus();
+   		}
+   		else
+   		{
+   			mActivity.reScanMediaOfMediaTab(TabPage.TABPAGE_ID_ARTIST);
+   		}
 	}
 	
 }

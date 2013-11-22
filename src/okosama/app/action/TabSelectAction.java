@@ -30,7 +30,8 @@ public final class TabSelectAction implements IViewAction {
 	public int doAction( Object param ) {
 		if( tabId != ControlIDs.ID_NOT_SPECIFIED  && tabId != TabPage.TABPAGE_ID_UNKNOWN )
 		{
-			if( tabPageId == OkosamaMediaPlayerActivity.getCurrentDisplayId(tabId) )
+			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+			if( tabPageId == act.getCurrentDisplayId(tabId) )
 			{
 				return 0;
 			}
@@ -39,7 +40,7 @@ public final class TabSelectAction implements IViewAction {
 			// 案外高コストかもしれない
 			// System.gc();
 			// tabRoot.setCurrentTab(tabId, (tabId != TabPage.TABPAGE_ID_NONE) );
-			OkosamaMediaPlayerActivity.setCurrentDisplayId(tabId,tabPageId);
+			act.setCurrentDisplayId(tabId,tabPageId);
 			
 			if( tabId != ControlIDs.ID_NOT_SPECIFIED && tabPageId != TabPage.TABPAGE_ID_NONE )
 			{			

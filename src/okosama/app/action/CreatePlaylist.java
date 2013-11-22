@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.behavior.IBehavior;
@@ -190,8 +191,8 @@ public class CreatePlaylist extends Activity
 	            OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 
         		if (uri != null) {
-                	Log.d("Å°new playlist","tabid=" + act.getCurrentSubTabId());
-                	absWidget lst = act.getListFromTabID(act.getCurrentSubTabId());
+                	Log.d("Å°new playlist","tabid=" + act.getTabStocker().getCurrentTabId(ControlIDs.TAB_ID_MEDIA));
+                	absWidget lst = act.getListFromTabID(act.getTabStocker().getCurrentTabId(ControlIDs.TAB_ID_MEDIA));
                 	if( lst != null )
                 	{
                 		IBehavior behavior = lst.getBehavior();

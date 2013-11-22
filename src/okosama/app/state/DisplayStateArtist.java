@@ -2,6 +2,7 @@ package okosama.app.state;
 
 import android.util.Log;
 import android.view.MenuItem;
+import okosama.app.AppStatus;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.tab.Tab;
@@ -20,7 +21,7 @@ public class DisplayStateArtist extends absDisplayStateMediaTab {
 	}
 	@Override
 	public long updateDisplay() {
-		long ret =  OkosamaMediaPlayerActivity.NO_REFRESH;
+		long ret =  AppStatus.NO_REFRESH;
 		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(ControlIDs.TAB_ID_MEDIA, false);
 		return ret;
 	}
@@ -32,7 +33,8 @@ public class DisplayStateArtist extends absDisplayStateMediaTab {
 		case MENU_UPDATE:
 			// AlbumÇçƒìxí[ññÇ©ÇÁì«Ç›íºÇ∑
 			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(
-				TabPage.TABPAGE_ID_ARTIST
+				TabPage.TABPAGE_ID_ARTIST,
+				true
 			);
 			break;
 		}

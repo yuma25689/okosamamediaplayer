@@ -25,6 +25,9 @@ public class DisplayStateFactory {
 		case TabPage.TABPAGE_ID_PLAY:
 			state = new DisplayStatePlay();
 			break;
+		case TabPage.TABPAGE_ID_PLAY_SUB:
+			state = new DisplayStatePlaySub();
+			break;
 		case TabPage.TABPAGE_ID_MEDIA:
 			state = new DisplayStateMedia();
 			break;

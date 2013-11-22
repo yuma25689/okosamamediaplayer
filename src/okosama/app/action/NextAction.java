@@ -1,4 +1,5 @@
 package okosama.app.action;
+import okosama.app.AppStatus;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.service.MediaPlayerUtil;
 import android.os.Handler;
@@ -23,8 +24,8 @@ public final class NextAction implements IViewAction {
         {
         	return -1;
         }
-        Message msg = handler.obtainMessage(OkosamaMediaPlayerActivity.REFRESH);
-        handler.removeMessages(OkosamaMediaPlayerActivity.REFRESH);
+        Message msg = handler.obtainMessage(AppStatus.REFRESH);
+        handler.removeMessages(AppStatus.REFRESH);
         handler.sendMessageDelayed(msg, 1);
 		
         OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().updatePlayStateButtonImage();

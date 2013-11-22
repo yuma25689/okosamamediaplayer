@@ -241,8 +241,8 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			if( activity.getAlbumAdp() == null )
 			{
 				Log.e("AlbumAdapter","re create");
-				// ArrayList<AlbumData> data = null;//new ArrayList<AlbumData>();
-				activity.setAlbumAdp(
+				activity.putAdapter(//setAlbumAdp(
+					TabPage.TABPAGE_ID_ALBUM,
 					new AlbumListRawAdapter(
 						activity,
 						R.layout.track_list_item,//,
@@ -277,7 +277,9 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			if( activity.getArtistAdp() == null )
 			{
 				// Adapter�̍쐬
-				activity.setArtistAdp(
+				activity.putAdapter(//setAlbumAdp(
+						TabPage.TABPAGE_ID_ARTIST,				
+				// activity.setArtistAdp(
 						new ArtistAlbumListRawAdapter(
 						activity,
 						//new SparseArray<ArtistGroupData>(),
@@ -326,7 +328,9 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			if( activity.getTrackAdp() == null )
 			{
 				//ArrayList<TrackData> data = null;//new ArrayList<TrackData>();
-				activity.setTrackAdp(
+				activity.putAdapter(//setAlbumAdp(
+						TabPage.TABPAGE_ID_SONG,				
+				// activity.setTrackAdp(
 					new TrackListRawAdapter(
 						activity,
 						editMode ? R.layout.edit_track_list_item : R.layout.track_list_item,
@@ -367,7 +371,9 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			if( activity.getPlaylistAdp() == null )
 			{
 				//ArrayList<PlaylistData> data = //new ArrayList<PlaylistData>();
-				activity.setPlaylistAdp(
+				activity.putAdapter(//setAlbumAdp(
+						TabPage.TABPAGE_ID_PLAYLIST,				
+				// activity.setPlaylistAdp(
 					new PlaylistListRawAdapter(
 						// activity.getApplication(),
 						activity,
@@ -414,7 +420,9 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			if( activity.getTrackAdp() == null )
 			{
 				ArrayList<TrackData> data = new ArrayList<TrackData>();
-				activity.setTrackAdp(
+				activity.putAdapter(//setAlbumAdp(
+						TabPage.TABPAGE_ID_SONG,
+				// activity.setTrackAdp(
 					new TrackListRawAdapter(
 						activity,
 						editMode ? R.layout.edit_track_list_item : R.layout.track_list_item,

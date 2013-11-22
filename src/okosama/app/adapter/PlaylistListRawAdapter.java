@@ -2,6 +2,7 @@ package okosama.app.adapter;
 
 import java.util.ArrayList;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
@@ -247,7 +248,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
             protected Integer doInBackground(Cursor... params) {
-            	Log.i("doInBackground","start");
+            	Log.e("playlist - doInBackground","start");
             	items.clear();
             	bLastError = false;
             	
@@ -269,7 +270,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
 	        		{
 	        			return -1;
 	        		}
-	            	Log.i("doInBackground","moveToFirst");
+	            	Log.e("playlist - doInBackground","moveToFirst");
 	        		cursor.moveToFirst();
 	        		do 
 	        		{
@@ -308,13 +309,12 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateData( items );
-            	TabPage page = (TabPage) mActivity.getMediaTab().getChild(TabPage.TABPAGE_ID_PLAYLIST);
+            	TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_PLAYLIST);
             	if( page != null )
             	{
             		page.endUpdate();
             	}
-            	
-            	bDataUpdating = false;            	
+            	bDataUpdating = false;     	
             }
         };
         task.execute();
@@ -358,6 +358,24 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
 	@Override
 	public boolean isLastErrored() {
 		return bLastError;
+	}
+	@Override
+	public int getMainItemCount() {
+		// 暫定版
+		return 0;// getCount();
+	}
+	@Override
+	public void initialize() {
+   		if( 0 < mActivity.getPlaylistAdp().getCount() 
+   		&& false == mActivity.getPlaylistAdp().isLastErrored() )
+   		{
+   			mActivity.getPlaylistAdp().updateStatus();
+   		}
+   		else
+   		{
+   			mActivity.reScanMediaOfMediaTab(TabPage.TABPAGE_ID_PLAYLIST);
+   		}		           		
+		
 	}
    
  }
