@@ -113,7 +113,10 @@ public class MainHandler extends Handler {
 	    		{
 		    		mActivity.updateTimeDisplayVisible(0);
 		    		mActivity.updateTimeDisplay(0);			    			
-		    		mActivity.sendUpdateMessage(ControlIDs.TAB_ID_MAIN, mActivity.getTabStocker().getCurrentTabId(ControlIDs.TAB_ID_MAIN));
+		    		mActivity.sendUpdateMessage(ControlIDs.TAB_ID_MAIN, 
+		    				mActivity.getTabStocker().getCurrentTabId(ControlIDs.TAB_ID_MAIN)
+		    				,true
+		    		);
 	    		}
 	           				           	
 	           	if( TimeControlPanel.getInstance() != null )
@@ -125,57 +128,23 @@ public class MainHandler extends Handler {
 	           	// if( bDataRestored == false )
            		//Log.d("msg_init_end","force rescan");
 	           	mActivity.getAdpStocker().initAllAdapter();
+	           	//mActivity.setForceRefreshFlag(false);
+            		           	
 	    		break;
         	}
         	case TabSelectAction.MSG_ID_TAB_SELECT:
         	{
-        		Log.w("tab select msg","id=" + (Integer)message.obj);
+        		Log.w("tab select msg","id=" + message.arg1);
         		// タブが選択された通知
- 
-        		if( ControlIDs.TAB_ID_MAIN == (Integer)message.obj )
-        		{
-	        		// Activityのタブidを更新
-        			int id = message.arg2;
-        			if( TabPage.TABPAGE_ID_NONE == id 
-        			|| TabPage.TABPAGE_ID_UNKNOWN == id )
-        			{
-        				id = TabPage.TABPAGE_ID_PLAY;
-        			}	
-        			mActivity.setMainTabSelection(
-        				id      					
-	        			// mActivity.getCurrentDisplayId( ControlIDs.TAB_ID_MAIN )
-	        		);
-	        		Log.e("maintab select","INIT_END");			        		
-        		}
-        		else if( ControlIDs.TAB_ID_MEDIA == (Integer)message.obj )
-        		{
-        			int id = message.arg2;//mActivity.getCurrentDisplayId( 
-//        				ControlIDs.TAB_ID_MEDIA 
-//        			);
-        			if( TabPage.TABPAGE_ID_NONE == id 
-        			|| TabPage.TABPAGE_ID_UNKNOWN == id )
-        			{
-        				id = TabPage.TABPAGE_ID_ARTIST;
-        			}
-        			Log.e("mediatab select","INIT_END");
-        			mActivity.setMediaTabSelection( id );
-        		}
-        		else if( ControlIDs.TAB_ID_PLAY == (Integer)message.obj )
-        		{
-        			int id = message.arg2;//mActivity.getCurrentDisplayId( ControlIDs.TAB_ID_PLAY );
-        			if( TabPage.TABPAGE_ID_NONE == id 
-        			|| TabPage.TABPAGE_ID_UNKNOWN == id )
-        			{
-        				id = TabPage.TABPAGE_ID_PLAY_SUB;
-        			}
-        			mActivity.setPlayTabSelection( id );
-        		}
+
+        		// タブIDを更新
+        		mActivity.updateTabId( message.arg1, message.arg2, (Boolean)message.obj );
+
         		// リスナを更新
         		mActivity.updateListeners(IDisplayState.STATUS_ON_CREATE);
         		mActivity.updateListeners(IDisplayState.STATUS_ON_RESUME);
             	// メディアを更新
-            	mActivity.reScanMedia((Integer)message.obj,false);
-            	mActivity.setForceRefreshFlag(false);
+            	mActivity.reScanMedia(message.arg1,false);
             	// 共通部分再描画
         		mActivity.updateCommonCtrls();
         		mActivity.updatePlayStateButtonImage();

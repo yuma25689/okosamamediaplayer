@@ -40,16 +40,16 @@ public final class TabSelectAction implements IViewAction {
 			// 案外高コストかもしれない
 			// System.gc();
 			// tabRoot.setCurrentTab(tabId, (tabId != TabPage.TABPAGE_ID_NONE) );
-			act.setCurrentDisplayId(tabId,tabPageId);
+			//act.setCurrentDisplayId(tabId,tabPageId);
 			
 			if( tabId != ControlIDs.ID_NOT_SPECIFIED && tabPageId != TabPage.TABPAGE_ID_NONE )
 			{			
 				// handlerに通知する
 				Message msg = Message.obtain();
 				msg.what = MSG_ID_TAB_SELECT;
-				// msg.arg1 = MSG_ID_TAB_SELECT;
+				msg.arg1 = tabId;
 				msg.arg2 = tabPageId;
-				msg.obj = tabId;
+				msg.obj = false;
                 Handler hdr = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getHandler();                        
                 if( hdr == null )
                 {

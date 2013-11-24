@@ -76,11 +76,11 @@ implements ServiceConnection, Database.Defs {
 	}
 	
 	// 強制リフレッシュフラグ？
-	public boolean bForceRefresh = false;
-	public void setForceRefreshFlag(boolean bForceRefresh)
-	{
-		this.bForceRefresh = bForceRefresh;
-	}
+//	public boolean bForceRefresh = false;
+//	public void setForceRefreshFlag(boolean bForceRefresh)
+//	{
+//		this.bForceRefresh = bForceRefresh;
+//	}
     // ポーズ中？
     private boolean paused = false;
     public boolean isPaused()
@@ -563,7 +563,7 @@ implements ServiceConnection, Database.Defs {
     	// 画面のサイズ等の情報を更新する
         dispInfo.init(this, componentContainer, handler);
         
-        bForceRefresh = true;
+        //bForceRefresh = true;
         paused = false;
         receiver = new MediaServiceNotifyReceiver();
         intentFilter = new IntentFilter();
@@ -590,7 +590,7 @@ implements ServiceConnection, Database.Defs {
 		
 		// componentContainer.removeAllViews();
 		// bInitEnd = false;
-		bForceRefresh = true;
+		// bForceRefresh = true;
         getResourceAccessor().releaseSound();
         stateStocker.unResisterReceiverAll();
         
@@ -615,9 +615,8 @@ implements ServiceConnection, Database.Defs {
 	 * @param bSndChgMsg 変化があったとき、メッセージを送信するか
 	 * @return 0:変化なし 1:変化有り -1:エラー
 	 */
-	public int setMainTabSelection( int mainTab )//, boolean bForceUpd )
+	public int setMainTabSelection( int mainTab, boolean bForceRefresh )
 	{
-		Log.w("setMainTabSelection", "come");
 		
 		IDisplayState stateMainTmp = DisplayStateFactory.createDisplayState(mainTab);
 		if( stateMainTmp == null )
@@ -630,6 +629,7 @@ implements ServiceConnection, Database.Defs {
 		if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) != mainTab 
 				|| bForceRefresh == true )
         {
+			Log.w("setMainTabSelection", "come");
 			if( stateStocker.getState(ControlIDs.TAB_ID_MAIN) != null )
 			{
 				stateStocker.getState(ControlIDs.TAB_ID_MAIN).unregisterReceivers(IDisplayState.STATUS_ON_PAUSE);
@@ -651,11 +651,15 @@ implements ServiceConnection, Database.Defs {
         // 2013/11/05 add
         if( mainTab == TabPage.TABPAGE_ID_MEDIA )
         {
-           	sendUpdateMessage(ControlIDs.TAB_ID_MEDIA, tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA));
+           	sendUpdateMessage(ControlIDs.TAB_ID_MEDIA, 
+           			tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA)
+           			,bForceRefresh);
         }
         if( mainTab == TabPage.TABPAGE_ID_PLAY )
         {
-           	sendUpdateMessage(ControlIDs.TAB_ID_PLAY, tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY));
+           	sendUpdateMessage(ControlIDs.TAB_ID_PLAY, 
+           			tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY)
+           			,bForceRefresh);
         }    
         return iRet;
 	}
@@ -666,7 +670,7 @@ implements ServiceConnection, Database.Defs {
 	 * @param bSndChgMsg 変化があったとき、メッセージを送信するか
 	 * @return 0:変化なし 1:変化有り -1:エラー
 	 */
-	public int setMediaTabSelection( int subTab )//, boolean bForceUpd )
+	public int setMediaTabSelection( int subTab, boolean bForceRefresh )
 	{
 		// Log.w("setMediaTabSelection", "come tabid=" + subTab);
 		IDisplayState stateSubTmp = DisplayStateFactory.createDisplayState(subTab);        		
@@ -681,10 +685,13 @@ implements ServiceConnection, Database.Defs {
         	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) 
         			== TabPage.TABPAGE_ID_MEDIA )
         	{
-        		// Log.w("setMediaTabSelection", "stateMain = MEDIA" );		
+        		Log.w("setMediaTabSelection", 
+        				"currentmediatab=" + tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA)
+        				+ "next=" + subTab );		
 	        	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA) != subTab 
 	        			|| bForceRefresh == true )
 	        	{
+	    			Log.w("setMediaTabSelection", "come");
 	        		IDisplayState stateMedia = stateStocker.getState(
 	        				ControlIDs.TAB_ID_MEDIA);
 	    			if( stateMedia != null )
@@ -722,7 +729,7 @@ implements ServiceConnection, Database.Defs {
 	 * @param bSndChgMsg 変化があったとき、メッセージを送信するか
 	 * @return 0:変化なし 1:変化有り -1:エラー
 	 */
-	public int setPlayTabSelection( int subTab )//, boolean bForceUpd )
+	public int setPlayTabSelection( int subTab, boolean bForceRefresh )
 	{
 		// Log.w("setMediaTabSelection", "come tabid=" + subTab);
 		
@@ -744,6 +751,7 @@ implements ServiceConnection, Database.Defs {
 	        	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY) != subTab 
 	        			|| bForceRefresh == true )
 	        	{
+	    			Log.w("setMediaTabSelection", "come");
 	        		IDisplayState statePlayTab = stateStocker.getState(ControlIDs.TAB_ID_PLAY);
 	        		
 	        		if( statePlayTab != null )
@@ -777,11 +785,56 @@ implements ServiceConnection, Database.Defs {
         }
         return iRet;
 	}
-	void sendUpdateMessage(int tabID,int tabPageID)//String tabName)
+	void updateTabId( int tabId, int tabPageId, boolean bForce )
 	{
-    	Message msg = new Message();
+		if( ControlIDs.TAB_ID_MAIN == tabId )
+		{
+    		// Activityのタブidを更新
+			int id = tabPageId;
+			if( TabPage.TABPAGE_ID_NONE == id 
+			|| TabPage.TABPAGE_ID_UNKNOWN == id )
+			{
+				id = TabPage.TABPAGE_ID_PLAY;
+			}	
+			setMainTabSelection(
+				id,
+				bForce
+    			// mActivity.getCurrentDisplayId( ControlIDs.TAB_ID_MAIN )
+    		);
+    		Log.e("maintab select","MSG_ID_TAB_SELECT");			        		
+		}
+		else if( ControlIDs.TAB_ID_MEDIA == tabId )
+		{
+			int id = tabPageId;//mActivity.getCurrentDisplayId( 
+//				ControlIDs.TAB_ID_MEDIA 
+//			);
+			if( TabPage.TABPAGE_ID_NONE == id 
+			|| TabPage.TABPAGE_ID_UNKNOWN == id )
+			{
+				id = TabPage.TABPAGE_ID_ARTIST;
+			}
+			Log.e("mediatab select","MSG_ID_TAB_SELECT");
+			setMediaTabSelection( id, bForce );
+		}
+		else if( ControlIDs.TAB_ID_PLAY == tabId )
+		{
+			int id = tabPageId;//mActivity.getCurrentDisplayId( ControlIDs.TAB_ID_PLAY );
+			if( TabPage.TABPAGE_ID_NONE == id 
+			|| TabPage.TABPAGE_ID_UNKNOWN == id )
+			{
+				id = TabPage.TABPAGE_ID_PLAY_SUB;
+			}
+			setPlayTabSelection( id, bForce );
+		}
+		
+	}
+	
+	void sendUpdateMessage(int tabID,int tabPageID, Boolean bForce)
+	{
+    	Message msg = Message.obtain();
     	msg.what = TabSelectAction.MSG_ID_TAB_SELECT;
-    	msg.obj = tabID;
+    	msg.obj = bForce;
+    	msg.arg1 = tabID;
     	msg.arg2 = tabPageID;
     	handler.sendMessage(msg);
 	}
