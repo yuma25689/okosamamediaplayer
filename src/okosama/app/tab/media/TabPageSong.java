@@ -114,7 +114,7 @@ public class TabPageSong extends TabPage {
 	@Override
 	public void setActivate( boolean bActivate )
 	{
-		// OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().setFilterType(TrackListRawAdapter.FILTER_NORMAL);
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().setFilterType(TrackListRawAdapter.FILTER_NORMAL);
 		super.setActivate(bActivate);
 	}
 }

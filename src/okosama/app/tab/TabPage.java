@@ -42,7 +42,7 @@ public abstract class TabPage extends TabComponentParent {
 	
 	@Override
 	public void setActivate( boolean bActivate )
-	{		
+	{
 		if( bActivate )
 		{
 			OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.requestTabMove(

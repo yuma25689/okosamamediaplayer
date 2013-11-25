@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <RelativeLayout 
-        android:id="@+id/TabCommonProgressPanel"
+        android:id="@+id/EmptyShowPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
@@ -25,4 +25,26 @@
         android:layout_below="@id/empty_image"
         />
     </RelativeLayout>
+   <RelativeLayout 
+        android:id="@+id/TabCommonProgressPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    <ProgressBar 
+        android:id="@+id/progress_common"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        style="?android:attr/progressBarStyleLargeInverse"        
+        />
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/updateing" 
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/progress_common"
+        />
+    </RelativeLayout>    
 </RelativeLayout>

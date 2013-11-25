@@ -230,10 +230,15 @@ implements IAdapterUpdate, SectionIndexer {
     	notifyDataSetChanged();
     }
     
-    public int stockMediaDataFromDevice()	//Cursor cursor)
+    public int stockMediaDataFromDevice(final TabPage page)	//Cursor cursor)
     {
     	if( bDataUpdating == true )
     	{
+        	if( page != null )
+        	{
+        		page.startUpdate();
+        	}
+    		
     		return -1;
     	}
     	bDataUpdating = true;
@@ -244,11 +249,16 @@ implements IAdapterUpdate, SectionIndexer {
 //            cursor = null;
 //        }
         // Database.getInstance(mActivity).setCursor( Database.AlbumCursorName, cursor );
- 
+    	if( page != null )
+    	{
+    		page.startUpdate();
+    	}
+
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
             protected Integer doInBackground(Cursor... params) {
             	Log.i("doInBackground","start");
+            	
             	items.clear();
             	bLastError = false;
             	
@@ -303,7 +313,7 @@ implements IAdapterUpdate, SectionIndexer {
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateData( items );
-            	TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_ALBUM);
+            	// TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_ALBUM);
             	if( page != null )
             	{
             		page.endUpdate();

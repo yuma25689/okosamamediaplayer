@@ -547,10 +547,15 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
     	notifyDataSetChanged();
     }
     
-    public int stockMediaDataFromDevice()
+    public int stockMediaDataFromDevice(final TabPage page)
     {
     	if( bDataUpdating == true )
     	{
+        	if( page != null )
+        	{
+        		page.startUpdate();
+        	}
+    		
     		return -1;
     	}
     	bDataUpdating = true;
@@ -562,11 +567,16 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 //            cursor = null;
 //        }
         // Database.getInstance(mActivity).setCursor( Database.ArtistCursorName, cursor );
+    	if( page != null )
+    	{
+    		page.startUpdate();
+    	}
             	
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
             protected Integer doInBackground(Cursor... params) {
             	Log.i("doInBackground","start");
+            	
             	bLastError = false;
             	// カーソルをループする
             	Cursor cursor = Database.getInstance(
@@ -679,7 +689,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateData( groupDataTmp, childDataTmp );
-            	TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_ARTIST);
+            	// TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_ARTIST);
             	if( page != null )
             	{
             		page.endUpdate();

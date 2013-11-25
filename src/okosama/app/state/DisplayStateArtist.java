@@ -22,7 +22,7 @@ public class DisplayStateArtist extends absDisplayStateMediaTab {
 	@Override
 	public long updateDisplay() {
 		long ret =  AppStatus.NO_REFRESH;
-		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(ControlIDs.TAB_ID_MEDIA, false);
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(ControlIDs.TAB_ID_MEDIA, false);
 		return ret;
 	}
 	@Override
@@ -32,8 +32,8 @@ public class DisplayStateArtist extends absDisplayStateMediaTab {
 		{
 		case MENU_UPDATE:
 			// AlbumÇçƒìxí[ññÇ©ÇÁì«Ç›íºÇ∑
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(
-				TabPage.TABPAGE_ID_ARTIST,
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
+				ControlIDs.TAB_ID_MEDIA,
 				true
 			);
 			break;

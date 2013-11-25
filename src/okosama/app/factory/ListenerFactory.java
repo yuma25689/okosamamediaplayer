@@ -48,7 +48,7 @@ public class ListenerFactory {
 		return new Handler() {
 	        @Override
 	        public void handleMessage(Message msg) {
-	        	OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(
+	        	OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
 	        			ControlIDs.ID_NOT_SPECIFIED,false);
 	        	
 	//            if (mAdapter != null) {

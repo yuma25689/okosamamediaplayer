@@ -92,10 +92,20 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     public static final int FILTER_NORMAL = 1;
     public static final int FILTER_NOW_QUEUE = 2;
     public static final int FILTER_PLAYLIST = 3;
+    int mFilterTypeBefore = FILTER_NORMAL;
     int mFilterType = FILTER_NORMAL;
-    public void setFilterType( int b )
+    public void setFilterType( int i )
     {
-    	mFilterType = b;
+    	if( mFilterType != i)
+    	{
+	    	mFilterTypeBefore = mFilterType;
+	    	mFilterType = i;
+    	}
+    }
+    public void clearFilterType()
+    {
+    	if( mFilterType == FILTER_NOW_QUEUE )
+    		mFilterType = mFilterTypeBefore;
     }
     boolean mDisableNowPlayingIndicator;
     private String genre;
@@ -343,15 +353,22 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     }
     
     
+    static ArrayList<TabPage> arrPage = new ArrayList<TabPage>();
     /**
      * カーソルから、アダプタのデータを設定する
      * @param cursor
      * @return
      */
-    public int stockMediaDataFromDevice()
+    public int stockMediaDataFromDevice(final TabPage page)
     {
     	if( bDataUpdating == true )
     	{
+        	if( page != null )
+        	{
+        		page.startUpdate();
+        		if( arrPage.contains(page) == false )
+        			arrPage.add(page);
+        	}
     		return -1;
     	}
     	bDataUpdating = true;
@@ -364,6 +381,12 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 //        }
         //Database.getInstance(mActivity).setCursor( Database.SongCursorName, cursor );
     	
+    	if( page != null )
+    	{
+    		page.startUpdate();
+    		if( arrPage.contains(page) == false )
+    			arrPage.add(page);
+    	}
             	
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
@@ -382,6 +405,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
         			Log.w("TrackListAdp - doInBk", "cursor closed!");
         			return -1;
         		}
+        		
         		try {
 	        		if( 0 > getColumnIndices(cursor) )
 	        		{
@@ -432,16 +456,17 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateList();
-            	TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_SONG);
-            	if( page != null )
+            	// TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_SONG);
+            	if( arrPage.isEmpty() == false )
             	{
-            		page.endUpdate();
+            		for( TabPage page : arrPage )
+            			page.endUpdate();
             	}
-            	TabPage page2 = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_PLAY).getChild(TabPage.TABPAGE_ID_NOW_PLAYLIST);
-            	if( page2 != null )
-            	{
-            		page2.endUpdate();
-            	}
+//            	TabPage page2 = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_PLAY).getChild(TabPage.TABPAGE_ID_NOW_PLAYLIST);
+//            	if( page2 != null )
+//            	{
+//            		page2.endUpdate();
+//            	}
             	
             	bDataUpdating = false;            	
             }

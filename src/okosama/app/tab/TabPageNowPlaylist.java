@@ -3,11 +3,14 @@ package okosama.app.tab;
 import okosama.app.ControlDefs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.adapter.IAdapterUpdate;
 import okosama.app.behavior.TrackListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;
@@ -25,6 +28,7 @@ public class TabPageNowPlaylist extends TabPage {
 		create(R.layout.tab_layout_content_empty_show );
 //		componentContainer.addView(tabButton.getView());
 	}
+	ViewGroup EmptyPanel = null;
 	@Override
 	public int create(int panelLayoutID) {
 		
@@ -35,6 +39,12 @@ public class TabPageNowPlaylist extends TabPage {
         );
 		tabBaseLayout.setLayoutParams(lp);
 		tabBaseLayout.setBackgroundResource(R.color.gradiant_test3);
+		updateProgressPanel = (ViewGroup)tabBaseLayout.findViewById(R.id.TabCommonProgressPanel );
+		EmptyPanel = (ViewGroup)tabBaseLayout.findViewById(R.id.EmptyShowPanel );
+		if( EmptyPanel != null )
+		{
+			EmptyPanel.setVisibility(View.GONE);
+		}
 
 		// NowPlaylistTabボタンのアクション
 //		SparseArray< IViewAction > actMapTemp
@@ -75,4 +85,36 @@ public class TabPageNowPlaylist extends TabPage {
 		
 		return 0;
 	}
+	@Override
+	public void startUpdate()
+	{
+		if( null != EmptyPanel )
+		{
+			EmptyPanel.setVisibility(View.GONE);
+		}
+		super.startUpdate();
+	}
+	public void endUpdate()
+	{
+		if( null != EmptyPanel )
+		{
+			// アダプタが空である場合のみ、Emptyを表示
+			
+			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+			IAdapterUpdate adp = act.getAdpStocker().get(TabPage.TABPAGE_ID_SONG);
+			if( adp != null )
+			{
+				if( adp.getMainItemCount() == 0 )
+				{
+					EmptyPanel.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					EmptyPanel.setVisibility(View.GONE);
+				}
+			}
+		}
+		super.endUpdate();
+	}
+	
 }

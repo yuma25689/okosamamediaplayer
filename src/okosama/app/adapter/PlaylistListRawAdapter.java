@@ -230,10 +230,15 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
     	notifyDataSetChanged();
     }
     
-    public int stockMediaDataFromDevice()
+    public int stockMediaDataFromDevice(final TabPage page)
     {
     	if( bDataUpdating == true )
     	{
+        	if( page != null )
+        	{
+        		page.startUpdate();
+        	}
+    		
     		return -1;
     	}
     	bDataUpdating = true;
@@ -244,6 +249,10 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
 //            cursor = null;
 //        }
         //Database.getInstance(mActivity).setCursor( Database.AlbumCursorName, cursor );
+    	if( page != null )
+    	{
+    		page.startUpdate();
+    	}
             	
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
@@ -264,6 +273,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
         			Log.w("PlaylistAdp - doInBk", "cursor closed!");
         			return -1;
         		}
+        		
         		try {
 
 	        		if( 0 != getColumnIndices(cursor) )
@@ -309,7 +319,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateData( items );
-            	TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_PLAYLIST);
+            	// TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_PLAYLIST);
             	if( page != null )
             	{
             		page.endUpdate();

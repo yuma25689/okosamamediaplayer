@@ -1,5 +1,6 @@
 package okosama.app.adapter;
 
+import okosama.app.tab.TabPage;
 import android.util.SparseArray;
 
 public class AdapterStocker {
@@ -41,12 +42,14 @@ public class AdapterStocker {
 		array.put(key,adp);
 	}
 	
-	public void stockMediaDataFromDevice(int key)
+	public boolean stockMediaDataFromDevice(int key,TabPage page)
 	{
 		if( get(key) != null )
 		{
-			get(key).stockMediaDataFromDevice();
+			get(key).stockMediaDataFromDevice(page);
+			return true;
 		}
+		return false;
 	}
 	/**
 	 * リストのアダプタの更新を行う
@@ -54,7 +57,7 @@ public class AdapterStocker {
 	 * @param bUpdateWhenEmptyOnly
 	 * @return 項目の更新が行われたかどうか
 	 */
-	public boolean stockMediaDataFromDevice(int key,boolean bUpdateWhenEmptyOnly)
+	public boolean stockMediaDataFromDevice(int key, TabPage page, boolean bUpdateWhenEmptyOnly)
 	{
 		if( bUpdateWhenEmptyOnly )
 		{
@@ -68,8 +71,7 @@ public class AdapterStocker {
 				}				
 			}
 		}
-		stockMediaDataFromDevice(key);
-		return true;
+		return stockMediaDataFromDevice(key, page);
 	}
 	
 	public void clear()

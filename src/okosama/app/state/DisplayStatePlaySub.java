@@ -15,7 +15,7 @@ public class DisplayStatePlaySub extends absDisplayState {
 	@Override
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
 		// ƒvƒŒƒC‘I‘ğ‰æ–Ê‚Ö‚ÌØ‚è‘Ö‚¦
-		tab.setCurrentTab(TabPage.TABPAGE_ID_PLAY, true);
+		tab.setCurrentTab(TabPage.TABPAGE_ID_PLAY_SUB, true);
 		//IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_PLAY );
 		//action.doAction(null);
 		return 0;

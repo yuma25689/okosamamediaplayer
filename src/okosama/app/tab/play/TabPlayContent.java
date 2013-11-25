@@ -93,7 +93,7 @@ public class TabPlayContent extends Tab {
 		
 		RelativeLayout rlCont = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_contents);
 		// ƒ^ƒu‚Ì’Ç‰Á
-		addChild( TabPage.TABPAGE_ID_PLAY, new TabPagePlay( this, pageContainer, rlCont ) );
+		addChild( TabPage.TABPAGE_ID_PLAY_SUB, new TabPagePlay( this, pageContainer, rlCont ) );
 		addChild( TabPage.TABPAGE_ID_NOW_PLAYLIST, new TabPageNowPlaylist( this, pageContainer, rlCont ) );
 	
 		//rlHooter.setBackgroundResource(R.color.gradiant_test4);

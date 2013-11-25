@@ -115,7 +115,7 @@ implements ServiceConnection, Database.Defs {
 		externalRef = externalRef_;
 		if( bChg )
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(ControlIDs.ID_NOT_SPECIFIED, true);
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(ControlIDs.ID_NOT_SPECIFIED, true);
 		}
 	}
 
@@ -132,7 +132,7 @@ implements ServiceConnection, Database.Defs {
 		internalRef = internalRef_;
 		if( bChg )
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMedia(ControlIDs.ID_NOT_SPECIFIED, true);
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(ControlIDs.ID_NOT_SPECIFIED, true);
 		}
 	}
 	private static boolean internalRef = true;
@@ -497,52 +497,14 @@ implements ServiceConnection, Database.Defs {
 	@Override
     public void onSaveInstanceState(Bundle outcicle) {
 		// TODO:マップをループして、全部の設定を保存
-		//tabCurrentDisplayIdMap.
-        //outcicle.putInt("displayid", iCurrentDisplayId);
-//		for(Entry<String, Integer> e : tabCurrentDisplayIdMap.entrySet()) {
-//		    outcicle.putInt( e.getKey(), e.getValue() );
-//		}
-//		outcicle.putSerializable(ALBUM_KEY, getAlbumAdp().getItems() );
-//		outcicle.putSerializable(ARTIST_GROUP_KEY, getArtistAdp().getGroupData() );
-//		outcicle.putSerializable(ARTIST_CHILD_KEY, getArtistAdp().getChildData() );
-//		outcicle.putSerializable(TRACK_KEY, getTrackAdp().getAllItems() );
-//		outcicle.putSerializable(PLAYLIST_KEY, getPlaylistAdp().getItems() );
         super.onSaveInstanceState(outcicle);
     }
-
-	
 	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
 	 */
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-//		if( savedInstanceState != null )
-//		{
-//			ArrayList<AlbumData> albumData 
-//			= (ArrayList<AlbumData>) savedInstanceState.getSerializable(ALBUM_KEY);
-//			// getAlbumAdp().setItems(albumData);
-//			HashMap<Integer,ArtistGroupData> artistGroupData 
-//			= (HashMap<Integer, ArtistGroupData>) savedInstanceState.getSerializable(ARTIST_GROUP_KEY);
-//			// getArtistAdp().setGroupData(artistGroupData);
-//			HashMap<Integer,ArtistChildData[]> artistChildData 
-//			= (HashMap<Integer, ArtistChildData[]>) savedInstanceState.getSerializable(ARTIST_CHILD_KEY);
-//			// getArtistAdp().setChildData(artistChildData);
-//			ArrayList<TrackData> trackData 
-//			= (ArrayList<TrackData>) savedInstanceState.getSerializable(TRACK_KEY);
-//			ArrayList<PlaylistData> playlistData 
-//			= (ArrayList<PlaylistData>) savedInstanceState.getSerializable(PLAYLIST_KEY);
-//			//getPlaylistAdp().setItems(playlistData);
-//			getAlbumAdp().updateData(albumData);
-//			getArtistAdp().updateData(artistGroupData, artistChildData);
-//			getTrackAdp().setAllItems(trackData);
-//			getTrackAdp().updateList();
-//			getPlaylistAdp().updateData(playlistData);
-//			bDataRestored = true;
-//			Log.e("onRestoreInstanceState","data restored");
-//			
-//		}
 		super.onRestoreInstanceState(savedInstanceState);
 	}
 	IntentFilter intentFilter;
@@ -616,17 +578,15 @@ implements ServiceConnection, Database.Defs {
 	 * @return 0:変化なし 1:変化有り -1:エラー
 	 */
 	public int setMainTabSelection( int mainTab, boolean bForceRefresh )
-	{
-		
+	{	
 		IDisplayState stateMainTmp = DisplayStateFactory.createDisplayState(mainTab);
 		if( stateMainTmp == null )
 		{
 			return -1;
-		}
-		
+		}	
 		int iRet = 0;
 		//int iRet2 = 0;
-		if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) != mainTab 
+		if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) != mainTab
 				|| bForceRefresh == true )
         {
 			Log.w("setMainTabSelection", "come");
@@ -672,54 +632,47 @@ implements ServiceConnection, Database.Defs {
 	 */
 	public int setMediaTabSelection( int subTab, boolean bForceRefresh )
 	{
-		// Log.w("setMediaTabSelection", "come tabid=" + subTab);
-		IDisplayState stateSubTmp = DisplayStateFactory.createDisplayState(subTab);        		
-        if( stateSubTmp == null )
-        {
-        	return -1;
-        }
 		int iRet = 0;
-        if( stateSubTmp != null )
-        {
-    		// Log.w("setMediaTabSelection", "stateSubTmp != null" );
-        	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) 
+    	
+		if( tabStocker.getTab(ControlIDs.TAB_ID_MEDIA) == null )
+		{
+			return -1;
+		}
+    	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA) != subTab
+    			|| true == tabStocker.getTab(ControlIDs.TAB_ID_MEDIA).isNextForceRefresh()
+    			|| bForceRefresh == true )
+    	{
+    		tabStocker.getTab(ControlIDs.TAB_ID_MEDIA).setNextForceRefresh(false);
+    		IDisplayState stateSubTmp = DisplayStateFactory.createDisplayState(subTab);        		
+            if( stateSubTmp == null )
+            {
+            	return -1;
+            }
+    		Log.w("setMediaTabSelection", 
+    				"currentmediatab=" + tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA)
+    				+ "next=" + subTab );		
+    		IDisplayState stateMedia = stateStocker.getState(
+    				ControlIDs.TAB_ID_MEDIA);
+			if( stateMedia != null )
+			{
+				stateMedia.unregisterReceivers(IDisplayState.STATUS_ON_DESTROY);
+			}	        		
+			tabStocker.setCurrentTabId(ControlIDs.TAB_ID_MEDIA, subTab );
+    		stateMedia = stateSubTmp;
+			stateStocker.putState(ControlIDs.TAB_ID_MEDIA, stateMedia);
+    		iRet = 1;
+    		// メディアタブであれば
+    		if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) 
         			== TabPage.TABPAGE_ID_MEDIA )
         	{
-        		Log.w("setMediaTabSelection", 
-        				"currentmediatab=" + tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA)
-        				+ "next=" + subTab );		
-	        	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA) != subTab 
-	        			|| bForceRefresh == true )
-	        	{
-	    			Log.w("setMediaTabSelection", "come");
-	        		IDisplayState stateMedia = stateStocker.getState(
-	        				ControlIDs.TAB_ID_MEDIA);
-	    			if( stateMedia != null )
-	    			{
-	    				stateMedia.unregisterReceivers(IDisplayState.STATUS_ON_DESTROY);
-	    			}	        		
-	    			tabStocker.setCurrentTabId(ControlIDs.TAB_ID_MEDIA, subTab );
-	        		stateMedia = stateSubTmp;
-	    			stateStocker.putState(ControlIDs.TAB_ID_MEDIA, stateMedia);
-	        		iRet = 1;
-	        		// メディアタブであれば
-	        		// サブ画面をロードする
-	        		// 二段階に分けると二度画面更新が走るので無駄が多いと思われるが、とりあえずそれしか思いつかない
-	                // stateSub = DisplayStateFactory.createDisplayState(subTab);        		
-	                if( stateMedia != null && tabStocker.getTab(ControlIDs.TAB_ID_MEDIA) != null)
-	                {
-	            		Log.w("stateMedia.ChangeDisplayBasedOnThisState", "come");
-	                	stateMedia.ChangeDisplayBasedOnThisState(
-	                			tabStocker.getTab(ControlIDs.TAB_ID_MEDIA));
-	                }
-	        	}
+    			// サブ画面をロードする
+        		if( stateMedia != null && tabStocker.getTab(ControlIDs.TAB_ID_MEDIA) != null)
+                {
+                	stateMedia.ChangeDisplayBasedOnThisState(
+                			tabStocker.getTab(ControlIDs.TAB_ID_MEDIA));
+                }
         	}
-        	else
-        	{
-        		// MediaTabでない場合、サブTabは擬似的にNoneで更新させる
-        		// DisplayStateFactory.createDisplayState(TabPage.TABPAGE_ID_NONE).ChangeDisplayBasedOnThisState(tabMedia);  
-        	}
-        }
+    	}
         return iRet;
 	}
 	/**
@@ -732,7 +685,10 @@ implements ServiceConnection, Database.Defs {
 	public int setPlayTabSelection( int subTab, boolean bForceRefresh )
 	{
 		// Log.w("setMediaTabSelection", "come tabid=" + subTab);
-		
+		if( tabStocker.getTab(ControlIDs.TAB_ID_PLAY) == null )
+		{
+			return -1;
+		}		
 		IDisplayState stateSubTmp = DisplayStateFactory.createDisplayState(subTab);        		
         if( stateSubTmp == null )
         {
@@ -740,49 +696,40 @@ implements ServiceConnection, Database.Defs {
         }
 		
 		int iRet = 0;
-        if( stateSubTmp != null )
-        {
-    		// Log.w("setMediaTabSelection", "stateSubTmp != null" );
-        	
+    		
+    	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY) != subTab 
+    			|| true == tabStocker.getTab(ControlIDs.TAB_ID_PLAY).isNextForceRefresh()
+    			|| bForceRefresh == true )
+    	{
+    		tabStocker.getTab(ControlIDs.TAB_ID_PLAY).setNextForceRefresh(false);
+			Log.w("setMediaTabSelection", "come");
+    		IDisplayState statePlayTab = stateStocker.getState(ControlIDs.TAB_ID_PLAY);
+    		
+    		if( statePlayTab != null )
+    		{
+    			statePlayTab.unregisterReceivers(IDisplayState.STATUS_ON_DESTROY);
+    		}
+    		tabStocker.setCurrentTabId(ControlIDs.TAB_ID_PLAY, subTab);
+    		statePlayTab = stateSubTmp;
+			stateStocker.putState(ControlIDs.TAB_ID_PLAY, statePlayTab);
+    		
+    		iRet = 1;
+    		// プレイタブであれば
         	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) == TabPage.TABPAGE_ID_PLAY )
         	{
-        		// Log.w("setMediaTabSelection", "stateMain = MEDIA" );
+        		// サブ画面をロードする
+        		// 二段階に分けると二度画面更新が走るので無駄が多いと思われるが、とりあえずそれしか思いつかない
+        		// statePlayTab = DisplayStateFactory.createDisplayState(subTab);
         		
-	        	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY) != subTab 
-	        			|| bForceRefresh == true )
-	        	{
-	    			Log.w("setMediaTabSelection", "come");
-	        		IDisplayState statePlayTab = stateStocker.getState(ControlIDs.TAB_ID_PLAY);
-	        		
-	        		if( statePlayTab != null )
-	        		{
-	        			statePlayTab.unregisterReceivers(IDisplayState.STATUS_ON_DESTROY);
-	        		}
-	        		tabStocker.setCurrentTabId(ControlIDs.TAB_ID_PLAY, subTab);
-	        		statePlayTab = stateSubTmp;
-	    			stateStocker.putState(ControlIDs.TAB_ID_PLAY, statePlayTab);
-	        		
-	        		iRet = 1;
-	        		// プレイタブであれば
-	        		// サブ画面をロードする
-	        		// 二段階に分けると二度画面更新が走るので無駄が多いと思われるが、とりあえずそれしか思いつかない
-	        		// statePlayTab = DisplayStateFactory.createDisplayState(subTab);
-	        		
-	                if( statePlayTab != null 
-	                && tabStocker.getTab(ControlIDs.TAB_ID_PLAY) != null)
-	                {
-	            		Log.w("statePlayTab.ChangeDisplayBasedOnThisState", "come");
-	            		statePlayTab.ChangeDisplayBasedOnThisState(
-	            				tabStocker.getTab(ControlIDs.TAB_ID_PLAY));
-	                }
-	        	}
+                if( statePlayTab != null 
+                && tabStocker.getTab(ControlIDs.TAB_ID_PLAY) != null)
+                {
+            		Log.w("statePlayTab.ChangeDisplayBasedOnThisState", "come");
+            		statePlayTab.ChangeDisplayBasedOnThisState(
+            				tabStocker.getTab(ControlIDs.TAB_ID_PLAY));
+                }
         	}
-        	else
-        	{
-        		// MediaTabでない場合、サブTabは擬似的にNoneで更新させる
-        		// DisplayStateFactory.createDisplayState(TabPage.TABPAGE_ID_NONE).ChangeDisplayBasedOnThisState(tabMedia);  
-        	}
-        }
+    	}
         return iRet;
 	}
 	void updateTabId( int tabId, int tabPageId, boolean bForce )
@@ -955,75 +902,60 @@ implements ServiceConnection, Database.Defs {
 			return;
 		}
     	TabPage page = (TabPage) tabMedia.getChild(tabID);
-    	if( page != null )
-    	{
-    		page.startUpdate();
-    	}
-    	adpStocker.stockMediaDataFromDevice(tabID);
+    	adpStocker.stockMediaDataFromDevice(tabID, page);
 	}
 	/**
 	 * メディアの再スキャン？TODO:スキャンのロジック自体に、見直し必要
-	 * @param tabID
+	 * @param tabID タブのID(タブページではないので注意
 	 * @param bForce
 	 */
-	public void reScanMedia(int tabID, boolean bForce)
+	public void reScanMediaAndUpdateTabPage(int tabID, boolean bForce)
 	{
+		boolean bNotUpdateIfNotEmpty = !bForce;
 		// 現在選択中のタブによって操作を変更
 		boolean bUpdateOccur = false;
-		if( 
-			( true == bForce
-			|| ControlIDs.TAB_ID_MEDIA == tabID ) )
+		Tab tabUpd = tabStocker.getTab(tabID);
+    	TabPage page = (TabPage)tabUpd.getChild(
+    			tabStocker.getCurrentTabId(tabID));
+		
+		if( ControlIDs.TAB_ID_MEDIA == tabID )
 		{
 			// メディアタブならば
 			// メディアを再度クエリ発行して更新する
-			bUpdateOccur = adpStocker.stockMediaDataFromDevice( 
-					tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA), true );
-			Tab tabMedia = tabStocker.getTab(ControlIDs.TAB_ID_MEDIA);
-			if( bUpdateOccur )
-			{
-		    	TabPage page = (TabPage)tabMedia.getChild(
-		    			tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA));
-		    	if( page != null )
-		    	{
-		    		page.startUpdate();
-		    	}
-			}
-			else
-			{
-		    	TabPage page = (TabPage) tabMedia.getChild(
-		    			tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA));
-		    	if( page != null )
-		    	{
-		    		page.endUpdate();
-		    	}	
-			}
+	    	
+			((TrackListRawAdapter)adpStocker.get(TabPage.TABPAGE_ID_SONG)).clearFilterType();
+	    	bUpdateOccur = 
+	    	adpStocker.stockMediaDataFromDevice( 
+					tabStocker.getCurrentTabId(tabID), page, bNotUpdateIfNotEmpty );
 		}
 		else	
-		if( tabID == ControlIDs.TAB_ID_PLAY
-				&& tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY) == TabPage.TABPAGE_ID_NOW_PLAYLIST )
+		if( tabID == ControlIDs.TAB_ID_PLAY )
 		{
-			// TODO: 現在、トラックと同じカーソルになっているが、考えた方がいいかもしれない
-			// NOWPLAYLIST
-			// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
-			((TrackListRawAdapter)adpStocker.get(TabPage.TABPAGE_ID_SONG)).setFilterType(TrackListRawAdapter.FILTER_NOW_QUEUE);
-	    	TabPage page2 = (TabPage)tabStocker.getTab(ControlIDs.TAB_ID_PLAY).getChild(
-	    			tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY));
-	    	if( page2 != null )
-	    	{
-	    		page2.startUpdate();
-	    	}
-			if( bForce == false )
+			if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY) == TabPage.TABPAGE_ID_NOW_PLAYLIST )
 			{
-				bUpdateOccur 
-				= adpStocker.stockMediaDataFromDevice( 
-						tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA), true );
-			}
-			else
-			{
-				adpStocker.stockMediaDataFromDevice( 
-						tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA) );
+				// TODO: 現在、トラックと同じカーソルになっているが、考えた方がいいかもしれない
+				// NOWPLAYLIST
+				// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
+				TrackListRawAdapter adp = (TrackListRawAdapter)adpStocker.get(TabPage.TABPAGE_ID_SONG);
+				adp.setFilterType(TrackListRawAdapter.FILTER_NOW_QUEUE);
+				bUpdateOccur = 
+		    	adpStocker.stockMediaDataFromDevice( 
+						TabPage.TABPAGE_ID_SONG, page, bNotUpdateIfNotEmpty );
+				if( bUpdateOccur == false )
+				{
+					adp.updateList();
+				}
 			}
 		}
+		if(bUpdateOccur == false )
+		{
+			if( page != null )
+			{
+				page.startUpdate();
+				page.endUpdate();
+			}
+		}	    	
+		
 	}
 	
 	@Override
@@ -1226,7 +1158,7 @@ implements ServiceConnection, Database.Defs {
 				if( statePlay == null )
 					return false;
 				
-				iRet = statePlay.onCreateOptionsMenu(menu);
+				iRet = statePlay.onPrepareOptionsMenu(menu);
 			}
 			
 	        return b;

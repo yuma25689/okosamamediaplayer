@@ -90,30 +90,7 @@ public class TabPageMedia extends TabPage {
 			// タブがアクティブ化された場合
 			// =メディアタブが選択された場合？
 			toggleEx.setEnabled(true);
-			toggleEx.setVisible(true);
-			
-			// TODO:背景イメージを設定する
-			// pageContainer.setBackgroundDrawable(null);
-			// タブページを初期化
-			// tabContent.setActiveFlg( true );	// setActivateとsetActiveFlgができてしまったのは不本意だが仕方ない
-			// 注意:メディアタブというのは架空のタブでしかないので、それを画面IDにはできない
-			// メディアタブが選択されたら、ここでその子となるタブのいずれかを現在の画面IDにする
-			//int iTabId = OkosamaMediaPlayerActivity.getCurrentDisplayId(ControlIDs.TAB_ID_MEDIA);
-			//if( TabPage.TABPAGE_ID_NONE == iTabId
-			//|| TabPage.TABPAGE_ID_UNKNOWN == iTabId)
-			//{
-				//TabSelectAction action = new TabSelectAction(tabContent, TabPage.TABPAGE_ID_ARTIST);
-				// tabContent.setCurrentTab(TabPage.TABPAGE_ID_ARTIST, true);
-				// コードが複雑になっているので、多分あまりよろしくないけど、もう一度メイン画面内部に格納されているタブの状態のみを更新
-				// (画面は更新しない)
-				//action.doAction(null);
-//			}
-//			else
-//			{
-//				tabContent.setCurrentTab(iTabId, true);
-//			}
-			// componentContainer.addView( tabBaseLayout );
-			
+			toggleEx.setVisible(true);			
 		}
 		else
 		{
@@ -122,16 +99,6 @@ public class TabPageMedia extends TabPage {
 //			tabButton.setEnabled( true );
 			toggleEx.setVisible(false);
 			toggleEx.setEnabled(false);
-			//toggleIn.setVisible(false);
-			//toggleIn.setEnabled(false);
-			// 背景イメージを消す
-			// 必要なし？
-			// pageContainer.setBackgroundDrawable(null);
-			// タブページを初期化
-			// tabContent.setActiveFlg( false );	// setActivateとsetActiveFlgができてしまったのは不本意だが仕方ない			
-	        // TODO:本来は、前回値や、送信値を見て決める
-			// tabContent.setCurrentTab(TabPage.TABPAGE_ID_NONE, false);
-			// omponentContainer.removeView( tabBaseLayout );			
 		}
 		// TabComponentParentのsetActivateで、全ての子クラスのsetActivateが実行される
         super.setActivate( bActivate );

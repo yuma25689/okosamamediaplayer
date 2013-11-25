@@ -260,7 +260,8 @@ public final class R {
         public static final int video_press=0x7f0200c7;
     }
     public static final class id {
-        public static final int TabCommonProgressPanel=0x7f0c0020;
+        public static final int EmptyShowPanel=0x7f0c0020;
+        public static final int TabCommonProgressPanel=0x7f0c0022;
         public static final int action_tweet=0x7f0c0000;
         public static final int album_appwidget=0x7f0c0002;
         public static final int albumart=0x7f0c000b;
@@ -281,26 +282,26 @@ public final class R {
         public static final int delete=0x7f0c0017;
         public static final int divider_next_play=0x7f0c0009;
         public static final int divider_play_info=0x7f0c000a;
-        public static final int duration=0x7f0c0028;
+        public static final int duration=0x7f0c0029;
         public static final int empty_image=0x7f0c0021;
         public static final int icon=0x7f0c001b;
         public static final int info=0x7f0c0012;
         public static final int input_text=0x7f0c0001;
-        public static final int line1=0x7f0c0029;
-        public static final int line2=0x7f0c002a;
+        public static final int line1=0x7f0c002a;
+        public static final int line2=0x7f0c002b;
         public static final int main_linearlayout=0x7f0c001c;
         public static final int main_relativelayout=0x7f0c001d;
-        public static final int play_indicator=0x7f0c002b;
+        public static final int play_indicator=0x7f0c002c;
         public static final int playlist=0x7f0c0019;
         public static final int progress_common=0x7f0c0023;
         public static final int prompt=0x7f0c0016;
-        public static final int tab_contents=0x7f0c0026;
-        public static final int tab_header=0x7f0c0025;
-        public static final int tab_hooter=0x7f0c0027;
-        public static final int tab_linearlayout=0x7f0c0024;
+        public static final int tab_contents=0x7f0c0027;
+        public static final int tab_header=0x7f0c0026;
+        public static final int tab_hooter=0x7f0c0028;
+        public static final int tab_linearlayout=0x7f0c0025;
         public static final int tab_relativelayout_tabcontent=0x7f0c001f;
         public static final int title=0x7f0c0003;
-        public static final int top_info_bar=0x7f0c0022;
+        public static final int top_info_bar=0x7f0c0024;
         public static final int trackname=0x7f0c0015;
         public static final int widget_4x1=0x7f0c0008;
         public static final int widget_4x2=0x7f0c000c;

@@ -124,28 +124,6 @@ public class TabChangeAnimation {
         	{
         		return;
         	}
-//        	if( animEndWait == true )
-//        	{
-//        		// 処理が終わるまで待ってからもう一度
-//        		Log.d("handler", "queue wait occured");
-//        		// this.sendMessageAtFrontOfQueue(message);
-//        		return;
-//        	}
-        	
-        	// 最新のものだけを処理しようと思っていたが、そうすると、漏れが生じるので、とりあえずここはコメント
-//    		if( message.arg1 != mostNewSelectionProcessId )
-//    		{
-//    			if( message.arg1 != lastProcessId )
-//    			{
-//    				Log.d("tab anim","through:" + message.arg2);
-//    				// 最新じゃなく、既に処理中でもないものは無視
-//    				return;
-//    			}
-//    			else
-//    			{
-//    				Log.d("tab anim","last process id:" + message.arg2 );
-//    			}
-//    		}
     		lastProcessId = message.arg1;
     		TabChangeAnimationTarget target = (TabChangeAnimationTarget)message.obj;
     		ViewGroup tabBaseLayout 		= target.target;
@@ -158,9 +136,6 @@ public class TabChangeAnimation {
     				// アニメーションは動的に生成
     				// TODO: 端末の傾きによって、アニメーションを変更する
     				animIn = TabAnimationFactory.createTabInAnimation();
-//    				animIn = AnimationUtils.loadAnimation(
-//    					OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
-//    					, R.anim.left_in );
     			}
         		if( tabBaseLayout.getParent() != null )
         		{

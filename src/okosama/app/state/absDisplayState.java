@@ -82,15 +82,8 @@ public abstract class absDisplayState implements IDisplayState {
 		clearReceivers();
 	}
 	
-	@Override
-	public int onCreateOptionsMenu(Menu menu)
+	public void CreateGenericMenu(Menu menu)
 	{
-		return MENU_OK;
-	}
-	@Override
-	public int onPrepareOptionsMenu(Menu menu)
-	{
-		menu.clear();	// TODO: 微妙
 		MenuItem item = null;
 		item = menu.add(Menu.NONE, MENU_UPDATE, Menu.NONE, R.string.update_menu);
 		// TODO: アイコンを更新に ic_menu_refreshが本当はあるはず？
@@ -101,7 +94,19 @@ public abstract class absDisplayState implements IDisplayState {
         if (OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getPackageManager().resolveActivity(i, 0) != null) {
             item = menu.add(Menu.NONE, MENU_EFFECTOR, Menu.NONE, R.string.effect_menu);
     		item.setIcon(android.R.drawable.ic_lock_silent_mode_off );
-    	}		
+    	}	
+	}
+	
+	@Override
+	public int onCreateOptionsMenu(Menu menu)
+	{
+		return MENU_OK;
+	}
+	@Override
+	public int onPrepareOptionsMenu(Menu menu)
+	{
+		menu.clear();	// TODO: 微妙
+		CreateGenericMenu(menu);
 		
 		return MENU_OK;		
 	}
