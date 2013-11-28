@@ -69,10 +69,6 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 		menu.add(0, PLAY_SELECTION, 0, R.string.play_selection);
 		SubMenu sub = menu.addSubMenu(0, ADD_TO_PLAYLIST, 0, R.string.add_to_playlist);
 		Database.makePlaylistMenu(activity, sub);
-		// TODO: EditMode‘Î‰ž
-		if (activity.isEditMode()) {
-		    menu.add(0, REMOVE, 0, R.string.remove_from_playlist);
-		}
 		menu.add(0, USE_AS_RINGTONE, 0, R.string.ringtone_menu);
 		menu.add(0, DELETE_ITEM, 0, R.string.delete_item);
 		AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfoIn;

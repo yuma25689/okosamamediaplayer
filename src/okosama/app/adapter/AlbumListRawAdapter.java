@@ -52,6 +52,7 @@ implements IAdapterUpdate, SectionIndexer {
 	{
 		return bDataUpdating;
 	}
+	private TabPage page;
 	private LayoutInflater inflater;
 	// private ArrayList<AlbumData> items;
 	private int iLayoutId;
@@ -84,10 +85,11 @@ implements IAdapterUpdate, SectionIndexer {
      * @param from
      * @param to
      */
-    public AlbumListRawAdapter( OkosamaMediaPlayerActivity currentactivity, 
-            int layout, ArrayList<AlbumData> items) {
+    public AlbumListRawAdapter( OkosamaMediaPlayerActivity currentactivity,
+    		int layout, ArrayList<AlbumData> items, TabPage page) {
         super(currentactivity, layout, items );
 
+        this.page = page;
         this.iLayoutId = layout;
         this.inflater 
         = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

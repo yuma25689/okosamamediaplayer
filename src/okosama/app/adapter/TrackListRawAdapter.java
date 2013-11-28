@@ -54,6 +54,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 
 	long [] playlist = null;
     private final BitmapDrawable mDefaultAlbumIcon;
+	TabPage page;
 	boolean bDataUpdating = false;	// 内部データを更新中かどうか
 	boolean bLastError = false;
 	public boolean isDataUpdating()
@@ -144,9 +145,10 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     public TrackListRawAdapter( OkosamaMediaPlayerActivity currentactivity, 
             int layout, ArrayList<TrackData> items,
             boolean isnowplaying, boolean disablenowplayingindicator,String genre_,
-            String albumId_, String artistId_ ) {
+            String albumId_, String artistId_, 	TabPage page ) {
 
         super(currentactivity, layout, items );
+        this.page = page;
         mActivity = currentactivity;
         this.iLayoutId = layout;
         this.inflater = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

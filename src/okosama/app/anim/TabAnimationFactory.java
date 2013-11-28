@@ -21,7 +21,7 @@ public class TabAnimationFactory {
 		MagneticFieldValue mag =
 		OkosamaMediaPlayerActivity.getResourceAccessor().motionObserver. getNowMagnetic();
 	
-		int random = (int)Math.random() * 5 + 5;
+		int random = (int)Math.random() * (nLevel*2) + 5;
 	    int iFromX = -100;
 	    float fromY = 0;
 	    AnimationSet set = new AnimationSet(true);
@@ -91,7 +91,7 @@ public class TabAnimationFactory {
 		    int iDirection = 1;
 		    if( direction )
 		    {
-		    	iToX = -100;
+		    	iToX = 100;
 		    	iDirection = -1;
 		    	//azimuth *= -1;
 		    }

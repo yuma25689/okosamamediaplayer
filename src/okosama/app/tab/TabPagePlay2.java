@@ -3,7 +3,6 @@ package okosama.app.tab;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import android.util.SparseArray;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 

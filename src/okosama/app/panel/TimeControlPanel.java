@@ -2,7 +2,6 @@ package okosama.app.panel;
 
 import okosama.app.ControlDefs;
 import okosama.app.ControlIDs;
-import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.R.drawable;
 import okosama.app.action.IViewAction;
@@ -77,14 +76,14 @@ public class TimeControlPanel extends ControlPanel {
 		TabComponentPropertySetter creationData[] = {
 			// ------------- HOUR
 			new TabComponentPropertySetter(
-				ControlIDs.TIME_HOUR10_BUTTON, ComponentType.BUTTON, 
+				ControlIDs.TIME_HOUR10_BUTTON, null, ComponentType.BUTTON, 
 				22, 240, 
 				ControlDefs.TIMECHAR_WIDTH, 
 				ControlDefs.TIMECHAR_HEIGHT
 				, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 			),
 			new TabComponentPropertySetter(
-				ControlIDs.TIME_HOUR1_BUTTON, ComponentType.BUTTON, 
+				ControlIDs.TIME_HOUR1_BUTTON, null, ComponentType.BUTTON, 
 				92, 240, 
 				ControlDefs.TIMECHAR_WIDTH, 
 				ControlDefs.TIMECHAR_HEIGHT
@@ -93,14 +92,14 @@ public class TimeControlPanel extends ControlPanel {
 
 			// ------------- MINUTE
 			new TabComponentPropertySetter(
-				ControlIDs.TIME_MINUTE10_BUTTON, ComponentType.BUTTON, 
+				ControlIDs.TIME_MINUTE10_BUTTON, null, ComponentType.BUTTON, 
 				167, 230, 
 				ControlDefs.TIMECHAR_WIDTH, 
 				ControlDefs.TIMECHAR_HEIGHT
 				, R.drawable.num4_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 			),
 			new TabComponentPropertySetter(
-				ControlIDs.TIME_MINUTE1_BUTTON, ComponentType.BUTTON, 
+				ControlIDs.TIME_MINUTE1_BUTTON, null, ComponentType.BUTTON, 
 				237, 215, 
 				ControlDefs.TIMECHAR_WIDTH, 
 				ControlDefs.TIMECHAR_HEIGHT
@@ -108,14 +107,14 @@ public class TimeControlPanel extends ControlPanel {
 			),
 			// --------------------- SECOND
 			new TabComponentPropertySetter(
-				ControlIDs.TIME_SECOND10_BUTTON, ComponentType.BUTTON, 
+				ControlIDs.TIME_SECOND10_BUTTON, null, ComponentType.BUTTON, 
 				303, 230, 
 				ControlDefs.TIMECHAR_WIDTH, 
 				ControlDefs.TIMECHAR_HEIGHT
 				, R.drawable.num8_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY 
 			),
 			new TabComponentPropertySetter(
-				ControlIDs.TIME_SECOND1_BUTTON, ComponentType.BUTTON, 
+				ControlIDs.TIME_SECOND1_BUTTON, null, ComponentType.BUTTON, 
 				373, 215, 
 				ControlDefs.TIMECHAR_WIDTH, 
 				ControlDefs.TIMECHAR_HEIGHT
@@ -123,32 +122,32 @@ public class TimeControlPanel extends ControlPanel {
 			),
 			// --------------------- DURATION
 			new TabComponentPropertySetter(
-				ControlIDs.TIME_DURATION_LABEL, ComponentType.LABEL, 
+				ControlIDs.TIME_DURATION_LABEL, null, ComponentType.LABEL, 
 				40, 270, 200, 50
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),		
 			// --------------------- SONG
 			new TabComponentPropertySetter(
-				ControlIDs.TIME_SONG_LABEL, ComponentType.LABEL, 
+				ControlIDs.TIME_SONG_LABEL, null, ComponentType.LABEL, 
 				30, 160, 400, 50
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),		
 			// --------------------- ARTIST
 			new TabComponentPropertySetter(
-				ControlIDs.TIME_ARTIST_LABEL, ComponentType.LABEL, 
+				ControlIDs.TIME_ARTIST_LABEL, null, ComponentType.LABEL, 
 				35, 300, 400, 50
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),		
 			// --------------------- ALBUM
 			new TabComponentPropertySetter(
-				ControlIDs.TIME_ALBUM_LABEL, ComponentType.LABEL, 
+				ControlIDs.TIME_ALBUM_LABEL, null, ComponentType.LABEL, 
 				35, 360, 400, 50
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),			
 			// --------------------- PROGRESS
 			// TODO: Œã‚Å•Ê‚ÉˆÚ‚·
 			new TabComponentPropertySetter(
-				ControlIDs.TIME_PROGRESS, ComponentType.PROGRESS, 
+				ControlIDs.TIME_PROGRESS, null, ComponentType.PROGRESS, 
 				0, 125, 480, 40
 				, null, null, "", ScaleType.FIT_XY
 			),

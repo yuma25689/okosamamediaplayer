@@ -58,7 +58,7 @@ public class TabPageNowPlaylist extends TabPage {
 		TabComponentPropertySetter creationData[] = {
 			// ------------- TAB
 			new TabComponentPropertySetter(
-				List.LISTID_NOW_PLAYLIST, ComponentType.LIST_NOWPLAYLIST, 
+				List.LISTID_NOW_PLAYLIST, this, ComponentType.LIST_NOWPLAYLIST, 
 				0, 0,//150 + 2
 				480, ControlDefs.LIST_HEIGHT_2//637 //599
 				, null, null//R.drawable.tab_3_list_bk

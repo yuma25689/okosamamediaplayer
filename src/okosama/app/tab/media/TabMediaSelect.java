@@ -26,10 +26,18 @@ import android.widget.ImageView.ScaleType;
  *
  */
 public class TabMediaSelect extends Tab {
+	// このタブのボタンの大きさ
 	static final int BUTTON_WIDTH = 90;
 	static final int BUTTON_HEIGHT = 90;
+	// このタブのフッタの大きさ
 	static final int HOOTER_SIZE = BUTTON_HEIGHT + Tab.HDR_SIZE;
 	
+	/**
+	 * コンストラクタ 親とほぼ同様 タブIDに、TAB_ID_MEDIAを利用する
+	 * @param ID
+	 * @param ll
+	 * @param rl
+	 */
 	public TabMediaSelect(int ID, LinearLayout ll, ViewGroup rl) {
 		super(ControlIDs.TAB_ID_MEDIA, ll, rl);
 	}
@@ -58,7 +66,8 @@ public class TabMediaSelect extends Tab {
 		
 		mapBtn.put( TabPage.TABPAGE_ID_ALBUM, DroidWidgetKit.getInstance().MakeButton() );
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
-			ControlIDs.ALBUM_TAB_BUTTON, ComponentType.BUTTON, 
+			ControlIDs.ALBUM_TAB_BUTTON, null, 
+			ComponentType.BUTTON, 
 			0, 0, // DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE,
 			BUTTON_WIDTH, BUTTON_HEIGHT,
 			R.drawable.music_select_album_image,
@@ -76,7 +85,7 @@ public class TabMediaSelect extends Tab {
 		// アーティストタブボタン
 		mapBtn.put( TabPage.TABPAGE_ID_ARTIST, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData = new TabComponentPropertySetter(
-			ControlIDs.ARTIST_TAB_BUTTON, ComponentType.BUTTON, 
+			ControlIDs.ARTIST_TAB_BUTTON, null, ComponentType.BUTTON, 
 			BUTTON_WIDTH + 5, 0, //DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
 			BUTTON_WIDTH, BUTTON_HEIGHT,
 			R.drawable.music_select_artist_image,
@@ -93,7 +102,7 @@ public class TabMediaSelect extends Tab {
 		// ソングタブ
 		mapBtn.put( TabPage.TABPAGE_ID_SONG, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData = new TabComponentPropertySetter(
-			ControlIDs.SONG_TAB_BUTTON, ComponentType.BUTTON, 
+			ControlIDs.SONG_TAB_BUTTON, null, ComponentType.BUTTON, 
 			( BUTTON_WIDTH + 5 ) * 2, 0, //DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
 			BUTTON_WIDTH, BUTTON_HEIGHT,
 			R.drawable.music_select_song_image,
@@ -110,7 +119,7 @@ public class TabMediaSelect extends Tab {
 		// プレイリストタブ
 		mapBtn.put( TabPage.TABPAGE_ID_PLAYLIST, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData = new TabComponentPropertySetter(
-			ControlIDs.PLAYLIST_TAB_BUTTON, ComponentType.BUTTON, 
+			ControlIDs.PLAYLIST_TAB_BUTTON, null, ComponentType.BUTTON, 
 			( BUTTON_WIDTH + 5 ) * 3, 0,//DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
 			BUTTON_WIDTH, BUTTON_HEIGHT,
 			R.drawable.music_select_playlist_image,

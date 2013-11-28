@@ -29,10 +29,10 @@
     <!-- android:textColor="?android:attr/textColorTertiary" -->
     <TextView android:id="@+id/duration"
         android:textColor="@color/dummy_black"
-        android:textSize="12sp"
+        android:textSize="16sp"
         android:textStyle="bold"
-        android:paddingLeft="4dip"
-        android:paddingRight="11dip"
+        android:paddingLeft="2dip"
+        android:paddingRight="8dip"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
         android:layout_alignWithParentIfMissing="true"
         android:layout_toRightOf="@id/icon"
         android:layout_toLeftOf="@id/duration"
-        android:maxLines="1" />
+        android:maxLines="2" />
 
     <!-- The height is set to half the height of the parent, which is 64 dip -->
     <TextView android:id="@+id/line2" android:visibility="visible"

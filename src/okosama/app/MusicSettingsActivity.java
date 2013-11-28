@@ -41,6 +41,9 @@ public class MusicSettingsActivity extends PreferenceActivity implements
 
 		ListPreference animation_level_preference = (ListPreference)getPreferenceScreen().findPreference(KEY_ANIMATION_LEVEL);
 		animation_level_preference.setSummary(animation_level_preference.getEntry());
+		
+		ListPreference animation_speed_preference = (ListPreference)getPreferenceScreen().findPreference(KEY_ANIMATION_SPEED);
+		animation_speed_preference.setSummary(animation_speed_preference.getEntry());		
     }
 
     @Override
@@ -51,6 +54,9 @@ public class MusicSettingsActivity extends PreferenceActivity implements
         
 		ListPreference animation_level_preference = (ListPreference)getPreferenceScreen().findPreference(KEY_ANIMATION_LEVEL);
 		animation_level_preference.setSummary(animation_level_preference.getEntry());
+
+		ListPreference animation_speed_preference = (ListPreference)getPreferenceScreen().findPreference(KEY_ANIMATION_SPEED);
+		animation_speed_preference.setSummary(animation_speed_preference.getEntry());
 
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }

@@ -59,7 +59,7 @@ public class TabPlayContent extends Tab {
 		
 		mapBtn.put( TabPage.TABPAGE_ID_PLAY_SUB, DroidWidgetKit.getInstance().MakeButton() );
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
-			ControlIDs.PLAY_TAB_BUTTON, ComponentType.BUTTON, 
+			ControlIDs.PLAY_TAB_BUTTON, null, ComponentType.BUTTON, 
 			0, 0,
 			BUTTON_WIDTH, BUTTON_HEIGHT,
 			R.drawable.music_tab_button_image,
@@ -78,7 +78,7 @@ public class TabPlayContent extends Tab {
 		// プレイリストタブ
 		mapBtn.put( TabPage.TABPAGE_ID_NOW_PLAYLIST, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData = new TabComponentPropertySetter(
-			ControlIDs.NOW_PLAYLIST_TAB_BUTTON, ComponentType.BUTTON, 
+			ControlIDs.NOW_PLAYLIST_TAB_BUTTON, null, ComponentType.BUTTON, 
 			( BUTTON_WIDTH + 5 ) * 1, 0,//DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
 			BUTTON_WIDTH, BUTTON_HEIGHT,
 			R.drawable.now_playlist_button_image,

@@ -62,26 +62,25 @@ public class PlayControlPanel extends ControlPanel {
 	
 	public PlayControlPanel(Activity activity) {
 		super(activity);
-		// TODO Auto-generated constructor stub
 		resetPanelViews(R.layout.tab_layout_content_generic);
 
 		//////////////////// button //////////////////////////
 		TabComponentPropertySetter creationData[] = {
 				// --------------------- PLAY
 				new TabComponentPropertySetter(
-					ControlIDs.PLAY_BUTTON, ComponentType.BUTTON, 
+					ControlIDs.PLAY_BUTTON, null, ComponentType.BUTTON, 
 					180, 10, 80, 100
 					, null, R.drawable.play_button_image, "", ScaleType.FIT_XY
 				),
 				// --------------------- NEXT
 				new TabComponentPropertySetter(
-					ControlIDs.NEXT_BUTTON, ComponentType.BUTTON, 
+					ControlIDs.NEXT_BUTTON, null, ComponentType.BUTTON, 
 					360, 6, 100, 100
 					, null, R.drawable.next_button_image, "", ScaleType.FIT_XY
 				),
 				// --------------------- PREV
 				new TabComponentPropertySetter(
-					ControlIDs.PREV_BUTTON, ComponentType.BUTTON, 
+					ControlIDs.PREV_BUTTON, null, ComponentType.BUTTON, 
 					30, 18, 100, 100
 					, null, R.drawable.back_button_image, "", ScaleType.FIT_XY
 				),
@@ -122,7 +121,6 @@ public class PlayControlPanel extends ControlPanel {
 			i++;
 		}
 		tabBaseLayout.setBackgroundResource(R.drawable.okosama_app_widget_bg);
-				
 		return;
 		
 	}

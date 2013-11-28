@@ -42,16 +42,20 @@ import android.widget.RelativeLayout;
 public class TabComponentPropertySetter implements ITabComponentConfigurator {
 	public TabComponentPropertySetter(
 			Integer internalID,
+			TabPage page,
 			ComponentType type ) 
 	{
 		this.internalID = internalID;
+		this.tabPageParent = page;
 		this.type = type;
 	}
 	public TabComponentPropertySetter(Integer internalID,
+			TabPage page,
 			ComponentType type, Integer left, Integer top,
 			Integer width, Integer height, Integer imageId ) 
 	{
 		this.internalID = internalID;
+		this.tabPageParent = page;		
 		this.type = type;
 		this.left = left;
 		this.top = top;
@@ -60,10 +64,12 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		this.imageId = imageId;
 	}	
 	public TabComponentPropertySetter(Integer internalID,
+			TabPage page,
 			ComponentType type, Integer left, Integer top,
 			Integer width, Integer height, Integer imageId, Integer bkImageId ) 
 	{
 		this.internalID = internalID;
+		this.tabPageParent = page;
 		this.type = type;
 		this.left = left;
 		this.top = top;
@@ -73,11 +79,13 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		this.bkImageId = bkImageId;
 	}
 	public TabComponentPropertySetter(Integer internalID,
+			TabPage page,
 			ComponentType type, Integer left, Integer top,
 			Integer width, Integer height, Integer imageId,
 			Integer bkImageId, String text, ScaleType scaleType) 
 	{
 		this.internalID = internalID;
+		this.tabPageParent = page;
 		this.type = type;
 		this.left = left;
 		this.top = top;
@@ -89,10 +97,12 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		this.scaleType = scaleType;
 	}
 	public TabComponentPropertySetter(Integer internalID,
+			TabPage page,
 			ComponentType type, ViewGroup.LayoutParams layoutParams, Integer imageId,
 			Integer bkImageId, String text, ScaleType scaleType) 
 	{
 		this.internalID = internalID;
+		this.tabPageParent = page;
 		this.type = type;
 		this.layoutParams = layoutParams;
 		this.imageId = imageId;
@@ -118,6 +128,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 	String text;
 	ScaleType scaleType = null;
 	int visibleFlag = View.VISIBLE;
+	TabPage tabPageParent = null;
 	public void setVisibleFlag( int f ) 
 	{
 		visibleFlag = f;
@@ -245,10 +256,9 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 					TabPage.TABPAGE_ID_ALBUM,
 					new AlbumListRawAdapter(
 						activity,
-						R.layout.track_list_item,//,
-						new ArrayList<AlbumData>()//,//Cursor cursor,
-//						new String[] {}, 
-//						new int[] {}
+						R.layout.track_list_item,
+						new ArrayList<AlbumData>(),
+						tabPageParent
 					)
 				);
 			}
@@ -288,8 +298,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 //	                    new int[] {},
 						//new SparseArray<ArtistChildData[]>(),
 	                    R.layout.track_list_item_child
-//	                    new String[] {},
-//	                    new int[] {}
+						,tabPageParent
 				));
 			}
 			// AdapterÇÃê›íË
@@ -343,6 +352,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 						genre,
 						albumId,
 			            artistId
+						,tabPageParent			            
 			        )
 				);
 			}
@@ -382,6 +392,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 						//null,//Cursor cursor,
 						//new String[] { PlaylistsColumns.NAME},
 	                    //new int[] { android.R.id.text1 }
+						,tabPageParent						
 					)
 				);
 			}
@@ -435,6 +446,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 						genre,
 						albumId,
 			            artistId
+						,tabPageParent			            
 			        )
 				);
 			}

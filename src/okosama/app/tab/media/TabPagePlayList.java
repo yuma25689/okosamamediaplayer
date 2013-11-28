@@ -53,7 +53,7 @@ public class TabPagePlayList extends TabPage {
 		TabComponentPropertySetter creationData[] = {
 			// ------------- LIST
 			new TabComponentPropertySetter(
-				List.LISTID_PLAYLIST, ComponentType.LIST_PLAYLIST, 
+				List.LISTID_PLAYLIST, this, ComponentType.LIST_PLAYLIST, 
 				//0, 260, 480, 599
 				0, 0//150 + 2 // + 90
 				, 480, ControlDefs.LIST_HEIGHT_1//637 + 70 //- 90//599

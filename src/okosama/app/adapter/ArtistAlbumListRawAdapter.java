@@ -37,6 +37,7 @@ import android.widget.TextView;
  */
 public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter implements IAdapterUpdate {//<ArtistGroupData,ArtistChildData> {
 	
+	TabPage page;
 	boolean bDataUpdating = false;
 	boolean bLastError = false;
 	public boolean IsDataUpdating()
@@ -104,10 +105,12 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
     		int glayout, 
     		// ArtistChildData[][] listChild, 
     		//SparseArray<ArtistChildData[]> childData,
-    		int clayout ) {
+    		int clayout,
+    		TabPage page ) {
         // super(currentactivity, listGroup, glayout, listChild, clayout );
         // activity�̍쐬
         // QueryHandler�̍쐬
+    	this.page = page;
         mActivity = currentactivity;
         this.inflater 
         = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -57,7 +57,7 @@ public class TabPageMedia extends TabPage {
 		toggleEx = DroidWidgetKit.getInstance().MakeToggleButton();
 		TabComponentPropertySetter externalBtnCreationData
 		= new TabComponentPropertySetter(
-			ControlIDs.EXTERNAL_TAB_BUTTON, ComponentType.TOGGLEBUTTON,
+			ControlIDs.EXTERNAL_TAB_BUTTON, this, ComponentType.TOGGLEBUTTON,
 			50, 155 + 2, 80, 80,
 			null, R.drawable.external_btn_image,
 			"", ScaleType.FIT_XY

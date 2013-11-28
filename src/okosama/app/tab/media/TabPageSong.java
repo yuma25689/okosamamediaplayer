@@ -15,7 +15,10 @@ import okosama.app.tab.TabPage;
 import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -49,31 +52,30 @@ public class TabPageSong extends TabPage {
 		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
         		0, 0
         );
+		View v = tabBaseLayout.findViewById(R.id.top_info_bar);
+	    ImageView icon = (ImageView) v.findViewById(R.id.icon);
+	    BitmapDrawable albumIcon 
+	    =  (BitmapDrawable)OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
+	    		R.drawable.filter_normal );
+	    albumIcon.setFilterBitmap(false);
+	    albumIcon.setDither(false);
+	    icon.setBackgroundDrawable(albumIcon);
 		tabBaseLayout.setLayoutParams(lp);
 		updateProgressPanel = (ViewGroup)tabBaseLayout.findViewById(R.id.TabCommonProgressPanel ); 
-		
-		// タブのボタンだけはここで作る？
-//		tabButton = DroidWidgetKit.getInstance().MakeButton();
-//		// TAB_BUTTON
-//		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
-//			"albumTabBtn", ComponentType.BUTTON, 
-//			( 120 + 5 ) * 2, 859 - 100, 120, 100,
-//			R.drawable.music_select_song_image,
-//			R.drawable.no_image, // R.drawable.tab3_btn_not_select_no_shadow2, 
-//			"", ScaleType.FIT_XY 
-//		);
-//		tabButton.acceptConfigurator(tabBtnCreationData);
-
-
-		
 		//////////////////// list //////////////////////////
+		// パネルにのせるリストの位置の設定
+		RelativeLayout.LayoutParams lpList 
+		= new RelativeLayout.LayoutParams(
+        		RelativeLayout.LayoutParams.FILL_PARENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+		lpList.addRule(RelativeLayout.BELOW,R.id.top_info_bar);
+		
 		TabComponentPropertySetter creationData[] = {
 			// ------------- TAB
 			new TabComponentPropertySetter(
-				List.LISTID_SONG, ComponentType.LIST_SONG, 
-				// 0, 260, 480, 599
-				0, 0//150 + 2 // + 90
-				, 480, ControlDefs.LIST_HEIGHT_1//637 + 70 // - 90//599
+				List.LISTID_SONG, this, ComponentType.LIST_SONG, 
+				lpList
 				, null, null//R.drawable.tab_3_list_bk
 				, "", ScaleType.FIT_XY
 			)

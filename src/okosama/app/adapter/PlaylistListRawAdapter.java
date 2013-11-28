@@ -38,6 +38,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
     //private static final long ALL_SONGS_PLAYLIST = -2;
     //private static final long PODCASTS_PLAYLIST = -3;
 	boolean bLastError = false;    	
+	TabPage page;
     
 	boolean bDataUpdating = false;	// 内部データを更新中かどうか
 	public boolean IsDataUpdating()
@@ -86,12 +87,13 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
      * @param to
      */
     public PlaylistListRawAdapter( OkosamaMediaPlayerActivity currentactivity, 
-            int layout, ArrayList<PlaylistData> items) {
+            int layout, ArrayList<PlaylistData> items,	TabPage page) {
         super(currentactivity, layout, items );
 //    	for (PlaylistData data : items) {
 //    	    add(data);
 //    	}
 
+        this.page = page;
         // this.items = items;
         this.iLayoutId = layout;
         this.inflater = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

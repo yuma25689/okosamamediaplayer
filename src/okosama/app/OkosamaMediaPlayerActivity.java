@@ -1,11 +1,8 @@
 package okosama.app;
 
-//import okosama.app.action.HideTabComponentAction;
-//import okosama.app.action.ShowTabComponentAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.AdapterStocker;
-//import okosama.app.adapter.ArtistAlbumListAdapter;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
 import okosama.app.adapter.IAdapterUpdate;
 import okosama.app.adapter.PlaylistListRawAdapter;
@@ -18,10 +15,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-//import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences.Editor;
-// import android.database.Cursor;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,13 +26,11 @@ import android.os.RemoteException;
 import okosama.app.panel.PlayControlPanel;
 import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TimeControlPanel;
-//import okosama.app.service.MediaPlaybackService;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.service.MediaPlayerUtil.ServiceToken;
 import okosama.app.state.DisplayStateFactory;
 import okosama.app.state.IDisplayState;
 import okosama.app.state.StateStocker;
-// import okosama.app.state.absDisplayState;
 import okosama.app.storage.Database;
 import okosama.app.tab.*;
 import okosama.app.widget.Button;
@@ -75,12 +68,6 @@ implements ServiceConnection, Database.Defs {
 		return stateStocker;
 	}
 	
-	// 強制リフレッシュフラグ？
-//	public boolean bForceRefresh = false;
-//	public void setForceRefreshFlag(boolean bForceRefresh)
-//	{
-//		this.bForceRefresh = bForceRefresh;
-//	}
     // ポーズ中？
     private boolean paused = false;
     public boolean isPaused()
@@ -213,30 +200,6 @@ implements ServiceConnection, Database.Defs {
 		return null;
 	}
 
-	// private TempBackupData backupData = new TempBackupData();
-	/**
-     * 果たしてmapごと保存してうまくいくのか・・・。TODO 要確認
-     */
-//    @Override
-//    public Object onRetainNonConfigurationInstance() {
-//    	Log.e("onRetainNonConfigrationInstance","come");
-//    	backupData.setAlbumAdp(getAlbumAdp());
-//    	backupData.setArtistAdp(getArtistAdp());
-//    	backupData.setTracklistAdp(getTrackAdp());
-//    	backupData.setPlaylistAdp(getPlaylistAdp());
-//        return backupData;
-//    }
-    // TrackAdapter用？
-    // editmodeかどうか。
-    // preference保存対象
-    private boolean editMode = false;
-	public boolean isEditMode() {
-		return editMode;
-	}
-
-	public void setEditMode(boolean editMode) {
-		this.editMode = editMode;
-	}
 	// タブの初期化が終わったかどうか
 	// onCreateとonResumeでの処理のダブりを回避する目的
 	// boolean bTabInitEnd = false;
@@ -1236,11 +1199,6 @@ implements ServiceConnection, Database.Defs {
 	    }
 	    public void updateTimeDisplay(long secs)
 	    {
-	        /* Provide multiple arguments so the format can be changed easily
-	         * by modifying the xml.
-	         */
-	        //sFormatBuilder.setLength(0);
-
 	    	long tmp = 0;
 	        final Integer[] timeArgs = sTimeArgs;
 	        tmp = secs;
@@ -1277,32 +1235,5 @@ implements ServiceConnection, Database.Defs {
 	        mToast.setText(resid);
 	        mToast.show();
 	    }
-//	    @Override
-//	    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//	    	Log.w("■on activity result","come");
-//	        switch (requestCode) {
-////	            case SCAN_DONE:
-////	                if (resultCode == RESULT_CANCELED) {
-////	                    finish();
-////	                } else {
-////	                    getAlbumCursor(mAdapter.getQueryHandler(), null);
-////	                }
-////	                break;
-//
-//	            case NEW_PLAYLIST:
-//                	Log.w("■new playlist","come");
-//	                if (resultCode == RESULT_OK) {
-//                    	Log.w("■new playlist","result ok");
-//	                    Uri uri = intent.getData();
-//	                    if (uri != null) {
-//	                    	Log.d("■new playlist","tabid=" + getCurrentSubTabId());
-//	                    	IBehavior behavior = getList(getCurrentSubTabId()).getBehavior();
-//	                        long [] list = behavior.getCurrentSongList(); //Database.getSongListForAlbum(this, Long.parseLong(mCurrentAlbumId));
-//	                        Database.addToPlaylist(this, list, Long.parseLong(uri.getLastPathSegment()));
-//	                    }
-//	                }
-//	                break;
-//	        }
-//	    }
 	    
 }

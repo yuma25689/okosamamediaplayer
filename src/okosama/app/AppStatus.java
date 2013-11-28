@@ -3,8 +3,6 @@
  */
 package okosama.app;
 
-//import okosama.app.factory.DroidWidgetKit;
-//import okosama.app.widget.Button;
 
 /**
  * アプリケーションの状態を保持するクラス

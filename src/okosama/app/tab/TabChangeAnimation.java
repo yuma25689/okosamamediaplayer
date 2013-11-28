@@ -187,7 +187,7 @@ public class TabChangeAnimation {
             						message.arg2)
             			);
         			animEndWait = true;
-	    			tabBaseLayout.startAnimation(animIn);                	
+	    			tabBaseLayout.startAnimation(animOut);                	
                 }
     			
     			componentContainer.removeAllViews();

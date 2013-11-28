@@ -91,12 +91,16 @@ public abstract class TabComponentParent implements ITabComponent {
 		}
 	}
 	
+	/**
+	 * 指定されたIDのレイアウトを作成し、内部のwidgetをクリアする
+	 * @param iPanelLayoutId
+	 */
 	protected void resetPanelViews(int iPanelLayoutId)
 	{
-		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		OkosamaMediaPlayerActivity act 
+		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		LayoutInflater inflator = act.getLayoutInflater();
 		tabBaseLayout = (ViewGroup)inflator.inflate(iPanelLayoutId, null, false);	
-		// tabBaseLayout.removeAllViews();
 		widgets.clear();
 	}
 
