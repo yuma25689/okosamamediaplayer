@@ -36,7 +36,47 @@
 			
     <string name="enable_headset_plug_and_play_title">ヘッドホン接続で再生</string>
     <string name="enable_headset_plug_and_play_summary">キューに曲があり、サービスが有効なときにヘッドホンがさされたら、即時再生する</string>
-    <string name="enable_media_change_vibrate_title">曲の変更時にバイブレーション</string>
+    <string name="enable_media_change_vibrate_title">曲変更時にバイブ</string>
     <string name="enable_media_change_vibrate_summary">曲が新しく再生される、次の曲へ行くなどしたとき、バイブレーションで通知する</string>
-    		
+    <string name="vibrate_intensity_title">曲変更時のバイブの長さ</string>
+    <string name="vibrate_intensity_summary">曲の変更時のバイブレーションの強さを、ミリ単位で設定(現在値=%s)</string>
+    <string name="enable_animation_title">無価値なアニメーションをさせる</string>
+    <string name="enable_animation_summary">何の意味もない、無価値なアニメーションが有効かどうか</string>
+    <string-array name="animation_level_entries">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="animation_level_entryvalues" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+   	</string-array>
+   	<string name="audio_animation_category_title">アニメーションの設定</string>
+    <string name="animation_level_title">無価値なアニメーションの強さ</string>
+    <string name="animation_level_summary">何の意味もない、無価値なアニメーションの強度を設定(大きいほど強い)</string>
+    <string name="animation_speed_title">無価値なアニメーションの速さ</string>
+    <string name="animation_speed_summary">何の意味もない、無価値なアニメーションの速さを設定(秒)</string>
+    <string-array name="animation_speed_entries">
+        <item>0.3 second</item>
+        <item>0.4 second</item>
+        <item>0.5 second</item>
+        <item>0.6 second</item>
+        <item>0.8 second</item>
+        <item>1 second</item>
+        <item>1.5 second</item>
+        <item>2 second</item>
+    </string-array>
+    <!-- Do not translate. Entry values for 'enable gestures' preference list -->
+    <string-array name="animation_speed_entryvalues" translatable="false">
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
+        <item>600</item>
+        <item>800</item>
+        <item>1000</item>
+        <item>1500</item>
+        <item>2000</item>
+   	</string-array>
+ 
 </resources>

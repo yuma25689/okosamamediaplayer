@@ -23,62 +23,43 @@
 
     <PreferenceCategory android:title="@string/audio_focus_category_title">
 
-        <CheckBoxPreference android:key="enable_focus_loss_ducking"
-            android:title="@string/enable_focus_loss_ducking_title"
-            android:summary="@string/enable_focus_loss_ducking_summary"
-            android:defaultValue="false" />
         <CheckBoxPreference android:key="enable_media_change_vibrate"
             android:title="@string/enable_media_change_vibrate_title"
             android:summary="@string/enable_media_change_vibrate_summary"
             android:defaultValue="true" />
+        <ListPreference android:key="virate_intensity"
+            android:title="@string/vibrate_intensity_title"
+            android:entries="@array/vibrate_intensity_entries"
+            android:entryValues="@array/vibrate_intensity_entryvalues"
+            android:defaultValue="100"
+            android:dialogTitle="@string/vibrate_intensity_title"
+            android:dependency="enable_media_change_vibrate" />
         <CheckBoxPreference android:key="enable_headset_plug_and_play"
             android:title="@string/enable_headset_plug_and_play_title"
             android:summary="@string/enable_headset_plug_and_play_summary"
             android:defaultValue="false" />
+    </PreferenceCategory>
         
-        <ListPreference android:key="duck_attenuation_db"
-            android:title="@string/duck_attenuation_db_title"
-            android:summary="@string/duck_attenuation_db_summary"
-            android:entries="@array/duck_attenuation_db_entries"
-            android:entryValues="@array/duck_attenuation_db_entryvalues"
-            android:defaultValue="8"
-            android:dialogTitle="@string/duck_attenuation_db_title"
-            android:dependency="enable_focus_loss_ducking" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/gestures_category_title">
-
-        <CheckBoxPreference android:key="enable_gestures"
-            android:title="@string/enable_gestures_title"
-            android:summary="@string/enable_gestures_summary"
-            android:defaultValue="false" />
-
-        <CheckBoxPreference android:key="enable_haptic_feedback"
-            android:title="@string/enable_haptic_feedback_title"
-            android:summary="@string/enable_haptic_feedback_summary"
-            android:defaultValue="false"
-            android:dependency="enable_gestures" />
-
-        <PreferenceScreen android:key="edit_gestures"
-            android:title="@string/edit_gestures_title"
-            android:dependency="enable_gestures">
-            <intent
-                android:targetPackage="com.android.music"
-                android:targetClass="com.android.music.EditGesturesActivity" />
-        </PreferenceScreen>
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/widget_category_title">
-
-        <ListPreference android:key="widget_transparency"
-            android:title="@string/widget_transparency_title"
-            android:summary="@string/widget_transparency_summary"
-            android:entries="@array/widget_transparency_entries"
-            android:entryValues="@array/widget_transparency_entryvalues"
-            android:defaultValue="0"
-            android:dialogTitle="@string/widget_transparency_title" />
+    <PreferenceCategory android:title="@string/audio_animation_category_title">
+        <CheckBoxPreference android:key="enable_animation"
+            android:title="@string/enable_animation_title"
+            android:summary="@string/enable_animation_summary"
+            android:defaultValue="true" />
+        <ListPreference android:key="animation_level"
+            android:title="@string/animation_level_title"
+            android:entries="@array/animation_level_entries"
+            android:entryValues="@array/animation_level_entryvalues"
+            android:defaultValue="3"
+            android:dialogTitle="@string/animation_level_title"
+            android:dependency="enable_animation" />
+        <ListPreference android:key="animation_speed"
+            android:title="@string/animation_speed_title"
+            android:entries="@array/animation_speed_entries"
+            android:entryValues="@array/animation_speed_entryvalues"
+            android:defaultValue="300"
+            android:dialogTitle="@string/animation_speed_title"
+            android:dependency="enable_animation" />
+        
 
     </PreferenceCategory>
 

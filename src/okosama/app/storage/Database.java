@@ -449,7 +449,7 @@ public class Database {
         		playlistCols, whereclause, keywords, PlaylistsColumns.NAME);
         
         // 最後に、ショートカットを付け加えたカーソルを返却する？
-        return mergedCursor(c, createShortCut);
+        return c;//mergedCursor(c, createShortCut);
     }
     
     // トラックカーソル用メンバ変数

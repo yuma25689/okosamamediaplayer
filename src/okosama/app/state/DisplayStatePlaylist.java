@@ -34,9 +34,9 @@ public class DisplayStatePlaylist extends absDisplayStateMediaTab {
 				ControlIDs.TAB_ID_MEDIA,
 				true
 			);
-			break;
+			return 0;
 		}
-		return 0;
+		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override

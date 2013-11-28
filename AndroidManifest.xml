@@ -46,7 +46,7 @@
 		         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 		     </intent-filter>
 		     <meta-data android:name="android.appwidget.provider" 
-		         android:resource="@xml/appwidget4x1_info" />
+		         android:resource="@xml/appwidget_info" />
 		</receiver>
 		<activity android:name="okosama.app.action.CreatePlaylist"
             android:theme="@android:style/Theme.Dialog" android:exported="false" />

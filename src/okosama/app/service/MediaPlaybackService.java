@@ -1494,8 +1494,14 @@ public class MediaPlaybackService extends Service {
 //                status.flags |= Notification.DEFAULT_VIBRATE;
 //                status.vibrate = new long[]{250,50,750,10};
                 Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-                vibrator.vibrate(100);
-                Log.d("MediaServ","vib");
+                String sVib = prefs.getString(MusicSettingsActivity.KEY_VIBRATE_INTENSITY, "");
+                //Log.e("Vib",sVib);
+                long nVib = 0;
+                if( sVib != null && sVib.length() > 0 )
+                {
+                	nVib = Long.parseLong(sVib);
+                }
+                vibrator.vibrate(nVib);
             }
             // クリック時に発行されるインテント？だろうか？
             // タイミングを指定して発行できるインテント

@@ -1,32 +1,27 @@
 package okosama.app;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 public class MusicSettingsActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
-    static final String KEY_ENABLE_FOCUS_LOSS_DUCKING = "enable_focus_loss_ducking";
+    // static final String KEY_ENABLE_FOCUS_LOSS_DUCKING = "enable_focus_loss_ducking";
     public static final String KEY_ENABLE_MEDIA_CHANGE_VIBRATE = "enable_media_change_vibrate";
     public static final String KEY_ENABLE_HEADSET_PLUG_AND_PLAY = "enable_headset_plug_and_play";
-    static final String KEY_DUCK_ATTENUATION_DB = "duck_attenuation_db";
-    static final String KEY_ENABLE_GESTURES = "enable_gestures";
-    static final String KEY_ENABLE_HAPTIC_FEEDBACK = "enable_haptic_feedback";
-    static final String KEY_HAS_CUSTOM_GESTURES = "has_custom_gestures";
-    //This key has the gesture entry name (E.g. PAUSE) appended to it before use
-    static final String KEY_HAS_CUSTOM_GESTURE_XXX = "has_custom_gesture_";
-    static final String KEY_WIDGET_TRANSPARENCY = "widget_transparency";
+    public static final String KEY_VIBRATE_INTENSITY = "virate_intensity";
+    public static final String KEY_ENABLE_ANIMATION = "enable_animation";
+    public static final String KEY_ANIMATION_LEVEL = "animation_level";
+    public static final String KEY_ANIMATION_SPEED = "animation_speed";
+    
+    static final String DEFAULT_VIB_INTENSITY_DB = "10";
 
-    static final String DEFAULT_DUCK_ATTENUATION_DB = "8";
-
-    static final String ACTION_ENABLE_GESTURES_CHANGED = "com.android.music.enablegestureschanged";
-    static final String ACTION_GESTURES_CHANGED = "com.android.music.gestureschanged";
+//    static final String ACTION_ENABLE_GESTURES_CHANGED = "com.android.music.enablegestureschanged";
+//    static final String ACTION_GESTURES_CHANGED = "com.android.music.gestureschanged";
 
     public static final String PREFERENCES_FILE = "settings";
 
@@ -40,30 +35,24 @@ public class MusicSettingsActivity extends PreferenceActivity implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(KEY_ENABLE_GESTURES)) {
-            Intent intent = new Intent(ACTION_ENABLE_GESTURES_CHANGED);
-            sendBroadcast(intent);
-//        } else if (key.equals(KEY_WIDGET_TRANSPARENCY)) {
-//            updateWidgetsForProvider(new ComponentName(this, MediaAppWidgetProvider4x1.class));
-//            updateWidgetsForProvider(new ComponentName(this, MediaAppWidgetProvider4x2.class));
-       }
-    }
+    		 
+		ListPreference vib_intensity_preference = (ListPreference)getPreferenceScreen().findPreference(KEY_VIBRATE_INTENSITY);
+		vib_intensity_preference.setSummary(vib_intensity_preference.getEntry());
 
-    private void updateWidgetsForProvider(ComponentName provider) {
-        final AppWidgetManager manager = AppWidgetManager.getInstance(this);
-        int[] appWidgetIds = manager.getAppWidgetIds(provider);
-        if (appWidgetIds != null && appWidgetIds.length > 0) {
-            Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
-            intent.setComponent(provider);
-            sendBroadcast(intent);
-        }
+		ListPreference animation_level_preference = (ListPreference)getPreferenceScreen().findPreference(KEY_ANIMATION_LEVEL);
+		animation_level_preference.setSummary(animation_level_preference.getEntry());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+		ListPreference vib_intensity_preference = (ListPreference)getPreferenceScreen().findPreference(KEY_VIBRATE_INTENSITY);
+		vib_intensity_preference.setSummary(vib_intensity_preference.getEntry());
+        
+		ListPreference animation_level_preference = (ListPreference)getPreferenceScreen().findPreference(KEY_ANIMATION_LEVEL);
+		animation_level_preference.setSummary(animation_level_preference.getEntry());
+
+		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override

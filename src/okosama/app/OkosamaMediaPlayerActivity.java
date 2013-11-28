@@ -785,23 +785,6 @@ implements ServiceConnection, Database.Defs {
     	msg.arg2 = tabPageID;
     	handler.sendMessage(msg);
 	}
-	void updateCommonCtrls()
-	{
-		// 共通で利用するボタンを最前面に持っていく
-		if( getResourceAccessor().commonBtns != null )
-		{
-			for( Button btn : getResourceAccessor().commonBtns )
-			{
-				if( btn.getView() != null )
-				{
-					btn.getView().bringToFront();
-				}
-			}
-		}
-		
-		// 時間表時の再描画?
-		queueNextRefresh(1);
-	}
 	
 	/**
 	 * 現在の状況に合わせて、リスナを登録し直す

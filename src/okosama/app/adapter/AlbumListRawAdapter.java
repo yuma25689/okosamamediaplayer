@@ -2,7 +2,6 @@ package okosama.app.adapter;
 
 import java.util.ArrayList;
 
-import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.service.MediaPlayerUtil;

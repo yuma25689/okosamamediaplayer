@@ -134,6 +134,7 @@ public class MainHandler extends Handler {
            		//Log.d("msg_init_end","force rescan");
 	           	mActivity.getAdpStocker().initAllAdapter();
 	           	//mActivity.setForceRefreshFlag(false);
+        		mActivity.queueNextRefresh(100);
 	    		break;
         	}
         	case TabSelectAction.MSG_ID_TAB_SELECT:
@@ -150,7 +151,7 @@ public class MainHandler extends Handler {
             	// メディアを更新
             	mActivity.reScanMediaAndUpdateTabPage(message.arg1,false);
             	// 共通部分再描画
-        		mActivity.updateCommonCtrls();
+        		mActivity.queueNextRefresh(1);
         		mActivity.updatePlayStateButtonImage();
         		break;
         	}

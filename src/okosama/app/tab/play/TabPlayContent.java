@@ -28,7 +28,8 @@ import android.widget.ImageView.ScaleType;
  *
  */
 public class TabPlayContent extends Tab {
-	static final int BUTTON_HEIGHT = 100;
+	static final int BUTTON_WIDTH = 90;
+	static final int BUTTON_HEIGHT = 90;
 	static final int HOOTER_SIZE = BUTTON_HEIGHT + Tab.HDR_SIZE;
 	
 	public TabPlayContent(int ID, LinearLayout ll, ViewGroup rl) {
@@ -60,7 +61,7 @@ public class TabPlayContent extends Tab {
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
 			ControlIDs.PLAY_TAB_BUTTON, ComponentType.BUTTON, 
 			0, 0,
-			120, BUTTON_HEIGHT,
+			BUTTON_WIDTH, BUTTON_HEIGHT,
 			R.drawable.music_tab_button_image,
 			R.drawable.no_image,
 			"", ScaleType.FIT_XY 
@@ -78,8 +79,8 @@ public class TabPlayContent extends Tab {
 		mapBtn.put( TabPage.TABPAGE_ID_NOW_PLAYLIST, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData = new TabComponentPropertySetter(
 			ControlIDs.NOW_PLAYLIST_TAB_BUTTON, ComponentType.BUTTON, 
-			( 120 + 5 ) * 1, 0,//DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
-			120, BUTTON_HEIGHT,
+			( BUTTON_WIDTH + 5 ) * 1, 0,//DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
+			BUTTON_WIDTH, BUTTON_HEIGHT,
 			R.drawable.now_playlist_button_image,
 			R.drawable.no_image,//R.drawable.tab4_btn_not_select_no_shadow2, 
 			"", ScaleType.FIT_XY 

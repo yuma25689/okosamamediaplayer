@@ -1,10 +1,14 @@
 package okosama.app.tab;
 
 import okosama.app.ControlIDs;
+import okosama.app.MusicSettingsActivity;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.anim.TabAnimationFactory;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -128,15 +132,30 @@ public class TabChangeAnimation {
     		TabChangeAnimationTarget target = (TabChangeAnimationTarget)message.obj;
     		ViewGroup tabBaseLayout 		= target.target;
     		ViewGroup componentContainer 	= target.parent;
+            SharedPreferences prefs 
+            = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getSharedPreferences(
+                    MusicSettingsActivity.PREFERENCES_FILE, Context.MODE_PRIVATE);
+            boolean bEnableAnim = prefs.getBoolean(MusicSettingsActivity.KEY_ENABLE_ANIMATION, false);
+            int nLevel = 0;
+            String sLevel;
+            String sDuration;
+            long nDuration = 0;
+            if( bEnableAnim )
+            {
+                sLevel = prefs.getString(MusicSettingsActivity.KEY_ANIMATION_LEVEL, "");
+	            if( sLevel != null && sLevel.length() > 0 )
+	            {
+	            	nLevel = Integer.parseInt(sLevel);
+	            }
+                sDuration = prefs.getString(MusicSettingsActivity.KEY_ANIMATION_SPEED, "");
+	            if( sDuration != null && sDuration.length() > 0 )
+	            {
+	            	nDuration = Long.parseLong(sDuration);
+	            }
+            }
     		switch( message.what )
     		{
         	case TAB_IN:
-    			//if( animIn == null )
-    			{
-    				// アニメーションは動的に生成
-    				// TODO: 端末の傾きによって、アニメーションを変更する
-    				animIn = TabAnimationFactory.createTabInAnimation();
-    			}
         		if( tabBaseLayout.getParent() != null )
         		{
         			if( tabBaseLayout.getParent() instanceof ViewGroup )
@@ -146,38 +165,33 @@ public class TabChangeAnimation {
             	{
         			componentContainer.addView( tabBaseLayout );
         			componentContainer.invalidate();
-//        			tabPageCnt[message.arg2]++;
-//        			Log.d("anim","add:" + message.arg2 + " cnt:" + tabPageCnt[message.arg2]);       		
             	}
-    			Log.d("anim","in start:" + message.arg2 );        		
-    			tabBaseLayout.startAnimation(animIn);
-    			
-        		break;
+        		
+                if( bEnableAnim )
+                {
+    				// アニメーションは動的に生成
+       				animIn = TabAnimationFactory.createTabInAnimation(nLevel,nDuration);
+	    			Log.d("anim","in start:" + message.arg2 );
+	    			tabBaseLayout.startAnimation(animIn);                	
+                }
+                break;
         	case TAB_OUT:
     			//if( animOut == null )
-    			{
-    				// TODO: アニメーションは動的に生成
-    				animOut = TabAnimationFactory.createTabOutAnimation();
-//    				animOut = AnimationUtils.loadAnimation(
-//    						OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
-//    						, R.anim.right_out );
+                if( bEnableAnim )
+                {
+    				animOut = TabAnimationFactory.createTabOutAnimation(nLevel,nDuration);
         			outAnimDelay = animOut.getDuration();
-    			}
-    			animOut.setAnimationListener(
-    				new TabOutAnimationListener(tabBaseLayout,
-    						componentContainer,
-    						message.arg2)
-    			);
-				// tabBaseLayout.setAnimation(anim);
-				//animOut.setFillAfter(true);
+        			animOut.setAnimationListener(
+            				new TabOutAnimationListener(tabBaseLayout,
+            						componentContainer,
+            						message.arg2)
+            			);
+        			animEndWait = true;
+	    			tabBaseLayout.startAnimation(animIn);                	
+                }
     			
-    			animEndWait = true;
-				//tabBaseLayout.startAnimation(animOut);
-    			// componentContainer.removeView( tabBaseLayout );
     			componentContainer.removeAllViews();
     			componentContainer.invalidate();
-//    			tabPageCnt[message.arg2]--;
-//    			Log.d("anim","out start:" + message.arg2 + " cnt:" + tabPageCnt[message.arg2] );
         		break;
     		}
     	}

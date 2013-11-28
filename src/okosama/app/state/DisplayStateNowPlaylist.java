@@ -35,9 +35,9 @@ public class DisplayStateNowPlaylist extends absDisplayStateMediaTab {
 				ControlIDs.TAB_ID_PLAY,
 				true
 			);
-			break;
+			return 0;
 		}
-		return 0;
+		return super.onOptionsItemSelected(item);
 	}
 	@Override
 	public int updateStatus() {
