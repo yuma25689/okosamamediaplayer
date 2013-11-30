@@ -98,7 +98,7 @@ public class TabPlayContent extends Tab {
 		addChild( TabPage.TABPAGE_ID_NOW_PLAYLIST, new TabPageNowPlaylist( this, pageContainer, rlCont ) );
 	
 		//rlHooter.setBackgroundResource(R.color.gradiant_test4);
-		rlCont.setBackgroundResource(R.color.gradiant_test4);
+		rlCont.setBackgroundResource(R.color.gradiant_tab_base);
 		
 		// タブのパネルを親から与えられたレイアウトに追加
 		componentContainer.addView(tabBaseLayout);

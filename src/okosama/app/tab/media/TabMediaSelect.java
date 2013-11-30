@@ -132,6 +132,24 @@ public class TabMediaSelect extends Tab {
 		actionSetter = new TabComponentActionSetter( actMapTemp );			
 		mapBtn.get(TabPage.TABPAGE_ID_PLAYLIST).acceptConfigurator(actionSetter);
 		rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_PLAYLIST).getView());
+
+		// videoタブ
+		mapBtn.put( TabPage.TABPAGE_ID_VIDEO, DroidWidgetKit.getInstance().MakeButton() );
+		tabBtnCreationData = new TabComponentPropertySetter(
+			ControlIDs.VIDEO_TAB_BUTTON, null, ComponentType.BUTTON, 
+			( BUTTON_WIDTH + 5 ) * 4, 0, 
+			BUTTON_WIDTH, BUTTON_HEIGHT,
+			R.drawable.video_select_image,
+			R.drawable.no_image, // R.drawable.tab3_btn_not_select_no_shadow2, 
+			"", ScaleType.FIT_XY 
+		);
+		mapBtn.get(TabPage.TABPAGE_ID_VIDEO).acceptConfigurator(tabBtnCreationData);
+		actMapTemp = new SparseArray< IViewAction >();
+		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( this.getInternalID(), TabPage.TABPAGE_ID_VIDEO ) );
+		actionSetter = new TabComponentActionSetter( actMapTemp );		
+		mapBtn.get(TabPage.TABPAGE_ID_VIDEO).acceptConfigurator(actionSetter);
+		rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_VIDEO).getView());
+	
 		
 		RelativeLayout rlCont = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_contents);
 		// タブの追加
@@ -139,9 +157,10 @@ public class TabMediaSelect extends Tab {
 		addChild( TabPage.TABPAGE_ID_ARTIST, new TabPageArtist( this, pageContainer, rlCont ) );
 		addChild( TabPage.TABPAGE_ID_SONG, new TabPageSong( this, pageContainer, rlCont ) );
 		addChild( TabPage.TABPAGE_ID_PLAYLIST, new TabPagePlayList( this, pageContainer, rlCont ) );
+		addChild( TabPage.TABPAGE_ID_VIDEO, new TabPageVideo( this, pageContainer, rlCont ) );
 	
 		//rlHooter.setBackgroundResource(R.color.gradiant_test4);
-		rlCont.setBackgroundResource(R.color.gradiant_test4);
+		rlCont.setBackgroundResource(R.color.gradiant_tab_base);
 		
 		// タブのパネルを親から与えられたレイアウトに追加
 		componentContainer.addView(tabBaseLayout);

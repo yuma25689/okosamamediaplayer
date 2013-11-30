@@ -6,6 +6,7 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
+import okosama.app.adapter.VideoListRawAdapter;
 // import okosama.app.adapter.PlaylistListAdapter;
 import okosama.app.adapter.PlaylistListRawAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
@@ -14,6 +15,7 @@ import okosama.app.storage.ArtistChildData;
 import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.PlaylistData;
 import okosama.app.storage.TrackData;
+import okosama.app.storage.VideoData;
 import okosama.app.widget.absWidget;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -113,7 +115,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 	public static enum ComponentType {
 		NONE, TAB, TAB_PAGE, BUTTON, LIST_ALBUM, 
 		LIST_ARTIST, LIST_SONG, LIST_PLAYLIST, LIST_NOWPLAYLIST,
-		TEXT, IMAGE, EXPLIST, TOGGLEBUTTON, LABEL, PROGRESS
+		TEXT, IMAGE, EXPLIST, TOGGLEBUTTON, LABEL, PROGRESS, LIST_VIDEO
 	};
 	
 	
@@ -462,6 +464,37 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			// 現在の再生対象のプレイリストを指定する
 			// Database.getInstance(external).createTrackCursor(activity.getTrackAdp().getQueryHandler(), Database.PlaylistName_NowPlaying, null, true, null, null, null);			
 		}		
+		////////////// Video /////////////////////
+		else if( type == ComponentType.LIST_VIDEO )
+		{
+			// 通常のリスト
+			ListView lst = null;
+			if( v instanceof ListView )
+			{
+				lst = (ListView)v;
+			}
+			
+			// Adapterの作成
+			if( activity.getVideoAdp() == null )
+			{
+				Log.e("VideoAdapter","re create");
+				activity.putAdapter(
+					TabPage.TABPAGE_ID_VIDEO,
+					new VideoListRawAdapter(
+						activity,
+						R.layout.track_list_item,
+						new ArrayList<VideoData>(),
+						tabPageParent
+					)
+				);
+			}
+			// Adapterの設定
+			lst.setAdapter(activity.getVideoAdp());
+
+			// Activityのコンテキストメニューに登録
+			lst.setTag(component);
+			activity.registerForContextMenu(lst);
+		}
 		else if( type == ComponentType.LABEL )
 		{
 			TextView txt = null;

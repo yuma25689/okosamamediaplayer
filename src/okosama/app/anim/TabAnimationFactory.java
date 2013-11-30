@@ -22,7 +22,7 @@ public class TabAnimationFactory {
 		OkosamaMediaPlayerActivity.getResourceAccessor().motionObserver. getNowMagnetic();
 	
 		int random = (int)Math.random() * (nLevel*2) + 5;
-	    int iFromX = -100;
+	    int iFromX = -1 * (int)( OkosamaMediaPlayerActivity.dispInfo.getBkImageWidth());;
 	    float fromY = 0;
 	    AnimationSet set = new AnimationSet(true);
 
@@ -38,7 +38,7 @@ public class TabAnimationFactory {
 		    int iDirection = 1;
 		    if( direction )
 		    {
-		    	iFromX = 100;
+		    	iFromX = (int)( OkosamaMediaPlayerActivity.dispInfo.getBkImageWidth());
 		    	iDirection = -1;
 		    	// azimuth *= -1;
 		    }
@@ -66,7 +66,7 @@ public class TabAnimationFactory {
 	public static AnimationSet createTabOutAnimation(int nLevel,long nDuration)
 	{
 	    AnimationSet set = new AnimationSet(true);
-	    int iToX = 100;
+	    int iToX = (int)( OkosamaMediaPlayerActivity.dispInfo.getBkImageWidth());
 	    float toY = 0;
 		
 	    
@@ -91,7 +91,7 @@ public class TabAnimationFactory {
 		    int iDirection = 1;
 		    if( direction )
 		    {
-		    	iToX = 100;
+		    	iToX = -1 * (int)( OkosamaMediaPlayerActivity.dispInfo.getBkImageWidth());
 		    	iDirection = -1;
 		    	//azimuth *= -1;
 		    }

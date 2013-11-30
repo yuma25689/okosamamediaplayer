@@ -4,6 +4,7 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.behavior.TrackListBehavior;
+import okosama.app.behavior.VideoListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabComponentPropertySetter;
@@ -25,7 +26,7 @@ import android.widget.RelativeLayout;
  * @author 25689
  *
  */
-public class TabPageSong extends TabPage {
+public class TabPageVideo extends TabPage {
 
 	/**
 	 * コンストラクタ
@@ -33,7 +34,7 @@ public class TabPageSong extends TabPage {
 	 * @param ll
 	 * @param rl
 	 */
-	public TabPageSong( Tab parent, LinearLayout ll, ViewGroup rl ) {
+	public TabPageVideo( Tab parent, LinearLayout ll, ViewGroup rl ) {
 		super();
 		this.parent = parent;
 		this.pageContainer = ll;
@@ -77,17 +78,18 @@ public class TabPageSong extends TabPage {
 		TabComponentPropertySetter creationData[] = {
 			// ------------- TAB
 			new TabComponentPropertySetter(
-				List.LISTID_SONG, this, ComponentType.LIST_SONG, 
+				List.LISTID_VIDEO, this, ComponentType.LIST_VIDEO, 
 				lpList
 				, null, null//R.drawable.tab_3_list_bk
 				, "", ScaleType.FIT_XY
 			)
 		};
-		List lst = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getList(List.LISTID_SONG);
+		List lst = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getList(
+				List.LISTID_VIDEO);
 		if( lst == null )
 		{
-			lst = DroidWidgetKit.getInstance().MakeList( new TrackListBehavior() );
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().setList(List.LISTID_SONG,lst);
+			lst = DroidWidgetKit.getInstance().MakeList( new VideoListBehavior() );
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().setList(List.LISTID_VIDEO,lst);
 		
 			widgets.add(lst);
 		}
@@ -100,14 +102,9 @@ public class TabPageSong extends TabPage {
 			// TODO:ボタンのアクションを設定
 			
 			
-			widget.getView().setBackgroundColor(Color.BLUE);
-			// ボタンをこのタブ子項目として追加
-			// addChild( creationData[i].getInternalID(), lst );
+			widget.getView().setBackgroundColor(Color.YELLOW);
 			tabBaseLayout.addView( widget.getView() );
 			
-			// ボタンを配置
-			// これは、setActivateで行う
-			// componentContainer.addView( btn.getView() );
 			i++;
 		}
 		

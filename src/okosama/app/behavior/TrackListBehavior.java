@@ -22,34 +22,16 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class TrackListBehavior extends IListBehavior implements Database.Defs {
 
-//    private static final int Q_SELECTED = CHILD_MENU_BASE;
-//    private static final int Q_ALL = CHILD_MENU_BASE + 1;
-//    private static final int SAVE_AS_PLAYLIST = CHILD_MENU_BASE + 2;
-//    private static final int PLAY_ALL = CHILD_MENU_BASE + 3;
-//    private static final int CLEAR_PLAYLIST = CHILD_MENU_BASE + 4;
     private static final int REMOVE = CHILD_MENU_BASE + 5;
     private static final int SEARCH = CHILD_MENU_BASE + 6;
 
 	@Override
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-		// Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).getCursor(Database.SongCursorName);
 		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		
 		if (act.getAdapter(TabPage.TABPAGE_ID_SONG).getMainItemCount() == 0) {
             return;
         }
-        // When selecting a track from the queue, just jump there instead of
-        // reloading the queue. This is both faster, and prevents accidentally
-        // dropping out of party shuffle.
-//        if (cursor instanceof Database.NowPlayingCursor) {
-//            if (MediaPlayerUtil.sService != null) {
-//                try {
-//                	MediaPlayerUtil.sService.setQueuePosition(position);
-//                    return;
-//                } catch (RemoteException ex) {
-//                }
-//            }
-//        }
 		long[] list = act.getTrackAdp().getCurrentAllAudioIds();		
         MediaPlayerUtil.playAll(
         		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
@@ -59,8 +41,6 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
     private int mSelectedPosition;
     private long mSelectedId;
     private String mCurrentTrackName;
-//    private String mCurrentAlbumName;
-//    private String mCurrentArtistNameForAlbum;
     
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfoIn) {

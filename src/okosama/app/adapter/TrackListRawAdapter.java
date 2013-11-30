@@ -416,26 +416,30 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	        		synchronized(allItems)
 	        		{
 		            	allItems.clear();
-		            	Log.i("doInBackground","moveToFirst");
-		        		cursor.moveToFirst();
-		        		do 
-		        		{
-		            		TrackData data = new TrackData();
-		        			// 全ての要素をループする
-		            		data.setTrackId( cursor.getLong(0));
-		            		data.setTrackTitle(cursor.getString(mTitleIdx));
-		            		data.setTrackArtist(cursor.getString(mArtistIdx));
-		            		data.setTrackDuration(cursor.getLong(mDurationIdx));
-		            		data.setTrackAudioId(cursor.getLong(mAudioIdIdx));
-		            		data.setTrackAlbum(cursor.getString(mAlbumIdx));
-		            		data.setTrackAlbumId(cursor.getString(mAlbumIdIdx));
-		            		data.setTrackArtistId(cursor.getString(mArtistIdIdx));
-		        			data.setTrackAlbumArt(
-		        					((AlbumListRawAdapter)mActivity.getAdapter(TabPage.TABPAGE_ID_ALBUM)).getAlbumArtFromId(Integer.parseInt(data.getTrackAlbumId())));
-		          		// Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
-		            	    allItems.add(data);
-		        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
-		        				cursor.moveToNext() );
+		            	if( 0 < cursor.getCount() )
+		            	{
+		            	
+			            	Log.i("doInBackground","moveToFirst");
+			        		cursor.moveToFirst();
+			        		do 
+			        		{
+			            		TrackData data = new TrackData();
+			        			// 全ての要素をループする
+			            		data.setTrackId( cursor.getLong(0));
+			            		data.setTrackTitle(cursor.getString(mTitleIdx));
+			            		data.setTrackArtist(cursor.getString(mArtistIdx));
+			            		data.setTrackDuration(cursor.getLong(mDurationIdx));
+			            		data.setTrackAudioId(cursor.getLong(mAudioIdIdx));
+			            		data.setTrackAlbum(cursor.getString(mAlbumIdx));
+			            		data.setTrackAlbumId(cursor.getString(mAlbumIdIdx));
+			            		data.setTrackArtistId(cursor.getString(mArtistIdIdx));
+			        			data.setTrackAlbumArt(
+			        					((AlbumListRawAdapter)mActivity.getAdapter(TabPage.TABPAGE_ID_ALBUM)).getAlbumArtFromId(Integer.parseInt(data.getTrackAlbumId())));
+			          		// Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
+			            	    allItems.add(data);
+			        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
+			        				cursor.moveToNext() );
+		            	}
 	        		}
         		} finally {
         			cursor.close();

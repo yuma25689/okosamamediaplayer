@@ -15,6 +15,7 @@ public class List extends absWidget {
 	public static int LISTID_SONG = 202;
 	public static int LISTID_PLAYLIST = 203;
 	public static int LISTID_NOW_PLAYLIST = 204;
+	public static int LISTID_VIDEO = 205;
 	
 	/**
 	 * ŽÀ‘•ƒNƒ‰ƒX

@@ -3,6 +3,7 @@ package okosama.app.tab;
 import java.util.ArrayList;
 
 import android.graphics.drawable.Drawable;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ProgressBar;
@@ -35,6 +36,7 @@ public abstract class TabPage extends TabComponentParent {
 	public static final int TABPAGE_ID_SONG = 6;
 	public static final int TABPAGE_ID_PLAYLIST = 7;
 	public static final int TABPAGE_ID_NOW_PLAYLIST = 8;
+	public static final int TABPAGE_ID_VIDEO = 9;
 	public static final int TABPAGE_ID_MEDIA_IMPL = 12;
 	public static final int TABPAGE_ID_PLAY_SUB = 13;
 	
@@ -67,5 +69,13 @@ public abstract class TabPage extends TabComponentParent {
 	 */
 	public boolean IsEqualTabId( int tabId ) {
 		return ( this.tabId == tabId );
+	}
+	/**
+	 * タブページのステータスバーとなるViewGroupを取得する
+	 * @return
+	 */
+	public ViewGroup getInfoBar()
+	{
+		return null;
 	}
 }

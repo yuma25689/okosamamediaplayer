@@ -279,19 +279,23 @@ implements IAdapterUpdate, SectionIndexer {
 	        		{
 	        			return -1;
 	        		}
-	            	Log.i("doInBackground","moveToFirst");
-	        		cursor.moveToFirst();
-	        		do 
-	        		{
-	            		AlbumData data = new AlbumData();
-	        			// 全ての要素をループする
-	            		data.setAlbumId(cursor.getInt(0));
-	        			data.setAlbumName(cursor.getString(mAlbumIdx));
-	        			data.setAlbumArtist(cursor.getString(mArtistIdx));
-	        			data.setAlbumArt(cursor.getString(mAlbumArtIndex));
-	        			items.add(data);
-	        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false 
-	        			&& cursor.moveToNext() );
+	            	if( 0 < cursor.getCount() )
+	            	{
+            		
+		            	Log.i("doInBackground","moveToFirst");
+		        		cursor.moveToFirst();
+		        		do 
+		        		{
+		            		AlbumData data = new AlbumData();
+		        			// 全ての要素をループする
+		            		data.setAlbumId(cursor.getInt(0));
+		        			data.setAlbumName(cursor.getString(mAlbumIdx));
+		        			data.setAlbumArtist(cursor.getString(mArtistIdx));
+		        			data.setAlbumArt(cursor.getString(mAlbumArtIndex));
+		        			items.add(data);
+		        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false 
+		        			&& cursor.moveToNext() );
+	            	}
             	} finally {
             		cursor.close();
             	}

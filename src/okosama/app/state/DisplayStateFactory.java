@@ -46,6 +46,9 @@ public class DisplayStateFactory {
 		case TabPage.TABPAGE_ID_NOW_PLAYLIST:
 			state = new DisplayStateNowPlaylist();
 			break;		
+		case TabPage.TABPAGE_ID_VIDEO:
+			state = new DisplayStateVideo();
+			break;		
 		}
 		return state;
 	}

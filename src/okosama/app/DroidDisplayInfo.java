@@ -20,6 +20,9 @@ public final class DroidDisplayInfo {
 	
 	DisplayMetrics metrics;
 
+	double orgHeightOfBk = 0;
+	double orgWidthOfBk = 0;
+	
 	int titleBarHeightPixels;
 	int statusBarHeightPixels;
 	int clientHeightPixels;
@@ -111,9 +114,9 @@ public final class DroidDisplayInfo {
 			    
 		        // 実際のDisplayの高さと横幅と、背景画像の高さと横幅との比率を求める
 				// ベース画像の、元（プログラムに入ってくる前）の高さと幅
-				double orgHeightOfBk 
+				orgHeightOfBk 
 					= (backgroundImgBase.getIntrinsicHeight()); /// metrics.density;
-				double orgWidthOfBk 
+				orgWidthOfBk 
 					= (backgroundImgBase.getIntrinsicWidth());// / metrics.density;
 				// プログラム内でのクライアント領域のサイズと、元の画像のサイズとの比率を求める
 		        heightScaleCorrectDensity

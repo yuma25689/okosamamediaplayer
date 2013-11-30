@@ -46,4 +46,12 @@ public final class DisplayInfo {
 	{
 		return _impl.getCorrectionYConsiderDensity( orgY );
 	}
+	public double getBkImageWidth()
+	{
+		return _impl.orgWidthOfBk;
+	}
+	public double getBkImageHeight()
+	{
+		return _impl.orgHeightOfBk;
+	}
 }

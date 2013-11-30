@@ -7,6 +7,7 @@ import okosama.app.adapter.ArtistAlbumListRawAdapter;
 import okosama.app.adapter.IAdapterUpdate;
 import okosama.app.adapter.PlaylistListRawAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
+import okosama.app.adapter.VideoListRawAdapter;
 import okosama.app.factory.DroidWidgetKit;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -146,6 +147,10 @@ implements ServiceConnection, Database.Defs {
 	public AlbumListRawAdapter getAlbumAdp()
 	{
 		return (AlbumListRawAdapter) getAdapter(TabPage.TABPAGE_ID_ALBUM);
+	}
+	public VideoListRawAdapter getVideoAdp()
+	{
+		return (VideoListRawAdapter) getAdapter(TabPage.TABPAGE_ID_VIDEO);
 	}
 	public ArtistAlbumListRawAdapter getArtistAdp()
 	{

@@ -47,14 +47,15 @@ public final class R {
         public static final int expanding_child_background=0x7f07000a;
         public static final int gradiant_base=0x7f07000c;
         public static final int gradiant_notify=0x7f07000d;
-        public static final int gradiant_test=0x7f07000e;
-        public static final int gradiant_test2=0x7f07000f;
-        public static final int gradiant_test3=0x7f070010;
-        public static final int gradiant_test4=0x7f070011;
+        public static final int gradiant_tab_base=0x7f07000e;
+        public static final int gradiant_test=0x7f07000f;
+        public static final int gradiant_test2=0x7f070010;
+        public static final int gradiant_test3=0x7f070011;
+        public static final int gradiant_test4=0x7f070012;
         public static final int gray=0x7f070006;
         public static final int green=0x7f070001;
         public static final int lightgray=0x7f070005;
-        public static final int list_item=0x7f070012;
+        public static final int list_item=0x7f070013;
         public static final int magenta=0x7f070002;
         public static final int orange=0x7f070008;
         public static final int white=0x7f070003;
@@ -264,6 +265,7 @@ public final class R {
         public static final int video_focus=0x7f0200c9;
         public static final int video_normal=0x7f0200ca;
         public static final int video_press=0x7f0200cb;
+        public static final int video_select_image=0x7f0200cc;
     }
     public static final class id {
         public static final int EmptyShowPanel=0x7f0c0013;

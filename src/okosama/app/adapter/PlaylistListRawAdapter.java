@@ -283,26 +283,30 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
 	        			return -1;
 	        		}
 	            	Log.e("playlist - doInBackground","moveToFirst");
-	        		cursor.moveToFirst();
-	        		do 
-	        		{
-	            		PlaylistData data = new PlaylistData();
-	        			// 全ての要素をループする
-	            		data.setPlaylistId(cursor.getLong(mIdIdx));
-	        			data.setPlaylistName(cursor.getString(mTitleIdx));
-	        	        if( 0 <= data.getPlaylistId() ) {
-	        		        long[] songlists = Database.getSongListForPlaylist( 
-	        		        		mActivity, data.getPlaylistId() );
-	        		        if( songlists != null )
-	        		        {
-	        		        	data.setPlaylistCount(String.valueOf(songlists.length));
-	        		        }
-	        	        }
-	        			
-	        			// そんなカラムはない
-	        			// data.setPlaylistCount(cursor.getString(mCountIdx));
-	        			items.add(data);
-	        		} while( cursor.moveToNext() );
+	            	if( 0 < cursor.getCount() )
+	            	{
+	            	
+		        		cursor.moveToFirst();
+		        		do 
+		        		{
+		            		PlaylistData data = new PlaylistData();
+		        			// 全ての要素をループする
+		            		data.setPlaylistId(cursor.getLong(mIdIdx));
+		        			data.setPlaylistName(cursor.getString(mTitleIdx));
+		        	        if( 0 <= data.getPlaylistId() ) {
+		        		        long[] songlists = Database.getSongListForPlaylist( 
+		        		        		mActivity, data.getPlaylistId() );
+		        		        if( songlists != null )
+		        		        {
+		        		        	data.setPlaylistCount(String.valueOf(songlists.length));
+		        		        }
+		        	        }
+		        			
+		        			// そんなカラムはない
+		        			// data.setPlaylistCount(cursor.getString(mCountIdx));
+		        			items.add(data);
+		        		} while( cursor.moveToNext() );
+	            	}
         		} finally {
         			cursor.close();
         		}

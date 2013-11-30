@@ -186,6 +186,7 @@ public class TabChangeAnimation {
             						componentContainer,
             						message.arg2)
             			);
+	    			Log.d("anim","out start:" + message.arg2 );        			
         			animEndWait = true;
 	    			tabBaseLayout.startAnimation(animOut);                	
                 }
