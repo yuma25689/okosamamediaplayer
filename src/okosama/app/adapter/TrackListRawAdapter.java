@@ -6,6 +6,7 @@ import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
+import okosama.app.service.MediaInfo;
 //import okosama.app.adapter.AlbumListRawAdapter.ViewHolder;
 import okosama.app.service.MediaPlayerUtil;
 //import okosama.app.storage.AlbumData;
@@ -52,7 +53,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     	
     // private final Drawable mNowListOverlay;
 
-	long [] playlist = null;
+	MediaInfo [] playlist = null;
     private final BitmapDrawable mDefaultAlbumIcon;
 	TabPage page;
 	boolean bDataUpdating = false;	// 内部データを更新中かどうか
@@ -64,13 +65,14 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	private LayoutInflater inflater;
 	private int iLayoutId;
     ArrayList<Long> currentAllAudioIds = new ArrayList<Long>();
-    public long[] getCurrentAllAudioIds()
+    public MediaInfo[] getCurrentAllMediaInfo()
     {
-    	long[] ret = new long[currentAllAudioIds.size()];
+    	MediaInfo[] ret = new MediaInfo[currentAllAudioIds.size()];
     	int i = 0;
     	for( Long lng : currentAllAudioIds )
     	{
-    		ret[i] = lng;
+    		ret[i].setId( lng );
+    		ret[i].setMediaType( MediaInfo.MEDIA_TYPE_AUDIO );
     		i++;
     	}
     	return ret;
@@ -508,7 +510,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	    		// 再生キューにあるものしか表示しない
 	    		for( int i=0; i< playlist.length; ++i )
 	    		{
-	    			if( playlist[i] == data.getTrackAudioId() )
+	    			if( playlist[i].getId() == data.getTrackAudioId() )
 	    			{
 	    				return true;
 	    			}
@@ -565,7 +567,13 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
         		return;
         	}
 	       	try {
-	    		playlist = MediaPlayerUtil.sService.getQueue();
+	       		long [] listId = MediaPlayerUtil.sService.getQueue();
+	       		int [] listType = MediaPlayerUtil.sService.getMediaType();
+		       	for( int i=0; i<listId.length; i++ )
+		       	{
+			       	playlist[i].setId( listId[i] );	       		
+			       	playlist[i].setMediaType( listType[i] );	       		
+		       	}
 	    	} catch( RemoteException ex ) {
 	    		Log.e("Error", "sService getQueue RemoteException occured!");
 	    	}

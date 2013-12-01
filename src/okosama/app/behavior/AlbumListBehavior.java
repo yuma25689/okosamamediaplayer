@@ -7,6 +7,7 @@ import okosama.app.action.CreatePlaylist;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.TrackListRawAdapter;
+import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.AlbumData;
 import okosama.app.storage.ArtistGroupData;
@@ -101,13 +102,13 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
         switch (item.getItemId()) {
         case PLAY_SELECTION: {
             // play the selected album
-            long [] list = Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
+            MediaInfo [] list = Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
             MediaPlayerUtil.playAll(activity, list, 0);
             return true;
         }
 
         case QUEUE: {
-            long [] list = Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
+        	MediaInfo [] list = Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
             MediaPlayerUtil.addToCurrentPlaylist(activity, list);
             return true;
         }
@@ -122,7 +123,7 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
         }        
 
         case PLAYLIST_SELECTED: {
-            long [] list = Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
+        	MediaInfo [] list = Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
             long playlist = item.getIntent().getLongExtra("playlist", 0);
             Database.addToPlaylist(activity, list, playlist);
             return true;
@@ -155,7 +156,7 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 	}
 
 	@Override
-	public long[] getCurrentSongList() {
+	public MediaInfo[] getCurrentMediaList() {
 		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		return Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
 	}

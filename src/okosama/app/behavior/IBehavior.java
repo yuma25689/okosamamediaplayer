@@ -1,5 +1,6 @@
 package okosama.app.behavior;
 
+import okosama.app.service.MediaInfo;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,5 +18,5 @@ public interface IBehavior {
 	void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfoIn);
 	boolean onContextItemSelected(MenuItem item);
 	void doSearch();
-	long[] getCurrentSongList();	
+	MediaInfo[] getCurrentMediaList();	
 }

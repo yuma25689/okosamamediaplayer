@@ -19,6 +19,7 @@ import okosama.app.action.IViewAction;
 import okosama.app.action.RenamePlaylist;
 import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.TrackListRawAdapter;
+import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.AlbumData;
 import okosama.app.storage.Database;
@@ -136,7 +137,7 @@ public class PlaylistListBehavior extends IListBehavior implements Database.Defs
 //	        }
 //	    }
 	@Override
-	public long[] getCurrentSongList() {
+	public MediaInfo[] getCurrentMediaList() {
         //long [] list = new long[] { mSelectedId };
         return null;//list;
 	}

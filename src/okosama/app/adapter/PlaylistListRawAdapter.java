@@ -6,6 +6,7 @@ import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
+import okosama.app.service.MediaInfo;
 import okosama.app.storage.PlaylistData;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
@@ -294,7 +295,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
 		            		data.setPlaylistId(cursor.getLong(mIdIdx));
 		        			data.setPlaylistName(cursor.getString(mTitleIdx));
 		        	        if( 0 <= data.getPlaylistId() ) {
-		        		        long[] songlists = Database.getSongListForPlaylist( 
+		        	        	MediaInfo[] songlists = Database.getSongListForPlaylist( 
 		        		        		mActivity, data.getPlaylistId() );
 		        		        if( songlists != null )
 		        		        {

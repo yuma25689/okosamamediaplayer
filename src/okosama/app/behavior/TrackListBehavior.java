@@ -2,6 +2,7 @@ package okosama.app.behavior;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
 import okosama.app.storage.TrackData;
@@ -32,7 +33,7 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 		if (act.getAdapter(TabPage.TABPAGE_ID_SONG).getMainItemCount() == 0) {
             return;
         }
-		long[] list = act.getTrackAdp().getCurrentAllAudioIds();		
+		MediaInfo[] list = act.getTrackAdp().getCurrentAllMediaInfo();		
         MediaPlayerUtil.playAll(
         		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
         		list, position, false);
@@ -80,17 +81,18 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 	public boolean onContextItemSelected(MenuItem item) {
 		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		// Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).getCursor(Database.SongCursorName);
-		long[] lngAudioIds = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().getCurrentAllAudioIds();
+		MediaInfo[] listMedia = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().getCurrentAllMediaInfo();
 		switch (item.getItemId()) {
 		case PLAY_SELECTION: {
 			// play the track
 			int position = mSelectedPosition;
-			MediaPlayerUtil.playAll(activity, lngAudioIds, position);
+			MediaPlayerUtil.playAll(activity, listMedia, position);
 			return true;
 		}
 	
 	   case QUEUE: {
-	       long [] list = new long[] { mSelectedId };
+		   MediaInfo [] list = new MediaInfo[] { 
+				   new MediaInfo(mSelectedId,MediaInfo.MEDIA_TYPE_AUDIO) };
 	       MediaPlayerUtil.addToCurrentPlaylist(activity, list);
 	       return true;
 	   }
@@ -104,7 +106,7 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 //	   }
 	
 	   case PLAYLIST_SELECTED: {
-	       long [] list = new long[] { mSelectedId };
+		   MediaInfo [] list = new MediaInfo[] { new MediaInfo(mSelectedId,MediaInfo.MEDIA_TYPE_AUDIO) };
 	       long playlist = item.getIntent().getLongExtra("playlist", 0);
 	       Database.addToPlaylist(activity, list, playlist);
 	       return true;
@@ -150,8 +152,8 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 	}
 
 	@Override
-	public long[] getCurrentSongList() {
-        long [] list = new long[] { mSelectedId };
+	public MediaInfo[] getCurrentMediaList() {
+		MediaInfo [] list = new MediaInfo[] { new MediaInfo(mSelectedId,MediaInfo.MEDIA_TYPE_AUDIO) };
         return list;
 	}
 

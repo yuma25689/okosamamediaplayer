@@ -463,7 +463,7 @@ public class MediaPlayerUtil {
 //        playAll(context, cursor, position, false);
 //    }
     
-    public static void playAll(Context context, long [] list, int position) {
+    public static void playAll(Context context, MediaInfo [] list, int position) {
         playAll(context, list, position, false);
     }
     
@@ -473,7 +473,7 @@ public class MediaPlayerUtil {
 //        playAll(context, list, position, force_shuffle);
 //    }
     
-    public static void playAll(Context context, long [] list, int position, boolean force_shuffle) {
+    public static void playAll(Context context, MediaInfo [] list, int position, boolean force_shuffle) {
         if (list.length == 0 || sService == null) {
             Log.d("MusicUtils", "attempt to play empty song list");
             // Don't try to play empty playlists. Nothing good will come of it.
@@ -487,12 +487,21 @@ public class MediaPlayerUtil {
             }
             long curid = sService.getAudioId();
             int curpos = sService.getQueuePosition();
-            if (position != -1 && curpos == position && curid == list[position]) {
+            if (position != -1 && curpos == position && curid == list[position].getId()) {
                 // The selected file is the file that's currently playing;
                 // figure out if we need to restart with a new playlist,
                 // or just launch the playback activity.
-                long [] playlist = sService.getQueue();
-                if (Arrays.equals(list, playlist)) {
+                long [] listId = sService.getQueue();
+                int [] listType = sService.getMediaType();
+                
+                MediaInfo [] listMedia = new MediaInfo[listId.length];
+                for( int i=0; i < listId.length; i++ )
+                {
+                	listMedia[i].setId( listId[i] );
+                	listMedia[i].setMediaType( listType[i] );
+                }
+                
+                if (Arrays.equals(list, listMedia)) {
                     // we don't need to set a new list, but we should resume playback if needed
                     sService.play();
                     return; // the 'finally' block will still run
@@ -501,7 +510,16 @@ public class MediaPlayerUtil {
             if (position < 0) {
                 position = 0;
             }
-            sService.open(list, force_shuffle ? -1 : position);
+            long [] listId = new long[list.length];
+            int [] listType = new int[list.length];
+            
+            for( int i=0; i < list.length; i++ )
+            {
+            	listId[i] = list[i].getId();
+            	listType[i]  = list[i].getMediaType();
+            }
+            
+            sService.open(listId, listType, force_shuffle ? -1 : position);
             sService.play();
         } catch (RemoteException ex) {
         } finally {
@@ -511,47 +529,27 @@ public class MediaPlayerUtil {
 //            context.startActivity(intent);
         }
     }
-    public static void addToCurrentPlaylist(Context context, long [] list) {
+    public static void addToCurrentPlaylist(Context context, MediaInfo [] list) {
         if (sService == null) {
             return;
         }
         try {
-            sService.enqueue(list, MediaPlaybackService.LAST);
+        	long [] listId = new long[list.length];
+        	int [] listType = new int[list.length];
+        	
+        	for( int i=0; i < list.length; i++ )
+        	{
+        		listId[i] = list[i].getId();
+        		listType[i] = list[i].getMediaType();
+        	}
+        	
+            sService.enqueue(listId, listType, MediaPlaybackService.LAST);
             String message = context.getResources().getQuantityString(
                     R.plurals.NNNtrackstoplaylist, list.length, Integer.valueOf(list.length));
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
         } catch (RemoteException ex) {
         }
     }
-    // Cursor should be positioned on the entry to be checked
-    // Returns false if the entry matches the naming pattern used for recordings,
-    // or if it is marked as not music in the database.
-//    public static boolean isMusic(Cursor c) {
-//        int titleidx = c.getColumnIndex(MediaColumns.TITLE);
-//        int albumidx = c.getColumnIndex(AudioColumns.ALBUM);
-//        int artistidx = c.getColumnIndex(AudioColumns.ARTIST);
-//
-//        String title = c.getString(titleidx);
-//        String album = c.getString(albumidx);
-//        String artist = c.getString(artistidx);
-//        if (MediaStore.UNKNOWN_STRING.equals(album) &&
-//                MediaStore.UNKNOWN_STRING.equals(artist) &&
-//                title != null &&
-//                title.startsWith("recording")) {
-//            // not music
-//            return false;
-//        }
-//
-//        int ismusic_idx = c.getColumnIndex(AudioColumns.IS_MUSIC);
-//        boolean ismusic = true;
-//        if (ismusic_idx >= 0) {
-//        	// TODO: ébíËî≈ Ç∆Ç¢Ç§Ç©ÅAëSÇ≠å©ÇƒÇ¢Ç»Ç¢
-//        	// Cursor trackCursor = Database.getInstance(false).getCursor(Database.SongCursorName);
-//        	// OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().getItem(position)
-//            ismusic = c.getInt(ismusic_idx) != 0;
-//        }
-//        return ismusic;
-//    }
     public static void clearQueue() {
         try {
             sService.removeTracks(0, Integer.MAX_VALUE);
@@ -588,7 +586,7 @@ public class MediaPlayerUtil {
     }
     
     public static void playPlaylist(Context context, long plid) {
-        long [] list = Database.getSongListForPlaylist(context, plid);
+    	MediaInfo [] list = Database.getSongListForPlaylist(context, plid);
         if (list != null) {
             playAll(context, list, -1, false);
         }

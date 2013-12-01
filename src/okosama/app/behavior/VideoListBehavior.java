@@ -2,6 +2,7 @@ package okosama.app.behavior;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
 import okosama.app.storage.TrackData;
@@ -36,14 +37,15 @@ public class VideoListBehavior extends IListBehavior implements Database.Defs {
 		VideoData data = act.getVideoAdp().getItem(mSelectedPosition);
 		mSelectedId = data.getVideoId();
 
+		/*
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setDataAndType(ContentUris.withAppendedId(
 				MediaStore.Video.Media.EXTERNAL_CONTENT_URI, mSelectedId), data.getType());
 		
 		act.startActivity(intent);
-		/*
-		long[] list = new long[] { mSelectedId };		
-        MediaPlayerUtil.playAllVideo(
+		*/
+		MediaInfo[] list = new MediaInfo[] { new MediaInfo( mSelectedId, MediaInfo.MEDIA_TYPE_VIDEO ) };		
+        MediaPlayerUtil.playAll(
         		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
         		list, position, false);
         		//*/
@@ -73,7 +75,7 @@ public class VideoListBehavior extends IListBehavior implements Database.Defs {
 	public boolean onContextItemSelected(MenuItem item) {
 		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		mSelectedId = activity.getVideoAdp().getItem(mSelectedPosition).getVideoId();
-		long[] list = new long[] { mSelectedId };		
+		MediaInfo[] list = new MediaInfo[] { new MediaInfo( mSelectedId, MediaInfo.MEDIA_TYPE_VIDEO ) };		
 		switch (item.getItemId()) {
 		case PLAY_SELECTION: {
 			// play the track
@@ -124,8 +126,8 @@ public class VideoListBehavior extends IListBehavior implements Database.Defs {
 	}
 
 	@Override
-	public long[] getCurrentSongList() {
-        long [] list = new long[] { mSelectedId };
+	public MediaInfo[] getCurrentMediaList() {
+		MediaInfo[] list = new MediaInfo[] { new MediaInfo( mSelectedId, MediaInfo.MEDIA_TYPE_VIDEO ) };		
         return list;
 	}
 

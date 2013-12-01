@@ -21,6 +21,7 @@ import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
+import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.ArtistChildData;
 import okosama.app.storage.ArtistGroupData;
@@ -170,7 +171,7 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
         switch (item.getItemId()) {
 	        case PLAY_SELECTION: {
 	            // play everything by the selected artist
-	            long [] list =
+	        	MediaInfo [] list =
 	                mCurrentArtistId != null ?
 	                Database.getSongListForArtist(activity, Long.parseLong(mCurrentArtistId))
 	                : Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
@@ -180,7 +181,7 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	        }
 	
 	        case QUEUE: {
-	            long [] list =
+	        	MediaInfo [] list =
 	                mCurrentArtistId != null ?
 	                Database.getSongListForArtist(activity, Long.parseLong(mCurrentArtistId))
 	                : Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
@@ -198,7 +199,7 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	        }
 	
 	        case PLAYLIST_SELECTED: {
-	            long [] list =
+	        	MediaInfo [] list =
 	                mCurrentArtistId != null ?
 	                Database.getSongListForArtist(activity, Long.parseLong(mCurrentArtistId))
 	                : Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
@@ -208,7 +209,7 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	        }
 	        
 	        case DELETE_ITEM: {
-	            long [] list;
+	        	MediaInfo [] list;
 	            String desc;
 	            if (mCurrentArtistId != null) {
 	                list = Database.getSongListForArtist(activity, Long.parseLong(mCurrentArtistId));
@@ -243,9 +244,9 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 
 	}
 	@Override
-	public long[] getCurrentSongList() {
+	public MediaInfo[] getCurrentMediaList() {
 		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-        long [] list = null;
+		MediaInfo [] list = null;
         if (mCurrentArtistId != null) {
             list = Database.getSongListForArtist(activity, Long.parseLong(mCurrentArtistId));
         } else if (mCurrentAlbumId != null) {

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.service.IMediaPlaybackService;
+import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.TabPage;
 
@@ -946,14 +947,14 @@ public class Database {
             }
         }
     }
-    private final static long [] sEmptyList = new long[0];
+    private final static MediaInfo [] sEmptyList = new MediaInfo[0];
     
-    public static long [] getSongListForCursor(Cursor cursor) {
+    public static MediaInfo [] getSongListForCursor(Cursor cursor) {
         if (cursor == null) {
             return sEmptyList;
         }
         int len = cursor.getCount();
-        long [] list = new long[len];
+        MediaInfo [] list = new MediaInfo[len];
         cursor.moveToFirst();
         int colidx = -1;
         try {
@@ -962,13 +963,14 @@ public class Database {
             colidx = cursor.getColumnIndexOrThrow(BaseColumns._ID);
         }
         for (int i = 0; i < len; i++) {
-            list[i] = cursor.getLong(colidx);
+            list[i].setId( cursor.getLong(colidx) );
+            list[i].setMediaType( MediaInfo.MEDIA_TYPE_AUDIO );
             cursor.moveToNext();
         }
         return list;
     }
 
-    public static long [] getSongListForArtist(Context context, long id) {
+    public static MediaInfo [] getSongListForArtist(Context context, long id) {
         final String[] ccols = new String[] { BaseColumns._ID };
         String where = AudioColumns.ARTIST_ID + "=" + id + " AND " + 
         AudioColumns.IS_MUSIC + "=1";
@@ -977,13 +979,13 @@ public class Database {
                 AudioColumns.ALBUM_KEY + ","  + AudioColumns.TRACK);
         
         if (cursor != null) {
-            long [] list = getSongListForCursor(cursor);
+            MediaInfo [] list = getSongListForCursor(cursor);
             cursor.close();
             return list;
         }
         return sEmptyList;
     }    
-    public static long [] getSongListForAlbum(Context context, long id) {
+    public static MediaInfo [] getSongListForAlbum(Context context, long id) {
         final String[] ccols = new String[] { BaseColumns._ID };
         String where = AudioColumns.ALBUM_ID + "=" + id + " AND " + 
                 AudioColumns.IS_MUSIC + "=1";
@@ -991,7 +993,7 @@ public class Database {
                 ccols, where, null, AudioColumns.TRACK);
 
         if (cursor != null) {
-            long [] list = getSongListForCursor(cursor);
+            MediaInfo [] list = getSongListForCursor(cursor);
             cursor.close();
             return list;
         }
@@ -1006,10 +1008,10 @@ public class Database {
      * @param len How many items to copy during this pass
      * @param base The play order offset to use for this pass
      */
-    private static void makeInsertItems(long[] ids, int offset, int len, int base) {
+    private static void makeInsertItems(MediaInfo[] list, int offset, int len, int base) {
         // adjust 'len' if would extend beyond the end of the source array
-        if (offset + len > ids.length) {
-            len = ids.length - offset;
+        if (offset + len > list.length) {
+            len = list.length - offset;
         }
         // allocate the ContentValues array, or reallocate if it is the wrong size
         if (sContentValuesCache == null || sContentValuesCache.length != len) {
@@ -1022,16 +1024,16 @@ public class Database {
             }
 
             sContentValuesCache[i].put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, base + offset + i);
-            sContentValuesCache[i].put(MediaStore.Audio.Playlists.Members.AUDIO_ID, ids[offset + i]);
+            sContentValuesCache[i].put(MediaStore.Audio.Playlists.Members.AUDIO_ID, list[offset + i].getId());
         }
     }    
-    public static void addToPlaylist(Context context, long [] ids, long playlistid) {
-        if (ids == null) {
+    public static void addToPlaylist(Context context, MediaInfo [] list, long playlistid) {
+        if (list == null) {
             // this shouldn't happen (the menuitems shouldn't be visible
             // unless the selected item represents something playable
             Log.e("MusicBase", "ListSelection null");
         } else {
-            int size = ids.length;
+            int size = list.length;
             ContentResolver resolver = context.getContentResolver();
             // need to determine the number of items currently in the playlist,
             // so the play_order field can be maintained.
@@ -1045,7 +1047,7 @@ public class Database {
             cur.close();
             int numinserted = 0;
             for (int i = 0; i < size; i += 1000) {
-                makeInsertItems(ids, i, 1000, base);
+                makeInsertItems(list, i, 1000, base);
                 numinserted += resolver.bulkInsert(uri, sContentValuesCache);
             }
             String message = context.getResources().getQuantityString(
@@ -1126,13 +1128,13 @@ public class Database {
         // in the media content domain, so update everything.
         context.getContentResolver().notifyChange(Uri.parse("content://media"), null);
     }
-    public static long [] getSongListForPlaylist(Context context, long plid) {
+    public static MediaInfo [] getSongListForPlaylist(Context context, long plid) {
         final String[] ccols = new String[] { MediaStore.Audio.Playlists.Members.AUDIO_ID };
         Cursor cursor = query(context, MediaStore.Audio.Playlists.Members.getContentUri("external", plid),
                 ccols, null, null, MediaStore.Audio.Playlists.Members.DEFAULT_SORT_ORDER);
         
         if (cursor != null) {
-            long [] list = getSongListForCursor(cursor);
+        	MediaInfo [] list = getSongListForCursor(cursor);
             cursor.close();
             return list;
         }

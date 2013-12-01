@@ -25,6 +25,7 @@ import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.behavior.IBehavior;
+import okosama.app.service.MediaInfo;
 import okosama.app.storage.Database;
 import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
@@ -198,7 +199,7 @@ public class CreatePlaylist extends Activity
                 		IBehavior behavior = lst.getBehavior();
                 		if( behavior != null )
                 		{
-	                		long [] list = behavior.getCurrentSongList(); //Database.getSongListForAlbum(this, Long.parseLong(mCurrentAlbumId));
+	                		MediaInfo [] list = behavior.getCurrentMediaList(); //Database.getSongListForAlbum(this, Long.parseLong(mCurrentAlbumId));
 	                		Database.addToPlaylist(act, list, Long.parseLong(uri.getLastPathSegment()));
                 		}
                     	else

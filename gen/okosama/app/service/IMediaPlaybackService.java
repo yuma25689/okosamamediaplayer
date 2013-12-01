@@ -67,9 +67,11 @@ case TRANSACTION_open:
 data.enforceInterface(DESCRIPTOR);
 long[] _arg0;
 _arg0 = data.createLongArray();
-int _arg1;
-_arg1 = data.readInt();
-this.open(_arg0, _arg1);
+int[] _arg1;
+_arg1 = data.createIntArray();
+int _arg2;
+_arg2 = data.readInt();
+this.open(_arg0, _arg1, _arg2);
 reply.writeNoException();
 return true;
 }
@@ -195,9 +197,11 @@ case TRANSACTION_enqueue:
 data.enforceInterface(DESCRIPTOR);
 long[] _arg0;
 _arg0 = data.createLongArray();
-int _arg1;
-_arg1 = data.readInt();
-this.enqueue(_arg0, _arg1);
+int[] _arg1;
+_arg1 = data.createIntArray();
+int _arg2;
+_arg2 = data.readInt();
+this.enqueue(_arg0, _arg1, _arg2);
 reply.writeNoException();
 return true;
 }
@@ -207,6 +211,14 @@ data.enforceInterface(DESCRIPTOR);
 long[] _result = this.getQueue();
 reply.writeNoException();
 reply.writeLongArray(_result);
+return true;
+}
+case TRANSACTION_getMediaType:
+{
+data.enforceInterface(DESCRIPTOR);
+int[] _result = this.getMediaType();
+reply.writeNoException();
+reply.writeIntArray(_result);
 return true;
 }
 case TRANSACTION_moveQueueItem:
@@ -375,13 +387,14 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override public void open(long[] list, int position) throws android.os.RemoteException
+@Override public void open(long[] list, int[] type, int position) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
 try {
 _data.writeInterfaceToken(DESCRIPTOR);
 _data.writeLongArray(list);
+_data.writeIntArray(type);
 _data.writeInt(position);
 mRemote.transact(Stub.TRANSACTION_open, _data, _reply, 0);
 _reply.readException();
@@ -632,13 +645,14 @@ _data.recycle();
 }
 return _result;
 }
-@Override public void enqueue(long[] list, int action) throws android.os.RemoteException
+@Override public void enqueue(long[] list, int[] type, int action) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
 try {
 _data.writeInterfaceToken(DESCRIPTOR);
 _data.writeLongArray(list);
+_data.writeIntArray(type);
 _data.writeInt(action);
 mRemote.transact(Stub.TRANSACTION_enqueue, _data, _reply, 0);
 _reply.readException();
@@ -658,6 +672,23 @@ _data.writeInterfaceToken(DESCRIPTOR);
 mRemote.transact(Stub.TRANSACTION_getQueue, _data, _reply, 0);
 _reply.readException();
 _result = _reply.createLongArray();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
+}
+@Override public int[] getMediaType() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+int[] _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_getMediaType, _data, _reply, 0);
+_reply.readException();
+_result = _reply.createIntArray();
 }
 finally {
 _reply.recycle();
@@ -901,23 +932,24 @@ static final int TRANSACTION_getArtistName = (android.os.IBinder.FIRST_CALL_TRAN
 static final int TRANSACTION_getArtistId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
 static final int TRANSACTION_enqueue = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
 static final int TRANSACTION_getQueue = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
-static final int TRANSACTION_moveQueueItem = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
-static final int TRANSACTION_setQueuePosition = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
-static final int TRANSACTION_getPath = (android.os.IBinder.FIRST_CALL_TRANSACTION + 22);
-static final int TRANSACTION_getAudioId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 23);
-static final int TRANSACTION_setShuffleMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 24);
-static final int TRANSACTION_getShuffleMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 25);
-static final int TRANSACTION_removeTracks = (android.os.IBinder.FIRST_CALL_TRANSACTION + 26);
-static final int TRANSACTION_removeTrack = (android.os.IBinder.FIRST_CALL_TRANSACTION + 27);
-static final int TRANSACTION_setRepeatMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 28);
-static final int TRANSACTION_getRepeatMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 29);
-static final int TRANSACTION_getMediaMountedCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 30);
-static final int TRANSACTION_setAudioSessionId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 31);
-static final int TRANSACTION_getAudioSessionId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 32);
+static final int TRANSACTION_getMediaType = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
+static final int TRANSACTION_moveQueueItem = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
+static final int TRANSACTION_setQueuePosition = (android.os.IBinder.FIRST_CALL_TRANSACTION + 22);
+static final int TRANSACTION_getPath = (android.os.IBinder.FIRST_CALL_TRANSACTION + 23);
+static final int TRANSACTION_getAudioId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 24);
+static final int TRANSACTION_setShuffleMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 25);
+static final int TRANSACTION_getShuffleMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 26);
+static final int TRANSACTION_removeTracks = (android.os.IBinder.FIRST_CALL_TRANSACTION + 27);
+static final int TRANSACTION_removeTrack = (android.os.IBinder.FIRST_CALL_TRANSACTION + 28);
+static final int TRANSACTION_setRepeatMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 29);
+static final int TRANSACTION_getRepeatMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 30);
+static final int TRANSACTION_getMediaMountedCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 31);
+static final int TRANSACTION_setAudioSessionId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 32);
+static final int TRANSACTION_getAudioSessionId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 33);
 }
 public void openFile(java.lang.String path, boolean oneShot) throws android.os.RemoteException;
 public void openFileAsync(java.lang.String path) throws android.os.RemoteException;
-public void open(long[] list, int position) throws android.os.RemoteException;
+public void open(long[] list, int[] type, int position) throws android.os.RemoteException;
 public int getQueuePosition() throws android.os.RemoteException;
 public boolean isPlaying() throws android.os.RemoteException;
 public void stop() throws android.os.RemoteException;
@@ -933,8 +965,9 @@ public java.lang.String getAlbumName() throws android.os.RemoteException;
 public long getAlbumId() throws android.os.RemoteException;
 public java.lang.String getArtistName() throws android.os.RemoteException;
 public long getArtistId() throws android.os.RemoteException;
-public void enqueue(long[] list, int action) throws android.os.RemoteException;
+public void enqueue(long[] list, int[] type, int action) throws android.os.RemoteException;
 public long[] getQueue() throws android.os.RemoteException;
+public int[] getMediaType() throws android.os.RemoteException;
 public void moveQueueItem(int from, int to) throws android.os.RemoteException;
 public void setQueuePosition(int index) throws android.os.RemoteException;
 public java.lang.String getPath() throws android.os.RemoteException;

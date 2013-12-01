@@ -44,13 +44,10 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AudioColumns;
 import android.provider.MediaStore.MediaColumns;
-//import android.telephony.PhoneStateListener;
-//import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -121,7 +118,8 @@ public class MediaPlaybackService extends Service {
     private int mMediaMountedCount = 0;
     private long [] mAutoShuffleList = null;
     private boolean mOneShot;
-    private long [] mPlayList = null;
+    //private long [] mPlayList = null;
+    private MediaInfo [] mPlayList = null;
     private int mPlayListLen = 0;
     private Vector<Integer> mHistory = new Vector<Integer>(MAX_HISTORY_SIZE);
     private Cursor mCursor;
@@ -165,7 +163,7 @@ public class MediaPlaybackService extends Service {
     private static final int IDLE_DELAY = 60000;
     
     /**
-     * フェードインしながら表示する
+     * フェードインしながら再生する
      */
     private void startAndFadeIn() {
     	// 処理は、ハンドラに任せる
@@ -506,7 +504,7 @@ public class MediaPlaybackService extends Service {
             int len = mPlayListLen;
             for (int i = 0; i < len; i++) {
             	// プレイリストのid取得
-                long n = mPlayList[i];
+                long n = mPlayList[i].getId();
                 if (n == 0) {
                     q.append("0;");
                 } else {
@@ -596,7 +594,7 @@ public class MediaPlaybackService extends Service {
                 	// プレイリストの領域確保
                     ensurePlayListCapacity(plen + 1);
                     // プレイリストを１個格納
-                    mPlayList[plen] = n;
+                    mPlayList[plen].setId( n );
                     // 次からのループに備えて初期化
                     plen++;
                     n = 0;
@@ -1013,11 +1011,12 @@ public class MediaPlaybackService extends Service {
             // need to grow and copy the array for every
             // insert
         	// 追加ごとに配列の拡大とコピーを防ぐために、サイズの2倍の領域を確保
-            long [] newlist = new long[size * 2];
+            MediaInfo [] newlist = new MediaInfo[size * 2];
             int len = mPlayList != null ? mPlayList.length : mPlayListLen;
             for (int i = 0; i < len; i++) {
             	// 現在のプレイリストの設定値を新しいリストにコピー
-                newlist[i] = mPlayList[i];
+                newlist[i].setId( mPlayList[i].getId() );
+                newlist[i].setMediaType( mPlayList[i].getMediaType() );
             }
             mPlayList = newlist;
         }
@@ -1031,7 +1030,7 @@ public class MediaPlaybackService extends Service {
      * @param position プレイリストの挿入位置
      */
     // insert the list of songs at the specified position in the playlist
-    private void addToPlayList(long [] list, int position) {
+    private void addToPlayList(long [] list, int[] type, int position) {
         int addlen = list.length;
         if (position < 0) { // overwrite
             mPlayListLen = 0;
@@ -1050,7 +1049,8 @@ public class MediaPlaybackService extends Service {
         
         // copy list into playlist
         for (int i = 0; i < addlen; i++) {
-            mPlayList[position + i] = list[i];
+            mPlayList[position + i].setId( list[i] );
+            mPlayList[position + i].setMediaType( type[i] );
         }
         mPlayListLen += addlen;
     }
@@ -1067,19 +1067,19 @@ public class MediaPlaybackService extends Service {
      * @param list The list of tracks to append.
      * @param action NOW, NEXT or LAST
      */
-    public void enqueue(long [] list, int action) {
+    public void enqueue(long [] list, int[] type, int action) {
         synchronized(this) {
             if (action == NEXT && mPlayPos + 1 < mPlayListLen) {
             	// ネクスト指定で、次の位置に挿入可能な場合
             	// 現在位置+1に挿入
-                addToPlayList(list, mPlayPos + 1);
+                addToPlayList(list, type, mPlayPos + 1);
                 // QUEUE_CHANGED通知
                 // ->キューの保存と思われる
                 notifyChange(QUEUE_CHANGED);
             } else {
                 // action == LAST || action == NOW || mPlayPos + 1 == mPlayListLen
             	// ネクストでない場合、最後尾に追加する
-                addToPlayList(list, Integer.MAX_VALUE);
+                addToPlayList(list, type, Integer.MAX_VALUE);
                 notifyChange(QUEUE_CHANGED);
                 if (action == NOW) {
                 	// NOWの場合
@@ -1113,7 +1113,7 @@ public class MediaPlaybackService extends Service {
      * 位置0が指定されたらランダム位置から、それ以外が指定されていたらその位置から再生する
      * @param list The new list of tracks.
      */
-    public void open(long [] list, int position) {
+    public void open(long [] list, int [] type, int position) {
         synchronized (this) {
         	// このクラスをロック
             if (mShuffleMode == SHUFFLE_AUTO) {
@@ -1129,7 +1129,7 @@ public class MediaPlaybackService extends Service {
                 // possible fast path: list might be the same
                 newlist = false;
                 for (int i = 0; i < listlength; i++) {
-                    if (list[i] != mPlayList[i]) {
+                    if (list[i] != mPlayList[i].getId()) {
                     	// 単純に、全ての項目の値を入れ替える
                         newlist = true;
                         break;
@@ -1139,7 +1139,7 @@ public class MediaPlaybackService extends Service {
             if (newlist) {
             	// リストを上書きする(-1指定で頭から上書き)
             	// そんなにすばらしいやり方ではないのかもしれないが、多分サイズも確保される
-                addToPlayList(list, -1);
+                addToPlayList(list, type, -1);
                 // リストが変更されたので、保存させる
                 notifyChange(QUEUE_CHANGED);
             }
@@ -1186,22 +1186,22 @@ public class MediaPlaybackService extends Service {
                 index2 = mPlayListLen - 1;
             }
             if (index1 < index2) {
-                long tmp = mPlayList[index1];
+                MediaInfo tmp = mPlayList[index1];
                 for (int i = index1; i < index2; i++) {
-                    mPlayList[i] = mPlayList[i+1];
+                    mPlayList[i].copy( mPlayList[i+1] );
                 }
-                mPlayList[index2] = tmp;
+                mPlayList[index2].copy( tmp );
                 if (mPlayPos == index1) {
                     mPlayPos = index2;
                 } else if (mPlayPos >= index1 && mPlayPos <= index2) {
                         mPlayPos--;
                 }
             } else if (index2 < index1) {
-                long tmp = mPlayList[index1];
+            	MediaInfo tmp = mPlayList[index1];
                 for (int i = index1; i > index2; i--) {
-                    mPlayList[i] = mPlayList[i-1];
+                    mPlayList[i].copy( mPlayList[i-1] );
                 }
-                mPlayList[index2] = tmp;
+                mPlayList[index2].copy( tmp );
                 if (mPlayPos == index1) {
                     mPlayPos = index2;
                 } else if (mPlayPos >= index2 && mPlayPos <= index1) {
@@ -1225,9 +1225,27 @@ public class MediaPlaybackService extends Service {
             int len = mPlayListLen;
             long [] list = new long[len];
             for (int i = 0; i < len; i++) {
-                list[i] = mPlayList[i];
+                list[i] = mPlayList[i].getId();
             }
             return list;
+        }
+    }
+    /**
+     * Returns the current play list
+     * 現在のプレイリストを返却？
+     * @return An array of integers containing the IDs of the tracks in the play list
+     * プレイリストの配列(=AudioIDの配列)
+     */
+    public int [] getMediaType() {
+        synchronized (this) {
+        	// クラスのロック
+        	// 単純に、現在のプレイリストをコピーした配列をreturn
+            int len = mPlayListLen;
+            int [] listType = new int[len];
+            for (int i = 0; i < len; i++) {
+                listType[i] = mPlayList[i].getMediaType();
+            }
+            return listType;
         }
     }
     
@@ -1368,7 +1386,8 @@ public class MediaPlaybackService extends Service {
                             mCursor.moveToNext();
                             ensurePlayListCapacity(1);
                             mPlayListLen = 1;
-                            mPlayList[0] = mCursor.getLong(IDCOLIDX);
+                            mPlayList[0].setId( mCursor.getLong(IDCOLIDX) );
+                            mPlayList[0].setMediaType(MediaInfo.MEDIA_TYPE_AUDIO);
                             mPlayPos = 0;
                         }
                     }
@@ -1870,7 +1889,8 @@ public class MediaPlaybackService extends Service {
             int idx = mRand.nextInt(mAutoShuffleList.length);
             long which = mAutoShuffleList[idx];
             ensurePlayListCapacity(mPlayListLen + 1);
-            mPlayList[mPlayListLen++] = which;
+            mPlayList[mPlayListLen++].setId( which );
+            mPlayList[mPlayListLen++].setMediaType( MediaInfo.MEDIA_TYPE_AUDIO );
             notify = true;
         }
         if (notify) {
@@ -2007,7 +2027,7 @@ public class MediaPlaybackService extends Service {
         synchronized (this) {
             for (int i = 0; i < mPlayListLen; i++) {
             	// 該当idの全てのトラックを削除
-                if (mPlayList[i] == id) {
+                if (mPlayList[i].getId() == id) {
                     numremoved += removeTracksInternal(i, i);
                     i--;
                 }
@@ -2099,9 +2119,11 @@ public class MediaPlaybackService extends Service {
      */
     public long getAudioId() {
         synchronized (this) {
-            if (mPlayPos >= 0 && mPlayer.isInitialized()) {
+            if (mPlayPos >= 0 && mPlayer.isInitialized()
+            	&& mPlayList[mPlayPos].getMediaType() == MediaInfo.MEDIA_TYPE_AUDIO ) 
+            {
             	// 再生位置が有効で、再生中であれば、再生されている曲のIDを返却
-                return mPlayList[mPlayPos];
+                return mPlayList[mPlayPos].getId();
             }
         }
         return -1;
@@ -2462,8 +2484,8 @@ public class MediaPlaybackService extends Service {
             mService.get().open(path, oneShot);
         }
         @Override
-		public void open(long [] list, int position) {
-            mService.get().open(list, position);
+		public void open(long [] list, int [] type, int position) {
+            mService.get().open(list, type, position);
         }
         @Override
 		public int getQueuePosition() {
@@ -2518,12 +2540,16 @@ public class MediaPlaybackService extends Service {
             return mService.get().getArtistId();
         }
         @Override
-		public void enqueue(long [] list , int action) {
-            mService.get().enqueue(list, action);
+		public void enqueue(long [] list , int [] type, int action) {
+            mService.get().enqueue(list, type, action);
         }
         @Override
 		public long [] getQueue() {
             return mService.get().getQueue();
+        }
+        @Override
+		public int [] getMediaType() {
+            return mService.get().getMediaType();
         }
         @Override
 		public void moveQueueItem(int from, int to) {
