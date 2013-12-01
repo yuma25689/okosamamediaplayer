@@ -475,6 +475,7 @@ public class MediaPlayerUtil {
     
     public static void playAll(Context context, MediaInfo [] list, int position, boolean force_shuffle) {
         if (list.length == 0 || sService == null) {
+        	// プレイリストが空ならば、ログを出力、トーストを表示して終了
             Log.d("MusicUtils", "attempt to play empty song list");
             // Don't try to play empty playlists. Nothing good will come of it.
             String message = context.getString(R.string.emptyplaylist, list.length);
@@ -483,9 +484,12 @@ public class MediaPlayerUtil {
         }
         try {
             if (force_shuffle) {
+            	// 強制シャッフルモードの場合
                 sService.setShuffleMode(MediaPlaybackService.SHUFFLE_NORMAL);
             }
+            // 現在のオーディオのidを取得
             long curid = sService.getAudioId();
+            // 現在のキュー位置を取得
             int curpos = sService.getQueuePosition();
             if (position != -1 && curpos == position && curid == list[position].getId()) {
                 // The selected file is the file that's currently playing;
@@ -497,8 +501,7 @@ public class MediaPlayerUtil {
                 MediaInfo [] listMedia = new MediaInfo[listId.length];
                 for( int i=0; i < listId.length; i++ )
                 {
-                	listMedia[i].setId( listId[i] );
-                	listMedia[i].setMediaType( listType[i] );
+                	listMedia[i] = new MediaInfo( listId[i], listType[i] );
                 }
                 
                 if (Arrays.equals(list, listMedia)) {

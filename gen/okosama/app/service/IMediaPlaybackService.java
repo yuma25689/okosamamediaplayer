@@ -49,7 +49,9 @@ java.lang.String _arg0;
 _arg0 = data.readString();
 boolean _arg1;
 _arg1 = (0!=data.readInt());
-this.openFile(_arg0, _arg1);
+int _arg2;
+_arg2 = data.readInt();
+this.openFile(_arg0, _arg1, _arg2);
 reply.writeNoException();
 return true;
 }
@@ -356,7 +358,9 @@ public java.lang.String getInterfaceDescriptor()
 {
 return DESCRIPTOR;
 }
-@Override public void openFile(java.lang.String path, boolean oneShot) throws android.os.RemoteException
+//void openFile(String path, boolean oneShot);
+
+@Override public void openFile(java.lang.String path, boolean oneShot, int mediaType) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -364,6 +368,7 @@ try {
 _data.writeInterfaceToken(DESCRIPTOR);
 _data.writeString(path);
 _data.writeInt(((oneShot)?(1):(0)));
+_data.writeInt(mediaType);
 mRemote.transact(Stub.TRANSACTION_openFile, _data, _reply, 0);
 _reply.readException();
 }
@@ -947,7 +952,9 @@ static final int TRANSACTION_getMediaMountedCount = (android.os.IBinder.FIRST_CA
 static final int TRANSACTION_setAudioSessionId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 32);
 static final int TRANSACTION_getAudioSessionId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 33);
 }
-public void openFile(java.lang.String path, boolean oneShot) throws android.os.RemoteException;
+//void openFile(String path, boolean oneShot);
+
+public void openFile(java.lang.String path, boolean oneShot, int mediaType) throws android.os.RemoteException;
 public void openFileAsync(java.lang.String path) throws android.os.RemoteException;
 public void open(long[] list, int[] type, int position) throws android.os.RemoteException;
 public int getQueuePosition() throws android.os.RemoteException;

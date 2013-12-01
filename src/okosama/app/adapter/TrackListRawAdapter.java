@@ -71,8 +71,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     	int i = 0;
     	for( Long lng : currentAllAudioIds )
     	{
-    		ret[i].setId( lng );
-    		ret[i].setMediaType( MediaInfo.MEDIA_TYPE_AUDIO );
+    		ret[i] = new MediaInfo( lng, MediaInfo.MEDIA_TYPE_AUDIO );
     		i++;
     	}
     	return ret;
@@ -569,10 +568,10 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	       	try {
 	       		long [] listId = MediaPlayerUtil.sService.getQueue();
 	       		int [] listType = MediaPlayerUtil.sService.getMediaType();
+	       		playlist = new MediaInfo[listId.length];
 		       	for( int i=0; i<listId.length; i++ )
 		       	{
-			       	playlist[i].setId( listId[i] );	       		
-			       	playlist[i].setMediaType( listType[i] );	       		
+		       		playlist[i] = new MediaInfo( listId[i], listType[i] );
 		       	}
 	    	} catch( RemoteException ex ) {
 	    		Log.e("Error", "sService getQueue RemoteException occured!");

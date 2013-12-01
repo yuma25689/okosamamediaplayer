@@ -123,11 +123,12 @@ public class MediaPlaybackService extends Service {
     private int mPlayListLen = 0;
     private Vector<Integer> mHistory = new Vector<Integer>(MAX_HISTORY_SIZE);
     private Cursor mCursor;
+    private int mCurrentType = MediaInfo.MEDIA_TYPE_AUDIO; 
     private int mPlayPos = -1;
     private static final String LOGTAG = "MediaPlaybackService";
     private final Shuffler mRand = new Shuffler();
     private int mOpenFailedCounter = 0;
-    String[] mCursorCols = new String[] {
+    String[] mCursorAudioCols = new String[] {
             "audio._id AS _id",             // index must match IDCOLIDX below
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.ALBUM,
@@ -138,6 +139,18 @@ public class MediaPlaybackService extends Service {
             MediaStore.Audio.Media.ARTIST_ID,
             MediaStore.Audio.Media.IS_PODCAST, // index must match PODCASTCOLIDX below
             MediaStore.Audio.Media.BOOKMARK    // index must match BOOKMARKCOLIDX below
+    };
+    String[] mCursorVideoCols = new String[] {
+    		MediaStore.Video.Media._ID, //"audio._id AS _id",             // index must match IDCOLIDX below
+            MediaStore.Video.Media.ARTIST,
+            MediaStore.Video.Media.ALBUM,
+            MediaStore.Video.Media.TITLE,
+            MediaStore.Video.Media.DATA,
+            MediaStore.Video.Media.MIME_TYPE,
+            MediaStore.Video.Media.BUCKET_ID,
+            MediaStore.Video.Media.CATEGORY,
+            MediaStore.Video.Media.DURATION, 
+            MediaStore.Video.Media.BOOKMARK    // index must match BOOKMARKCOLIDX below
     };
     private final static int IDCOLIDX = 0;
     private final static int PODCASTCOLIDX = 8;
@@ -594,7 +607,7 @@ public class MediaPlaybackService extends Service {
                 	// プレイリストの領域確保
                     ensurePlayListCapacity(plen + 1);
                     // プレイリストを１個格納
-                    mPlayList[plen].setId( n );
+                    mPlayList[plen] = new MediaInfo( n, MediaInfo.MEDIA_TYPE_AUDIO );
                     // 次からのループに備えて初期化
                     plen++;
                     n = 0;
@@ -637,16 +650,29 @@ public class MediaPlaybackService extends Service {
             // それもまた失敗したら、問題があるのを事実だとし、状態をリストアしない
             // MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
             // 現在のプレイリストのidで検索。おそらく存在確認
+            Uri uri = null;
+            String [] cursorCols = null;
+        	mCurrentType = mPlayList[mPlayPos].getMediaType();
+            if( mCurrentType == MediaInfo.MEDIA_TYPE_AUDIO)
+            {
+            	uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            	cursorCols = mCursorAudioCols;
+            }
+            else if( mCurrentType == MediaInfo.MEDIA_TYPE_VIDEO)
+            {
+            	uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            	cursorCols = mCursorVideoCols;
+            }
             Cursor crsr = StorageInfo.query(this,
-                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        new String [] {"_id"}, "_id=" + mPlayList[mPlayPos] , null, null);
+                        uri,
+                        new String [] {"_id"}, "_id=" + mPlayList[mPlayPos].getId() , null, null);
             if (crsr == null || crsr.getCount() == 0) {
                 // wait a bit and try again
             	// 失敗したら、3秒待ってリトライ？
                 SystemClock.sleep(3000);
                 crsr = getContentResolver().query(
                         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        mCursorCols, "_id=" + mPlayList[mPlayPos] , null, null);
+                        cursorCols, "_id=" + mPlayList[mPlayPos].getId() , null, null);
             }
             if (crsr != null) {
                 crsr.close();
@@ -1014,9 +1040,12 @@ public class MediaPlaybackService extends Service {
             MediaInfo [] newlist = new MediaInfo[size * 2];
             int len = mPlayList != null ? mPlayList.length : mPlayListLen;
             for (int i = 0; i < len; i++) {
+            	if( mPlayList[i] == null )
+            	{
+            		continue;
+            	}
             	// 現在のプレイリストの設定値を新しいリストにコピー
-                newlist[i].setId( mPlayList[i].getId() );
-                newlist[i].setMediaType( mPlayList[i].getMediaType() );
+            	newlist[i] = new MediaInfo( mPlayList[i].getId(), mPlayList[i].getMediaType() );
             }
             mPlayList = newlist;
         }
@@ -1049,8 +1078,7 @@ public class MediaPlaybackService extends Service {
         
         // copy list into playlist
         for (int i = 0; i < addlen; i++) {
-            mPlayList[position + i].setId( list[i] );
-            mPlayList[position + i].setMediaType( type[i] );
+        	mPlayList[position + i] = new MediaInfo( list[i], type[i] );
         }
         mPlayListLen += addlen;
     }
@@ -1269,18 +1297,33 @@ public class MediaPlaybackService extends Service {
             stop(false);
 
             // 現在の曲のidを取得
-            String id = String.valueOf(mPlayList[mPlayPos]);
+            String id = String.valueOf(mPlayList[mPlayPos].getId());
+            
+            Uri uri = null;
+            String [] cursorCols = null;
+        	mCurrentType = mPlayList[mPlayPos].getMediaType();
+            if( mCurrentType == MediaInfo.MEDIA_TYPE_AUDIO )
+            {
+            	 uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            	 cursorCols = mCursorAudioCols;
+            }
+            else if ( mCurrentType == MediaInfo.MEDIA_TYPE_VIDEO )
+            {
+            	uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+           	 	cursorCols = mCursorVideoCols;
+            }
+            
             
             // 現在の曲の情報を取得
             mCursor = getContentResolver().query(
-                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    mCursorCols, "_id=" + id , null, null);
+            		uri,
+            		cursorCols, "_id=" + id , null, null);
             if (mCursor != null) {
             	// 取得できたら
             	// カーソルの最初の項目を、オープンする
                 mCursor.moveToFirst();
                 // オープン（MultiPlayer.setDataSourceで再生準備される)
-                open(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/" + id, false);
+                open(uri + "/" + id, false, mPlayList[mPlayPos].getMediaType());
                 // go to bookmark if needed
                 if (isPodcast()) {
                 	// Podcastであれば
@@ -1331,7 +1374,7 @@ public class MediaPlaybackService extends Service {
      * @param oneshot when set to true, playback will stop after this file completes, instead
      * of moving on to the next track in the list 
      */
-    public void open(String path, boolean oneshot) {
+    public void open(String path, boolean oneshot, int mediaType) {
         synchronized (this) {
         	// おそらくこのサービスをロックする
             if (path == null) {
@@ -1351,9 +1394,13 @@ public class MediaPlaybackService extends Service {
             if (mCursor == null) {
             	// カーソルがnullならば
                 ContentResolver resolver = getContentResolver();
-                Uri uri;
+                Uri uri = null;
+                String [] cursorCols = null;
+                
                 String where;
                 String selectionArgs[];
+                mCurrentType = mPlayList[mPlayPos].getMediaType();
+                
                 if (path.startsWith("content://media/")) {
                 	// パスがcontent://mediaで始まっていたら
                 	// パスをuriに変換
@@ -1364,15 +1411,32 @@ public class MediaPlaybackService extends Service {
                 } else {
                    // そうでない場合も、パスをuriに変換する？
                    // TODO:getContentUriForPathを調査
-                   uri = MediaStore.Audio.Media.getContentUriForPath(path);
+                   // uri = MediaStore.Audio.Media.getContentUriForPath(path);
                    // この場合、条件を設定
                    where = MediaColumns.DATA + "=?";
                    selectionArgs = new String[] { path };
+
+                   if( mCurrentType == MediaInfo.MEDIA_TYPE_AUDIO)
+                   {
+	                   	uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                   }
+                   else if( mCurrentType == MediaInfo.MEDIA_TYPE_VIDEO)
+                   {
+	                   	uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                   }
+                }
+                if( mCurrentType == MediaInfo.MEDIA_TYPE_AUDIO)
+                {
+	                   	cursorCols = mCursorAudioCols;
+                }
+                else if( mCurrentType == MediaInfo.MEDIA_TYPE_VIDEO)
+                {
+	                   	cursorCols = mCursorVideoCols;
                 }
                 
                 try {
                 	// クエリの発行
-                    mCursor = resolver.query(uri, mCursorCols, where, selectionArgs, null);
+                    mCursor = resolver.query(uri, cursorCols, where, selectionArgs, null);
                     if  (mCursor != null) {
                     	// 結果が取得できた
                         if (mCursor.getCount() == 0) {
@@ -1386,8 +1450,8 @@ public class MediaPlaybackService extends Service {
                             mCursor.moveToNext();
                             ensurePlayListCapacity(1);
                             mPlayListLen = 1;
-                            mPlayList[0].setId( mCursor.getLong(IDCOLIDX) );
-                            mPlayList[0].setMediaType(MediaInfo.MEDIA_TYPE_AUDIO);
+                            mPlayList[0] = new MediaInfo( mCursor.getLong(IDCOLIDX),
+                            		MediaInfo.MEDIA_TYPE_AUDIO);
                             mPlayPos = 0;
                         }
                     }
@@ -1889,8 +1953,8 @@ public class MediaPlaybackService extends Service {
             int idx = mRand.nextInt(mAutoShuffleList.length);
             long which = mAutoShuffleList[idx];
             ensurePlayListCapacity(mPlayListLen + 1);
-            mPlayList[mPlayListLen++].setId( which );
-            mPlayList[mPlayListLen++].setMediaType( MediaInfo.MEDIA_TYPE_AUDIO );
+            mPlayList[mPlayListLen++] = new MediaInfo( which, 
+            		MediaInfo.MEDIA_TYPE_AUDIO );
             notify = true;
         }
         if (notify) {
@@ -2174,7 +2238,7 @@ public class MediaPlaybackService extends Service {
     
     public long getArtistId() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null || mCurrentType != MediaInfo.MEDIA_TYPE_AUDIO ) {
                 return -1;
             }
             return mCursor.getLong(mCursor.getColumnIndexOrThrow(AudioColumns.ARTIST_ID));
@@ -2192,7 +2256,7 @@ public class MediaPlaybackService extends Service {
 
     public long getAlbumId() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null || mCurrentType != MediaInfo.MEDIA_TYPE_AUDIO ) {
                 return -1;
             }
             return mCursor.getLong(mCursor.getColumnIndexOrThrow(AudioColumns.ALBUM_ID));
@@ -2210,7 +2274,7 @@ public class MediaPlaybackService extends Service {
 
     private boolean isPodcast() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null || mCurrentType != MediaInfo.MEDIA_TYPE_AUDIO ) {
                 return false;
             }
             return (mCursor.getInt(PODCASTCOLIDX) > 0);
@@ -2479,9 +2543,9 @@ public class MediaPlaybackService extends Service {
             mService.get().openAsync(path);
         }
         @Override
-		public void openFile(String path, boolean oneShot)
+		public void openFile(String path, boolean oneShot, int mediaType)
         {
-            mService.get().open(path, oneShot);
+            mService.get().open(path, oneShot, mediaType);
         }
         @Override
 		public void open(long [] list, int [] type, int position) {

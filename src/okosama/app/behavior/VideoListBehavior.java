@@ -1,5 +1,6 @@
 package okosama.app.behavior;
 
+import okosama.app.DeleteItems;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.service.MediaInfo;
@@ -47,7 +48,7 @@ public class VideoListBehavior extends IListBehavior implements Database.Defs {
 		MediaInfo[] list = new MediaInfo[] { new MediaInfo( mSelectedId, MediaInfo.MEDIA_TYPE_VIDEO ) };		
         MediaPlayerUtil.playAll(
         		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
-        		list, position, false);
+        		list, 0, false);
         		//*/
 	}
 
@@ -62,7 +63,7 @@ public class VideoListBehavior extends IListBehavior implements Database.Defs {
 		menu.add(0, PLAY_SELECTION, 0, R.string.play_selection);
 //		SubMenu sub = menu.addSubMenu(0, ADD_TO_PLAYLIST, 0, R.string.add_to_playlist);
 //		Database.makePlaylistMenu(activity, sub);
-		menu.add(0, DELETE_ITEM, 0, R.string.delete_item);
+		// menu.add(0, DELETE_ITEM, 0, R.string.delete_item);
 		AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfoIn;
 		mSelectedPosition =  mi.position;
 		VideoData data = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoAdp().getItem(mSelectedPosition);
@@ -76,11 +77,13 @@ public class VideoListBehavior extends IListBehavior implements Database.Defs {
 		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		mSelectedId = activity.getVideoAdp().getItem(mSelectedPosition).getVideoId();
 		MediaInfo[] list = new MediaInfo[] { new MediaInfo( mSelectedId, MediaInfo.MEDIA_TYPE_VIDEO ) };		
+		long[] listId = new long[] { mSelectedId };		
+		int[] listType = new int[] { MediaInfo.MEDIA_TYPE_VIDEO };		
 		switch (item.getItemId()) {
 		case PLAY_SELECTION: {
 			// play the track
-			int position = mSelectedPosition;
-			MediaPlayerUtil.playAll(activity, list, position);
+			// int position = mSelectedPosition;
+			MediaPlayerUtil.playAll(activity, list, 0);
 			return true;
 		}
 	
@@ -104,7 +107,8 @@ public class VideoListBehavior extends IListBehavior implements Database.Defs {
 	       String f = activity.getString(R.string.delete_song_desc); 
 	       String desc = String.format(f, mCurrentTrackName);
 	       b.putString("description", desc);
-	       b.putLongArray("items", list);
+	       b.putLongArray(DeleteItems.ITEMID_KEY, listId);
+	       b.putIntArray(DeleteItems.TYPEID_KEY, listType);
 	       Intent intent = new Intent();
 	       intent.setClass(activity, okosama.app.DeleteItems.class);
 	       intent.putExtras(b);

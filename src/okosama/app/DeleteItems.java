@@ -28,9 +28,12 @@ import android.widget.TextView;
 
 public class DeleteItems extends Activity
 {
+	public static final String ITEMID_KEY = "items";
+	public static final String TYPEID_KEY = "types";
     private TextView mPrompt;
     private Button mButton;
     private long [] mItemList;
+    private int [] mTypeList;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -55,7 +58,8 @@ public class DeleteItems extends Activity
 
         Bundle b = getIntent().getExtras();
         String desc = b.getString("description");
-        mItemList = b.getLongArray("items");
+        mItemList = b.getLongArray(ITEMID_KEY);
+        mTypeList = b.getIntArray(TYPEID_KEY);
         
         mPrompt.setText(desc);
     }
@@ -64,7 +68,7 @@ public class DeleteItems extends Activity
         @Override
 		public void onClick(View v) {
             // delete the selected item(s)
-            Database.deleteTracks(DeleteItems.this, mItemList);
+            Database.deleteTracks(DeleteItems.this, mItemList, mTypeList);
             finish();
         }
     };

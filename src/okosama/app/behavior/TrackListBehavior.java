@@ -1,5 +1,6 @@
 package okosama.app.behavior;
 
+import okosama.app.DeleteItems;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.service.MediaInfo;
@@ -121,11 +122,13 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 	   case DELETE_ITEM: {
 	       long [] list = new long[1];
 	       list[0] = (int) mSelectedId;
+	       int[] listType = new int[] { MediaInfo.MEDIA_TYPE_VIDEO };		
 	       Bundle b = new Bundle();
 	       String f = activity.getString(R.string.delete_song_desc); 
 	       String desc = String.format(f, mCurrentTrackName);
 	       b.putString("description", desc);
-	       b.putLongArray("items", list);
+	       b.putLongArray(DeleteItems.ITEMID_KEY, list);
+	       b.putIntArray(DeleteItems.TYPEID_KEY, listType);
 	       Intent intent = new Intent();
 	       intent.setClass(activity, okosama.app.DeleteItems.class);
 	       intent.putExtras(b);

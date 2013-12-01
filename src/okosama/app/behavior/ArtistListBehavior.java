@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import okosama.app.ControlIDs;
+import okosama.app.DeleteItems;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.CreatePlaylist;
@@ -221,8 +222,12 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	                desc = String.format(f, mCurrentAlbumName);
 	            }
 	            Bundle b = new Bundle();
-	            b.putString("description", desc);
-	            b.putLongArray("items", list);
+	    		long[] listId = new long[list.length];		
+	    		int[] listType = new int[list.length];		
+	            
+	            b.putLongArray(DeleteItems.ITEMID_KEY, listId);
+			    b.putIntArray(DeleteItems.TYPEID_KEY, listType);
+	            
 	            Intent intent = new Intent();
 	            intent.setClass(activity, okosama.app.DeleteItems.class);
 	            intent.putExtras(b);

@@ -963,8 +963,7 @@ public class Database {
             colidx = cursor.getColumnIndexOrThrow(BaseColumns._ID);
         }
         for (int i = 0; i < len; i++) {
-            list[i].setId( cursor.getLong(colidx) );
-            list[i].setMediaType( MediaInfo.MEDIA_TYPE_AUDIO );
+        	list[i] = new MediaInfo( cursor.getLong(colidx), MediaInfo.MEDIA_TYPE_AUDIO );
             cursor.moveToNext();
         }
         return list;
@@ -1062,10 +1061,52 @@ public class Database {
         context.getContentResolver().delete(uri, null, null);
         return;
     }    
-    public static void deleteTracks(Context context, long [] list) {
+    public static void deleteTracks(Context context, long [] list, int [] listType ) {
+    	
+    	
+    	if( listType.length != list.length )
+    	{
+    		Log.e("delete tracks","listtype size != list size");
+    		return;
+    	}
+
+    	ArrayList<Long> lstAudioId = new ArrayList<Long>();
+    	ArrayList<Long> lstVideoId = new ArrayList<Long>();
+    	for( int i=0; i<listType.length;++i)
+    	{
+    		if( listType[i] == MediaInfo.MEDIA_TYPE_AUDIO )
+    		{
+    			lstAudioId.add(list[i]);
+    		}
+    		else if( listType[i] == MediaInfo.MEDIA_TYPE_VIDEO )
+    		{
+    			lstVideoId.add(list[i]);    			
+    		}
+    	}
+    	if( lstAudioId.isEmpty() == false )
+    	{
+	    	long[] listAudio = new long[lstAudioId.size()];
+	    	for( int i=0; i<lstAudioId.size(); ++i )
+	    	{
+	    		listAudio[i] = lstAudioId.get(i);
+	    	}
+	    	deleteAudioTracks(context, listAudio);
+    	}
+    	
+    	if( lstVideoId.isEmpty() == false )
+    	{
+	    	long[] listVideo = new long[lstVideoId.size()];
+	    	for( int i=0; i<lstVideoId.size(); ++i )
+	    	{
+	    		listVideo[i] = lstVideoId.get(i);
+	    	}
+	    	// TODO: ƒrƒfƒI‚Ìíœ
+	    	// deleteVideoTracks(context, listVideo);
+    	}
+    }
+    public static void deleteAudioTracks(Context context, long [] list ) {
         
-        String [] cols = new String [] { BaseColumns._ID, 
-                MediaColumns.DATA, AudioColumns.ALBUM_ID };
+        String [] cols = new String [] { BaseColumns._ID, MediaColumns.DATA, AudioColumns.ALBUM_ID };
         StringBuilder where = new StringBuilder();
         where.append(BaseColumns._ID + " IN (");
         for (int i = 0; i < list.length; i++) {
@@ -1099,7 +1140,8 @@ public class Database {
             }
 
             // step 2: remove selected tracks from the database
-            context.getContentResolver().delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, where.toString(), null);
+            context.getContentResolver().delete(
+            		MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, where.toString(), null);
 
             // step 3: remove files from card
             c.moveToFirst();
