@@ -49,6 +49,8 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AudioColumns;
 import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -1157,7 +1159,7 @@ public class MediaPlaybackService extends Service {
                 // possible fast path: list might be the same
                 newlist = false;
                 for (int i = 0; i < listlength; i++) {
-                    if (list[i] != mPlayList[i].getId()) {
+                    if (list[i] != mPlayList[i].getId() || type[i] != mPlayList[i].getMediaType() ) {
                     	// 単純に、全ての項目の値を入れ替える
                         newlist = true;
                         break;
@@ -1461,7 +1463,7 @@ public class MediaPlaybackService extends Service {
             // プレイヤーのデータソースとして、指定されたファイルを設定する
             mFileToPlay = path;
             // 再生準備される
-            mPlayer.setDataSource(mFileToPlay);
+            mPlayer.setDataSource(mFileToPlay,mCurrentType);
             mOneShot = oneshot;
             if (! mPlayer.isInitialized()) {
             	// まだプレイヤーが初期化されていない
@@ -1491,6 +1493,10 @@ public class MediaPlaybackService extends Service {
                 mOpenFailedCounter = 0;
             }
         }
+    }
+    public boolean isInitialized()
+    {
+    	return mPlayer.isInitialized();
     }
 
     /**
@@ -1523,13 +1529,14 @@ public class MediaPlaybackService extends Service {
             // イメージを設定？
             views.setImageViewResource(R.id.icon, R.drawable.stat_notify_musicplayer);
             String ticket;
-            if (getAudioId() < 0) {
-                // streaming
-            	// ストリーミング
-                views.setTextViewText(R.id.trackname, getPath());
-                views.setTextViewText(R.id.artistalbum, null);
-                ticket = getPath();
-            } else {
+//            if (getAudioId() < 0) {
+//                // streaming
+//            	// ストリーミング
+//                views.setTextViewText(R.id.trackname, getPath());
+//                views.setTextViewText(R.id.artistalbum, null);
+//                ticket = getPath();
+//            } else {
+            {
             	// 普通のメディア？
                 String artist = getArtistName();
                 // トラック名をビューに設定
@@ -2345,7 +2352,7 @@ public class MediaPlaybackService extends Service {
      * 統合されたインタフェースを提供
      * midiとその他のメディアファイルを分けて再生できる？
      */
-    private class MultiPlayer {
+    private class MultiPlayer implements android.view.SurfaceHolder.Callback {
         private MediaPlayer mMediaPlayer = new MediaPlayer();
         private Handler mHandler;
         private boolean mIsInitialized = false;
@@ -2381,11 +2388,24 @@ public class MediaPlaybackService extends Service {
             mIsInitialized = true;
         }
         
+        @Override
+        public void surfaceCreated(SurfaceHolder holder) {
+        	mMediaPlayer.setDisplay(holder);
+        }
+
+        @Override
+        public void surfaceDestroyed(SurfaceHolder holder) {
+            
+            // Could be called after player was released in onDestroy.
+            if (mMediaPlayer != null) {
+            	mMediaPlayer.setDisplay(null);
+            }
+        }        
         /**
          * データソースを設定
          * @param path
          */
-        public void setDataSource(String path) {
+        public void setDataSource(String path, int mediaType) {
             try {
                 mMediaPlayer.reset();
                 mMediaPlayer.setOnPreparedListener(null);
@@ -2394,7 +2414,19 @@ public class MediaPlaybackService extends Service {
                 } else {
                     mMediaPlayer.setDataSource(path);
                 }
-                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                if( mediaType == MediaInfo.MEDIA_TYPE_VIDEO )
+                {
+                	SurfaceHolder holder 
+                	= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoViewHolder();
+                	holder.addCallback(this);
+	                holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+	                // surfaceholderができてから設定？
+	                // mMediaPlayer.setDisplay(holder);
+	            }
+                else
+                {
+                	mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                }
                 mMediaPlayer.prepare();
             } catch (IOException ex) {
                 // TODO: notify the user why the file couldn't be opened
@@ -2494,6 +2526,12 @@ public class MediaPlaybackService extends Service {
                     mHandler.sendMessageDelayed(mHandler.obtainMessage(SERVER_DIED), 2000);
                     return true;
                 default:
+                	mMediaPlayer.reset();
+                	mIsInitialized = false;
+                	Toast.makeText(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(), 
+                			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getString(R.string.cant_play_media),
+                			Toast.LENGTH_LONG).show();
+                	
                     Log.d("MultiPlayer", "Error: " + what + "," + extra);
                     break;
                 }
@@ -2522,7 +2560,14 @@ public class MediaPlaybackService extends Service {
         }
         public int getAudioSessionId() {
             return mMediaPlayer.getAudioSessionId();
-        }        
+        }
+
+		@Override
+		public void surfaceChanged(SurfaceHolder holder, int format, int width,
+				int height) {
+			// TODO Auto-generated method stub
+			
+		}        
     }
 
     /*
@@ -2678,6 +2723,11 @@ public class MediaPlaybackService extends Service {
 		public int getAudioSessionId() throws RemoteException {
 			// TODO Auto-generated method stub
 			return mService.get().getAudioSessionId();
+		}
+
+		@Override
+		public boolean isInitialized() throws RemoteException {
+			return mService.get().isInitialized();
 		}
 
     }

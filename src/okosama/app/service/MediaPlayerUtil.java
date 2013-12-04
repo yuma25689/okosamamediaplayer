@@ -7,9 +7,13 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.action.IViewAction;
+import okosama.app.action.TabSelectAction;
 import okosama.app.storage.Database;
+import okosama.app.tab.TabPage;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -504,10 +508,24 @@ public class MediaPlayerUtil {
                 	listMedia[i] = new MediaInfo( listId[i], listType[i] );
                 }
                 
-                if (Arrays.equals(list, listMedia)) {
-                    // we don't need to set a new list, but we should resume playback if needed
-                    sService.play();
-                    return; // the 'finally' block will still run
+                if (listMedia.length == list.length) {
+                	boolean bEqual = true;
+                	for( int i=0; i < list.length; ++i)
+                	{
+                		if( listMedia[i].getId() != list[i].getId()
+                		|| listMedia[i].getMediaType() != list[i].getMediaType()
+                		)
+                		{
+                			bEqual = false;
+                			break;
+                		}
+                	}
+                	if(bEqual )
+                	{
+	                    // we don't need to set a new list, but we should resume playback if needed
+	                    sService.play();
+	                    return; // the 'finally' block will still run
+                	}
                 }
             }
             if (position < 0) {
@@ -523,13 +541,35 @@ public class MediaPlayerUtil {
             }
             
             sService.open(listId, listType, force_shuffle ? -1 : position);
-            sService.play();
+            if( sService.isInitialized() )
+            {
+            	sService.play();
+            }
+            else
+            {
+            	Toast.makeText(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(), 
+            			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getString(R.string.cant_play_media),
+            			Toast.LENGTH_LONG).show();
+            }
         } catch (RemoteException ex) {
         } finally {
-        	// TODO: Ä¶‰æ–Ê‚ÖˆÚ“®
-//            Intent intent = new Intent("com2.android.music.PLAYBACK_VIEWER")
-//                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            context.startActivity(intent);
+        	// Ä¶‰æ–Ê‚ÖˆÚ“®
+//    		IViewAction action1 = new TabSelectAction( ControlIDs.TAB_ID_MAIN,
+//    				TabPage.TABPAGE_ID_PLAY );
+//    		action1.doAction(null);
+//    		IViewAction action2 = new TabSelectAction( ControlIDs.TAB_ID_PLAY,
+//    				TabPage.TABPAGE_ID_PLAY_SUB );
+//    		action2.doAction(null);  
+//        	OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().setCurrentDisplayId( 
+//        			ControlIDs.TAB_ID_PLAY, 
+//    				TabPage.TABPAGE_ID_PLAY_SUB );
+        	
+//        	OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().sendUpdateMessage( 
+//        			ControlIDs.TAB_ID_MAIN, TabPage.TABPAGE_ID_PLAY, true );
+        	
+    		IViewAction action = new TabSelectAction( ControlIDs.TAB_ID_MAIN,
+    				TabPage.TABPAGE_ID_PLAY );
+    		action.doAction(null);
         }
     }
     public static void addToCurrentPlaylist(Context context, MediaInfo [] list) {

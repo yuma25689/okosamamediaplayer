@@ -23,6 +23,7 @@
     <string name="empty_data">Now playing queue is empty.</string>
     <string name="effect_menu">音響効果</string>
     <string name="setting_menu">設定</string>
+    <string name="cant_play_media">指定されたメディアはこのプレイヤーでは再生できません。</string>
     
     <string name="twitter_consumer_key">Zeg3AGGq1muwWgcZ9Qrw</string>
     <string name="twitter_consumer_secret">oMLphzSbP54JCZroFm9x9Y2l4IFvpAOWIpjZsdek</string>

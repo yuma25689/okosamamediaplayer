@@ -39,7 +39,7 @@ public class TabPageVideo extends TabPage {
 		this.parent = parent;
 		this.pageContainer = ll;
 		this.componentContainer = rl;
-		this.tabId = TABPAGE_ID_SONG;
+		this.tabId = TABPAGE_ID_VIDEO;
 		
 		create(R.layout.tab_layout_content_generic_progress);
 	}

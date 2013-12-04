@@ -28,7 +28,7 @@ public class TabPagePlay2 extends TabPage {
 		this.componentContainer = rl;
 		this.internalID = ControlIDs.TAB_ID_PLAY;
 		// コンストラクタでこのタブのタブIDを設定
-		this.tabId = TABPAGE_ID_PLAY;
+		this.tabId = TABPAGE_ID_PLAY_SUB;
 		create(R.layout.tab_layout_content_generic);
 	}
 	@Override

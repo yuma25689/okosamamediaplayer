@@ -192,8 +192,8 @@ public class CreatePlaylist extends Activity
 	            OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 
         		if (uri != null) {
-                	Log.d("Å°new playlist","tabid=" + act.getTabStocker().getCurrentTabId(ControlIDs.TAB_ID_MEDIA));
-                	absWidget lst = act.getListFromTabID(act.getTabStocker().getCurrentTabId(ControlIDs.TAB_ID_MEDIA));
+                	Log.d("Å°new playlist","tabid=" + act.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA));
+                	absWidget lst = act.getListFromTabID(act.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA));
                 	if( lst != null )
                 	{
                 		IBehavior behavior = lst.getBehavior();

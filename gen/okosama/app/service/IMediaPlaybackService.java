@@ -77,6 +77,14 @@ this.open(_arg0, _arg1, _arg2);
 reply.writeNoException();
 return true;
 }
+case TRANSACTION_isInitialized:
+{
+data.enforceInterface(DESCRIPTOR);
+boolean _result = this.isInitialized();
+reply.writeNoException();
+reply.writeInt(((_result)?(1):(0)));
+return true;
+}
 case TRANSACTION_getQueuePosition:
 {
 data.enforceInterface(DESCRIPTOR);
@@ -408,6 +416,23 @@ finally {
 _reply.recycle();
 _data.recycle();
 }
+}
+@Override public boolean isInitialized() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+boolean _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_isInitialized, _data, _reply, 0);
+_reply.readException();
+_result = (0!=_reply.readInt());
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
 }
 @Override public int getQueuePosition() throws android.os.RemoteException
 {
@@ -920,43 +945,45 @@ return _result;
 static final int TRANSACTION_openFile = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
 static final int TRANSACTION_openFileAsync = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
 static final int TRANSACTION_open = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
-static final int TRANSACTION_getQueuePosition = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
-static final int TRANSACTION_isPlaying = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
-static final int TRANSACTION_stop = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
-static final int TRANSACTION_pause = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
-static final int TRANSACTION_play = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
-static final int TRANSACTION_prev = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
-static final int TRANSACTION_next = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
-static final int TRANSACTION_duration = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
-static final int TRANSACTION_position = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
-static final int TRANSACTION_seek = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
-static final int TRANSACTION_getTrackName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
-static final int TRANSACTION_getAlbumName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
-static final int TRANSACTION_getAlbumId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
-static final int TRANSACTION_getArtistName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
-static final int TRANSACTION_getArtistId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
-static final int TRANSACTION_enqueue = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
-static final int TRANSACTION_getQueue = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
-static final int TRANSACTION_getMediaType = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
-static final int TRANSACTION_moveQueueItem = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
-static final int TRANSACTION_setQueuePosition = (android.os.IBinder.FIRST_CALL_TRANSACTION + 22);
-static final int TRANSACTION_getPath = (android.os.IBinder.FIRST_CALL_TRANSACTION + 23);
-static final int TRANSACTION_getAudioId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 24);
-static final int TRANSACTION_setShuffleMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 25);
-static final int TRANSACTION_getShuffleMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 26);
-static final int TRANSACTION_removeTracks = (android.os.IBinder.FIRST_CALL_TRANSACTION + 27);
-static final int TRANSACTION_removeTrack = (android.os.IBinder.FIRST_CALL_TRANSACTION + 28);
-static final int TRANSACTION_setRepeatMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 29);
-static final int TRANSACTION_getRepeatMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 30);
-static final int TRANSACTION_getMediaMountedCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 31);
-static final int TRANSACTION_setAudioSessionId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 32);
-static final int TRANSACTION_getAudioSessionId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 33);
+static final int TRANSACTION_isInitialized = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
+static final int TRANSACTION_getQueuePosition = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
+static final int TRANSACTION_isPlaying = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
+static final int TRANSACTION_stop = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
+static final int TRANSACTION_pause = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
+static final int TRANSACTION_play = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
+static final int TRANSACTION_prev = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
+static final int TRANSACTION_next = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
+static final int TRANSACTION_duration = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
+static final int TRANSACTION_position = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
+static final int TRANSACTION_seek = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
+static final int TRANSACTION_getTrackName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
+static final int TRANSACTION_getAlbumName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
+static final int TRANSACTION_getAlbumId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
+static final int TRANSACTION_getArtistName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
+static final int TRANSACTION_getArtistId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
+static final int TRANSACTION_enqueue = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
+static final int TRANSACTION_getQueue = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
+static final int TRANSACTION_getMediaType = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
+static final int TRANSACTION_moveQueueItem = (android.os.IBinder.FIRST_CALL_TRANSACTION + 22);
+static final int TRANSACTION_setQueuePosition = (android.os.IBinder.FIRST_CALL_TRANSACTION + 23);
+static final int TRANSACTION_getPath = (android.os.IBinder.FIRST_CALL_TRANSACTION + 24);
+static final int TRANSACTION_getAudioId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 25);
+static final int TRANSACTION_setShuffleMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 26);
+static final int TRANSACTION_getShuffleMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 27);
+static final int TRANSACTION_removeTracks = (android.os.IBinder.FIRST_CALL_TRANSACTION + 28);
+static final int TRANSACTION_removeTrack = (android.os.IBinder.FIRST_CALL_TRANSACTION + 29);
+static final int TRANSACTION_setRepeatMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 30);
+static final int TRANSACTION_getRepeatMode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 31);
+static final int TRANSACTION_getMediaMountedCount = (android.os.IBinder.FIRST_CALL_TRANSACTION + 32);
+static final int TRANSACTION_setAudioSessionId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 33);
+static final int TRANSACTION_getAudioSessionId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 34);
 }
 //void openFile(String path, boolean oneShot);
 
 public void openFile(java.lang.String path, boolean oneShot, int mediaType) throws android.os.RemoteException;
 public void openFileAsync(java.lang.String path) throws android.os.RemoteException;
 public void open(long[] list, int[] type, int position) throws android.os.RemoteException;
+public boolean isInitialized() throws android.os.RemoteException;
 public int getQueuePosition() throws android.os.RemoteException;
 public boolean isPlaying() throws android.os.RemoteException;
 public void stop() throws android.os.RemoteException;

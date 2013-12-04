@@ -32,7 +32,7 @@ public class MainHandler extends Handler {
     		case AppStatus.REFRESH:
     		{
                 long next = AppStatus.NO_REFRESH;
-                if( mActivity.getTabStocker().getCurrentTabId(ControlIDs.TAB_ID_MEDIA)
+                if( mActivity.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA)
                 		== TabPage.TABPAGE_ID_MEDIA )
                 {
                 	IDisplayState stateMedia 
@@ -45,7 +45,7 @@ public class MainHandler extends Handler {
         			}
                 	next = stateMedia.updateDisplay();
                 }
-                else if( mActivity.getTabStocker().getCurrentTabId(ControlIDs.TAB_ID_PLAY)
+                else if( mActivity.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_PLAY)
                 		== TabPage.TABPAGE_ID_PLAY_SUB )
                 {
                 	IDisplayState statePlayTab 
@@ -110,10 +110,6 @@ public class MainHandler extends Handler {
 	    		{
 		    		mActivity.updateTimeDisplayVisible(0);
 		    		mActivity.updateTimeDisplay(0);			    			
-		    		mActivity.sendUpdateMessage(ControlIDs.TAB_ID_MAIN, 
-		    				mActivity.getTabStocker().getCurrentTabId(ControlIDs.TAB_ID_MAIN)
-		    				,true
-		    		);
 		    		if( mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA) != null )
 		    		{
 		    			mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).setNextForceRefresh(true);
@@ -122,6 +118,10 @@ public class MainHandler extends Handler {
 		    		{
 		    			mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_PLAY).setNextForceRefresh(true);
 		    		}
+		    		mActivity.sendUpdateMessage(ControlIDs.TAB_ID_MAIN, 
+		    				mActivity.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_MAIN)
+		    				,true
+		    		);
 	    		}
 	           				           	
 	           	if( TimeControlPanel.getInstance() != null )
@@ -134,7 +134,7 @@ public class MainHandler extends Handler {
            		//Log.d("msg_init_end","force rescan");
 	           	mActivity.getAdpStocker().initAllAdapter();
 	           	//mActivity.setForceRefreshFlag(false);
-        		mActivity.queueNextRefresh(100);
+        		mActivity.queueNextRefresh(1000);
 	    		break;
         	}
         	case TabSelectAction.MSG_ID_TAB_SELECT:
@@ -151,7 +151,7 @@ public class MainHandler extends Handler {
             	// メディアを更新
             	mActivity.reScanMediaAndUpdateTabPage(message.arg1,false);
             	// 共通部分再描画
-        		mActivity.queueNextRefresh(1);
+        		mActivity.queueNextRefresh(100);
         		mActivity.updatePlayStateButtonImage();
         		break;
         	}

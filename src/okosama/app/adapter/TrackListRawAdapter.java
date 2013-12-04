@@ -49,7 +49,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 
 	private ArrayList<TrackData> allItems = new ArrayList<TrackData>();
 	// TODO:次へボタン等
-	int maxShowCount = 80;
+	int maxShowCount = 500;
     	
     // private final Drawable mNowListOverlay;
 
@@ -515,6 +515,9 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	    			}
 	    		}
     		}
+    		else
+    		{
+    		}
 			return false;
     	}
     	else if( mFilterType == this.FILTER_NORMAL )
@@ -605,7 +608,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	    		if( maxShowCount < this.getCount() )
 	    		{
 	    			// maxの表示件数以上は、表示しない
-	    			// TODO:ページきりかえ未対応なので、最初の80件しか表示できていない
+	    			// TODO:ページきりかえ未対応なので、最初のmaxShowCount件しか表示できていない
 	    			break;
 	    		}
 	    	}

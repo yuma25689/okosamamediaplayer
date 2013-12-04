@@ -11,23 +11,34 @@ import android.widget.RelativeLayout;
 
 public class TabStocker {
 	
+	int currentTabID = ControlIDs.TAB_ID_MAIN;
+	public void setCurrentTabId(int tabID)
+	{
+		currentTabID = tabID;
+	}
+	public int getCurrentTabId()
+	{
+		return currentTabID;
+	}
+	
+	
 	SparseArray<Tab> tabArray = new SparseArray<Tab>();
-	SparseArray<Integer> currentTabId = new SparseArray<Integer>();
-	public SparseArray<Integer> getTabIdMap()
+	SparseArray<Integer> currentTabPageId = new SparseArray<Integer>();
+	public SparseArray<Integer> getTabPageIdMap()
 	{
-		return currentTabId;
+		return currentTabPageId;
 	}
-	public int getCurrentTabId(int key)
+	public int getCurrentTabPageId(int key)
 	{
-		return currentTabId.get(key);
+		return currentTabPageId.get(key);
 	}
-	public void setCurrentTabId(int key,Integer id)
+	public void setCurrentTabPageId(int key,Integer id)
 	{
-		currentTabId.put(key,id);
+		currentTabPageId.put(key,id);
 	}
-	public void clearCurrentTabId()
+	public void clearCurrentTabPageId()
 	{
-		currentTabId.clear();
+		currentTabPageId.clear();
 	}
 	
 	/**

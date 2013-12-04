@@ -43,6 +43,8 @@ import android.util.SparseArray;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.ViewGroup.LayoutParams;
@@ -56,6 +58,19 @@ public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection, Database.Defs {
 	public static final String MEDIA_SERVICE_NOTIFY = "MediaServiceNotify";
 	
+	public SurfaceView surfaceView = null;
+	public SurfaceView getVideoView()
+	{
+		if( surfaceView == null )
+		{
+			surfaceView = new SurfaceView(this);
+		}
+		return surfaceView;
+	}
+	public SurfaceHolder getVideoViewHolder()
+	{
+		return getVideoView().getHolder();
+	}	
 	// タブ格納用
 	TabStocker tabStocker = new TabStocker();
 	public TabStocker getTabStocker()
@@ -255,7 +270,7 @@ implements ServiceConnection, Database.Defs {
 	// private static HashMap<Integer,Integer> tabCurrentDisplayIdMap = new HashMap<Integer,Integer>();
 	public void clearDisplayIdMap()
 	{
-		tabStocker.clearCurrentTabId();
+		tabStocker.clearCurrentTabPageId();
 	}
 	public void reloadDisplayIdMap()
 	{
@@ -278,17 +293,17 @@ implements ServiceConnection, Database.Defs {
 	 */
 	public void setCurrentDisplayId( int internalID, int iDispId )
 	{
-		tabStocker.setCurrentTabId(internalID, iDispId);
+		tabStocker.setCurrentTabPageId(internalID, iDispId);
 		// tabCurrentDisplayIdMap.put( internalID, iDispId );
 	}
 	public int getCurrentDisplayId( int internalID )
 	{
 		// tabStocker.setCurrentTabId(internalID, iDispId);
-		tabStocker.getTabIdMap().get(internalID);
+		tabStocker.getTabPageIdMap().get(internalID);
 		
-		if( 0 <= tabStocker.getTabIdMap().indexOfKey( internalID ))
+		if( 0 <= tabStocker.getTabPageIdMap().indexOfKey( internalID ))
 		{
-			return tabStocker.getCurrentTabId( internalID );
+			return tabStocker.getCurrentTabPageId( internalID );
 		}
 		else
 		{
@@ -339,20 +354,7 @@ implements ServiceConnection, Database.Defs {
         {
         	mToken = MediaPlayerUtil.bindToService(this, this);
         }      
-//        if (savedInstanceState != null) {
-//        	// 取得できなければ-1を返却する(=TABPAGE_ID_UNKNOWN)
-//        	currentMainTabId = savedInstanceState.getInt(tabNameMain + dispIdKey);
-//        	currentSubTabId = savedInstanceState.getInt(tabNameMedia + dispIdKey);
-//        }
-        // クリアしないと、メディアタブの内容とプレイタブの内容が重なってしまう・・・なぜだろう？
-        // setTabSelection( TabPage.TABPAGE_ID_MEDIA, TabPage.TABPAGE_ID_NONE );
-        // setTabSelection( TabPage.TABPAGE_ID_NONE, TabPage.TABPAGE_ID_NONE );
-        // ここで入れたら駄目
-//		SharedPreferences pref = getPreferences(MODE_PRIVATE);
-//    	currentMainTabId = pref.getInt(tabNameMain + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN);
-//    	currentSubTabId = pref.getInt(tabNameMedia + dispIdKey, TabPage.TABPAGE_ID_UNKNOWN);
 
-        // サイズが取得できたら、下記の処理実行されるようにする
     }
     /**
      * ベース画像上での絶対座標を指定した位置を表すLayoutParamを作成する
@@ -365,9 +367,11 @@ implements ServiceConnection, Database.Defs {
 	createLayoutParamForAbsolutePosOnBk(
 			int left, int top )
 	{
+		// 指定された左位置に対して、ディスプレイサイズを考慮した調整を行う
 		int xCorrect = dispInfo.getCorrectionXConsiderDensity(left);
 		int yCorrect = dispInfo.getCorrectionYConsiderDensity(top);
 		
+		// 幅と高さの指定がないので、親を埋めるように設定する
 		RelativeLayout.LayoutParams lp = 
 				new RelativeLayout.LayoutParams(
 						LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
@@ -456,45 +460,47 @@ implements ServiceConnection, Database.Defs {
         
         return lp;
 	}
-	public static final String ALBUM_KEY = "Album";
-	public static final String ARTIST_GROUP_KEY = "ArtistGroup";
-	public static final String ARTIST_CHILD_KEY = "ArtistChild";
-	public static final String TRACK_KEY = "Track";
-	public static final String PLAYLIST_KEY = "Playlist";
 	
-	@Override
-    public void onSaveInstanceState(Bundle outcicle) {
-		// TODO:マップをループして、全部の設定を保存
-        super.onSaveInstanceState(outcicle);
-    }
-	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
-	 */
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-	}
+	// 画面開店時の値のバックアップと復元
+	// 今のところ、不要
+//	@Override
+//    public void onSaveInstanceState(Bundle outcicle) {
+//		// TODO:マップをループして、全部の設定を保存
+//        super.onSaveInstanceState(outcicle);
+//    }	
+//	@Override
+//	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//		super.onRestoreInstanceState(savedInstanceState);
+//	}
 	IntentFilter intentFilter;
 	BroadcastReceiver receiver;
+	
+	/**
+	 * メディアサービスからのintentのレシーバ
+	 * @author 25689
+	 *
+	 */
 	class MediaServiceNotifyReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) 
 		{
-			// 表示の更新
+			// メディアサービスからintentを受け取ったら
+			// 再生ボタンの表示更新
 			updatePlayStateButtonImage();
 		}
-		
 	}
 	@Override
 	protected void onResume() {
-		Log.e("onResume","resume!");
+		Log.w("onResume","resume!");
     	// 画面のサイズ等の情報を更新する
+		// 終わったらhandlerッセージが送られる
+		// 現在、そこで初めて画面位置の初期化を行っている
         dispInfo.init(this, componentContainer, handler);
         
         //bForceRefresh = true;
         paused = false;
+        // レシーバの作成、登録
         receiver = new MediaServiceNotifyReceiver();
         intentFilter = new IntentFilter();
         intentFilter.addAction(MEDIA_SERVICE_NOTIFY);
@@ -506,47 +512,41 @@ implements ServiceConnection, Database.Defs {
 	@Override
 	protected void onPause() {
 		// マップをループして、全部の設定を保存
-		//tabCurrentDisplayIdMap.
-        //outcicle.putInt("displayid", iCurrentDisplayId);
 		Editor editor = getPreferences(MODE_PRIVATE).edit();
-		//for(Entry<Integer, Integer> e : tabCurrentDisplayIdMap.entrySet()) {
-		for(int i=0; i < tabStocker.getTabIdMap().size(); ++i ) {
-			editor.putInt( String.valueOf( tabStocker.getTabIdMap().keyAt(i) ),
-					tabStocker.getTabIdMap().valueAt(i) );
+		// 現在選択されているタブID
+		for(int i=0; i < tabStocker.getTabPageIdMap().size(); ++i ) {
+			editor.putInt( String.valueOf( tabStocker.getTabPageIdMap().keyAt(i) ),
+					tabStocker.getTabPageIdMap().valueAt(i) );
 		}
 		editor.commit();
 		
 		paused = true;
-		
-		// componentContainer.removeAllViews();
-		// bInitEnd = false;
-		// bForceRefresh = true;
+
+		// 効果音クラスの解放
         getResourceAccessor().releaseSound();
+        // 全てのレシーバの登録解除
         stateStocker.unResisterReceiverAll();
-        
         if( null != receiver )
         {
         	this.unregisterReceiver(receiver);
         	receiver = null;
         }
         
+        // モーションセンサの登録解除
         getResourceAccessor().rereaseMotionSenser();
-
-        // bTabInitEnd = false;
-		// System.gc();
         
 		super.onPause();
 	}
 	
 	/**
-	 * サブタブは、状況によって変化するので注意
-	 * まだこの関数は未完成（その、サブタブの選択部分)
-	 * @param mainTab	 
-	 * @param bSndChgMsg 変化があったとき、メッセージを送信するか
+	 * メインタブの選択の変更
+	 * @param 新しく選択される、mainTabのタブページID 
+	 * @param bForceRefresh 強制的にリフレッシュするか
 	 * @return 0:変化なし 1:変化有り -1:エラー
 	 */
 	public int setMainTabSelection( int mainTab, boolean bForceRefresh )
 	{	
+		// 新しく選択されるタブのステータスクラスを作成
 		IDisplayState stateMainTmp = DisplayStateFactory.createDisplayState(mainTab);
 		if( stateMainTmp == null )
 		{
@@ -554,15 +554,19 @@ implements ServiceConnection, Database.Defs {
 		}	
 		int iRet = 0;
 		//int iRet2 = 0;
-		if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) != mainTab
+		if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MAIN) != mainTab
 				|| bForceRefresh == true )
         {
-			Log.w("setMainTabSelection", "come");
+			// タブが変わっているか、強制リフレッシュの場合
+			// Log.w("setMainTabSelection", "come");
 			if( stateStocker.getState(ControlIDs.TAB_ID_MAIN) != null )
 			{
+				// 前のタブのレシーバを登録解除
 				stateStocker.getState(ControlIDs.TAB_ID_MAIN).unregisterReceivers(IDisplayState.STATUS_ON_PAUSE);
 			}
-			tabStocker.setCurrentTabId(ControlIDs.TAB_ID_MAIN, mainTab );
+			// 選択されているタブの変更
+			tabStocker.setCurrentTabPageId(ControlIDs.TAB_ID_MAIN, mainTab );
+			// ステータスクラスの変更
 			stateStocker.putState(ControlIDs.TAB_ID_MAIN, stateMainTmp);
 			iRet = 1;
         }
@@ -571,31 +575,33 @@ implements ServiceConnection, Database.Defs {
         	// 画面IDから状態が取得できた
         	if( iRet == 1 )
         	{
-        		//iRet2 = 
+        		// 現在のタブに応じて、ディスプレイを切り替える
         		stateStocker.getState(ControlIDs.TAB_ID_MAIN).ChangeDisplayBasedOnThisState(
         				tabStocker.getTab(ControlIDs.TAB_ID_MAIN));
         	}
         }
-        // 2013/11/05 add
         if( mainTab == TabPage.TABPAGE_ID_MEDIA )
         {
+        	// 選択されたタブページがメディアタブだった場合
+        	// 子となるメディアタブも更新させる
            	sendUpdateMessage(ControlIDs.TAB_ID_MEDIA, 
-           			tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA)
+           			tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA)
            			,bForceRefresh);
         }
-        if( mainTab == TabPage.TABPAGE_ID_PLAY )
+        else if( mainTab == TabPage.TABPAGE_ID_PLAY )
         {
+        	// 選択されたタブページがプレイタブだった場合
+        	// 子となるプレイタブも更新させる
            	sendUpdateMessage(ControlIDs.TAB_ID_PLAY, 
-           			tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY)
+           			tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_PLAY)
            			,bForceRefresh);
         }    
         return iRet;
 	}
 	/**
-	 * サブタブは、状況によって変化するので注意
-	 * まだこの関数は未完成（その、サブタブの選択部分)
-	 * @param subTab
-	 * @param bSndChgMsg 変化があったとき、メッセージを送信するか
+	 * メディアタブ内のタブページを選択する
+	 * @param subTab 新しく選択したいタブページのID
+	 * @param bForceRefresh 強制リフレッシュフラグ
 	 * @return 0:変化なし 1:変化有り -1:エラー
 	 */
 	public int setMediaTabSelection( int subTab, boolean bForceRefresh )
@@ -606,10 +612,13 @@ implements ServiceConnection, Database.Defs {
 		{
 			return -1;
 		}
-    	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA) != subTab
+    	if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA) != subTab
     			|| true == tabStocker.getTab(ControlIDs.TAB_ID_MEDIA).isNextForceRefresh()
     			|| bForceRefresh == true )
     	{
+    		// タブページが変更されているか、このタブが次のリフレッシュだけ強制リフレッシュになるフラグがたっているか、
+    		// 強制リフレッシュフラグがたっている場合
+    		// 次のリフレッシュだけ強制リフレッシュになるフラグを落とす
     		tabStocker.getTab(ControlIDs.TAB_ID_MEDIA).setNextForceRefresh(false);
     		IDisplayState stateSubTmp = DisplayStateFactory.createDisplayState(subTab);        		
             if( stateSubTmp == null )
@@ -617,7 +626,7 @@ implements ServiceConnection, Database.Defs {
             	return -1;
             }
     		Log.w("setMediaTabSelection", 
-    				"currentmediatab=" + tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MEDIA)
+    				"currentmediatab=" + tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA)
     				+ "next=" + subTab );		
     		IDisplayState stateMedia = stateStocker.getState(
     				ControlIDs.TAB_ID_MEDIA);
@@ -625,12 +634,12 @@ implements ServiceConnection, Database.Defs {
 			{
 				stateMedia.unregisterReceivers(IDisplayState.STATUS_ON_DESTROY);
 			}	        		
-			tabStocker.setCurrentTabId(ControlIDs.TAB_ID_MEDIA, subTab );
+			tabStocker.setCurrentTabPageId(ControlIDs.TAB_ID_MEDIA, subTab );
     		stateMedia = stateSubTmp;
 			stateStocker.putState(ControlIDs.TAB_ID_MEDIA, stateMedia);
     		iRet = 1;
-    		// メディアタブであれば
-    		if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) 
+    		// メインタブの選択がメディアタブであれば
+    		if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MAIN) 
         			== TabPage.TABPAGE_ID_MEDIA )
         	{
     			// サブ画面をロードする
@@ -665,25 +674,25 @@ implements ServiceConnection, Database.Defs {
 		
 		int iRet = 0;
     		
-    	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY) != subTab 
+    	if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_PLAY) != subTab 
     			|| true == tabStocker.getTab(ControlIDs.TAB_ID_PLAY).isNextForceRefresh()
     			|| bForceRefresh == true )
     	{
     		tabStocker.getTab(ControlIDs.TAB_ID_PLAY).setNextForceRefresh(false);
-			Log.w("setMediaTabSelection", "come");
+			Log.w("setPlayTabSelection", "come");
     		IDisplayState statePlayTab = stateStocker.getState(ControlIDs.TAB_ID_PLAY);
     		
     		if( statePlayTab != null )
     		{
     			statePlayTab.unregisterReceivers(IDisplayState.STATUS_ON_DESTROY);
     		}
-    		tabStocker.setCurrentTabId(ControlIDs.TAB_ID_PLAY, subTab);
+    		tabStocker.setCurrentTabPageId(ControlIDs.TAB_ID_PLAY, subTab);
     		statePlayTab = stateSubTmp;
 			stateStocker.putState(ControlIDs.TAB_ID_PLAY, statePlayTab);
     		
     		iRet = 1;
     		// プレイタブであれば
-        	if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_MAIN) == TabPage.TABPAGE_ID_PLAY )
+        	if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MAIN) == TabPage.TABPAGE_ID_PLAY )
         	{
         		// サブ画面をロードする
         		// 二段階に分けると二度画面更新が走るので無駄が多いと思われるが、とりあえずそれしか思いつかない
@@ -700,11 +709,18 @@ implements ServiceConnection, Database.Defs {
     	}
         return iRet;
 	}
-	void updateTabId( int tabId, int tabPageId, boolean bForce )
+	/**
+	 * タブIDを更新する
+	 * @param tabId タブのID
+	 * @param tabPageId タブページのID
+	 * @param bForce 強制リフレッシュフラグ
+	 */
+	public void updateTabId( int tabId, int tabPageId, boolean bForce )
 	{
+		// 現在のタブを設定する
+		this.tabStocker.setCurrentTabId( tabId );
 		if( ControlIDs.TAB_ID_MAIN == tabId )
 		{
-    		// Activityのタブidを更新
 			int id = tabPageId;
 			if( TabPage.TABPAGE_ID_NONE == id 
 			|| TabPage.TABPAGE_ID_UNKNOWN == id )
@@ -714,12 +730,21 @@ implements ServiceConnection, Database.Defs {
 			setMainTabSelection(
 				id,
 				bForce
-    			// mActivity.getCurrentDisplayId( ControlIDs.TAB_ID_MAIN )
     		);
     		Log.e("maintab select","MSG_ID_TAB_SELECT");			        		
 		}
 		else if( ControlIDs.TAB_ID_MEDIA == tabId )
 		{
+	        if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MAIN) != TabPage.TABPAGE_ID_MEDIA )
+	        {
+	        	tabStocker.setCurrentTabPageId(ControlIDs.TAB_ID_MAIN, TabPage.TABPAGE_ID_MEDIA );
+	    		IDisplayState stateMainTmp = DisplayStateFactory.createDisplayState(TabPage.TABPAGE_ID_MEDIA);
+	    		stateStocker.putState(ControlIDs.TAB_ID_MAIN,stateMainTmp);
+	    		stateMainTmp.ChangeDisplayBasedOnThisState(tabStocker.getTab(ControlIDs.TAB_ID_MAIN));
+	        	tabStocker.getTab(tabId).setNextForceRefresh(true);
+	        	
+	        }
+			
 			int id = tabPageId;//mActivity.getCurrentDisplayId( 
 //				ControlIDs.TAB_ID_MEDIA 
 //			);
@@ -732,7 +757,16 @@ implements ServiceConnection, Database.Defs {
 			setMediaTabSelection( id, bForce );
 		}
 		else if( ControlIDs.TAB_ID_PLAY == tabId )
-		{
+		{			
+	        if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MAIN) != TabPage.TABPAGE_ID_PLAY )
+	        {
+	        	tabStocker.setCurrentTabPageId(ControlIDs.TAB_ID_MAIN, TabPage.TABPAGE_ID_PLAY );
+	    		IDisplayState stateMainTmp = DisplayStateFactory.createDisplayState(TabPage.TABPAGE_ID_PLAY);
+	    		stateStocker.putState(ControlIDs.TAB_ID_MAIN,stateMainTmp);
+	    		stateMainTmp.ChangeDisplayBasedOnThisState(tabStocker.getTab(ControlIDs.TAB_ID_MAIN));
+	        	tabStocker.getTab(tabId).setNextForceRefresh(true);	        	
+	        }
+			
 			int id = tabPageId;//mActivity.getCurrentDisplayId( ControlIDs.TAB_ID_PLAY );
 			if( TabPage.TABPAGE_ID_NONE == id 
 			|| TabPage.TABPAGE_ID_UNKNOWN == id )
@@ -743,8 +777,15 @@ implements ServiceConnection, Database.Defs {
 		}
 		
 	}
-	
-	void sendUpdateMessage(int tabID,int tabPageID, Boolean bForce)
+
+	/**
+	 * タブの更新をさせるメッセージを投げる.
+	 * ただ、タブ選択アクションを実行するだけ
+	 * @param tabID
+	 * @param tabPageID
+	 * @param bForce
+	 */
+	public void sendUpdateMessage(int tabID,int tabPageID, Boolean bForce)
 	{
     	Message msg = Message.obtain();
     	msg.what = TabSelectAction.MSG_ID_TAB_SELECT;
@@ -798,62 +839,20 @@ implements ServiceConnection, Database.Defs {
 			// Log.e("registerReceivers<0","Failed to register the listeners.");
 		}		
 	}
-	/**
-	 * adapterの準備が終わったときに、adapterからコールバックする感じの関数
-	 */
-//	public void initAdapter(int id,Cursor cursor)
-//	{
-//		initAdapter(id,cursor,false);
-//	}
-	// 2013/11/03 del ->
-//	public void initAdapter(int id,Cursor cursor, boolean isLimited)
-//	{
-//		if( cursor == null )
-//		{
-//			Log.w("Warning","cursor is null");
-//			// nullのままでcursor設定されても特に問題はない
-//			// return;
-//		}
-//		
-//		switch( id )
-//		{
-//		// TODO:nullの場合、表示するビューを変更した方がいいかもしれない
-//		case TabPage.TABPAGE_ID_ALBUM:
-//			// Listにカーソルを設定
-//			getAlbumAdp().insertAllDataFromCursor(cursor);//changeCursor(cursor);
-//			break;
-//		case TabPage.TABPAGE_ID_ARTIST:
-//			// Listにカーソルを設定
-//			getArtistAdp().insertAllDataFromCursor(cursor);
-//			break;
-//		case TabPage.TABPAGE_ID_SONG:
-//			// Listにカーソルを設定
-//			getTrackAdp().insertAllDataFromCursor(cursor);
-//			break;
-//		case TabPage.TABPAGE_ID_PLAYLIST:
-//			Cursor c = null;
-//			c = Database.getInstance(isExternalRef()).mergedCursor(cursor, false);//createShortCut);
-//			// Listにカーソルを設定
-//			getPlaylistAdp().changeCursor(c);
-//			break;
-//		}
-//	}
-	// 2013/11/03 del <-
-
 	
 	/**
-	 * 強制リスキャン
-	 * @param tabID
+	 * メディアライブラリのリスキャン
+	 * @param tabPageID タブページのID
 	 */
-	public void reScanMediaOfMediaTab(int tabID)
+	public void reScanMediaOfMediaTab(int tabPageID)
 	{
 		Tab tabMedia = tabStocker.getTab(ControlIDs.TAB_ID_MEDIA);
 		if( tabMedia == null )
 		{
 			return;
 		}
-    	TabPage page = (TabPage) tabMedia.getChild(tabID);
-    	adpStocker.stockMediaDataFromDevice(tabID, page);
+    	TabPage page = (TabPage) tabMedia.getChild(tabPageID);
+    	adpStocker.stockMediaDataFromDevice(tabPageID, page);
 	}
 	/**
 	 * メディアの再スキャン？TODO:スキャンのロジック自体に、見直し必要
@@ -867,7 +866,7 @@ implements ServiceConnection, Database.Defs {
 		boolean bUpdateOccur = false;
 		Tab tabUpd = tabStocker.getTab(tabID);
     	TabPage page = (TabPage)tabUpd.getChild(
-    			tabStocker.getCurrentTabId(tabID));
+    			tabStocker.getCurrentTabPageId(tabID));
 		
 		if( ControlIDs.TAB_ID_MEDIA == tabID )
 		{
@@ -877,12 +876,12 @@ implements ServiceConnection, Database.Defs {
 			((TrackListRawAdapter)adpStocker.get(TabPage.TABPAGE_ID_SONG)).clearFilterType();
 	    	bUpdateOccur = 
 	    	adpStocker.stockMediaDataFromDevice( 
-					tabStocker.getCurrentTabId(tabID), page, bNotUpdateIfNotEmpty );
+					tabStocker.getCurrentTabPageId(tabID), page, bNotUpdateIfNotEmpty );
 		}
 		else	
 		if( tabID == ControlIDs.TAB_ID_PLAY )
 		{
-			if( tabStocker.getCurrentTabId(ControlIDs.TAB_ID_PLAY) == TabPage.TABPAGE_ID_NOW_PLAYLIST )
+			if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_PLAY) == TabPage.TABPAGE_ID_NOW_PLAYLIST )
 			{
 				// TODO: 現在、トラックと同じカーソルになっているが、考えた方がいいかもしれない
 				// NOWPLAYLIST

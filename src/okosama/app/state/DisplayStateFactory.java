@@ -49,6 +49,9 @@ public class DisplayStateFactory {
 		case TabPage.TABPAGE_ID_VIDEO:
 			state = new DisplayStateVideo();
 			break;		
+		case TabPage.TABPAGE_ID_VIDEO_VIEW:
+			state = new DisplayStateVideoView();
+			break;		
 		}
 		return state;
 	}

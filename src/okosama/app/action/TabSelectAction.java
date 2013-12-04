@@ -31,7 +31,8 @@ public final class TabSelectAction implements IViewAction {
 		if( tabId != ControlIDs.ID_NOT_SPECIFIED  && tabId != TabPage.TABPAGE_ID_UNKNOWN )
 		{
 			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-			if( tabPageId == act.getCurrentDisplayId(tabId) )
+			if( tabId == act.getTabStocker().getCurrentTabId()
+			&& tabPageId == act.getCurrentDisplayId(tabId) )
 			{
 				return 0;
 			}

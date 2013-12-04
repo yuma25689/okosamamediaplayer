@@ -109,7 +109,9 @@ public class TabAnimationFactory {
 			set.addAnimation(rotate);
 			set.addAnimation(scale);
 		}
-		set.setDuration(300);
+		set.setFillAfter(false);
+		set.setFillEnabled(true);
+		set.setDuration(nDuration);
 		
 		return set;
 	}
