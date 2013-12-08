@@ -67,8 +67,8 @@ public final class DroidDisplayInfo {
 			// 割と強引だが、この画像をスクリーンと考えた位置に他のコンポーネントを配置する
 			// この画像内での他のコンポーネントの位置は分かるが、プログラム内ではdensityを考慮しなければならない
 			// densityを考慮した場合の、補正値を計算する
-	        backgroundImgBase = OkosamaMediaPlayerActivity.getResourceAccessor()
-	        		.getResourceDrawable(R.drawable.background_3);
+//	        backgroundImgBase = OkosamaMediaPlayerActivity.getResourceAccessor()
+//	        		.getResourceDrawable(R.drawable.background_3);
 		}
 		updateDisplayMetrics();
 	}
@@ -115,9 +115,9 @@ public final class DroidDisplayInfo {
 		        // 実際のDisplayの高さと横幅と、背景画像の高さと横幅との比率を求める
 				// ベース画像の、元（プログラムに入ってくる前）の高さと幅
 				orgHeightOfBk 
-					= (backgroundImgBase.getIntrinsicHeight()); /// metrics.density;
+					= ControlDefs.APP_BASE_HEIGHT;//(backgroundImgBase.getIntrinsicHeight()); /// metrics.density;
 				orgWidthOfBk 
-					= (backgroundImgBase.getIntrinsicWidth());// / metrics.density;
+					= ControlDefs.APP_BASE_WIDTH;//(backgroundImgBase.getIntrinsicWidth());// / metrics.density;
 				// プログラム内でのクライアント領域のサイズと、元の画像のサイズとの比率を求める
 		        heightScaleCorrectDensity
 		        	=  clientHeightPixels 

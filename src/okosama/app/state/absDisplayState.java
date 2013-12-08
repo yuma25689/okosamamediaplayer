@@ -123,6 +123,10 @@ public abstract class absDisplayState implements IDisplayState {
             act.startActivity(intent);
 			break;
 		case MENU_EFFECTOR:
+        	if( MediaPlayerUtil.sService == null )
+        	{
+        		break;
+        	}
             Intent i = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
             try {
 				i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, 

@@ -434,7 +434,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 			            		data.setTrackAlbum(cursor.getString(mAlbumIdx));
 			            		data.setTrackAlbumId(cursor.getString(mAlbumIdIdx));
 			            		data.setTrackArtistId(cursor.getString(mArtistIdIdx));
-				          		Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
+				          		// Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
 			            		if( data.getTrackAlbumId() != null )
 			            		{
 				        			data.setTrackAlbumArt(

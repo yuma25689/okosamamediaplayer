@@ -27,6 +27,8 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Environment;
+import android.util.Log;
+import android.util.SparseArray;
 
 /**
  * リソースにアクセスするためのクラス
@@ -69,6 +71,8 @@ public final class ResourceAccessor {
 	private int iSoundLoadCnt = 0;
 	private SoundPool soundPool;
 	
+	private SparseArray<Bitmap> bmpArray = new SparseArray<Bitmap>();
+	
 	
 	// リソースを取得するためのアクティビティを設定
 	// TODO: しかし、ここに保持しておくと、
@@ -86,7 +90,6 @@ public final class ResourceAccessor {
 	private ResourceAccessor(OkosamaMediaPlayerActivity activity) 
 	{
 		this.activity = activity;
-		commonBtns = new ArrayList<Button>();
 	}
 	public static void CreateInstance( OkosamaMediaPlayerActivity activity )
 	{
@@ -149,7 +152,32 @@ public final class ResourceAccessor {
 	{
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inPreferredConfig = Bitmap.Config.ARGB_4444;
-		return BitmapFactory.decodeResource(activity.getResources(), id, options);
+		
+		Bitmap ret = null;
+		
+		if( 0 < bmpArray.indexOfKey( id ) && bmpArray.get(id) != null )
+		{
+			ret = bmpArray.get(id);
+		}
+		else
+		{
+			try {
+				ret = BitmapFactory.decodeResource(activity.getResources(), id, options);
+			} catch( OutOfMemoryError ex ) {
+				System.gc();
+				Log.e("Out of memory occur","bitmap create");
+				ret = null;
+			}
+			if( ret == null )
+			{
+				ret = BitmapFactory.decodeResource(activity.getResources(), id, options);
+			}
+			if( ret != null )
+			{
+				bmpArray.put( id, ret );
+			}
+		}
+		return ret;
 	}	
 	public Drawable getResourceDrawable( int id )
 	{

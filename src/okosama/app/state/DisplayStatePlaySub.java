@@ -37,13 +37,16 @@ public class DisplayStatePlaySub extends absDisplayState {
 		switch( status )
 		{
 		case STATUS_ON_RESUME:
-			f = new IntentFilter();
-	        f.addAction(MediaPlaybackService.META_CHANGED);
-	        f.addAction(MediaPlaybackService.QUEUE_CHANGED);
-	        BroadcastReceiver playChangeListener = ListenerFactory.createPlayChangeListener(this);
-	        receivers.put( LSNER_NAME_PLAYCHG, playChangeListener );
-	        OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().registerReceiver(playChangeListener, f);
-	        playChangeListener.onReceive(null, null);
+			if( receivers.containsKey( LSNER_NAME_PLAYCHG ) == false )
+			{
+				f = new IntentFilter();
+		        f.addAction(MediaPlaybackService.META_CHANGED);
+		        f.addAction(MediaPlaybackService.QUEUE_CHANGED);
+		        BroadcastReceiver playChangeListener = ListenerFactory.createPlayChangeListener(this);
+		        receivers.put( LSNER_NAME_PLAYCHG, playChangeListener );
+		        OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().registerReceiver(playChangeListener, f);
+		        playChangeListener.onReceive(null, null);
+			}
 	        break;
 		}
 		return 0;

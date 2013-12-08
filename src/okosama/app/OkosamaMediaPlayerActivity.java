@@ -399,11 +399,7 @@ implements ServiceConnection, Database.Defs {
         //HideTabComponentAction.getInstance().setTabLayout(componentContainer);
         //ShowTabComponentAction.getInstance().setTabLayout(componentContainer);
 
-		if( false == OkosamaMediaPlayerActivity.getResourceAccessor().isSdCanRead() )
-		{
-			// SDカードが読めない状態の場合
-			OkosamaMediaPlayerActivity.getResourceAccessor().setReadSDCardSuccess(false);
-		}
+		OkosamaMediaPlayerActivity.getResourceAccessor().setReadSDCardSuccess(OkosamaMediaPlayerActivity.getResourceAccessor().isSdCanRead());
         
         // 時間表時の初期化
 		updateTimeDisplayVisible(0);
@@ -594,6 +590,19 @@ implements ServiceConnection, Database.Defs {
         
         // モーションセンサの登録解除
         getResourceAccessor().rereaseMotionSenser();
+        
+        // サービスの登録解除
+		try {
+			if( MediaPlayerUtil.sService != null && false == MediaPlayerUtil.sService.isPlaying() )
+			{
+				// サービスの登録解除
+			    MediaPlayerUtil.unbindFromService(mToken);
+			    MediaPlayerUtil.sService = null;
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
 		super.onPause();
 	}
@@ -983,6 +992,9 @@ implements ServiceConnection, Database.Defs {
 
 	@Override
 	protected void onDestroy() {
+        // 全てのレシーバの登録解除
+        stateStocker.unResisterReceiverAll();
+		
 		try {
 			if( MediaPlayerUtil.sService != null && false == MediaPlayerUtil.sService.isPlaying() )
 			{
@@ -1132,8 +1144,14 @@ implements ServiceConnection, Database.Defs {
 				IDisplayState stateMedia = stateStocker.getState(ControlIDs.TAB_ID_MEDIA);
 				if( stateMedia == null )
 					return false;
-				
-				iRet = stateMedia.onCreateOptionsMenu(menu);
+				try {				
+					iRet = stateMedia.onCreateOptionsMenu(menu);
+				} catch( OutOfMemoryError ex ) {
+					Log.e("OutOfMemory","Menu Create");
+					System.gc();
+					iRet = stateMedia.onCreateOptionsMenu(menu);
+				}
+
 			}
 			else if( iRet == IDisplayState.MENU_PLAY_STATE )
 			{
@@ -1141,7 +1159,14 @@ implements ServiceConnection, Database.Defs {
 				if( statePlay == null )
 					return false;
 				
-				iRet = statePlay.onCreateOptionsMenu(menu);
+				try {
+					iRet = statePlay.onCreateOptionsMenu(menu);
+				} catch( OutOfMemoryError ex ) {
+					Log.e("OutOfMemory","Menu Create");
+					System.gc();
+					iRet = statePlay.onCreateOptionsMenu(menu);
+				}
+				
 			}
 	        return true;
 	    }
@@ -1290,7 +1315,7 @@ implements ServiceConnection, Database.Defs {
 		        {
 		        	if( null != timeBtns[i].getView() )
 		        	{
-		        		((ButtonImpl)timeBtns[i].getView()).setImageResource( timeImgResIds[ timeArgs[i] ] );
+		        		((ButtonImpl)timeBtns[i].getView()).setImageBitmap( getResourceAccessor().createBitmapFromDrawableId(timeImgResIds[ timeArgs[i] ]) );
 		        	}
 		        }
 	        }
