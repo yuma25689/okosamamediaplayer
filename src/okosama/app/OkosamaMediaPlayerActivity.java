@@ -24,9 +24,11 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
+import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
 import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TimeControlPanel;
+import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.service.MediaPlayerUtil.ServiceToken;
 import okosama.app.state.DisplayStateFactory;
@@ -56,7 +58,7 @@ import okosama.app.widget.ButtonImpl;
 
 public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection, Database.Defs {
-	public static final String MEDIA_SERVICE_NOTIFY = "MediaServiceNotify";
+	public static final String MEDIA_SERVICE_NOTIFY = "MediaServiceNotify";	
 	
 	public SurfaceView surfaceView = null;
 	public SurfaceView getVideoView()
@@ -92,6 +94,40 @@ implements ServiceConnection, Database.Defs {
     }
 	public void updatePlayStateButtonImage()
 	{
+		//Log.e("update playstatebutton","come");
+		if( PlayControlPanel.getInstance() != null ) 
+		{
+			boolean bRealEnabled = OkosamaMediaPlayerActivity.getResourceAccessor().isSdCanRead();
+			boolean bEnabled = getResourceAccessor().isReadSDCardSuccess();
+			if( bRealEnabled != bEnabled )
+			{
+				getResourceAccessor().setReadSDCardSuccess(bRealEnabled);
+				bEnabled = bRealEnabled;
+				// アプリケーションを再起動
+                Message msg = handler.obtainMessage(AppStatus.RESTART);
+                handler.removeMessages(AppStatus.RESTART);
+                handler.sendMessageDelayed(msg, 1);
+				
+				return;
+			}
+			if( PlayControlPanel.getInstance().isEnabled() != bEnabled )
+			{
+				PlayControlPanel.getInstance().setEnabled(bEnabled);
+			
+				if( SubControlPanel.getInstance() != null )
+				{
+					SubControlPanel.getInstance().setEnabled(bEnabled);
+				}			
+				if( TimeControlPanel.getInstance() != null )
+				{
+					TimeControlPanel.getInstance().setEnabled(bEnabled);
+				}			
+				if( NowPlayingControlPanel.getInstance() != null )
+				{
+					NowPlayingControlPanel.getInstance().setEnabled(bEnabled);
+				}
+			}
+		}
 		if( PlayControlPanel.getInstance() != null ) 
 			PlayControlPanel.getInstance().setPlayPauseButtonImage();
 		
@@ -99,6 +135,24 @@ implements ServiceConnection, Database.Defs {
 		{
 			SubControlPanel.getInstance().setShuffleButtonImage();
 			SubControlPanel.getInstance().setRepeatButtonImage();
+		}
+	}
+	public void updateVideoView()
+	{
+		if( getVideoView() != null ) 
+		{
+			try {
+				if( MediaPlayerUtil.sService != null 
+				&& MediaPlayerUtil.sService.getQueue() != null
+				&& MediaPlayerUtil.sService.getCurrentType() == MediaInfo.MEDIA_TYPE_VIDEO )
+				{
+					getVideoView().setVisibility(View.VISIBLE);
+					return;
+				}
+			} catch (RemoteException e) {
+			}
+			getVideoView().setVisibility(View.GONE);
+
 		}
 	}
 	// サービスのトークン
@@ -345,6 +399,12 @@ implements ServiceConnection, Database.Defs {
         //HideTabComponentAction.getInstance().setTabLayout(componentContainer);
         //ShowTabComponentAction.getInstance().setTabLayout(componentContainer);
 
+		if( false == OkosamaMediaPlayerActivity.getResourceAccessor().isSdCanRead() )
+		{
+			// SDカードが読めない状態の場合
+			OkosamaMediaPlayerActivity.getResourceAccessor().setReadSDCardSuccess(false);
+		}
+        
         // 時間表時の初期化
 		updateTimeDisplayVisible(0);
 		updateTimeDisplay(0);
@@ -800,6 +860,11 @@ implements ServiceConnection, Database.Defs {
 	 */
 	void updateListeners(int status)
 	{
+		if( false == getResourceAccessor().isReadSDCardSuccess() )
+		{
+			return;
+		}
+		
 		IDisplayState stateMain = stateStocker.getState(ControlIDs.TAB_ID_MAIN);
 	
 		if( stateMain == null )

@@ -1,14 +1,10 @@
 package okosama.app.tab;
 // import android.R;
-import java.util.ArrayList;
 
 import android.graphics.drawable.Drawable;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.widget.ProgressBar;
 import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.widget.absWidget;
 
 /**
  * タブの１つのページを模倣したクラス
@@ -41,7 +37,7 @@ public abstract class TabPage extends TabComponentParent {
 	public static final int TABPAGE_ID_PLAY_SUB = 13;
 	public static final int TABPAGE_ID_VIDEO_VIEW = 14;
 	
-	private boolean bPrevActivate = false;
+	// private boolean bPrevActivate = false;
 	
 	@Override
 	public void setActivate( boolean bActivate )
@@ -58,7 +54,7 @@ public abstract class TabPage extends TabComponentParent {
 					TabChangeAnimation.TAB_OUT, tabBaseLayout, componentContainer, this.tabId);			
 	
 		}
-		bPrevActivate = bActivate;
+		// bPrevActivate = bActivate;
 		super.setActivate(bActivate);
 	}
 

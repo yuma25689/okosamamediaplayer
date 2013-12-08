@@ -94,12 +94,20 @@ public class PlaylistListBehavior extends IListBehavior implements Database.Defs
 //                if (mPlaylistCursor.getCount() == 0) {
 //                    setTitle(R.string.no_playlists_title);
 //                }
+    			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
+    					ControlIDs.TAB_ID_MEDIA,
+    					true
+    				);
                 break;
             case RENAME_PLAYLIST:
                 Intent intent = new Intent();
                 intent.setClass(activity, RenamePlaylist.class);
                 intent.putExtra("rename", data.getPlaylistId());
                 activity.startActivityForResult(intent, RENAME_PLAYLIST);
+    			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
+    					ControlIDs.TAB_ID_MEDIA,
+    					true
+    				);
                 break;
         }
         return true;

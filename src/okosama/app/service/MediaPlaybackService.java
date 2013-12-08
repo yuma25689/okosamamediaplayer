@@ -125,7 +125,11 @@ public class MediaPlaybackService extends Service {
     private int mPlayListLen = 0;
     private Vector<Integer> mHistory = new Vector<Integer>(MAX_HISTORY_SIZE);
     private Cursor mCursor;
-    private int mCurrentType = MediaInfo.MEDIA_TYPE_AUDIO; 
+    private int mCurrentType = -1; //= MediaInfo.MEDIA_TYPE_AUDIO;
+    public int getCurrentType()
+    {
+    	return mCurrentType;
+    }
     private int mPlayPos = -1;
     private static final String LOGTAG = "MediaPlaybackService";
     private final Shuffler mRand = new Shuffler();
@@ -2245,7 +2249,7 @@ public class MediaPlaybackService extends Service {
     
     public long getArtistId() {
         synchronized (this) {
-            if (mCursor == null || mCurrentType != MediaInfo.MEDIA_TYPE_AUDIO ) {
+            if (mCursor == null || mCurrentType == -1 || mCurrentType != MediaInfo.MEDIA_TYPE_AUDIO ) {
                 return -1;
             }
             return mCursor.getLong(mCursor.getColumnIndexOrThrow(AudioColumns.ARTIST_ID));
@@ -2263,7 +2267,7 @@ public class MediaPlaybackService extends Service {
 
     public long getAlbumId() {
         synchronized (this) {
-            if (mCursor == null || mCurrentType != MediaInfo.MEDIA_TYPE_AUDIO ) {
+            if (mCursor == null || mCurrentType == -1 || mCurrentType != MediaInfo.MEDIA_TYPE_AUDIO ) {
                 return -1;
             }
             return mCursor.getLong(mCursor.getColumnIndexOrThrow(AudioColumns.ALBUM_ID));
@@ -2281,7 +2285,7 @@ public class MediaPlaybackService extends Service {
 
     private boolean isPodcast() {
         synchronized (this) {
-            if (mCursor == null || mCurrentType != MediaInfo.MEDIA_TYPE_AUDIO ) {
+            if (mCursor == null || mCurrentType == -1 || mCurrentType != MediaInfo.MEDIA_TYPE_AUDIO ) {
                 return false;
             }
             return (mCursor.getInt(PODCASTCOLIDX) > 0);
@@ -2555,9 +2559,9 @@ public class MediaPlaybackService extends Service {
         public void setVolume(float vol) {
             mMediaPlayer.setVolume(vol, vol);
         }
-        public void setAudioSessionId(int sessionId) {
-            mMediaPlayer.setAudioSessionId(sessionId);
-        }
+//        public void setAudioSessionId(int sessionId) {
+//            mMediaPlayer.setAudioSessionId(sessionId);
+//        }
         public int getAudioSessionId() {
             return mMediaPlayer.getAudioSessionId();
         }
@@ -2728,6 +2732,11 @@ public class MediaPlaybackService extends Service {
 		@Override
 		public boolean isInitialized() throws RemoteException {
 			return mService.get().isInitialized();
+		}
+
+		@Override
+		public int getCurrentType() throws RemoteException {
+			return mService.get().getCurrentType();
 		}
 
     }

@@ -29,7 +29,12 @@ public class absWidget extends TabLeaf {
 	public absWidget(Activity activity) {
 		super(activity);
 	}
+	public boolean isEnabled()
+	{
+		return this.getView().isEnabled();
+	}
 	public void setEnabled( boolean b ) {
+		this.getView().setEnabled(b);
 	}
 	
 	public int create() {
@@ -46,5 +51,10 @@ public class absWidget extends TabLeaf {
 	@Override
 	public void acceptConfigurator(ITabComponentConfigurator conf) {
 		conf.configure(this);
+	}
+	
+	public void clearChild()
+	{
+		return;
 	}
 }

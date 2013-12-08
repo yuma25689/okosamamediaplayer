@@ -5,7 +5,9 @@ import okosama.app.R;
 import okosama.app.R.drawable;
 import okosama.app.action.CycleRepeatAction;
 import okosama.app.action.IViewAction;
+import okosama.app.action.MediaStopAction;
 import okosama.app.action.ToggleShuffleAction;
+import okosama.app.action.TweetAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.service.MediaPlaybackService;
 import okosama.app.service.MediaPlayerUtil;
@@ -59,6 +61,22 @@ public class SubControlPanel extends ControlPanel {
 			Log.e("error","insert sub control panel");
 		}
 	}
+	public static void removeToLayout( ViewGroup tabBaseLayout )
+	{
+		if( instance != null && instance.getView() != null )
+		{
+			if( instance.getView().getParent() != null )
+			{
+				ViewParent v = instance.getView().getParent();
+				if( v instanceof ViewGroup )
+				{
+					((ViewGroup) v).removeView(instance.getView());
+				}
+			}
+
+			parent = null;				
+		}
+	}
 
 	public SubControlPanel(Activity activity) {
 		super(activity);
@@ -78,11 +96,26 @@ public class SubControlPanel extends ControlPanel {
 					200, 390, 100, 100
 					, null, drawable.no_image, "", ScaleType.FIT_XY
 				),
+				// --------------------- STOP
+				new TabComponentPropertySetter(
+					ControlIDs.STOP_BUTTON, null, ComponentType.BUTTON, 
+					150, 500, 100, 100
+					, null, R.drawable.stop_button_image, "", ScaleType.FIT_XY
+				),
+				// --------------------- TWITTER
+				new TabComponentPropertySetter(
+					ControlIDs.TWEET_BUTTON, null, ComponentType.BUTTON, 
+					370, 450, 80, 80
+					, null, R.drawable.internal_btn_image, "", ScaleType.FIT_XY
+				),				
 		};
 	
 		absWidget widgets[] = {
 				getShuffleButton()
 				,getRepeatButton()
+				,DroidWidgetKit.getInstance().MakeButton()
+				,DroidWidgetKit.getInstance().MakeButton()
+				
 			};
 		// ---- action
 		// Timeコンポーネント
@@ -95,9 +128,20 @@ public class SubControlPanel extends ControlPanel {
 			= new SparseArray< IViewAction >();
 		actMapRepeat.put( IViewAction.ACTION_ID_ONCLICK, new CycleRepeatAction() );
 
+		// stopボタン
+		SparseArray< IViewAction > actMapStop 
+		= new SparseArray< IViewAction >();
+		actMapStop.put( IViewAction.ACTION_ID_ONCLICK, new MediaStopAction() );
+		// twitterボタン
+		SparseArray< IViewAction > actMapTwitter
+			= new SparseArray< IViewAction >();
+		actMapTwitter.put( IViewAction.ACTION_ID_ONCLICK, new TweetAction() );
+				
 		TabComponentActionSetter actionSetterCont[] = {
 				new TabComponentActionSetter( actMapShuffle )
 				,new TabComponentActionSetter( actMapRepeat )
+				,new TabComponentActionSetter( actMapStop )
+				,new TabComponentActionSetter( actMapTwitter )
 			};
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;
@@ -111,6 +155,7 @@ public class SubControlPanel extends ControlPanel {
 			}
 			
 			// ボタンをこのタブ子項目として追加
+			addChild( creationData[i].getInternalID(), widget );			
 			tabBaseLayout.addView( widget.getView() );
 			i++;
 		}

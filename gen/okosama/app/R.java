@@ -100,172 +100,183 @@ public final class R {
         public static final int brat_main_disable=0x7f020024;
         public static final int brat_main_normal=0x7f020025;
         public static final int brat_main_press=0x7f020026;
-        public static final int btn_clear_focus=0x7f020027;
-        public static final int btn_clear_normal=0x7f020028;
-        public static final int btn_clear_press=0x7f020029;
-        public static final int btn_no_repeat_image=0x7f02002a;
-        public static final int btn_no_shuffle_image=0x7f02002b;
-        public static final int btn_one_repeat_image=0x7f02002c;
-        public static final int btn_play_disable=0x7f02002d;
-        public static final int btn_play_focus=0x7f02002e;
-        public static final int btn_play_image=0x7f02002f;
-        public static final int btn_play_normal=0x7f020030;
-        public static final int btn_play_press=0x7f020031;
-        public static final int btn_playback_ic_next=0x7f020032;
-        public static final int btn_playback_ic_pause=0x7f020033;
-        public static final int btn_playback_ic_play=0x7f020034;
-        public static final int btn_playback_ic_prev=0x7f020035;
-        public static final int btn_repeat_all_image=0x7f020036;
-        public static final int btn_shuffle_all_image=0x7f020037;
-        public static final int btn_shuffle_auto_image=0x7f020038;
-        public static final int empty=0x7f020039;
-        public static final int exp_down_ind=0x7f02003a;
-        public static final int exp_down_ind_24=0x7f02003b;
-        public static final int exp_ind=0x7f02003c;
-        public static final int exp_up_ind=0x7f02003d;
-        public static final int exp_up_ind_24=0x7f02003e;
-        public static final int external_btn_image=0x7f02003f;
-        public static final int external_disabled=0x7f020040;
-        public static final int external_normal=0x7f020041;
-        public static final int external_press=0x7f020042;
-        public static final int external_selected=0x7f020043;
-        public static final int filter_disable=0x7f020044;
-        public static final int filter_normal=0x7f020045;
-        public static final int filter_press=0x7f020046;
-        public static final int ic_appwidget_music_next=0x7f020047;
-        public static final int ic_appwidget_music_pause=0x7f020048;
-        public static final int ic_appwidget_music_play=0x7f020049;
-        public static final int ic_launcher=0x7f02004a;
-        public static final int ic_mp_album_playback=0x7f02004b;
-        public static final int ic_mp_artist_list=0x7f02004c;
-        public static final int ic_mp_artist_playback=0x7f02004d;
-        public static final int ic_mp_current_playlist_btn=0x7f02004e;
-        public static final int ic_mp_move=0x7f02004f;
-        public static final int ic_mp_partyshuffle_on_btn=0x7f020050;
-        public static final int ic_mp_playlist_list=0x7f020051;
-        public static final int ic_mp_playlist_recently_added_list=0x7f020052;
-        public static final int ic_mp_repeat_all_btn=0x7f020053;
-        public static final int ic_mp_repeat_off_btn=0x7f020054;
-        public static final int ic_mp_repeat_once_btn=0x7f020055;
-        public static final int ic_mp_sd_card=0x7f020056;
-        public static final int ic_mp_shuffle_off_btn=0x7f020057;
-        public static final int ic_mp_shuffle_on_btn=0x7f020058;
-        public static final int ic_mp_song_list=0x7f020059;
-        public static final int ic_mp_song_playback=0x7f02005a;
-        public static final int ic_slide_keyboard=0x7f02005b;
-        public static final int indicator_ic_mp_playing_list=0x7f02005c;
-        public static final int internal_btn_image=0x7f02005d;
-        public static final int internal_disabled=0x7f02005e;
-        public static final int internal_normal=0x7f02005f;
-        public static final int internal_press=0x7f020060;
-        public static final int internal_selected=0x7f020061;
-        public static final int list_divider_tesuri=0x7f020062;
-        public static final int list_selector=0x7f020063;
-        public static final int logo=0x7f020064;
-        public static final int music_choice_button_image=0x7f020065;
-        public static final int music_choice_disable=0x7f020066;
-        public static final int music_choice_focus=0x7f020067;
-        public static final int music_choice_normal=0x7f020068;
-        public static final int music_choice_press=0x7f020069;
-        public static final int music_select_album_image=0x7f02006a;
-        public static final int music_select_artist_image=0x7f02006b;
-        public static final int music_select_playlist_image=0x7f02006c;
-        public static final int music_select_song_image=0x7f02006d;
-        public static final int music_tab_button_image=0x7f02006e;
-        public static final int nestbtn_disabled=0x7f02006f;
-        public static final int nestbtn_focus=0x7f020070;
-        public static final int nestbtn_normal=0x7f020071;
-        public static final int nestbtn_press=0x7f020072;
-        public static final int next_button_image=0x7f020073;
-        public static final int no_image=0x7f020074;
-        public static final int no_repeat=0x7f020075;
-        public static final int no_repeat_focus=0x7f020076;
-        public static final int now_playlist_button_image=0x7f020077;
-        public static final int num0_1=0x7f020078;
-        public static final int num1_1=0x7f020079;
-        public static final int num2_1=0x7f02007a;
-        public static final int num3_1=0x7f02007b;
-        public static final int num4_1=0x7f02007c;
-        public static final int num5_1=0x7f02007d;
-        public static final int num6_1=0x7f02007e;
-        public static final int num7_1=0x7f02007f;
-        public static final int num8_1=0x7f020080;
-        public static final int num9_1=0x7f020081;
-        public static final int okosama_app_widget_bg=0x7f020082;
-        public static final int okosama_progress_inverse=0x7f020083;
-        public static final int one_repeat=0x7f020084;
-        public static final int one_repeat_focus=0x7f020085;
-        public static final int pause_button_image=0x7f020086;
-        public static final int play_button_disable=0x7f020087;
-        public static final int play_button_focus=0x7f020088;
-        public static final int play_button_image=0x7f020089;
-        public static final int play_button_normal=0x7f02008a;
-        public static final int play_button_playing=0x7f02008b;
-        public static final int play_button_pressed=0x7f02008c;
-        public static final int play_ear_normal=0x7f02008d;
-        public static final int play_ear_normal_black=0x7f02008e;
-        public static final int play_ear_normal_black_press=0x7f02008f;
-        public static final int playlist_disabled=0x7f020090;
-        public static final int playlist_normal=0x7f020091;
-        public static final int playlist_press=0x7f020092;
-        public static final int playlist_selected=0x7f020093;
-        public static final int playlisttabbtn_normal=0x7f020094;
-        public static final int playlisttabbtn_press=0x7f020095;
-        public static final int playlisttabbtn_selected=0x7f020096;
-        public static final int progress_image=0x7f020097;
-        public static final int progress_max=0x7f020098;
-        public static final int progress_normal=0x7f020099;
-        public static final int repeat_press=0x7f02009a;
-        public static final int shuffle_all=0x7f02009b;
-        public static final int shuffle_all2=0x7f02009c;
-        public static final int shuffle_all_focus=0x7f02009d;
-        public static final int shuffle_auto=0x7f02009e;
-        public static final int shuffle_auto2=0x7f02009f;
-        public static final int shuffle_auto_focus=0x7f0200a0;
-        public static final int shuffle_normal=0x7f0200a1;
-        public static final int shuffle_normal2=0x7f0200a2;
-        public static final int shuffle_normal_focus=0x7f0200a3;
-        public static final int shuffle_press=0x7f0200a4;
-        public static final int songtabbtn_normal=0x7f0200a5;
-        public static final int songtabbtn_press=0x7f0200a6;
-        public static final int songtabbtn_selected=0x7f0200a7;
-        public static final int stat_notify_musicplayer=0x7f0200a8;
-        public static final int stop_button_image=0x7f0200a9;
-        public static final int stop_disable=0x7f0200aa;
-        public static final int stop_focus=0x7f0200ab;
-        public static final int stop_hand_normal=0x7f0200ac;
-        public static final int stop_hand_normal_black=0x7f0200ad;
-        public static final int stop_hand_normal_black_press=0x7f0200ae;
-        public static final int stop_normal=0x7f0200af;
-        public static final int stop_press=0x7f0200b0;
-        public static final int tab1_btn_not_select_no_shadow2=0x7f0200b1;
-        public static final int tab1_btn_not_select_right_shadow=0x7f0200b2;
-        public static final int tab1_btn_select_2=0x7f0200b3;
-        public static final int tab2_btn_not_select_no_shadow2=0x7f0200b4;
-        public static final int tab2_btn_select_2=0x7f0200b5;
-        public static final int tab3_btn_not_select_both_shadow=0x7f0200b6;
-        public static final int tab3_btn_not_select_left_shadow=0x7f0200b7;
-        public static final int tab3_btn_not_select_no_shadow2=0x7f0200b8;
-        public static final int tab3_btn_select_2=0x7f0200b9;
-        public static final int tab4_btn_not_select_both_shadow=0x7f0200ba;
-        public static final int tab4_btn_not_select_no_shadow2=0x7f0200bb;
-        public static final int tab4_btn_select_2=0x7f0200bc;
-        public static final int tab_1_list_bk=0x7f0200bd;
-        public static final int tab_1_select=0x7f0200be;
-        public static final int tab_1_select_2=0x7f0200bf;
-        public static final int tab_2_list_bk=0x7f0200c0;
-        public static final int tab_2_select=0x7f0200c1;
-        public static final int tab_2_select_2=0x7f0200c2;
-        public static final int tab_3_list_bk=0x7f0200c3;
-        public static final int tab_3_select_2=0x7f0200c4;
-        public static final int tab_4_list_bk=0x7f0200c5;
-        public static final int tab_4_select_2=0x7f0200c6;
-        public static final int time_background=0x7f0200c7;
-        public static final int time_bk_shelf=0x7f0200c8;
-        public static final int video_focus=0x7f0200c9;
-        public static final int video_normal=0x7f0200ca;
-        public static final int video_press=0x7f0200cb;
-        public static final int video_select_image=0x7f0200cc;
+        public static final int btn_clear_disable=0x7f020027;
+        public static final int btn_clear_focus=0x7f020028;
+        public static final int btn_clear_normal=0x7f020029;
+        public static final int btn_clear_press=0x7f02002a;
+        public static final int btn_no_repeat_image=0x7f02002b;
+        public static final int btn_no_shuffle_image=0x7f02002c;
+        public static final int btn_one_repeat_image=0x7f02002d;
+        public static final int btn_play_disable=0x7f02002e;
+        public static final int btn_play_focus=0x7f02002f;
+        public static final int btn_play_image=0x7f020030;
+        public static final int btn_play_normal=0x7f020031;
+        public static final int btn_play_press=0x7f020032;
+        public static final int btn_playback_ic_next=0x7f020033;
+        public static final int btn_playback_ic_pause=0x7f020034;
+        public static final int btn_playback_ic_play=0x7f020035;
+        public static final int btn_playback_ic_prev=0x7f020036;
+        public static final int btn_repeat_all_image=0x7f020037;
+        public static final int btn_shuffle_all_image=0x7f020038;
+        public static final int btn_shuffle_auto_image=0x7f020039;
+        public static final int empty=0x7f02003a;
+        public static final int exp_down_ind=0x7f02003b;
+        public static final int exp_down_ind_24=0x7f02003c;
+        public static final int exp_ind=0x7f02003d;
+        public static final int exp_up_ind=0x7f02003e;
+        public static final int exp_up_ind_24=0x7f02003f;
+        public static final int external_btn_image=0x7f020040;
+        public static final int external_disabled=0x7f020041;
+        public static final int external_normal=0x7f020042;
+        public static final int external_press=0x7f020043;
+        public static final int external_selected=0x7f020044;
+        public static final int filter_disable=0x7f020045;
+        public static final int filter_normal=0x7f020046;
+        public static final int filter_press=0x7f020047;
+        public static final int ic_appwidget_music_next=0x7f020048;
+        public static final int ic_appwidget_music_pause=0x7f020049;
+        public static final int ic_appwidget_music_play=0x7f02004a;
+        public static final int ic_launcher=0x7f02004b;
+        public static final int ic_mp_album_playback=0x7f02004c;
+        public static final int ic_mp_artist_list=0x7f02004d;
+        public static final int ic_mp_artist_playback=0x7f02004e;
+        public static final int ic_mp_current_playlist_btn=0x7f02004f;
+        public static final int ic_mp_move=0x7f020050;
+        public static final int ic_mp_partyshuffle_on_btn=0x7f020051;
+        public static final int ic_mp_playlist_list=0x7f020052;
+        public static final int ic_mp_playlist_recently_added_list=0x7f020053;
+        public static final int ic_mp_repeat_all_btn=0x7f020054;
+        public static final int ic_mp_repeat_off_btn=0x7f020055;
+        public static final int ic_mp_repeat_once_btn=0x7f020056;
+        public static final int ic_mp_sd_card=0x7f020057;
+        public static final int ic_mp_shuffle_off_btn=0x7f020058;
+        public static final int ic_mp_shuffle_on_btn=0x7f020059;
+        public static final int ic_mp_song_list=0x7f02005a;
+        public static final int ic_mp_song_playback=0x7f02005b;
+        public static final int ic_slide_keyboard=0x7f02005c;
+        public static final int indicator_ic_mp_playing_list=0x7f02005d;
+        public static final int internal_btn_image=0x7f02005e;
+        public static final int internal_disabled=0x7f02005f;
+        public static final int internal_normal=0x7f020060;
+        public static final int internal_press=0x7f020061;
+        public static final int internal_selected=0x7f020062;
+        public static final int list_divider_tesuri=0x7f020063;
+        public static final int list_selector=0x7f020064;
+        public static final int logo=0x7f020065;
+        public static final int music_choice_button_image=0x7f020066;
+        public static final int music_choice_disable=0x7f020067;
+        public static final int music_choice_focus=0x7f020068;
+        public static final int music_choice_normal=0x7f020069;
+        public static final int music_choice_press=0x7f02006a;
+        public static final int music_select_album_image=0x7f02006b;
+        public static final int music_select_artist_image=0x7f02006c;
+        public static final int music_select_playlist_image=0x7f02006d;
+        public static final int music_select_song_image=0x7f02006e;
+        public static final int music_tab_button_image=0x7f02006f;
+        public static final int nestbtn_disabled=0x7f020070;
+        public static final int nestbtn_focus=0x7f020071;
+        public static final int nestbtn_normal=0x7f020072;
+        public static final int nestbtn_press=0x7f020073;
+        public static final int next_button_image=0x7f020074;
+        public static final int no_image=0x7f020075;
+        public static final int no_repeat=0x7f020076;
+        public static final int no_repeat_focus=0x7f020077;
+        public static final int now_playlist_button_image=0x7f020078;
+        public static final int num0_1=0x7f020079;
+        public static final int num1_1=0x7f02007a;
+        public static final int num2_1=0x7f02007b;
+        public static final int num3_1=0x7f02007c;
+        public static final int num4_1=0x7f02007d;
+        public static final int num5_1=0x7f02007e;
+        public static final int num6_1=0x7f02007f;
+        public static final int num7_1=0x7f020080;
+        public static final int num8_1=0x7f020081;
+        public static final int num9_1=0x7f020082;
+        public static final int okosama_app_widget_bg=0x7f020083;
+        public static final int okosama_progress_inverse=0x7f020084;
+        public static final int one_repeat=0x7f020085;
+        public static final int one_repeat_focus=0x7f020086;
+        public static final int pause_button_image=0x7f020087;
+        public static final int play_button_disable=0x7f020088;
+        public static final int play_button_focus=0x7f020089;
+        public static final int play_button_image=0x7f02008a;
+        public static final int play_button_normal=0x7f02008b;
+        public static final int play_button_playing=0x7f02008c;
+        public static final int play_button_pressed=0x7f02008d;
+        public static final int play_ear_disable=0x7f02008e;
+        public static final int play_ear_normal=0x7f02008f;
+        public static final int play_ear_normal_black=0x7f020090;
+        public static final int play_ear_normal_black_press=0x7f020091;
+        public static final int playlist_disabled=0x7f020092;
+        public static final int playlist_normal=0x7f020093;
+        public static final int playlist_press=0x7f020094;
+        public static final int playlist_selected=0x7f020095;
+        public static final int playlisttabbtn_normal=0x7f020096;
+        public static final int playlisttabbtn_press=0x7f020097;
+        public static final int playlisttabbtn_selected=0x7f020098;
+        public static final int progress_image=0x7f020099;
+        public static final int progress_max=0x7f02009a;
+        public static final int progress_normal=0x7f02009b;
+        public static final int repeat_disable=0x7f02009c;
+        public static final int repeat_press=0x7f02009d;
+        public static final int sdcard_choice_button_image=0x7f02009e;
+        public static final int sdcard_disable=0x7f02009f;
+        public static final int sdcard_empty=0x7f0200a0;
+        public static final int sdcard_focus=0x7f0200a1;
+        public static final int sdcard_normal=0x7f0200a2;
+        public static final int sdcard_press=0x7f0200a3;
+        public static final int shuffle_all=0x7f0200a4;
+        public static final int shuffle_all2=0x7f0200a5;
+        public static final int shuffle_all_focus=0x7f0200a6;
+        public static final int shuffle_auto=0x7f0200a7;
+        public static final int shuffle_auto2=0x7f0200a8;
+        public static final int shuffle_auto_focus=0x7f0200a9;
+        public static final int shuffle_disable=0x7f0200aa;
+        public static final int shuffle_focus=0x7f0200ab;
+        public static final int shuffle_normal=0x7f0200ac;
+        public static final int shuffle_normal2=0x7f0200ad;
+        public static final int shuffle_normal_focus=0x7f0200ae;
+        public static final int shuffle_press=0x7f0200af;
+        public static final int songtabbtn_normal=0x7f0200b0;
+        public static final int songtabbtn_press=0x7f0200b1;
+        public static final int songtabbtn_selected=0x7f0200b2;
+        public static final int stat_notify_musicplayer=0x7f0200b3;
+        public static final int stop_button_image=0x7f0200b4;
+        public static final int stop_disable=0x7f0200b5;
+        public static final int stop_focus=0x7f0200b6;
+        public static final int stop_hand_normal=0x7f0200b7;
+        public static final int stop_hand_normal_black=0x7f0200b8;
+        public static final int stop_hand_normal_black_press=0x7f0200b9;
+        public static final int stop_normal=0x7f0200ba;
+        public static final int stop_press=0x7f0200bb;
+        public static final int tab1_btn_not_select_no_shadow2=0x7f0200bc;
+        public static final int tab1_btn_not_select_right_shadow=0x7f0200bd;
+        public static final int tab1_btn_select_2=0x7f0200be;
+        public static final int tab2_btn_not_select_no_shadow2=0x7f0200bf;
+        public static final int tab2_btn_select_2=0x7f0200c0;
+        public static final int tab3_btn_not_select_both_shadow=0x7f0200c1;
+        public static final int tab3_btn_not_select_left_shadow=0x7f0200c2;
+        public static final int tab3_btn_not_select_no_shadow2=0x7f0200c3;
+        public static final int tab3_btn_select_2=0x7f0200c4;
+        public static final int tab4_btn_not_select_both_shadow=0x7f0200c5;
+        public static final int tab4_btn_not_select_no_shadow2=0x7f0200c6;
+        public static final int tab4_btn_select_2=0x7f0200c7;
+        public static final int tab_1_list_bk=0x7f0200c8;
+        public static final int tab_1_select=0x7f0200c9;
+        public static final int tab_1_select_2=0x7f0200ca;
+        public static final int tab_2_list_bk=0x7f0200cb;
+        public static final int tab_2_select=0x7f0200cc;
+        public static final int tab_2_select_2=0x7f0200cd;
+        public static final int tab_3_list_bk=0x7f0200ce;
+        public static final int tab_3_select_2=0x7f0200cf;
+        public static final int tab_4_list_bk=0x7f0200d0;
+        public static final int tab_4_select_2=0x7f0200d1;
+        public static final int time_background=0x7f0200d2;
+        public static final int time_bk_shelf=0x7f0200d3;
+        public static final int video_focus=0x7f0200d4;
+        public static final int video_normal=0x7f0200d5;
+        public static final int video_press=0x7f0200d6;
+        public static final int video_select_image=0x7f0200d7;
     }
     public static final class id {
         public static final int EmptyShowPanel=0x7f0c0013;
@@ -280,18 +291,19 @@ public final class R {
         public static final int control_play=0x7f0c0006;
         public static final int create=0x7f0c000c;
         public static final int delete=0x7f0c0009;
-        public static final int duration=0x7f0c001c;
+        public static final int duration=0x7f0c001d;
         public static final int empty_image=0x7f0c0014;
         public static final int icon=0x7f0c000d;
         public static final int input_text=0x7f0c0001;
-        public static final int line1=0x7f0c001d;
-        public static final int line2=0x7f0c001e;
+        public static final int line1=0x7f0c001e;
+        public static final int line2=0x7f0c001f;
         public static final int main_linearlayout=0x7f0c000e;
         public static final int main_relativelayout=0x7f0c000f;
-        public static final int play_indicator=0x7f0c001f;
+        public static final int play_indicator=0x7f0c0020;
         public static final int playlist=0x7f0c000b;
         public static final int progress_common=0x7f0c0016;
         public static final int prompt=0x7f0c0008;
+        public static final int sdcard_empty=0x7f0c001c;
         public static final int tab_contents=0x7f0c001a;
         public static final int tab_header=0x7f0c0019;
         public static final int tab_hooter=0x7f0c001b;
@@ -314,10 +326,11 @@ public final class R {
         public static final int tab_layout_content_generic_progress=0x7f030009;
         public static final int tab_layout_header=0x7f03000a;
         public static final int tab_layout_hooter=0x7f03000b;
-        public static final int track_list_item=0x7f03000c;
-        public static final int track_list_item_child=0x7f03000d;
-        public static final int track_list_item_common=0x7f03000e;
-        public static final int track_list_item_group=0x7f03000f;
+        public static final int tab_layout_sdcard_cant_read=0x7f03000c;
+        public static final int track_list_item=0x7f03000d;
+        public static final int track_list_item_child=0x7f03000e;
+        public static final int track_list_item_common=0x7f03000f;
+        public static final int track_list_item_group=0x7f030010;
     }
     public static final class plurals {
         /**  Toast confirming that song(s) was/were deleted. 
@@ -351,7 +364,7 @@ public final class R {
         /**  Context menu item 
          */
         public static final int add_to_playlist=0x7f08003a;
-        public static final int album_label=0x7f08007a;
+        public static final int album_label=0x7f08007b;
         /**  Category label on Library screen 
          */
         public static final int albums_menu=0x7f080012;
@@ -364,16 +377,16 @@ public final class R {
         /**  All media screen title 
          */
         public static final int all_title=0x7f080019;
-        public static final int animation_level_summary=0x7f080086;
-        public static final int animation_level_title=0x7f080085;
-        public static final int animation_speed_summary=0x7f080088;
-        public static final int animation_speed_title=0x7f080087;
+        public static final int animation_level_summary=0x7f080087;
+        public static final int animation_level_title=0x7f080086;
+        public static final int animation_speed_summary=0x7f080089;
+        public static final int animation_speed_title=0x7f080088;
         public static final int app_name=0x7f080061;
-        public static final int artist_label=0x7f080079;
+        public static final int artist_label=0x7f08007a;
         /**  Artist screen title 
          */
         public static final int artists_title=0x7f080011;
-        public static final int audio_animation_category_title=0x7f080084;
+        public static final int audio_animation_category_title=0x7f080085;
         /**  Category title for audio focus in music settings 
          */
         public static final int audio_focus_category_title=0x7f080063;
@@ -427,16 +440,16 @@ public final class R {
         /**  Toast after selecting an empty playlist 
          */
         public static final int emptyplaylist=0x7f08003e;
-        public static final int enable_animation_summary=0x7f080083;
-        public static final int enable_animation_title=0x7f080082;
+        public static final int enable_animation_summary=0x7f080084;
+        public static final int enable_animation_title=0x7f080083;
         public static final int enable_focus_loss_ducking_summary=0x7f080065;
         /**  Title and summary for 'enable focus loss ducking' preference checkbox 
          */
         public static final int enable_focus_loss_ducking_title=0x7f080064;
-        public static final int enable_headset_plug_and_play_summary=0x7f08007d;
-        public static final int enable_headset_plug_and_play_title=0x7f08007c;
-        public static final int enable_media_change_vibrate_summary=0x7f08007f;
-        public static final int enable_media_change_vibrate_title=0x7f08007e;
+        public static final int enable_headset_plug_and_play_summary=0x7f08007e;
+        public static final int enable_headset_plug_and_play_title=0x7f08007d;
+        public static final int enable_media_change_vibrate_summary=0x7f080080;
+        public static final int enable_media_change_vibrate_title=0x7f08007f;
         /**  Toast after streamStarter activity receives PLAYBACK_COMPLETE in case of an error 
          */
         public static final int fail_to_start_stream=0x7f08005c;
@@ -473,6 +486,7 @@ public final class R {
         /**  Activity label. This might show up in the activity-picker 
          */
         public static final int musicshortcutlabel=0x7f080049;
+        public static final int need_restart_because_sdcard_status_change=0x7f080073;
         /**  Context menu item 
          */
         public static final int new_playlist=0x7f08003c;
@@ -489,7 +503,7 @@ public final class R {
          */
         public static final int no_videos_title=0x7f08001e;
         public static final int notification_artist_album=0x7f08006c;
-        public static final int nowplaying_tag=0x7f080077;
+        public static final int nowplaying_tag=0x7f080078;
         /**  title of the "current playlist" screen when not in party shuffle mode 
          */
         public static final int nowplaying_title=0x7f08000f;
@@ -579,6 +593,7 @@ public final class R {
         /**  label underneath icon used to indicate that the sd card is present, but currently unavailable 
          */
         public static final int sdcard_busy_title=0x7f08002b;
+        public static final int sdcard_cant_read=0x7f08008a;
         /**  label underneath icon used to indicate there was an error accessing the sd card 
          */
         public static final int sdcard_error_message=0x7f08002e;
@@ -622,7 +637,7 @@ public final class R {
         /**  Toast after turning shuffle on 
          */
         public static final int shuffle_on_notif=0x7f080031;
-        public static final int song_label=0x7f08007b;
+        public static final int song_label=0x7f08007c;
         /**  Menu in music picker to sort the list by album name. 
          */
         public static final int sort_by_album=0x7f080058;
@@ -641,23 +656,23 @@ public final class R {
         /**  Songs screen title 
          */
         public static final int tracks_title=0x7f080015;
-        public static final int tweet=0x7f080076;
-        public static final int twitter_callback_url=0x7f080075;
-        public static final int twitter_consumer_key=0x7f080073;
-        public static final int twitter_consumer_secret=0x7f080074;
+        public static final int tweet=0x7f080077;
+        public static final int twitter_callback_url=0x7f080076;
+        public static final int twitter_consumer_key=0x7f080074;
+        public static final int twitter_consumer_secret=0x7f080075;
         /**  Default name of album that doesn't have a name in the metadata 
          */
         public static final int unknown_album_name=0x7f080030;
         /**  Default name of artist that doesn't have a name in the metadata 
          */
         public static final int unknown_artist_name=0x7f08002f;
-        public static final int unknown_song_name=0x7f080078;
+        public static final int unknown_song_name=0x7f080079;
         /**  Update 
          */
         public static final int update_menu=0x7f08001c;
         public static final int updateing=0x7f08006e;
-        public static final int vibrate_intensity_summary=0x7f080081;
-        public static final int vibrate_intensity_title=0x7f080080;
+        public static final int vibrate_intensity_summary=0x7f080082;
+        public static final int vibrate_intensity_title=0x7f080081;
         /**  Activity label. This might show up in the activity-picker 
          */
         public static final int videobrowserlabel=0x7f08004b;

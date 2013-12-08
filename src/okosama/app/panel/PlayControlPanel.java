@@ -51,12 +51,28 @@ public class PlayControlPanel extends ControlPanel {
 			//if( -1 == tabBaseLayout.indexOfChild(instance.getView()) )
 			//{
 			tabBaseLayout.addView(instance.getView());
-			parent = tabBaseLayout;				
+			parent = tabBaseLayout;		
 			//}
 		}
 		else
 		{
 			Log.e("error","insert play control panel");
+		}
+	}
+	public static void removeToLayout( ViewGroup tabBaseLayout )
+	{
+		if( instance != null && instance.getView() != null )
+		{
+			if( instance.getView().getParent() != null )
+			{
+				ViewParent v = instance.getView().getParent();
+				if( v instanceof ViewGroup )
+				{
+					((ViewGroup) v).removeView(instance.getView());
+				}
+			}
+
+			parent = null;				
 		}
 	}
 	
@@ -115,8 +131,8 @@ public class PlayControlPanel extends ControlPanel {
 			{
 				widget.acceptConfigurator(actionSetterCont[i]);
 			}
-			
 			// ボタンをこのタブ子項目として追加
+			addChild( creationData[i].getInternalID(), widget );			
 			tabBaseLayout.addView( widget.getView() );
 			i++;
 		}

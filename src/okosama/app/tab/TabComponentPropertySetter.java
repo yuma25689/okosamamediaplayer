@@ -11,18 +11,13 @@ import okosama.app.adapter.VideoListRawAdapter;
 import okosama.app.adapter.PlaylistListRawAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.storage.AlbumData;
-import okosama.app.storage.ArtistChildData;
-import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.PlaylistData;
 import okosama.app.storage.TrackData;
 import okosama.app.storage.VideoData;
 import okosama.app.widget.absWidget;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.provider.MediaStore.Audio.PlaylistsColumns;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -32,7 +27,6 @@ import android.widget.ToggleButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 /**
  * Tab‚Ì\¬—v‘f‚ğì¬‚·‚é‚½‚ß‚É•K—v‚È‘S‚Ä‚Ìî•ñ‚ğ‚±‚±‚ÉŠi”[‚µ‚ÄTabComponent‚É“n‚·

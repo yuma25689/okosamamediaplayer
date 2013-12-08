@@ -45,6 +45,10 @@ public abstract class TabComponentParent implements ITabComponent {
 		return this.internalID;
 	}
 	protected boolean active = false;
+	protected boolean enable = true;
+	public boolean isEnabled() {
+		return enable;
+	}
 	public boolean isActive() {
 		return active;
 	}
@@ -144,6 +148,18 @@ public abstract class TabComponentParent implements ITabComponent {
         }
 	}
 	/**
+	 * 使用可能かどうかを設定。子の同関数もコールする
+	 * @param b
+	 */	
+	@Override
+	public void setEnabled( boolean b )
+	{
+		enable = b;
+        for( int i=0; i < children.size(); i++ ) {
+        	children.valueAt(i).setEnabled( b );
+        }
+	}	
+	/**
 	 * Visibleかどうかを設定。子の同関数もコールする
 	 * @param b
 	 */	
@@ -218,7 +234,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	/**
 	 * 子項目のクリア
 	 */
-//	public void clearChild() {
-//		children.clear();
-//	}
+	public void clearChild() {
+		children.clear();
+	}
 }

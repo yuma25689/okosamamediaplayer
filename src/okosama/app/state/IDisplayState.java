@@ -14,6 +14,7 @@ public interface IDisplayState {
 	 */
 	public int ChangeDisplayBasedOnThisState(Tab tab);
 	
+	public static String LSNER_NAME_PLAYCHG = "PLAY_CHG_LSN";
 	public static String LSNER_NAME_MEDIACHG = "MEDIA_CHG_LSN";
 	public static String LSNER_NAME_SCAN = "SCAN_LSN";
 	public static String HDLER_NAME_RESCAN = "RESCAN_HDL";

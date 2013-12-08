@@ -48,6 +48,13 @@ public interface ITabComponent {
 	public void setVisible( boolean b );
 
 	/**
+	 * 使用可能かどうかを設定
+	 * @param b
+	 */
+	public void setEnabled( boolean b );
+	public boolean isEnabled();
+	
+	/**
 	 * 表示の更新
 	 */
 	public void updateDisplay();
@@ -80,5 +87,5 @@ public interface ITabComponent {
 	/**
 	 * 子項目のクリア
 	 */
-	// public void clearChild();
+	public void clearChild();
 }

@@ -17,7 +17,7 @@ import android.widget.ImageView.ScaleType;
 
 public class TabPageNowPlaylist extends TabPage {
 
-	Tab tabContent;
+	//Tab tabContent;
 	public TabPageNowPlaylist( Tab parent, LinearLayout ll, RelativeLayout rl ) {
 		super();
 		this.parent = parent;

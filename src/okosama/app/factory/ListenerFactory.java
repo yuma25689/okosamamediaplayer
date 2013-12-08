@@ -4,7 +4,6 @@ import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.state.IDisplayState;
-import okosama.app.state.absDisplayState;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +12,17 @@ import android.os.Message;
 
 public class ListenerFactory {
 	/////////////////////// ƒŠƒXƒi
+	public static BroadcastReceiver createPlayChangeListener(IDisplayState state) 
+	{
+		return new BroadcastReceiver() {
+			@Override
+	        public void onReceive(Context context, Intent intent) {
+				OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+				act.updatePlayStateButtonImage();
+				act.updateVideoView();
+	        }
+	    };
+	}
 	public static BroadcastReceiver createMediaChangeListener(IDisplayState state) 
 	{
 		final IDisplayState state2 = state;

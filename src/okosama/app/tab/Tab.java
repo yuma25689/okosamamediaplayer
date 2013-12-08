@@ -101,7 +101,7 @@ public class Tab extends TabComponentParent {
 		= new TabComponentPropertySetter(
 			ControlIDs.MEDIA_TAB_BUTTON, null, ComponentType.BUTTON,
 			120, 40, 100, 100,
-			null, R.drawable.music_choice_button_image,
+			null, R.drawable.sdcard_choice_button_image,
 			"", ScaleType.FIT_XY
 		);
 		mapBtn.get(TabPage.TABPAGE_ID_MEDIA).acceptConfigurator(tabBtnCreationData);		
@@ -113,14 +113,14 @@ public class Tab extends TabComponentParent {
 		mapBtn.get(TabPage.TABPAGE_ID_MEDIA).acceptConfigurator(actionSetter);
 		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_MEDIA).getView());
 		// プレイリストタブボタン
-		mapBtn.put( TabPage.TABPAGE_ID_NOW_PLAYLIST, DroidWidgetKit.getInstance().MakeButton() );
-		tabBtnCreationData
-		= new TabComponentPropertySetter(
-			ControlIDs.PLAYLIST_TAB_BUTTON, null, ComponentType.BUTTON,
-			230, 40, 100, 100,
-			null, R.drawable.now_playlist_button_image,
-			"", ScaleType.FIT_XY
-		);
+//		mapBtn.put( TabPage.TABPAGE_ID_NOW_PLAYLIST, DroidWidgetKit.getInstance().MakeButton() );
+//		tabBtnCreationData
+//		= new TabComponentPropertySetter(
+//			ControlIDs.PLAYLIST_TAB_BUTTON, null, ComponentType.BUTTON,
+//			230, 40, 100, 100,
+//			null, R.drawable.now_playlist_button_image,
+//			"", ScaleType.FIT_XY
+//		);
 //		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(tabBtnCreationData);		
 //		actMapTemp
 //		= new SparseArray< IViewAction >();

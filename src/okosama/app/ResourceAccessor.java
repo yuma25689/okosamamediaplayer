@@ -6,6 +6,7 @@ package okosama.app;
 //import java.util.HashMap;
 //import java.util.Map;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Locale;
@@ -25,6 +26,7 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
+import android.os.Environment;
 
 /**
  * リソースにアクセスするためのクラス
@@ -272,4 +274,28 @@ public final class ResourceAccessor {
 	{
 		return activity.getResources().getQuantityString(id, num, args);
 	}
+	
+	public boolean bReadSDcardSuccess = false;
+	public boolean isReadSDCardSuccess()
+	{
+		return bReadSDcardSuccess;
+	}
+	public void setReadSDCardSuccess(boolean b)
+	{
+		bReadSDcardSuccess = b;
+	}
+	
+	public boolean isSdCanRead() {
+	  //SDカードがあるかチェック
+	  String status = Environment.getExternalStorageState();
+	  if (!status.equals(Environment.MEDIA_MOUNTED)) {
+	    return false;
+	  }
+	
+	  File file = Environment.getExternalStorageDirectory();
+	  if (file.canRead()){
+	    return true;
+	  }
+	  return false;
+	}	
 }

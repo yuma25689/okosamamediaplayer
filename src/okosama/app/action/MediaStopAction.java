@@ -2,6 +2,7 @@ package okosama.app.action;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.panel.TimeControlPanel;
+import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.service.IMediaPlaybackService;
 import okosama.app.service.MediaPlayerUtil;
 import android.os.RemoteException;
@@ -26,6 +27,7 @@ public class MediaStopAction implements IViewAction {
                 OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().updateTimeDisplay(0);
                 OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().updatePlayStateButtonImage();
                 TimeControlPanel.clearTimeDisplays();
+                NowPlayingControlPanel.clearNowPlayingDisplays();
             }
         } catch (RemoteException ex) {
         }		

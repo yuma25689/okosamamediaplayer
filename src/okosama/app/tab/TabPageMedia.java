@@ -26,7 +26,13 @@ public class TabPageMedia extends TabPage {
 	{
 		return tabContent;
 	}
-	ToggleButton toggleEx;
+	public void resetTabContent()
+	{
+		clearChild();
+		tabContent = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabStocker().createMediaTab(
+				pageContainer, tabBaseLayout);
+	}
+	// ToggleButton toggleEx;
 	//ToggleButton toggleIn;
 	public TabPageMedia( Tab parent, LinearLayout ll, RelativeLayout rl ) {
 		super();
@@ -54,28 +60,30 @@ public class TabPageMedia extends TabPage {
 		
 		// メディアの場所トグルボタン
 		// external
-		toggleEx = DroidWidgetKit.getInstance().MakeToggleButton();
-		TabComponentPropertySetter externalBtnCreationData
-		= new TabComponentPropertySetter(
-			ControlIDs.EXTERNAL_TAB_BUTTON, this, ComponentType.TOGGLEBUTTON,
-			50, 155 + 2, 80, 80,
-			null, R.drawable.external_btn_image,
-			"", ScaleType.FIT_XY
-		);
-		toggleEx.acceptConfigurator(externalBtnCreationData);
+//		toggleEx = DroidWidgetKit.getInstance().MakeToggleButton();
+//		TabComponentPropertySetter externalBtnCreationData
+//		= new TabComponentPropertySetter(
+//			ControlIDs.EXTERNAL_TAB_BUTTON, this, ComponentType.TOGGLEBUTTON,
+//			50, 155 + 2, 80, 80,
+//			null, R.drawable.external_btn_image,
+//			"", ScaleType.FIT_XY
+//		);
+//		toggleEx.acceptConfigurator(externalBtnCreationData);
 		
 		// toggleのアクション
-		SparseArray< IViewAction > actMapTemp2
-		= new SparseArray< IViewAction >();
-		actMapTemp2.put( IViewAction.ACTION_ID_ONTOGGLEON, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_EXTERNAL, true ) );
-		actMapTemp2.put( IViewAction.ACTION_ID_ONTOGGLEOFF, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_EXTERNAL, false ) );
-		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp2 );	
-		toggleEx.acceptConfigurator(actionSetter);
+//		SparseArray< IViewAction > actMapTemp2
+//		= new SparseArray< IViewAction >();
+//		actMapTemp2.put( IViewAction.ACTION_ID_ONTOGGLEON, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_EXTERNAL, true ) );
+//		actMapTemp2.put( IViewAction.ACTION_ID_ONTOGGLEOFF, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_EXTERNAL, false ) );
+//		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp2 );	
+//		toggleEx.acceptConfigurator(actionSetter);
 
 		// tabBaseLayout.addView( toggleEx.getView() );
-		tabContent = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabStocker().createMediaTab(
-				pageContainer, tabBaseLayout);
-		
+		// このパネルにTabMediaSelectが追加される
+		// このパネルが表示されるとき、TabMediaSelectが表示される
+//		tabContent = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabStocker().createMediaTab(
+//				pageContainer, tabBaseLayout);
+		resetTabContent();
 		return 0;
 	}
 	/**
@@ -85,26 +93,26 @@ public class TabPageMedia extends TabPage {
 	@Override
 	public void setActivate( boolean bActivate )
 	{
-		if( bActivate )
-		{
-			// タブがアクティブ化された場合
-			// =メディアタブが選択された場合？
-			toggleEx.setEnabled(true);
-			toggleEx.setVisible(true);			
-		}
-		else
-		{
-			// タブがアクティブではなくなった場合
-			// タブボタンを「有」効な時の表示にする
-//			tabButton.setEnabled( true );
-			toggleEx.setVisible(false);
-			toggleEx.setEnabled(false);
-		}
+//		if( bActivate )
+//		{
+//			// タブがアクティブ化された場合
+//			// =メディアタブが選択された場合？
+//			toggleEx.setEnabled(true);
+//			toggleEx.setVisible(true);			
+//		}
+//		else
+//		{
+//			// タブがアクティブではなくなった場合
+//			// タブボタンを「有」効な時の表示にする
+////			tabButton.setEnabled( true );
+//			toggleEx.setVisible(false);
+//			toggleEx.setEnabled(false);
+//		}
 		// TabComponentParentのsetActivateで、全ての子クラスのsetActivateが実行される
         super.setActivate( bActivate );
-        if( toggleEx != null && toggleEx.getView() != null )
-        {
-        	toggleEx.getView().bringToFront();
-        }
+//        if( toggleEx != null && toggleEx.getView() != null )
+//        {
+//        	toggleEx.getView().bringToFront();
+//        }
 	}
 }

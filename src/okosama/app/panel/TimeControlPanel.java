@@ -65,6 +65,22 @@ public class TimeControlPanel extends ControlPanel {
 			Log.e("error","insert sub control panel");
 		}
 	}
+	public static void removeToLayout( ViewGroup tabBaseLayout )
+	{
+		if( instance != null && instance.getView() != null )
+		{
+			if( instance.getView().getParent() != null )
+			{
+				ViewParent v = instance.getView().getParent();
+				if( v instanceof ViewGroup )
+				{
+					((ViewGroup) v).removeView(instance.getView());
+				}
+			}
+
+			parent = null;				
+		}
+	}
 
 	public TimeControlPanel(Activity activity) {
 		super(activity);
@@ -126,24 +142,6 @@ public class TimeControlPanel extends ControlPanel {
 				40, 270, 200, 50
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),		
-			// --------------------- SONG
-			new TabComponentPropertySetter(
-				ControlIDs.TIME_SONG_LABEL, null, ComponentType.LABEL, 
-				30, 160, 400, 50
-				, null, drawable.no_image, "", ScaleType.FIT_XY
-			),		
-			// --------------------- ARTIST
-			new TabComponentPropertySetter(
-				ControlIDs.TIME_ARTIST_LABEL, null, ComponentType.LABEL, 
-				35, 300, 400, 50
-				, null, drawable.no_image, "", ScaleType.FIT_XY
-			),		
-			// --------------------- ALBUM
-			new TabComponentPropertySetter(
-				ControlIDs.TIME_ALBUM_LABEL, null, ComponentType.LABEL, 
-				35, 360, 400, 50
-				, null, drawable.no_image, "", ScaleType.FIT_XY
-			),			
 			// --------------------- PROGRESS
 			// TODO: 後で別に移す
 			new TabComponentPropertySetter(
@@ -162,9 +160,6 @@ public class TimeControlPanel extends ControlPanel {
 				,getTimesButton()[4]
 				,getTimesButton()[5]
 				,getDurationLabel()
-				,getNowPlayingSongLabel()
-				,getNowPlayingArtistLabel()
-				,getNowPlayingAlbumLabel()
 				,getProgressBar()
 			};
 		// ---- action
@@ -194,9 +189,6 @@ public class TimeControlPanel extends ControlPanel {
 				,new TabComponentActionSetter( actMapTimeClick5 )
 				,new TabComponentActionSetter( actMapTimeClick6 )
 				,null
-				,null
-				,null
-				,null
 				,new TabComponentActionSetter( actMapProgress )
 			};
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
@@ -211,7 +203,7 @@ public class TimeControlPanel extends ControlPanel {
 			}
 			
 			// ボタンをこのタブ子項目として追加
-			// addChild( creationData[i].getInternalID(), widget );
+			addChild( creationData[i].getInternalID(), widget );
 			tabBaseLayout.addView( widget.getView() );
 			// ボタンを配置
 			// これは、setActivateで行う?
@@ -275,63 +267,6 @@ public class TimeControlPanel extends ControlPanel {
         }
         ((LabelImpl)durationLabel.getView()).setText(sDuration);
     }
-	Label nowPlayingSongLabel = null;
-	public Label getNowPlayingSongLabel()
-	{
-		if( nowPlayingSongLabel == null )
-		{
-			nowPlayingSongLabel = DroidWidgetKit.getInstance().MakeLabel();
-		}		
-		return nowPlayingSongLabel;
-	}
-    public void setNowPlayingSongLabel(String strSong)
-    {
-    	if( nowPlayingSongLabel == null
-    	|| nowPlayingSongLabel.getView() == null )
-    	{
-    		return;
-    	}
-    	((LabelImpl)nowPlayingSongLabel.getView()).setText(strSong);
-    	return;
-    }	
-	Label nowPlayingArtistLabel = null;
-	public Label getNowPlayingArtistLabel()
-	{
-		if( nowPlayingArtistLabel == null )
-		{
-			nowPlayingArtistLabel = DroidWidgetKit.getInstance().MakeLabel();
-		}		
-		return nowPlayingArtistLabel;
-	}
-    public void setNowPlayingArsistLabel(String strSong)
-    {
-    	if( nowPlayingArtistLabel == null
-    	|| nowPlayingArtistLabel.getView() == null )
-    	{
-    		return;
-    	}
-    	((LabelImpl)nowPlayingArtistLabel.getView()).setText(strSong);
-    	return;
-    }	
-	Label nowPlayingAlbumLabel = null;
-	public Label getNowPlayingAlbumLabel()
-	{
-		if( nowPlayingAlbumLabel == null )
-		{
-			nowPlayingAlbumLabel = DroidWidgetKit.getInstance().MakeLabel();
-		}		
-		return nowPlayingAlbumLabel;
-	}
-    public void setNowPlayingAlbumLabel(String strSong)
-    {
-    	if( nowPlayingAlbumLabel == null
-    	|| nowPlayingAlbumLabel.getView() == null )
-    	{
-    		return;
-    	}
-    	((LabelImpl)nowPlayingAlbumLabel.getView()).setText(strSong);
-    	return;
-    }
     // TODO: 後で別に移すべき
 	SeekBar seekBar = null;
 	public SeekBar getProgressBar()
@@ -379,9 +314,6 @@ public class TimeControlPanel extends ControlPanel {
 		if( TimeControlPanel.getInstance() != null )
 		{
 			TimeControlPanel.getInstance().setDurationLabel(0);
-			TimeControlPanel.getInstance().setNowPlayingSongLabel("");
-			TimeControlPanel.getInstance().setNowPlayingArsistLabel("");
-			TimeControlPanel.getInstance().setNowPlayingAlbumLabel("");
 			TimeControlPanel.getInstance().getProgressBar().setMax(0);
 			TimeControlPanel.getInstance().getProgressBar().setProgress(0);
 			TimeControlPanel.getInstance().getProgressBar().setVisibility(View.VISIBLE);

@@ -24,6 +24,7 @@
     <string name="effect_menu">音響効果</string>
     <string name="setting_menu">設定</string>
     <string name="cant_play_media">指定されたメディアはこのプレイヤーでは再生できません。</string>
+    <string name="need_restart_because_sdcard_status_change">SDカードの状態が変わったので、すみませんが再起動してください。強制的にアプリを終了しました。</string>
     
     <string name="twitter_consumer_key">Zeg3AGGq1muwWgcZ9Qrw</string>
     <string name="twitter_consumer_secret">oMLphzSbP54JCZroFm9x9Y2l4IFvpAOWIpjZsdek</string>
@@ -79,5 +80,6 @@
         <item>1500</item>
         <item>2000</item>
    	</string-array>
- 
+    <string name="sdcard_cant_read">このアプリはSDカード上のメディアを再生するアプリですが、現在、SDカードを読み取れない状態のようです。アプリを終了し、SDカードを読める状態にしてから、アプリを再起動して下さい。</string>
+    
 </resources>

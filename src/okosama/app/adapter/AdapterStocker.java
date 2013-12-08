@@ -1,5 +1,6 @@
 package okosama.app.adapter;
 
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.tab.TabPage;
 import android.util.SparseArray;
 
@@ -44,6 +45,11 @@ public class AdapterStocker {
 	
 	public boolean stockMediaDataFromDevice(int key,TabPage page)
 	{
+		if( false == OkosamaMediaPlayerActivity.getResourceAccessor().isReadSDCardSuccess() )
+		{
+			return false;
+		}
+		
 		if( get(key) != null )
 		{
 			get(key).stockMediaDataFromDevice(page);
@@ -59,6 +65,10 @@ public class AdapterStocker {
 	 */
 	public boolean stockMediaDataFromDevice(int key, TabPage page, boolean bUpdateWhenEmptyOnly)
 	{
+		if( false == OkosamaMediaPlayerActivity.getResourceAccessor().isReadSDCardSuccess() )
+		{
+			return false;
+		}
 		if( bUpdateWhenEmptyOnly )
 		{
 			if( get(key) != null )

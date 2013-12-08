@@ -1,14 +1,17 @@
 package okosama.app;
 
 import okosama.app.action.TabSelectAction;
+import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
 import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TimeControlPanel;
 import okosama.app.state.IDisplayState;
 import okosama.app.tab.TabPage;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 public class MainHandler extends Handler {
 
@@ -29,6 +32,13 @@ public class MainHandler extends Handler {
     	}
     	switch( message.what )
 		{
+	    	case AppStatus.RESTART:
+				Log.e("app restart","come");
+				mActivity.finish();
+				Toast.makeText(mActivity, R.string.need_restart_because_sdcard_status_change, Toast.LENGTH_LONG).show();
+				System.gc();
+				//mActivity.startActivity((new Intent( mActivity, OkosamaMediaPlayerActivity.class)));	    		
+	    		break;
     		case AppStatus.REFRESH:
     		{
                 long next = AppStatus.NO_REFRESH;
@@ -46,7 +56,9 @@ public class MainHandler extends Handler {
                 	next = stateMedia.updateDisplay();
                 }
                 else if( mActivity.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_PLAY)
-                		== TabPage.TABPAGE_ID_PLAY_SUB )
+                		== TabPage.TABPAGE_ID_PLAY_SUB 
+                || mActivity.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_PLAY)
+        		== TabPage.TABPAGE_ID_VIDEO_VIEW )
                 {
                 	IDisplayState statePlayTab 
                 	= mActivity.getStateStocker().getState(
@@ -78,6 +90,7 @@ public class MainHandler extends Handler {
 	        		TimeControlPanel.createInstance(mActivity);
 	        		PlayControlPanel.createInstance(mActivity);
 	        		SubControlPanel.createInstance(mActivity);
+	        		NowPlayingControlPanel.createInstance(mActivity);
 		            
 	        		// 初期化されていなければ、タブを作成
 	        		// このアクティビティのレイアウトクラスを渡す

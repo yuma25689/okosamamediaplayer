@@ -82,6 +82,10 @@ public class TabStocker {
 		}
 		return tabMedia;
 	}
+	public void clearMediaTab()
+	{
+		putTab(ControlIDs.TAB_ID_MEDIA,null);
+	}
 	
 	/**
 	 * プレイのタブを作成する
