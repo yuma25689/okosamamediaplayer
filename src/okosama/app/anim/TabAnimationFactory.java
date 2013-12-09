@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
@@ -63,7 +64,7 @@ public class TabAnimationFactory {
 		
 		return set;
 	}
-	public static AnimationSet createTabOutAnimation(int nLevel,long nDuration)
+	public static AnimationSet createTabOutAnimation(int nLevel,long nDuration,AnimationListener listener)
 	{
 	    AnimationSet set = new AnimationSet(true);
 	    int iToX = (int)( OkosamaMediaPlayerActivity.dispInfo.getBkImageWidth());
@@ -97,7 +98,7 @@ public class TabAnimationFactory {
 		    }
 		    if( 2 < nLevel )
 		    {
-				rotate = new RotateAnimation(0,180 * iDirection * random,iToX, rotateY);
+				rotate = new RotateAnimation(0,180 * iDirection * random,(int)(iToX * Math.random()), rotateY);
 			    scale = new ScaleAnimation(1, random, 1, random);
 		    }
 		}
@@ -109,9 +110,10 @@ public class TabAnimationFactory {
 			set.addAnimation(rotate);
 			set.addAnimation(scale);
 		}
-		set.setFillAfter(false);
-		set.setFillEnabled(true);
+		//set.setFillAfter(false);
+		//set.setFillEnabled(true);
 		set.setDuration(nDuration);
+		set.setAnimationListener(listener);
 		
 		return set;
 	}

@@ -28,9 +28,14 @@
     
     <string name="twitter_consumer_key">Zeg3AGGq1muwWgcZ9Qrw</string>
     <string name="twitter_consumer_secret">oMLphzSbP54JCZroFm9x9Y2l4IFvpAOWIpjZsdek</string>
-	<string name="twitter_callback_url">yuma25689://twitter</string>    
+	<string name="twitter_callback_url">okosamamediaplayer://twitter</string>    
 	<string name="tweet">つぶやく</string>
-	<string name="nowplaying_tag">#NowPlaying</string>
+	<string name="tweetAuthTitle">tweetを行うボタンが押されました。</string>
+	<string name="twitterAuth">このアプリケーションからtweetするためには、twitterのweb認証が必要です。</string>
+	<string name="twitterAuthButton">認証をする</string>
+	<string name="auth_success">twitterの認証に成功しました。</string>
+	<string name="auth_failed">twitterの認証に失敗したようです。</string>
+			<string name="nowplaying_tag">#NowPlaying</string>
 	<string name="unknown_song_name">不明</string>		
 	<string name="artist_label">[artist]</string>		
 	<string name="album_label">[album]</string>		

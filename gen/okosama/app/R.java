@@ -281,6 +281,7 @@ public final class R {
     public static final class id {
         public static final int EmptyShowPanel=0x7f0c0013;
         public static final int TabCommonProgressPanel=0x7f0c0015;
+        public static final int action_start_auth=0x7f0c0021;
         public static final int action_tweet=0x7f0c0000;
         public static final int album_appwidget=0x7f0c0002;
         public static final int artist=0x7f0c0004;
@@ -331,6 +332,7 @@ public final class R {
         public static final int track_list_item_child=0x7f03000e;
         public static final int track_list_item_common=0x7f03000f;
         public static final int track_list_item_group=0x7f030010;
+        public static final int twitter_auth=0x7f030011;
     }
     public static final class plurals {
         /**  Toast confirming that song(s) was/were deleted. 
@@ -364,7 +366,7 @@ public final class R {
         /**  Context menu item 
          */
         public static final int add_to_playlist=0x7f08003a;
-        public static final int album_label=0x7f08007b;
+        public static final int album_label=0x7f080080;
         /**  Category label on Library screen 
          */
         public static final int albums_menu=0x7f080012;
@@ -377,19 +379,21 @@ public final class R {
         /**  All media screen title 
          */
         public static final int all_title=0x7f080019;
-        public static final int animation_level_summary=0x7f080087;
-        public static final int animation_level_title=0x7f080086;
-        public static final int animation_speed_summary=0x7f080089;
-        public static final int animation_speed_title=0x7f080088;
+        public static final int animation_level_summary=0x7f08008c;
+        public static final int animation_level_title=0x7f08008b;
+        public static final int animation_speed_summary=0x7f08008e;
+        public static final int animation_speed_title=0x7f08008d;
         public static final int app_name=0x7f080061;
-        public static final int artist_label=0x7f08007a;
+        public static final int artist_label=0x7f08007f;
         /**  Artist screen title 
          */
         public static final int artists_title=0x7f080011;
-        public static final int audio_animation_category_title=0x7f080085;
+        public static final int audio_animation_category_title=0x7f08008a;
         /**  Category title for audio focus in music settings 
          */
         public static final int audio_focus_category_title=0x7f080063;
+        public static final int auth_failed=0x7f08007c;
+        public static final int auth_success=0x7f08007b;
         /**  Category label on Library screen 
          */
         public static final int browse_menu=0x7f08001a;
@@ -440,16 +444,16 @@ public final class R {
         /**  Toast after selecting an empty playlist 
          */
         public static final int emptyplaylist=0x7f08003e;
-        public static final int enable_animation_summary=0x7f080084;
-        public static final int enable_animation_title=0x7f080083;
+        public static final int enable_animation_summary=0x7f080089;
+        public static final int enable_animation_title=0x7f080088;
         public static final int enable_focus_loss_ducking_summary=0x7f080065;
         /**  Title and summary for 'enable focus loss ducking' preference checkbox 
          */
         public static final int enable_focus_loss_ducking_title=0x7f080064;
-        public static final int enable_headset_plug_and_play_summary=0x7f08007e;
-        public static final int enable_headset_plug_and_play_title=0x7f08007d;
-        public static final int enable_media_change_vibrate_summary=0x7f080080;
-        public static final int enable_media_change_vibrate_title=0x7f08007f;
+        public static final int enable_headset_plug_and_play_summary=0x7f080083;
+        public static final int enable_headset_plug_and_play_title=0x7f080082;
+        public static final int enable_media_change_vibrate_summary=0x7f080085;
+        public static final int enable_media_change_vibrate_title=0x7f080084;
         /**  Toast after streamStarter activity receives PLAYBACK_COMPLETE in case of an error 
          */
         public static final int fail_to_start_stream=0x7f08005c;
@@ -503,7 +507,7 @@ public final class R {
          */
         public static final int no_videos_title=0x7f08001e;
         public static final int notification_artist_album=0x7f08006c;
-        public static final int nowplaying_tag=0x7f080078;
+        public static final int nowplaying_tag=0x7f08007d;
         /**  title of the "current playlist" screen when not in party shuffle mode 
          */
         public static final int nowplaying_title=0x7f08000f;
@@ -593,7 +597,7 @@ public final class R {
         /**  label underneath icon used to indicate that the sd card is present, but currently unavailable 
          */
         public static final int sdcard_busy_title=0x7f08002b;
-        public static final int sdcard_cant_read=0x7f08008a;
+        public static final int sdcard_cant_read=0x7f08008f;
         /**  label underneath icon used to indicate there was an error accessing the sd card 
          */
         public static final int sdcard_error_message=0x7f08002e;
@@ -637,7 +641,7 @@ public final class R {
         /**  Toast after turning shuffle on 
          */
         public static final int shuffle_on_notif=0x7f080031;
-        public static final int song_label=0x7f08007c;
+        public static final int song_label=0x7f080081;
         /**  Menu in music picker to sort the list by album name. 
          */
         public static final int sort_by_album=0x7f080058;
@@ -657,6 +661,9 @@ public final class R {
          */
         public static final int tracks_title=0x7f080015;
         public static final int tweet=0x7f080077;
+        public static final int tweetAuthTitle=0x7f080078;
+        public static final int twitterAuth=0x7f080079;
+        public static final int twitterAuthButton=0x7f08007a;
         public static final int twitter_callback_url=0x7f080076;
         public static final int twitter_consumer_key=0x7f080074;
         public static final int twitter_consumer_secret=0x7f080075;
@@ -666,13 +673,13 @@ public final class R {
         /**  Default name of artist that doesn't have a name in the metadata 
          */
         public static final int unknown_artist_name=0x7f08002f;
-        public static final int unknown_song_name=0x7f080079;
+        public static final int unknown_song_name=0x7f08007e;
         /**  Update 
          */
         public static final int update_menu=0x7f08001c;
         public static final int updateing=0x7f08006e;
-        public static final int vibrate_intensity_summary=0x7f080082;
-        public static final int vibrate_intensity_title=0x7f080081;
+        public static final int vibrate_intensity_summary=0x7f080087;
+        public static final int vibrate_intensity_title=0x7f080086;
         /**  Activity label. This might show up in the activity-picker 
          */
         public static final int videobrowserlabel=0x7f08004b;

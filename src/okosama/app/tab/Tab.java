@@ -155,7 +155,7 @@ public class Tab extends TabComponentParent {
 	 * タブ切り替え中のロックだが、本来は元のEnableを考慮した制御が必要
 	 * @param bEnable
 	 */
-	void setEnableAllTab(boolean bEnable)
+	public void setEnableAllTab(boolean bEnable)
 	{
 		for( int i=0; i < mapBtn.size(); ++i )
 		{
@@ -183,9 +183,10 @@ public class Tab extends TabComponentParent {
 		synchronized( OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim )
 		{
 			OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(true, internalID);
-			setEnableAllTab(false);
+			// setEnableAllTab(false);
 			// TODO: タブページはマップに格納した方がいいかもしれない
 	
+			boolean bOutExec = false;
 	//        		// 一度全てのタブの選択を解除
 	//        		c.setActivate( false );
 			if( null != children.get(tabId,null) )
@@ -194,6 +195,7 @@ public class Tab extends TabComponentParent {
 				{
 		    		// 現在選択中のタブのタブページをクリアする
 					children.get(iCurrentTabPageId).setActivate(false);
+					bOutExec = true;
 		   		}
 				// 現在選択中のタブを新しいものに設定する
 				children.get(tabId).setActivate(true);
@@ -212,7 +214,10 @@ public class Tab extends TabComponentParent {
 	    		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 	        	act.setCurrentDisplayId(this.internalID,tabId);
 	        }
-	        OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(false, internalID);
+	        if( bOutExec == false )
+	        {
+	        	OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(false, internalID);
+	        }
 		}
 
 	}

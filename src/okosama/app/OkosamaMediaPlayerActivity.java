@@ -156,7 +156,8 @@ implements ServiceConnection, Database.Defs {
 		}
 	}
 	// サービスのトークン
-    private ServiceToken mToken;
+	// TODO:Trying to unbind with null tokenというエラーが発生
+    private static ServiceToken mToken;
     
     // 楽曲の検索に、Externalを利用
     private static boolean externalRef = true;// false;
@@ -408,8 +409,20 @@ implements ServiceConnection, Database.Defs {
         // サービスへの接続を開始
         if( 0 == MediaPlayerUtil.getServiceConnectionCount() )
         {
+        	// 絶対に１つしか接続されないようにする
         	mToken = MediaPlayerUtil.bindToService(this, this);
-        }      
+        	// Toast.makeText(this, "service registered : token=" + mToken, Toast.LENGTH_LONG).show();
+        }
+//        else
+//        {
+//        	// 既にコネクションがある場合
+//        	// コネクションのidを調べ、現在のactivityと違う場合は、接続し直す？
+//        	if( MediaPlayerUtil.hasServiceConnection(this) == false )
+//        	{
+//        		// コネクションはあるが、このアクティビティのコネクションはない
+//        		
+//        	}
+//        }
 
     }
     /**
@@ -590,19 +603,6 @@ implements ServiceConnection, Database.Defs {
         
         // モーションセンサの登録解除
         getResourceAccessor().rereaseMotionSenser();
-        
-        // サービスの登録解除
-		try {
-			if( MediaPlayerUtil.sService != null && false == MediaPlayerUtil.sService.isPlaying() )
-			{
-				// サービスの登録解除
-			    MediaPlayerUtil.unbindFromService(mToken);
-			    MediaPlayerUtil.sService = null;
-			}
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
         
 		super.onPause();
 	}
@@ -995,16 +995,17 @@ implements ServiceConnection, Database.Defs {
         // 全てのレシーバの登録解除
         stateStocker.unResisterReceiverAll();
 		
-		try {
-			if( MediaPlayerUtil.sService != null && false == MediaPlayerUtil.sService.isPlaying() )
+		//try {
+			if( MediaPlayerUtil.sService != null ) //&& false == MediaPlayerUtil.sService.isPlaying() )
 			{
 				// サービスの登録解除
 			    MediaPlayerUtil.unbindFromService(mToken);
+	        	// Toast.makeText(this, "service unregistered : token=" + mToken, Toast.LENGTH_LONG).show();			    
 			}
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		} catch (RemoteException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		super.onDestroy();
 	}
 

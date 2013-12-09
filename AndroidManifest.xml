@@ -24,16 +24,7 @@
             </intent-filter>
         </activity>
         <service android:name=".service.MediaPlaybackService"></service>
-        <activity android:name="TweetActivity" android:launchMode="singleTask">
-        	<intent-filter>
-        	    <data android:scheme="yuma25689" android:host="twitter"/>
- 	          	<category android:name="android.intent.category.DEFAULT" />
-            	<category android:name="android.intent.category.BROWSABLE" />     	    
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-            
-            
-        </activity>
+        <activity android:name="TweetActivity" />
         <receiver android:name="okosama.app.service.MediaButtonIntentReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
@@ -54,6 +45,15 @@
             android:theme="@android:style/Theme.Dialog" android:exported="false" />
         <activity android:name="MusicSettingsActivity"></activity>
         <activity android:name="DeleteItems"></activity>
+		<activity android:name="TwitterAuthActivity" 
+		    android:launchMode="singleTask">
+        	<intent-filter>
+        	    <data android:scheme="okosamamediaplayer" android:host="twitter"/>
+ 	          	<category android:name="android.intent.category.DEFAULT" />
+            	<category android:name="android.intent.category.BROWSABLE" />     	    
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>             
     </application>
 
 </manifest>
