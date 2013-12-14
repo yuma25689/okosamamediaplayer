@@ -38,7 +38,7 @@ public class TabOutAnimationListener implements AnimationListener {
         		Log.d("anim","out end:" + tabId);
         		if( lastLockTabId != 0 )
         		{
-        			ReleaseTabSelectionLock( lastLockTabId );
+        			ReleaseTabSelectionLock( lastLockTabId );//, tabId );
         		}
 //        		componentContainer.removeAllViews();
 //        		componentContainer.invalidate();		
@@ -59,7 +59,7 @@ public class TabOutAnimationListener implements AnimationListener {
 		// TODO Auto-generated method stub
 		Log.i("anim_start","ok");
 	}  
-	public void ReleaseTabSelectionLock( int tabId)
+	public void ReleaseTabSelectionLock( int tabId )
 	{
 		lastLockTabId = 0;
 		// タブのロック解除
@@ -79,7 +79,8 @@ public class TabOutAnimationListener implements AnimationListener {
 		}
 		if( tab != null )
 		{
-			tab.setEnableAllTab(true);
+			int tabPageId = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabStocker().getCurrentTabPageId(tabId);
+			tab.setEnableAllTab(true, tabPageId);
 		}
 	}
 	

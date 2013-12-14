@@ -107,7 +107,7 @@ public class DisplayStatePlaySub extends absDisplayState {
 				}
 				// act.setPlayPauseButtonImage();
 				act.updateTimeDisplay(pos/1000);
-		    	Log.e("playsub - updateDisplay", "come position=" + pos );
+		    	Log.d("playsub - updateDisplay", "come position=" + pos );
 		    }
         }
         catch( RemoteException ex )

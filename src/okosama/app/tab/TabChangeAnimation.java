@@ -41,7 +41,7 @@ public class TabChangeAnimation {
 	final int MAX_ANIM_WAIT = 1000;
 	// このフラグがたっているときに来たリクエストは、全て同じ選択処理の一部と見なす
 	boolean bGroupingTabSelectionProc = false;
-	public void SetTabSelectionLock(boolean b, int tabId)
+	public void SetTabSelectionLock(boolean b, int tabId, int tabPageId)
 	{
 //		if( bGroupingTabSelectionProc == false 
 //		&& b == true )
@@ -73,7 +73,7 @@ public class TabChangeAnimation {
 		}
 		if( tab != null )
 		{
-			tab.setEnableAllTab(!b);
+			tab.setEnableAllTab(!b,tabPageId);
 		}
 		// bGroupingTabSelectionProc = b;
 	}
@@ -206,7 +206,7 @@ public class TabChangeAnimation {
             {
         		if( lastLockTabId != 0 )
         		{
-        			SetTabSelectionLock( false, lastLockTabId );
+        			SetTabSelectionLock( false, lastLockTabId, tabId );
         		}
             }    			
     		break;

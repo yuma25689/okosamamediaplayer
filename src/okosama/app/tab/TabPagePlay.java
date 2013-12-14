@@ -39,6 +39,7 @@ public class TabPagePlay extends TabPage {
         		0, 0
         );
 		tabBaseLayout.setLayoutParams(lp);
+		
 		// ---- action
 //		SparseArray< IViewAction > actMapTemp 
 //			= new SparseArray< IViewAction >();
@@ -117,6 +118,7 @@ public class TabPagePlay extends TabPage {
 //		tabBaseLayout.addView( activity.getTimeCP().getView() );
 //		tabBaseLayout.addView( activity.getPlayCP().getView() );
 		tabBaseLayout.setBackgroundResource(R.color.gradiant_test);
+		tabBaseLayout.setOnTouchListener(new TabViewTouchListener(0,0));
 		
 		activity.updatePlayStateButtonImage();
 		

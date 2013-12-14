@@ -6,6 +6,8 @@ import okosama.app.behavior.AlbumListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabComponentPropertySetter;
+import okosama.app.tab.TabListViewTouchListener;
+import okosama.app.tab.TabViewTouchListener;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.tab.TabPage;
 import okosama.app.widget.List;
@@ -54,6 +56,7 @@ public class TabPageAlbum extends TabPage {
         		0, 0
         );
 		tabBaseLayout.setLayoutParams(lp);
+		
 		// TODO:âΩÇ‚Ç¡ÇƒÇÈÇ©í≤ç∏ ???
 //		View v = tabBaseLayout.findViewById(R.id.top_info_bar);
 //	    ImageView icon = (ImageView) v.findViewById(R.id.icon);
@@ -108,6 +111,8 @@ public class TabPageAlbum extends TabPage {
 			tabBaseLayout.addView( widget.getView() );
 			i++;
 		}
+		// lst.getView().setOnTouchListener(new TabListViewTouchListener(0,0));
+		
 		return 0;
 	}
 }

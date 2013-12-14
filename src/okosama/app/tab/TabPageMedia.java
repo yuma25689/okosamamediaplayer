@@ -57,7 +57,6 @@ public class TabPageMedia extends TabPage {
         );
 		tabBaseLayout.setLayoutParams(lp);
 		tabBaseLayout.setBackgroundResource(R.color.gradiant_test2);
-		
 		// メディアの場所トグルボタン
 		// external
 //		toggleEx = DroidWidgetKit.getInstance().MakeToggleButton();

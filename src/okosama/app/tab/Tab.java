@@ -151,23 +151,25 @@ public class Tab extends TabComponentParent {
 		return errCode;
 	}
 	
+	int lastSelectedTabIndexForEnableAllTab = 0;
 	/**
 	 * タブ切り替え中のロックだが、本来は元のEnableを考慮した制御が必要
 	 * @param bEnable
 	 */
-	public void setEnableAllTab(boolean bEnable)
+	public void setEnableAllTab(boolean bEnable,int iTabPageId)
 	{
 		for( int i=0; i < mapBtn.size(); ++i )
 		{
 			// あまりよくないが、選択中のタブボタンは、ここでEnable=trueにはさせない
 			if( bEnable == true )
 			{
-				if( iCurrentTabPageId == mapBtn.keyAt(i) )
+				if( //iCurrentTabPageId == mapBtn.keyAt(i) )
+						iTabPageId == mapBtn.keyAt(i) )
 				{
 					mapBtn.valueAt(i).setEnabled(false);
 					continue;
 				}
-			}			
+			}
 			mapBtn.valueAt(i).setEnabled(bEnable);
 		}
 	}
@@ -175,21 +177,21 @@ public class Tab extends TabComponentParent {
 	/**
 	 * 現在のタブを設定する
 	 * 現状、TabSelectActionでは結局これが呼ばれる
-	 * @param tabId
+	 * @param tabPageId
 	 */
-	public void setCurrentTab(int tabId,boolean save)
+	public void setCurrentTab(int tabPageId,boolean save)
 	{
-		Log.d("tab.setCurrentTab", "tab:" + tabId);
+		Log.d("tab.setCurrentTab", "tab:" + tabPageId);
 		synchronized( OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim )
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(true, internalID);
+			OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(true, internalID,tabPageId);
 			// setEnableAllTab(false);
 			// TODO: タブページはマップに格納した方がいいかもしれない
 	
 			boolean bOutExec = false;
 	//        		// 一度全てのタブの選択を解除
 	//        		c.setActivate( false );
-			if( null != children.get(tabId,null) )
+			if( null != children.get(tabPageId,null) )
 			{
 				if( null != children.get(iCurrentTabPageId,null) )
 				{
@@ -198,8 +200,8 @@ public class Tab extends TabComponentParent {
 					bOutExec = true;
 		   		}
 				// 現在選択中のタブを新しいものに設定する
-				children.get(tabId).setActivate(true);
-				iCurrentTabPageId = tabId;
+				children.get(tabPageId).setActivate(true);
+				iCurrentTabPageId = tabPageId;
 	   		}
 	//        for( ITabComponent c : children ) {
 	//        	if( c instanceof TabPage ) { // できたら使いたくなかった・・・。
@@ -212,11 +214,11 @@ public class Tab extends TabComponentParent {
 	        {
 	    		OkosamaMediaPlayerActivity act 
 	    		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-	        	act.setCurrentDisplayId(this.internalID,tabId);
+	        	act.setCurrentDisplayId(this.internalID,tabPageId);
 	        }
 	        if( bOutExec == false )
 	        {
-	        	OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(false, internalID);
+	        	OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(false, internalID,tabPageId);
 	        }
 		}
 
