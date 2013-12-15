@@ -25,6 +25,8 @@
         android:layout_below="@id/empty_image"
         />
     </RelativeLayout>
+   	<include layout="@layout/left_move_panel_common" />
+   	<include layout="@layout/right_move_panel_common" />
    <RelativeLayout 
         android:id="@+id/TabCommonProgressPanel"
         android:layout_width="match_parent"

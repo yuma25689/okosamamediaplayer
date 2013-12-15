@@ -2,12 +2,10 @@ package okosama.app.tab.media;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.behavior.TrackListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabComponentPropertySetter;
-import okosama.app.tab.TabViewTouchListener;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.tab.TabPage;
 import okosama.app.widget.List;

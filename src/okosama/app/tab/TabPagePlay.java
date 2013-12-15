@@ -24,7 +24,7 @@ public class TabPagePlay extends TabPage {
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_PLAY;
 		
-		create(R.layout.tab_layout_content_generic);
+		create(R.layout.tab_layout_content_generic_flickable);
 //		componentContainer.addView(tabButton.getView());
 	}
 	/* (non-Javadoc)
@@ -118,7 +118,7 @@ public class TabPagePlay extends TabPage {
 //		tabBaseLayout.addView( activity.getTimeCP().getView() );
 //		tabBaseLayout.addView( activity.getPlayCP().getView() );
 		tabBaseLayout.setBackgroundResource(R.color.gradiant_test);
-		tabBaseLayout.setOnTouchListener(new TabViewTouchListener(0,0));
+		// tabBaseLayout.setOnTouchListener(new TabViewTouchListener(0,0));
 		
 		activity.updatePlayStateButtonImage();
 		

@@ -86,5 +86,7 @@
         <item>2000</item>
    	</string-array>
     <string name="sdcard_cant_read">このアプリはSDカード上のメディアを再生するアプリですが、現在、SDカードを読み取れない状態のようです。アプリを終了し、SDカードを読める状態にしてから、アプリを再起動して下さい。</string>
+    <string name="left_move_text">今、指を離すと上のアイコンのタブに移動します。</string>
+    <string name="right_move_text">今、指を離すと上のアイコンのタブに移動します。</string>
     
 </resources>

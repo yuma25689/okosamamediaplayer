@@ -6,20 +6,14 @@ import okosama.app.behavior.AlbumListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabComponentPropertySetter;
-import okosama.app.tab.TabListViewTouchListener;
-import okosama.app.tab.TabViewTouchListener;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.tab.TabPage;
 import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 /**

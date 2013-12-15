@@ -37,7 +37,7 @@ public class TabPageVideoView extends TabPage implements OnTouchListener {
 		this.componentContainer = rl;
 		// コンストラクタでこのタブのタブIDを設定
 		this.tabId = TABPAGE_ID_VIDEO_VIEW;
-		create(R.layout.tab_layout_content_generic );
+		create(R.layout.tab_layout_content_generic_flickable );
 	}
 	@Override
 	public int create(int panelLayoutID) {

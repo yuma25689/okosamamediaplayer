@@ -316,18 +316,21 @@ public class MediaPlaybackService extends Service {
             	             		
             		if( mPlayListLen <= 0 || bPlugAndPlay == false )
             		{
-            			Toast.makeText(context, "headset connect", Toast.LENGTH_SHORT).show();	
+            			// Toast.makeText(context, "headset connect", Toast.LENGTH_SHORT).show();
+            			Log.d("headset", "connect");
             		}
             		else
             		{
-	            		Toast.makeText(context, "headset connect - play", Toast.LENGTH_SHORT).show();
+	            		// Toast.makeText(context, "headset connect - play", Toast.LENGTH_SHORT).show();
+            			Log.d("headset", "connect and play");
 	                    play();
             		}
             	}
             	else if( iCon == 0 )
             	{
             		// ƒwƒbƒhƒzƒ“Ø’f
-            		Toast.makeText(context, "headset disconnect - pause", Toast.LENGTH_SHORT).show();
+            		// Toast.makeText(context, "headset disconnect - pause", Toast.LENGTH_SHORT).show();
+        			Log.d("headset", "disconnect and pause");
                     pause();
                     mPausedByTransientLossOfFocus = false;
             	}
