@@ -1,9 +1,15 @@
 package okosama.app.tab.media;
 
+import java.util.ArrayList;
+
+import okosama.app.ControlDefs;
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.behavior.AlbumListBehavior;
 import okosama.app.factory.DroidWidgetKit;
+import okosama.app.panel.MoveTabInfo;
+import okosama.app.panel.TouchHookRelativeLayout;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
@@ -11,6 +17,7 @@ import okosama.app.tab.TabPage;
 import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
@@ -41,13 +48,33 @@ public class TabPageAlbum extends TabPage {
 	}
 	@Override
 	public int create(int panelLayoutID) {
+		// フリック入力対応
+		ArrayList<MoveTabInfo> arrMti = new ArrayList<MoveTabInfo>();
+		// 左フリック時の設定
+		MoveTabInfo mti = new MoveTabInfo();
+		mti.setTabInfoIndex( MoveTabInfo.LEFT_1 );
+		mti.setTabId(ControlIDs.TAB_ID_MAIN);
+		mti.setTabPageId(TabPage.TABPAGE_ID_PLAY);
+		mti.setPanelId(R.id.left_move_panel);
+		mti.setImageViewId(R.id.left_move_image);
+		mti.setTabImageResId(R.drawable.brat_main_normal);
+		arrMti.add(mti);
+		// 右フリック時の設定
+		MoveTabInfo mtiR = new MoveTabInfo();
+		mtiR.setTabInfoIndex( MoveTabInfo.RIGHT_1 );
+		mtiR.setTabId(ControlIDs.TAB_ID_MEDIA);
+		mtiR.setTabPageId(TabPage.TABPAGE_ID_ARTIST);
+		mtiR.setPanelId(R.id.right_move_panel);
+		mtiR.setImageViewId(R.id.right_move_image);
+		mtiR.setTabImageResId(R.drawable.artisttabbtn_normal);
+		arrMti.add(mtiR);
 
 		// レイアウトをクリア
-		resetPanelViews(panelLayoutID);
+		resetPanelViews(panelLayoutID,arrMti);
 		// パネルの位置を設定
 		RelativeLayout.LayoutParams lp 
 		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-        		0, 0
+        	0, 0, ControlDefs.APP_BASE_WIDTH, ControlDefs.APP_BASE_HEIGHT
         );
 		tabBaseLayout.setLayoutParams(lp);
 		
@@ -73,6 +100,8 @@ public class TabPageAlbum extends TabPage {
 				RelativeLayout.LayoutParams.WRAP_CONTENT
         );
 		lpList.addRule(RelativeLayout.BELOW,R.id.top_info_bar);
+		lpList.addRule(RelativeLayout.RIGHT_OF,R.id.left_move_panel);
+		lpList.addRule(RelativeLayout.LEFT_OF,R.id.right_move_panel);
 		// リストの作成
 		TabComponentPropertySetter creationData[] = {
 			// リストの性質情報を設定
@@ -106,6 +135,9 @@ public class TabPageAlbum extends TabPage {
 			i++;
 		}
 		// lst.getView().setOnTouchListener(new TabListViewTouchListener(0,0));
+		
+		
+		// Log.e("album flick setting","ok");
 		
 		return 0;
 	}

@@ -7,13 +7,9 @@ import okosama.app.anim.TabAnimationFactory;
 import okosama.app.anim.TabOutAnimationListener;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 
 /**
  * tabの変更が連打された時のために、タブの変更は、このクラスにキューとして持つようにする
@@ -43,11 +39,6 @@ public class TabChangeAnimation {
 	boolean bGroupingTabSelectionProc = false;
 	public void SetTabSelectionLock(boolean b, int tabId, int tabPageId)
 	{
-//		if( bGroupingTabSelectionProc == false 
-//		&& b == true )
-//		{
-//			getNextTabSelectionId();
-//		}
 		if( b == true )
 		{
 			lastLockTabId = tabId;
@@ -211,94 +202,5 @@ public class TabChangeAnimation {
             }    			
     		break;
 		}
-	}
-
-//    // サイズが取得できたら、下記の処理実行されるようにする
-//    Handler handler =  new Handler(){
-//        //メッセージ受信
-//        @Override
-//		public void handleMessage(Message message) {
-//        	if( message.what != TAB_IN
-//        	&&  message.what != TAB_OUT )
-//        	{
-//        		return;
-//        	}
-//    		// lastProcessId = message.arg1;
-//    		TabChangeAnimationTarget target = (TabChangeAnimationTarget)message.obj;
-//    		ViewGroup tabBaseLayout 		= target.target;
-//    		ViewGroup componentContainer 	= target.parent;
-//            SharedPreferences prefs 
-//            = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getSharedPreferences(
-//                    MusicSettingsActivity.PREFERENCES_FILE, Context.MODE_PRIVATE);
-//            boolean bEnableAnim = prefs.getBoolean(MusicSettingsActivity.KEY_ENABLE_ANIMATION, false);
-//            int nLevel = 0;
-//            String sLevel;
-//            String sDuration;
-//            long nDuration = 0;
-//            if( bEnableAnim )
-//            {
-//                sLevel = prefs.getString(MusicSettingsActivity.KEY_ANIMATION_LEVEL, "");
-//	            if( sLevel != null && sLevel.length() > 0 )
-//	            {
-//	            	nLevel = Integer.parseInt(sLevel);
-//	            }
-//                sDuration = prefs.getString(MusicSettingsActivity.KEY_ANIMATION_SPEED, "");
-//	            if( sDuration != null && sDuration.length() > 0 )
-//	            {
-//	            	nDuration = Long.parseLong(sDuration);
-//	            }
-//            }
-//    		switch( message.what )
-//    		{
-//        	case TAB_IN:
-//        		if( tabBaseLayout.getParent() != null )
-//        		{
-//        			if( tabBaseLayout.getParent() instanceof ViewGroup )
-//        				((ViewGroup)tabBaseLayout.getParent()).removeView( tabBaseLayout );
-//        		}
-//        		if( 0 > componentContainer.indexOfChild( tabBaseLayout ))
-//            	{
-//        			componentContainer.addView( tabBaseLayout );
-//        			componentContainer.invalidate();
-//            	}
-//        		
-//                if( bEnableAnim )
-//                {
-//    				// アニメーションは動的に生成
-//       				Animation animIn = TabAnimationFactory.createTabInAnimation(nLevel,nDuration);
-//	    			Log.d("anim","in start:" + message.arg2 );
-//	    			tabBaseLayout.startAnimation(animIn);                	
-//                }
-//                break;
-//        	case TAB_OUT:
-//    			componentContainer.removeAllViews();
-//    			componentContainer.invalidate();
-//        		
-//    			//if( animOut == null )
-//                if( bEnableAnim )
-//                {
-//    				Animation animOut = TabAnimationFactory.createTabOutAnimation(nLevel,nDuration);
-//        			outAnimDelay = animOut.getDuration();
-//        			animOut.setAnimationListener(
-//            				new TabOutAnimationListener(
-//            						tabBaseLayout,
-//            						componentContainer,
-//            						message.arg2,
-//            						lastLockTabId)
-//            			);
-//	    			Log.d("anim","out start:" + message.arg2 );        			
-//        			tabBaseLayout.startAnimation(animOut);                	
-//                }
-//                else
-//                {
-//            		if( lastLockTabId != 0 )
-//            		{
-//            			SetTabSelectionLock( false, lastLockTabId );
-//            		}
-//                }    			
-//        		break;
-//    		}
-//    	}
-//    };
-    
+	}    
 }

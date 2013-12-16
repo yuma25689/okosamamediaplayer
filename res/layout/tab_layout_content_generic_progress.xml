@@ -16,8 +16,6 @@
 	    <include layout="@layout/track_list_item_common" />
 	
 	</RelativeLayout>
-   	<include layout="@layout/left_move_panel_common" />
-   	<include layout="@layout/right_move_panel_common" />	   
     <RelativeLayout 
         android:id="@+id/TabCommonProgressPanel"
         android:layout_width="match_parent"
@@ -27,7 +25,7 @@
         android:id="@+id/progress_common"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-		android:indeterminateDrawable="@drawable/empty"        
+		android:indeterminateDrawable="@drawable/okosama_progress_inverse"        
         android:layout_gravity="center_vertical"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
@@ -41,4 +39,6 @@
         android:layout_below="@id/progress_common"
         />
     </RelativeLayout>
+    
+    
 </okosama.app.panel.TouchHookRelativeLayout>

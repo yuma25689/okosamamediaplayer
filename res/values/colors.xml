@@ -24,5 +24,7 @@
     <color name="gray">#777777</color>
     <color name="dummy_black">#111111</color>
     <color name="orange">#aaaa33</color>
+    <color name="move_info_moving">#aa777700</color>
+    <color name="move_info_move">#ff777700</color>
 </resources>
 

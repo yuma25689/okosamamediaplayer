@@ -2,7 +2,6 @@ package okosama.app.adapter;
 
 import java.util.HashMap;
 
-import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
@@ -13,7 +12,6 @@ import android.annotation.SuppressLint;
 // import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.CursorWrapper;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -22,7 +20,6 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.ArtistColumns;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

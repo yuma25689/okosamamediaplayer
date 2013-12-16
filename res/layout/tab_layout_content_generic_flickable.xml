@@ -3,6 +3,4 @@
     android:id="@+id/tab_relativelayout_tabcontent"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <include layout="@layout/left_move_panel_common" />
-   	<include layout="@layout/right_move_panel_common" />
 </okosama.app.panel.TouchHookRelativeLayout>

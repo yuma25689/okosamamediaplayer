@@ -4,6 +4,8 @@ import okosama.app.action.TabSelectAction;
 import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
 import okosama.app.panel.SubControlPanel;
+import okosama.app.panel.TabMoveLeftInfoPanel;
+import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.panel.TimeControlPanel;
 import okosama.app.state.IDisplayState;
 import okosama.app.tab.TabPage;
@@ -91,6 +93,8 @@ public class MainHandler extends Handler {
 	        		PlayControlPanel.createInstance(mActivity);
 	        		SubControlPanel.createInstance(mActivity);
 	        		NowPlayingControlPanel.createInstance(mActivity);
+	        		TabMoveRightInfoPanel.createInstance(mActivity);
+	        		TabMoveLeftInfoPanel.createInstance(mActivity);
 		            
 	        		// 初期化されていなければ、タブを作成
 	        		// このアクティビティのレイアウトクラスを渡す

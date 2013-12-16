@@ -297,6 +297,10 @@ public final class ResourceAccessor {
 	{
 		return activity.getResources().getString(id);
 	}
+	public int getColor( int id )
+	{
+		return activity.getResources().getColor(id);
+	}
 	
 	public String getQuantityString( int id, int num, Object[] args )
 	{

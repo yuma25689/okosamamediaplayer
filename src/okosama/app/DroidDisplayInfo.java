@@ -2,7 +2,7 @@ package okosama.app;
 
 import android.app.Activity;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
+// import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
@@ -30,7 +30,7 @@ public final class DroidDisplayInfo {
 	Activity activity;
 	Handler handler;
 	View viewForMeasureBarHeight;
-	private static Drawable backgroundImgBase = null;
+	// private static Drawable backgroundImgBase = null;
 	double widthScaleCorrectDensity = 0;
 	double heightScaleCorrectDensity = 0;
 	

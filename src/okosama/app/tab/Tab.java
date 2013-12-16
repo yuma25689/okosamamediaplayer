@@ -1,5 +1,6 @@
 package okosama.app.tab;
 
+import okosama.app.ControlDefs;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
@@ -30,9 +31,24 @@ public class Tab extends TabComponentParent {
 	int iCurrentTabPageId;
 	// next force refresh
 	boolean nextForceRefresh = false;
+	boolean locking = false;
 	
 	
 	
+	/**
+	 * @return the locking
+	 */
+	public boolean isLocking() {
+		return locking;
+	}
+
+	/**
+	 * @param locking the locking to set
+	 */
+	protected void setLocking(boolean locking) {
+		this.locking = locking;
+	}
+
 	/**
 	 * @return the nextForceRefresh
 	 */
@@ -73,7 +89,7 @@ public class Tab extends TabComponentParent {
 		// パネル位置の設定(FILL_PARENT)
 		RelativeLayout.LayoutParams lp 
 		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-        		0, 0 
+        		0, 0
         );
 		tabBaseLayout.setLayoutParams(lp);
 		// タブボタンを置くヘッダとなるレイアウト
@@ -172,6 +188,7 @@ public class Tab extends TabComponentParent {
 			}
 			mapBtn.valueAt(i).setEnabled(bEnable);
 		}
+		setLocking( !bEnable );
 	}
 	
 	/**

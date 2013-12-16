@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.action.IViewAction;
 import okosama.app.behavior.IBehavior;
+import okosama.app.panel.MoveTabInfo;
+import okosama.app.panel.TouchHookRelativeLayout;
 import okosama.app.widget.absWidget;
 
 import android.app.Activity;
@@ -105,6 +107,19 @@ public abstract class TabComponentParent implements ITabComponent {
 		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		LayoutInflater inflator = act.getLayoutInflater();
 		tabBaseLayout = (ViewGroup)inflator.inflate(iPanelLayoutId, null, false);	
+		widgets.clear();
+	}
+	protected void resetPanelViews(int iPanelLayoutId,ArrayList<MoveTabInfo> arrMti)
+	{
+		OkosamaMediaPlayerActivity act 
+		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		LayoutInflater inflator = act.getLayoutInflater();
+		TouchHookRelativeLayout thrl = (TouchHookRelativeLayout) inflator.inflate(iPanelLayoutId, null, false);
+		for( MoveTabInfo mti : arrMti )
+		{
+			thrl.setMoveTabInfo(mti.getTabInfoIndex(), mti);
+		}
+		tabBaseLayout = thrl;
 		widgets.clear();
 	}
 

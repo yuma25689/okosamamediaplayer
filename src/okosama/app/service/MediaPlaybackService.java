@@ -50,7 +50,6 @@ import android.provider.MediaStore.Audio.AudioColumns;
 import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -314,15 +313,20 @@ public class MediaPlaybackService extends Service {
                             MusicSettingsActivity.PREFERENCES_FILE, MODE_PRIVATE);
                     bPlugAndPlay = prefs.getBoolean(MusicSettingsActivity.KEY_ENABLE_HEADSET_PLUG_AND_PLAY, false);
             	             		
-            		if( mPlayListLen <= 0 || bPlugAndPlay == false )
+        			Log.d("headset", "connect");
+
+        			if( mPlayListLen <= 0 || bPlugAndPlay == false )
             		{
             			// Toast.makeText(context, "headset connect", Toast.LENGTH_SHORT).show();
-            			Log.d("headset", "connect");
             		}
             		else
             		{
 	            		// Toast.makeText(context, "headset connect - play", Toast.LENGTH_SHORT).show();
-            			Log.d("headset", "connect and play");
+            			if( isPlaying() )
+            			{
+            				Toast.makeText(context, R.string.headset_connect_and_play, Toast.LENGTH_SHORT).show();
+                            pause();        				
+            			}            			
 	                    play();
             		}
             	}
@@ -330,8 +334,12 @@ public class MediaPlaybackService extends Service {
             	{
             		// ƒwƒbƒhƒzƒ“Ø’f
             		// Toast.makeText(context, "headset disconnect - pause", Toast.LENGTH_SHORT).show();
-        			Log.d("headset", "disconnect and pause");
-                    pause();
+        			if( isPlaying() )
+        			{
+        				Log.d("headset", "disconnect and pause");
+            			Toast.makeText(context, R.string.headset_disconnect_and_pause, Toast.LENGTH_SHORT).show();
+                        pause();        				
+        			}
                     mPausedByTransientLossOfFocus = false;
             	}
 //            	intent.setClass(context, OkosamaMediaPlayerActivity.class);

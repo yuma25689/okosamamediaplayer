@@ -148,7 +148,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
 	       vh.line2 = (TextView) v.findViewById(R.id.line2);
 	       vh.play_indicator = (ImageView) v.findViewById(R.id.play_indicator);
 	       vh.icon = (ImageView) v.findViewById(R.id.icon);
-	       vh.icon.setBackgroundDrawable(mDefaultAlbumIcon);
+	       vh.icon.setBackgroundDrawable(null);
 	       vh.icon.setPadding(0, 0, 1, 0);
 	       v.setTag(vh);
     	}
@@ -188,13 +188,9 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
         
         // idの種類によって、アイコンの画像を変える
         ImageView iv = vh.icon;//(ImageView) view.findViewById(R.id.icon);
-        if (id == RECENTLY_ADDED_PLAYLIST) {
-        	// 最近追加されたもの
-            iv.setImageResource(R.drawable.ic_mp_playlist_recently_added_list);
-        } else {
-        	// それ以外
-            iv.setImageResource(R.drawable.ic_mp_playlist_list);
-        }
+        
+        iv.setImageResource(R.drawable.playlist_normal);
+        
         // アイコンのレイアウトをリセット？
         // TODO: 意味ないように感じる・・・
         ViewGroup.LayoutParams p = iv.getLayoutParams();

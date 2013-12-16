@@ -35,28 +35,30 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int app_bk=0x7f07000b;
+        public static final int app_bk=0x7f07000d;
         public static final int appwidget_text=0x7f070000;
         /**  Do not translate. Background color for currently dragged item in playlist edit mode. 
          */
-        public static final int dragndrop_background=0x7f070009;
+        public static final int dragndrop_background=0x7f07000b;
         public static final int dummy_black=0x7f070007;
         public static final int dummy_white=0x7f070004;
         /**  Do not translate. Background color for albums in the artists list view. 
          */
-        public static final int expanding_child_background=0x7f07000a;
-        public static final int gradiant_base=0x7f07000c;
-        public static final int gradiant_notify=0x7f07000d;
-        public static final int gradiant_tab_base=0x7f07000e;
-        public static final int gradiant_test=0x7f07000f;
-        public static final int gradiant_test2=0x7f070010;
-        public static final int gradiant_test3=0x7f070011;
-        public static final int gradiant_test4=0x7f070012;
+        public static final int expanding_child_background=0x7f07000c;
+        public static final int gradiant_base=0x7f07000e;
+        public static final int gradiant_notify=0x7f07000f;
+        public static final int gradiant_tab_base=0x7f070010;
+        public static final int gradiant_test=0x7f070011;
+        public static final int gradiant_test2=0x7f070012;
+        public static final int gradiant_test3=0x7f070013;
+        public static final int gradiant_test4=0x7f070014;
         public static final int gray=0x7f070006;
         public static final int green=0x7f070001;
         public static final int lightgray=0x7f070005;
-        public static final int list_item=0x7f070013;
+        public static final int list_item=0x7f070015;
         public static final int magenta=0x7f070002;
+        public static final int move_info_move=0x7f07000a;
+        public static final int move_info_moving=0x7f070009;
         public static final int orange=0x7f070008;
         public static final int white=0x7f070003;
     }
@@ -249,34 +251,12 @@ public final class R {
         public static final int stop_hand_normal_black_press=0x7f0200b9;
         public static final int stop_normal=0x7f0200ba;
         public static final int stop_press=0x7f0200bb;
-        public static final int tab1_btn_not_select_no_shadow2=0x7f0200bc;
-        public static final int tab1_btn_not_select_right_shadow=0x7f0200bd;
-        public static final int tab1_btn_select_2=0x7f0200be;
-        public static final int tab2_btn_not_select_no_shadow2=0x7f0200bf;
-        public static final int tab2_btn_select_2=0x7f0200c0;
-        public static final int tab3_btn_not_select_both_shadow=0x7f0200c1;
-        public static final int tab3_btn_not_select_left_shadow=0x7f0200c2;
-        public static final int tab3_btn_not_select_no_shadow2=0x7f0200c3;
-        public static final int tab3_btn_select_2=0x7f0200c4;
-        public static final int tab4_btn_not_select_both_shadow=0x7f0200c5;
-        public static final int tab4_btn_not_select_no_shadow2=0x7f0200c6;
-        public static final int tab4_btn_select_2=0x7f0200c7;
-        public static final int tab_1_list_bk=0x7f0200c8;
-        public static final int tab_1_select=0x7f0200c9;
-        public static final int tab_1_select_2=0x7f0200ca;
-        public static final int tab_2_list_bk=0x7f0200cb;
-        public static final int tab_2_select=0x7f0200cc;
-        public static final int tab_2_select_2=0x7f0200cd;
-        public static final int tab_3_list_bk=0x7f0200ce;
-        public static final int tab_3_select_2=0x7f0200cf;
-        public static final int tab_4_list_bk=0x7f0200d0;
-        public static final int tab_4_select_2=0x7f0200d1;
-        public static final int time_background=0x7f0200d2;
-        public static final int time_bk_shelf=0x7f0200d3;
-        public static final int video_focus=0x7f0200d4;
-        public static final int video_normal=0x7f0200d5;
-        public static final int video_press=0x7f0200d6;
-        public static final int video_select_image=0x7f0200d7;
+        public static final int time_background=0x7f0200bc;
+        public static final int time_bk_shelf=0x7f0200bd;
+        public static final int video_focus=0x7f0200be;
+        public static final int video_normal=0x7f0200bf;
+        public static final int video_press=0x7f0200c0;
+        public static final int video_select_image=0x7f0200c1;
     }
     public static final class id {
         public static final int EmptyShowPanel=0x7f0c0017;
@@ -476,6 +456,8 @@ public final class R {
         /**  Menu item that takes the user back to the top level screen of the music player 
          */
         public static final int goto_start=0x7f080003;
+        public static final int headset_connect_and_play=0x7f080093;
+        public static final int headset_disconnect_and_pause=0x7f080092;
         public static final int left_move_text=0x7f080090;
         /**  Shown in the music picker while loading the music database. 
          */

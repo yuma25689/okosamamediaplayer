@@ -2,12 +2,8 @@ package okosama.app.anim;
 
 // import android.view.animation.Animation;
 import okosama.app.ControlDefs;
-import okosama.app.MusicSettingsActivity;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.MotionObserver.MagneticFieldValue;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
