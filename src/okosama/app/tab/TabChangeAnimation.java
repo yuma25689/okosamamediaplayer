@@ -67,32 +67,7 @@ public class TabChangeAnimation {
 			tab.setEnableAllTab(!b,tabPageId);
 		}
 		// bGroupingTabSelectionProc = b;
-	}
-//	int getNextTabSelectionId()
-//	{
-//		if( bGroupingTabSelectionProc )
-//		{
-//			return tabSelectionProcessId;
-//		}
-//		if( false == handler.hasMessages(TAB_IN) 
-//		&& false == handler.hasMessages(TAB_OUT) )
-//		{
-//			tabSelectionProcessId = 0;
-//		}
-//		else
-//		{
-//			if( MAX_TABSELECTION_PROCESS_ID <= tabSelectionProcessId )
-//			{
-//				tabSelectionProcessId = 0;
-//			}
-//			else
-//			{
-//				tabSelectionProcessId++;
-//			}
-//		}
-//		return tabSelectionProcessId;
-//	}
-	
+	}	
 	public class TabChangeAnimationTarget {
 		TabChangeAnimationTarget(ViewGroup t,ViewGroup p)
 		{
@@ -151,17 +126,7 @@ public class TabChangeAnimation {
 		switch( iMoveType )
 		{
     	case TAB_IN:
-    		if( tabBaseLayout.getParent() != null )
-    		{
-    			if( tabBaseLayout.getParent() instanceof ViewGroup )
-    				((ViewGroup)tabBaseLayout.getParent()).removeView( tabBaseLayout );
-    		}
-    		if( 0 > componentContainer.indexOfChild( tabBaseLayout ))
-        	{
-    			componentContainer.addView( tabBaseLayout );
-    			componentContainer.invalidate();
-        	}
-    		
+    		TabPage.addLayoutFromParent( tabBaseLayout, componentContainer );
             if( bEnableAnim )
             {
 				// アニメーションは動的に生成
@@ -182,14 +147,6 @@ public class TabChangeAnimation {
         						tabId,
         						lastLockTabId)
 				);
-    			// outAnimDelay = animOut.getDuration();
-//    			animOut.setAnimationListener(
-//        				new TabOutAnimationListener(
-//        						tabBaseLayout,
-//        						componentContainer,
-//        						tabId,
-//        						lastLockTabId)
-//        			);
     			Log.d("anim_out","out start:" + tabId + " lastlocktabId:" + lastLockTabId );        			
     			tabBaseLayout.startAnimation(animOut);                	
             }

@@ -1,11 +1,15 @@
 package okosama.app.tab.play;
 
+import java.util.ArrayList;
+
 import okosama.app.ControlDefs;
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.adapter.IAdapterUpdate;
 import okosama.app.behavior.TrackListBehavior;
 import okosama.app.factory.DroidWidgetKit;
+import okosama.app.panel.MoveTabInfo;
 import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
 import okosama.app.panel.SubControlPanel;
@@ -41,8 +45,29 @@ public class TabPageVideoView extends TabPage implements OnTouchListener {
 	}
 	@Override
 	public int create(int panelLayoutID) {
-		
-		resetPanelViews( panelLayoutID );
+		// フリック入力対応
+		ArrayList<MoveTabInfo> arrMti = new ArrayList<MoveTabInfo>();
+		// 左フリック時の設定
+		MoveTabInfo mti = new MoveTabInfo();
+		mti.setTabInfoIndex( MoveTabInfo.LEFT_1 );
+		mti.setTabId(ControlIDs.TAB_ID_PLAY);
+		mti.setTabPageId(TabPage.TABPAGE_ID_NOW_PLAYLIST);
+		mti.setPanelId(R.id.left_move_panel);
+		mti.setImageViewId(R.id.left_move_image);
+		mti.setTabImageResId(R.drawable.playlist_normal);
+		arrMti.add(mti);
+		// 右フリック時の設定
+		MoveTabInfo mtiR = new MoveTabInfo();
+		mtiR.setImageVertialAlign( MoveTabInfo.VERTIAL_TOP );
+		mtiR.setTabInfoIndex( MoveTabInfo.RIGHT_1 );
+		mtiR.setTabId(ControlIDs.TAB_ID_MAIN);
+		mtiR.setTabPageId(TabPage.TABPAGE_ID_MEDIA);
+		mtiR.setPanelId(R.id.right_move_panel);
+		mtiR.setImageViewId(R.id.right_move_image);
+		mtiR.setTabImageResId(R.drawable.music_choice_normal);
+		arrMti.add(mtiR);
+						
+		resetPanelViews( panelLayoutID, arrMti );
 		RelativeLayout.LayoutParams lp 
 		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
         		0, 0

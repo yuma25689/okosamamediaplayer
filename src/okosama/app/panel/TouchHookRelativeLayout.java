@@ -2,6 +2,8 @@ package okosama.app.panel;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R.color;
+import okosama.app.action.IViewAction;
+import okosama.app.action.TabSelectAction;
 import okosama.app.tab.Tab;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -14,23 +16,28 @@ import android.widget.RelativeLayout;
 
 public class TouchHookRelativeLayout extends RelativeLayout {
 
-	static final int INFO_SHOW_PANEL_WIDTH_DIP = 200;
+	static final int INFO_SHOW_PANEL_WIDTH_DIP = 150;
+	static final double FLICK_MOVE_SPEED = 1;
 	
 	MoveTabInfo nextMoveTabInfo = null;
 	
 	boolean bLeftShow = false;
 	boolean bRightShow = false;
 	
-	public static final int SHOW_MOVEINFO_RECOGNIZE_PLAY_LEFT = 5;
-	public static final int SHOW_MOVEINFO_RECOGNIZE_PLAY_RIGHT = 5;
+	public static final int SHOW_MOVEINFO_RECOGNIZE_PLAY_LEFT = 0;
+	public static final int SHOW_MOVEINFO_RECOGNIZE_PLAY_RIGHT = 0;
 	// フリックでどれだけ動かした後で離したら隣のタブへ移動するか
-	public static final int MOVE_RECOGNIZE_PLAY_LEFT = 180;
-	public static final int MOVE_RECOGNIZE_PLAY_RIGHT =180;
+	public static final int MOVE_RECOGNIZE_PLAY_LEFT = 100;
+	public static final int MOVE_RECOGNIZE_PLAY_RIGHT =100;
 
 	SparseArray<MoveTabInfo> mapMoveTabIdIdx = new SparseArray<MoveTabInfo>();
 	public void setMoveTabInfo( int idx, MoveTabInfo tabInfo )
 	{
 		mapMoveTabIdIdx.put( idx, tabInfo );
+	}
+	public void clearMoveTabInfo()
+	{
+		mapMoveTabIdIdx.clear();
 	}
 	static final int PLAY = 20;
 	int orgX = 0;
@@ -112,18 +119,28 @@ public class TouchHookRelativeLayout extends RelativeLayout {
                 // 左へ一定以上はなれたらタブの移動の表示を開始
             	bShow = updateTabInfoPanel( MoveTabInfo.LEFT_1 );
             }
-            if( bShow == false )
-            {
-            	// それ以外の場合、クリア？
-                // 全てのタブ移動パネル情報をクリアする
-                clearAllMoveTabInfoPanel();            	
-            }
+			// layout( currentX, currentY, currentX + getWidth(), currentY + getHeight() );
+//            if( bShow == false )
+//            {
+//            	// それ以外の場合、クリア？
+//                // 全てのタブ移動パネル情報をクリアする
+//                clearAllMoveTabInfoPanel();            	
+//            }
         	break;
 	    case MotionEvent.ACTION_DOWN:
 	        break;
 	    case MotionEvent.ACTION_UP:
             // layout(orgX, orgY, orgX + getWidth(), orgY + getHeight());
-            // TODO: 必要がある場合、タブの移動を行う
+            // 必要がある場合、タブの移動を行う
+	    	if( nextMoveTabInfo != null )
+	    	{
+	    		IViewAction action = new TabSelectAction( 
+	    				nextMoveTabInfo.getTabId(),
+	    				nextMoveTabInfo.getTabPageId() );
+	    		action.doAction(null);
+	    		nextMoveTabInfo = null;
+	    	}
+	    	
             // 全てのタブ移動パネル情報をクリアする
             clearAllMoveTabInfoPanel();
 	        break;
@@ -145,7 +162,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
     		if( ti != null 
     				// && ti.isShowing() == false
     				&& ti.getTabId() != null
-    				&& ti.getTabPageId() != null    				
+    				&& ti.getTabPageId() != null			
     				&& ti.getPanelId() != null
     				&& ti.getImageViewId() != null )
     		{
@@ -155,7 +172,6 @@ public class TouchHookRelativeLayout extends RelativeLayout {
     			{
     				return false;
     			}
-    			
     			// まだタブ情報パネルが表示されていなければ
     			if( ti.isShowing() == false )
     			{
@@ -190,24 +206,54 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	        							getResourceAccessor().
 	        							getResourceDrawable(
 	        									ti.getTabImageResId()));
+	        					RelativeLayout.LayoutParams lpIv = (LayoutParams) iv.getLayoutParams();
+        						
+	        					lpIv.addRule(RelativeLayout.CENTER_VERTICAL);
+//	        					switch( ti.getImageVertialAlign() )
+//	        					{
+//	        					case MoveTabInfo.VERTIAL_CENTER:
+//		        					lpIv.addRule(RelativeLayout.CENTER_VERTICAL);
+//		        					break;
+//	        					case MoveTabInfo.VERTIAL_TOP:
+//		        					lpIv.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+//	        						break;
+//	        					case MoveTabInfo.VERTIAL_BOTTOM:
+//		        					lpIv.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//	        						break;
+//	        						
+//	        					}
 	        				}
 	        			}
-        				// rl.layout( currentX, currentY, currentX + getWidth(), currentY + getHeight() );
             			// パネルを表示
             			rl.setVisibility(View.VISIBLE);
         			}
     				int parent_width = getWidth();
+    				int border_right = OkosamaMediaPlayerActivity.dispInfo.getCorrectionXConsiderDensity(
+    						MOVE_RECOGNIZE_PLAY_RIGHT
+    				);
+    				int border_left = OkosamaMediaPlayerActivity.dispInfo.getCorrectionXConsiderDensity(
+    						MOVE_RECOGNIZE_PLAY_LEFT
+    				);
     				int width = OkosamaMediaPlayerActivity.dispInfo.getCorrectionXConsiderDensity( 
     						INFO_SHOW_PANEL_WIDTH_DIP );
 //					currentX < 0 ? currentX * -1 : currentX );
-					int x = OkosamaMediaPlayerActivity.dispInfo.getCorrectionXConsiderDensity(
-						currentX < 0 ? parent_width + currentX : -1 * width + currentX );
+					int x = 0;
+					if( currentX < 0 )
+					{
+						x = OkosamaMediaPlayerActivity.dispInfo.getCorrectionXConsiderDensity( currentX ) + parent_width; 
+					}
+					else
+					{
+						x = -1 * width + currentX;
+					}
+					// なるべく簡単なフリックで到達するように、移動量をFLICK_MOVE_SPEED倍する
+					x = (int)(x * FLICK_MOVE_SPEED);
 		            x = limitMaxCurrentX( x );
 		            
     				int y = OkosamaMediaPlayerActivity.dispInfo.getCorrectionYConsiderDensity(
     						currentY);
     				int height = OkosamaMediaPlayerActivity.dispInfo.getCorrectionYConsiderDensity(
-    						currentY + getHeight());
+    						currentY ) + getHeight();
     				
     				//rl.layout(x, y, x + width, y + height);
     				
@@ -217,24 +263,27 @@ public class TouchHookRelativeLayout extends RelativeLayout {
     				lp.width = width;
     				lp.height = height;
     				rl.setLayoutParams(lp);
+    				
     				if( ti.isShowing() == false )
     				{
                       	ti.setShowing(true);	    				
     				}
-                	if( ( bRightShow &&  MOVE_RECOGNIZE_PLAY_RIGHT < -1 * currentX ) 
-                	|| ( bLeftShow && MOVE_RECOGNIZE_PLAY_LEFT < width + x ) )
+                	if( ( bRightShow &&  border_right < -1 * currentX ) 
+                	|| ( bLeftShow && border_left < width + x ) )
                 	{
                 		// 今離したら移動する場合
                 		// 背景の透明度を下げる
                 		rl.setBackgroundColor(
-                				OkosamaMediaPlayerActivity.getResourceAccessor().getColor(color.move_info_move));
+                			OkosamaMediaPlayerActivity.getResourceAccessor().getColor(color.move_info_move));
                 		nextMoveTabInfo = ti;
                 	}
                 	else
                 	{
+                		Log.d("x","=" + x);
+                		Log.d("width","=" + width);
                 		// そうでない
                 		rl.setBackgroundColor(
-                				OkosamaMediaPlayerActivity.getResourceAccessor().getColor(color.move_info_moving));
+                			OkosamaMediaPlayerActivity.getResourceAccessor().getColor(color.move_info_moving));
                 		nextMoveTabInfo = null;
                 	}
         		}
@@ -298,6 +347,8 @@ public class TouchHookRelativeLayout extends RelativeLayout {
     				}
         		}
     		}
+			layout( orgX, orgY, orgX + getWidth(), orgY + getHeight() );
+			
 			bRightShow = false;
 			bLeftShow = false;
 			nextMoveTabInfo = null;

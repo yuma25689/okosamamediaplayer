@@ -3,6 +3,7 @@ package okosama.app.anim;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.tab.Tab;
+import okosama.app.tab.TabPage;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -30,18 +31,20 @@ public class TabOutAnimationListener implements AnimationListener {
 		componentContainer.post(new Runnable() {
             @Override
 			public void run() {
-            	if( 0 <= componentContainer.indexOfChild( tabBaseLayout ))
-            	{
-            		componentContainer.removeView( tabBaseLayout );
-            		Log.d("anim","remove:" + tabId);
-		    	}
+        		TabPage.removeLayoutFromParent( tabBaseLayout, componentContainer );            	
+//            	if( 0 <= componentContainer.indexOfChild( tabBaseLayout ))
+//            	{
+//            		componentContainer.removeView( tabBaseLayout );
+//            		Log.d("anim","remove:" + tabId);
+//		    	}
         		Log.d("anim","out end:" + tabId);
         		if( lastLockTabId != 0 )
         		{
+            		Log.d("relesetablock","out end:" + tabId);
         			ReleaseTabSelectionLock( lastLockTabId );//, tabId );
         		}
-//        		componentContainer.removeAllViews();
-//        		componentContainer.invalidate();		
+        		//componentContainer.removeAllViews();
+        		//componentContainer.invalidate();		
         		
             }
         });				

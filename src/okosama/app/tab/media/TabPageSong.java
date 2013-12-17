@@ -1,9 +1,13 @@
 package okosama.app.tab.media;
 
+import java.util.ArrayList;
+
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.behavior.TrackListBehavior;
 import okosama.app.factory.DroidWidgetKit;
+import okosama.app.panel.MoveTabInfo;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
@@ -46,9 +50,29 @@ public class TabPageSong extends TabPage {
 	 */
 	@Override
 	public int create(int panelLayoutID) {
-		
+		// フリック入力対応
+		ArrayList<MoveTabInfo> arrMti = new ArrayList<MoveTabInfo>();
+		// 左フリック時の設定
+		MoveTabInfo mti = new MoveTabInfo();
+		mti.setTabInfoIndex( MoveTabInfo.LEFT_1 );
+		mti.setTabId(ControlIDs.TAB_ID_MEDIA);
+		mti.setTabPageId(TabPage.TABPAGE_ID_ARTIST);
+		mti.setPanelId(R.id.left_move_panel);
+		mti.setImageViewId(R.id.left_move_image);
+		mti.setTabImageResId(R.drawable.artisttabbtn_normal);
+		arrMti.add(mti);
+		// 右フリック時の設定
+		MoveTabInfo mtiR = new MoveTabInfo();
+		mtiR.setTabInfoIndex( MoveTabInfo.RIGHT_1 );
+		mtiR.setTabId(ControlIDs.TAB_ID_MEDIA);
+		mtiR.setTabPageId(TabPage.TABPAGE_ID_PLAYLIST);
+		mtiR.setPanelId(R.id.right_move_panel);
+		mtiR.setImageViewId(R.id.right_move_image);
+		mtiR.setTabImageResId(R.drawable.playlisttabbtn_normal);
+		arrMti.add(mtiR);
+				
 		// パネルの作成
-		resetPanelViews( panelLayoutID );
+		resetPanelViews( panelLayoutID, arrMti );
 		RelativeLayout.LayoutParams lp 
 		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
         		0, 0

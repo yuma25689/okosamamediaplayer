@@ -115,6 +115,8 @@ public abstract class TabComponentParent implements ITabComponent {
 		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		LayoutInflater inflator = act.getLayoutInflater();
 		TouchHookRelativeLayout thrl = (TouchHookRelativeLayout) inflator.inflate(iPanelLayoutId, null, false);
+		thrl.clearAllMoveTabInfoPanel();
+		thrl.clearMoveTabInfo();
 		for( MoveTabInfo mti : arrMti )
 		{
 			thrl.setMoveTabInfo(mti.getTabInfoIndex(), mti);

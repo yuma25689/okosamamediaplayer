@@ -1,6 +1,33 @@
 package okosama.app.panel;
 
 public class MoveTabInfo {
+	// タブ情報のインデックス
+	public static final int LEFT_1 = 1;
+	public static final int RIGHT_1 = 2;
+	
+	public static final int VERTIAL_CENTER = 1;
+	public static final int VERTIAL_TOP = 2;
+	public static final int VERTIAL_BOTTOM = 3;
+	//Button btnTabBtn;
+	Integer tabId = null;
+	Integer tabPageId = null;
+	Integer tabInfoIndex = null;
+	Integer imageViewId = null;
+	Integer tabImageResId = null;
+	Integer imageVertialAlign = VERTIAL_CENTER;
+	/**
+	 * @return the imageVertialAlign
+	 */
+	public Integer getImageVertialAlign() {
+		return imageVertialAlign;
+	}
+	/**
+	 * @param imageVertialAlign the imageVertialAlign to set
+	 */
+	public void setImageVertialAlign(Integer imageVertialAlign) {
+		this.imageVertialAlign = imageVertialAlign;
+	}
+	boolean showing = false;
 	/**
 	 * @return the tabId
 	 */
@@ -13,12 +40,6 @@ public class MoveTabInfo {
 	public void setTabId(int tabId) {
 		this.tabId = tabId;
 	}
-	// タブ情報のインデックス
-	public static final int LEFT_1 = 1;
-	public static final int RIGHT_1 = 2;
-	
-	Integer tabInfoIndex = null;
-	
 	
 	/**
 	 * @return the tabInfoIndex
@@ -32,9 +53,6 @@ public class MoveTabInfo {
 	public void setTabInfoIndex(Integer tabInfoIndex) {
 		this.tabInfoIndex = tabInfoIndex;
 	}
-	//Button btnTabBtn;
-	Integer tabId = null;
-	Integer tabPageId = null;
 	/**
 	 * @return the tabPageId
 	 */
@@ -72,9 +90,6 @@ public class MoveTabInfo {
 	public void setImageViewId(Integer imageViewId) {
 		this.imageViewId = imageViewId;
 	}
-	Integer imageViewId = null;
-	Integer tabImageResId = null;
-	boolean showing = false;
 	/**
 	 * @return the showing
 	 */

@@ -52,6 +52,7 @@ public class TabPageAlbum extends TabPage {
 		ArrayList<MoveTabInfo> arrMti = new ArrayList<MoveTabInfo>();
 		// ¶ƒtƒŠƒbƒN‚Ìİ’è
 		MoveTabInfo mti = new MoveTabInfo();
+		mti.setImageVertialAlign( MoveTabInfo.VERTIAL_TOP );
 		mti.setTabInfoIndex( MoveTabInfo.LEFT_1 );
 		mti.setTabId(ControlIDs.TAB_ID_MAIN);
 		mti.setTabPageId(TabPage.TABPAGE_ID_PLAY);

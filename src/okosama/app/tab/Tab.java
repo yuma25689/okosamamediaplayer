@@ -2,6 +2,7 @@ package okosama.app.tab;
 
 import okosama.app.ControlDefs;
 import okosama.app.ControlIDs;
+import okosama.app.MusicSettingsActivity;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.IViewAction;
@@ -9,6 +10,8 @@ import okosama.app.action.TabSelectAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.Button;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -201,13 +204,16 @@ public class Tab extends TabComponentParent {
 		Log.d("tab.setCurrentTab", "tab:" + tabPageId);
 		synchronized( OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim )
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(true, internalID,tabPageId);
-			// setEnableAllTab(false);
-			// TODO: タブページはマップに格納した方がいいかもしれない
-	
+			OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(
+					true, internalID,tabPageId);
 			boolean bOutExec = false;
-	//        		// 一度全てのタブの選択を解除
-	//        		c.setActivate( false );
+			boolean bAnimExec = false;
+	        SharedPreferences prefs 
+	        = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getSharedPreferences(
+	                MusicSettingsActivity.PREFERENCES_FILE, Context.MODE_PRIVATE);
+	        bAnimExec = prefs.getBoolean(MusicSettingsActivity.KEY_ENABLE_ANIMATION, false);
+						
+			// 一度全てのタブの選択を解除
 			if( null != children.get(tabPageId,null) )
 			{
 				if( null != children.get(iCurrentTabPageId,null) )
@@ -220,11 +226,6 @@ public class Tab extends TabComponentParent {
 				children.get(tabPageId).setActivate(true);
 				iCurrentTabPageId = tabPageId;
 	   		}
-	//        for( ITabComponent c : children ) {
-	//        	if( c instanceof TabPage ) { // できたら使いたくなかった・・・。
-	//        		((TabPage) c).setTabButtonToFront();
-	//        	}
-	//        }
 			// アプリケーションに選択されたタブの画面IDを設定する
 			// この場所だけでいいかどうかは不明
 	        if( save == true )
@@ -233,9 +234,10 @@ public class Tab extends TabComponentParent {
 	    		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 	        	act.setCurrentDisplayId(this.internalID,tabPageId);
 	        }
-	        if( bOutExec == false )
+	        if( bAnimExec == false || bOutExec == false )
 	        {
-	        	OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(false, internalID,tabPageId);
+	        	OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(
+	        			false, internalID,tabPageId);
 	        }
 		}
 

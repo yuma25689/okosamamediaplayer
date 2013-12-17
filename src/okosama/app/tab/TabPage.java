@@ -1,9 +1,13 @@
 package okosama.app.tab;
 // import android.R;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import okosama.app.MusicSettingsActivity;
 import okosama.app.OkosamaMediaPlayerActivity;
 
 /**
@@ -39,19 +43,63 @@ public abstract class TabPage extends TabComponentParent {
 	
 	// private boolean bPrevActivate = false;
 	
+	public static void addLayoutFromParent( ViewGroup layout, ViewGroup parent )
+	{
+		if( layout.getParent() != null )
+		{
+			if( layout.getParent() instanceof ViewGroup )
+				((ViewGroup)layout.getParent()).removeView( layout );
+		}
+		if( 0 > parent.indexOfChild( layout ))
+    	{
+			parent.addView( layout );
+			// parent.invalidate();
+    	}
+		
+	}
+	
+	public static void removeLayoutFromParent( ViewGroup layout, ViewGroup parent )
+	{
+    	if( 0 <= parent.indexOfChild( layout ))
+    	{
+    		parent.removeView( layout );
+    	}		
+	}
+	
+	
 	@Override
 	public void setActivate( boolean bActivate )
 	{
+        SharedPreferences prefs 
+        = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getSharedPreferences(
+                MusicSettingsActivity.PREFERENCES_FILE, Context.MODE_PRIVATE);
+        boolean bEnableAnim = prefs.getBoolean(MusicSettingsActivity.KEY_ENABLE_ANIMATION, false);
+		
 		if( bActivate )
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.requestTabMove(
+			if( bEnableAnim )
+			{
+				OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.requestTabMove(
 					TabChangeAnimation.TAB_IN, tabBaseLayout, componentContainer, this.tabId);
+			}
+			else
+			{
+				addLayoutFromParent( tabBaseLayout, componentContainer );				
+			}
 
 		}
 		else
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.requestTabMove(
-					TabChangeAnimation.TAB_OUT, tabBaseLayout, componentContainer, this.tabId);			
+			if( bEnableAnim )
+			{
+				Log.d("tab out anim","come");
+				OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.requestTabMove(
+					TabChangeAnimation.TAB_OUT, tabBaseLayout, componentContainer, this.tabId);
+			}
+			else
+			{
+				removeLayoutFromParent( tabBaseLayout, componentContainer );
+			}
 	
 		}
 		// bPrevActivate = bActivate;
