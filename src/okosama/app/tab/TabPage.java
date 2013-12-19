@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import okosama.app.MusicSettingsActivity;
 import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.panel.TabMoveLeftInfoPanel;
+import okosama.app.panel.TabMoveRightInfoPanel;
+import okosama.app.panel.TouchHookRelativeLayout;
 
 /**
  * タブの１つのページを模倣したクラス
@@ -23,6 +26,8 @@ public abstract class TabPage extends TabComponentParent {
 	
 	// protected Button tabButton;
 	protected Drawable bk_drawable;
+	protected TabMoveRightInfoPanel rightPanel;
+	protected TabMoveLeftInfoPanel leftPanel;
 	
 	protected int tabId = TABPAGE_ID_UNKNOWN;
 	

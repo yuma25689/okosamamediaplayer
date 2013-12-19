@@ -20,23 +20,23 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- used in various places to indicate there is one song for a given artist or album -->
-    <string name="onesong">1 song</string>
+    <string name="onesong">1曲</string>
     <!-- used in various places to indicate there is some number other than one songs for a given artist or album. -->
     <plurals name="Nsongs">
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> songs</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>曲</item>
     </plurals>
 
     <!-- shows how many songs on the album are by the selected artist, out of how many total, if those two numbers are different -->
     <plurals name="Nsongscomp">
-        <item quantity="other"><xliff:g id="count_for_artist">%2$d</xliff:g> of <xliff:g id="total_count">%1$d</xliff:g> songs</item>
+        <item quantity="other"><xliff:g id="total_count">%1$d</xliff:g>曲中<xliff:g id="count_for_artist">%2$d</xliff:g>曲</item>
     </plurals>
 
     <!-- Used in artists list view, indicates how many albums exist for a given artist. -->
     <plurals name="Nalbums">
         <!-- number of albums is one -->
-        <item quantity="one">1 album</item>
+        <item quantity="one"></item>
         <!-- number of albums is not equal to one -->
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> albums</item>
+        <item quantity="other">アルバム<xliff:g id="count">%d</xliff:g>個</item>
     </plurals>
 
     <!--
@@ -56,144 +56,143 @@
 
     <!-- Menu item that deletes the currently selected item, which might be a single song, or a collection of songs.
          The user will be prompted to confirm before deletion actually takes place -->
-    <string name="delete_item">Delete</string>
+    <string name="delete_item">削除</string>
     <!-- Menu item to play back all the songs in the currently showing list in list order -->
-    <string name="play_all">Play all</string>
+    <string name="play_all">全て再生</string>
 
     <!-- Delete confirmation dialog when deleting an entire artist -->
-    <string name="delete_artist_desc">All songs by <xliff:g id="artist">%s</xliff:g> will be permanently deleted from the SD card.</string>
+    <string name="delete_artist_desc">アーティスト\"<xliff:g id="artist">%s</xliff:g>\"の全ての曲をSDカードから消しますが、いいでしょうか？</string>
 
     <!-- Delete confirmation dialog when deleting an entire album -->
-    <string name="delete_album_desc">The entire album \"<xliff:g id="album">%s</xliff:g>\" will be permanently deleted from the SD card.</string>
+    <string name="delete_album_desc"> アルバム\"<xliff:g id="album">%s</xliff:g>\" の全ての曲をSDカードから消しますが、いいでしょうか？</string>
 
     <!-- Delete confirmation dialog when deleting a single song -->
-    <string name="delete_song_desc">\"<xliff:g id="song">%s</xliff:g>\" will be permanently deleted from the SD card.</string>
+    <string name="delete_song_desc">曲\"<xliff:g id="song">%s</xliff:g>\" をSDカードから消しますけど、いいですか？</string>
 
     <!-- Delete confirmation dialog, confirmation button text -->
-    <string name="delete_confirm_button_text">OK</string>
+    <string name="delete_confirm_button_text">やる</string>
     <!-- Toast confirming that song(s) was/were deleted. -->
     <plurals name="NNNtracksdeleted">
         <!-- delete confirmation message for 1 song -->
-        <item quantity="one">1 song was deleted.</item>
+        <item quantity="one">1曲消しました。</item>
         <!-- delete confirmation message for 0 or more than 1 songs -->
-        <item quantity="other"><xliff:g id="songs_to_delete">%d</xliff:g> songs were deleted.</item>
+        <item quantity="other"><xliff:g id="songs_to_delete">%d</xliff:g> 曲消しました。</item>
     </plurals>
 
     <!-- shown in dialog while the media scanner is starting up -->
-    <string name="scanning">Scanning SD card\u2026</string>
+    <string name="scanning">SDカードスキャン中\u2026</string>
 
     <!-- title of the "current playlist" screen when not in party shuffle mode -->
-    <string name="nowplaying_title">Now playing</string>
+    <string name="nowplaying_title">現在プレイ中</string>
     <!-- Artist screen title -->
-    <string name="artists_title">Artists</string>
+    <string name="artists_title">アーティスト</string>
     <!-- Category label on Library screen -->
-    <string name="albums_menu">Albums</string>
+    <string name="albums_menu">アルバム</string>
     <!-- Albums screen title -->
-    <string name="albums_title">Albums</string>
+    <string name="albums_title">アルバム</string>
     <!-- Category label on Library screen -->
-    <string name="tracks_menu">Songs</string>
+    <string name="tracks_menu">曲</string>
     <!-- Songs screen title -->
-    <string name="tracks_title">Songs</string>
+    <string name="tracks_title">曲</string>
     <!-- Category label on Library screen -->
-    <string name="playlists_menu">Playlists</string>
+    <string name="playlists_menu">プレイリスト</string>
     <!-- Playlists screen title -->
-    <string name="playlists_title">Playlists</string>
+    <string name="playlists_title">プレイリスト</string>
     <!-- Videos screen title -->
-    <string name="videos_title">Videos</string>
+    <string name="videos_title">動画</string>
     <!-- All media screen title -->
-    <string name="all_title">All media</string>
+    <string name="all_title">全てのメディア</string>
     <!-- Category label on Library screen -->
-    <string name="browse_menu">Artists</string>
+    <string name="browse_menu">アーティスト</string>
     <!-- Library screen, menu item -->
-    <string name="search_title">Search</string>
+    <string name="search_title">検索</string>
     <!-- Update -->
-    <string name="update_menu">Update</string>
+    <string name="update_menu">更新</string>
     <!-- Title of screen when there are no songs, or if the SD card is busy -->
-    <string name="no_tracks_title">No songs</string>
+    <string name="no_tracks_title">曲なし</string>
     <!-- Title of screen when there are no videos, or if the SD card is busy -->
-    <string name="no_videos_title">No videos</string>
+    <string name="no_videos_title">動画なし</string>
     <!-- Title of screen when there are no playlists, or if the SD card is busy -->
-    <string name="no_playlists_title">No playlists</string>
+    <string name="no_playlists_title">プレイリストなし</string>
     <!-- Playlist context menu item to delete the selected playlist. -->
-    <string name="delete_playlist_menu">Delete</string>
+    <string name="delete_playlist_menu">削除</string>
     <!-- Playlist context menu item to edit the selected playlist -->
-    <string name="edit_playlist_menu">Edit</string>
+    <string name="edit_playlist_menu">編集</string>
     <!-- Playlist context menu item to rename the selected playlist-->
-    <string name="rename_playlist_menu">Rename</string>
+    <string name="rename_playlist_menu">名前変更</string>
     <!-- Transient popup message shown after deleting a playlist -->
-    <string name="playlist_deleted_message">Playlist deleted.</string>
+    <string name="playlist_deleted_message">プレイリストを削除しました。</string>
     <!-- Transient popup message shown after renaming a playlist -->
-    <string name="playlist_renamed_message">Playlist renamed.</string>
+    <string name="playlist_renamed_message">プレイリストの名前を変更しました。</string>
     <!-- The name of the pseudo-playlist that holds all the recently added files, shown in list view -->
-    <string name="recentlyadded">Recently added</string>
+    <string name="recentlyadded">最近追加されたもの</string>
     <!-- The name of the pseudo-playlist that holds all the recently added files, shown in title bar of songs list -->
-    <string name="recentlyadded_title">Recently added</string>
+    <string name="recentlyadded_title">最近追加されたもの</string>
     <!-- The name of the pseudo-playlist that holds all the podcasts, shown in list view -->
-    <string name="podcasts_listitem">Podcasts</string>
+    <string name="podcasts_listitem">ポッドキャスト</string>
     <!-- The name of the pseudo-playlist that holds all the podcasts, shown in title bar of songs list -->
-    <string name="podcasts_title">Podcasts</string>
+    <string name="podcasts_title">ポッドキャスト</string>
     <!-- Title of screen when no sd card is present -->
-    <string name="sdcard_missing_title">No SD card</string>
+    <string name="sdcard_missing_title">SDカードなし</string>
     <!-- label underneath icon used to indicate that no sd card is present -->
-    <string name="sdcard_missing_message">Your phone does not have an SD card inserted.</string>
+    <string name="sdcard_missing_message">この端末にはSDカードが挿入されていません。</string>
     <!-- label underneath icon used to indicate that the sd card is present, but currently unavailable -->
-    <string name="sdcard_busy_title">SD card unavailable</string>
+    <string name="sdcard_busy_title">SDカードが使用不可</string>
     <!-- label underneath icon used to indicate sd card is mounted to your computer via USB -->
-    <string name="sdcard_busy_message">Sorry, your SD card is busy.</string>
+    <string name="sdcard_busy_message">ごめんなさい、現在、この端末のSDカードは使えないようです。</string>
     <!-- Title of screen when there was an error accessing the sd card -->
-    <string name="sdcard_error_title">SD card error</string>
+    <string name="sdcard_error_title">SDカードでエラー</string>
     <!-- label underneath icon used to indicate there was an error accessing the sd card -->
-    <string name="sdcard_error_message">An error was encountered on your SD card.</string>
+    <string name="sdcard_error_message">SDカードでエラーが起きているようです。</string>
     <!-- Default name of artist that doesn't have a name in the metadata -->
-    <string name="unknown_artist_name">Unknown artist</string>
+    <string name="unknown_artist_name">アーティスト認識不能</string>
     <!-- Default name of album that doesn't have a name in the metadata -->
-    <string name="unknown_album_name">Unknown album</string>
+    <string name="unknown_album_name">アルバム認識不能</string>
     <!-- Toast after turning shuffle on -->
-    <string name="shuffle_on_notif">Shuffle is on.</string>
+    <string name="shuffle_on_notif">キューの曲をシャッフル再生します。つまり、順番をめちゃくちゃにして再生します。</string>
     <!-- Toast after turning shuffle off -->
-    <string name="shuffle_off_notif">Shuffle is off.</string>
+    <string name="shuffle_off_notif">キューの曲をシャッフル再生をやめます。つまり、順番通りに再生されます。</string>
     <!-- Toast after turning repeat off -->
-    <string name="repeat_off_notif">Repeat is off.</string>
+    <string name="repeat_off_notif">繰り返し再生をしません。</string>
     <!-- Toast after turning single repeat on -->
-    <string name="repeat_current_notif">Repeating current song.</string>
+    <string name="repeat_current_notif">現在再生中の曲を繰り返し再生し続けます。</string>
     <!-- Toast after turning repeat all on -->
-    <string name="repeat_all_notif">Repeating all songs.</string>
+    <string name="repeat_all_notif">キューの全ての曲を再生し終わったら、もう一度最初の曲から再生します。</string>
     <!-- Individual song context menu item -->
-    <string name="ringtone_menu">Use as phone ringtone</string>
+    <string name="ringtone_menu">この曲を着信音にします。</string>
     <!-- Menu item -->
-    <string name="ringtone_menu_short">Use as ringtone</string>
+    <string name="ringtone_menu_short">この曲を着信音にします。</string>
     <!-- Toast after setting a song as phone ringtone -->
-    <string name="ringtone_set">\"<xliff:g id="name" example="Alarm Bell">%s</xliff:g>\" set as phone ringtone.</string>
+    <string name="ringtone_set">\"<xliff:g id="name" example="Alarm Bell">%s</xliff:g>\"が端末の着信音に設定されました。</string>
     <!-- Context menu item -->
-    <string name="play_selection">Play</string>
+    <string name="play_selection">再生</string>
     <!-- Context menu item -->
-    <string name="add_to_playlist">Add to playlist</string>
+    <string name="add_to_playlist">プレイリストに追加</string>
     <!-- Context menu item -->
-    <string name="queue">Current playlist</string>
+    <string name="queue">現在のプレイリスト</string>
     <!-- Context menu item -->
-    <string name="new_playlist">New</string>
+    <string name="new_playlist">新しいプレイリスト</string>
     <!-- Template for newly created playlist name -->
     <string name="new_playlist_name_template">New playlist <xliff:g id="number">%d</xliff:g></string>
     <!-- Toasts after adding song(s) to playlists -->
     <plurals name="NNNtrackstoplaylist">
         <!-- message shown when one song was added -->
-        <item quantity="one">1 song added to playlist.</item>
+        <item quantity="one">1曲プレイリストに追加されました。</item>
         <!-- message shown when zero or more than one song was added -->
-        <item quantity="other"><xliff:g id="number" example="27">%d</xliff:g> songs added to playlist.</item>
+        <item quantity="other"><xliff:g id="number" example="27">%d</xliff:g>曲プレイリストに追加されました。</item>
     </plurals>
     <!-- Toast after selecting an empty playlist -->
-    <string name="emptyplaylist">Selected playlist is empty.</string>
+    <string name="emptyplaylist">そのプレイリストには何も曲が登録されていません。</string>
     <!-- Button name when saving a playlist -->
-    <string name="create_playlist_create_text">Save</string>
+    <string name="create_playlist_create_text">決定</string>
     <!-- Button name when saving a playlist and the new playlist will overwrite an existing one -->
-    <string name="create_playlist_overwrite_text">Overwrite</string>
+    <string name="create_playlist_overwrite_text">上書き保存します</string>
     <!-- Dialog box title -->
-    <string name="service_start_error_title">Playback problem</string>
+    <string name="service_start_error_title">再生失敗</string>
     <!-- Dialog box message -->
-    <string name="service_start_error_msg">Sorry, the song could not be played.</string>
+    <string name="service_start_error_msg">ごめんなさい、その曲は再生できないみたいです。</string>
     <!-- Dialog box button -->
-    <string name="service_start_error_button">OK</string>
-    <!-- Time span edit options that appear when editing system playlist "Recently added" -->
+    <string name="service_start_error_button">了解</string>
     <!-- Do not translate. Background color for currently dragged item in playlist edit mode. -->
     <color name="dragndrop_background">#e0103010</color>
     <!-- Do not translate. Background color for albums in the artists list view. -->
@@ -219,7 +218,7 @@
     <string name="playback_failed">Sorry, the player does not support this type of audio file.</string>
 
     <!-- Text for the "cancel" button in the "delete" and "create playlist" confirmation dialogs -->
-    <string name="cancel">Cancel</string>
+    <string name="cancel">やめる</string>
 
     <!-- context menu item to remove the selected item from the playlist -->
     <string name="remove_from_playlist">Remove from playlist</string>
@@ -231,33 +230,33 @@
     <string name="mediasearch">Search for <xliff:g id="term" example="Beethoven">%s</xliff:g> using:</string>
 
     <!-- Shown in the title bar while the list of artists is being retrieved in the background -->
-    <string name="working_artists">Artists\u2026</string>
+    <string name="working_artists">アーティスト\u2026</string>
     <!-- Shown in the title bar while the list of albums is being retrieved in the background -->
-    <string name="working_albums">Albums\u2026</string>
+    <string name="working_albums">アルバム\u2026</string>
     <!-- Shown in the title bar while the list of songs is being retrieved in the background -->
-    <string name="working_songs">Songs\u2026</string>
+    <string name="working_songs">曲\u2026</string>
     <!-- Shown in the title bar while the list of playlists is being retrieved in the background -->
-    <string name="working_playlists">Playlists\u2026</string>
+    <string name="working_playlists">プレイリスト\u2026</string>
 
     <!-- Shown in the music picker while loading the music database. -->
-    <string name="loading">Loading</string>
+    <string name="loading">ロード中</string>
     <!-- Menu in music picker to sort the list by track/song name. -->
-    <string name="sort_by_track">Tracks</string>
+    <string name="sort_by_track">曲</string>
     <!-- Menu in music picker to sort the list by album name. -->
-    <string name="sort_by_album">Albums</string>
+    <string name="sort_by_album">アルバム</string>
     <!-- Menu in music picker to sort the list by artist name. -->
-    <string name="sort_by_artist">Artists</string>
+    <string name="sort_by_artist">アーティスト</string>
     <!--  Title of the music picker activity. -->
     <string name="music_picker_title">Select music track</string>
 
     <!-- Title for track number in music gadget -->
-    <string name="gadget_track">Track <xliff:g id="track_number">%d</xliff:g></string>
+    <string name="gadget_track">トラック<xliff:g id="track_number">%d</xliff:g></string>
 
     <!-- Toast after streamStarter activity receives PLAYBACK_COMPLETE in case of an error -->
     <string name="fail_to_start_stream">Failed to play the requested stream.</string>
 
     <!-- The string used to describe Music as a searchable item within system search settings. -->
-    <string name="search_settings_description">Artists, albums, and tracks</string>
+    <string name="search_settings_description">アーティスト, アルバム, 曲</string>
 
     <!-- Shown in the search box as a hint -->
     <string name="search_hint">Search Music</string>
@@ -266,11 +265,11 @@
     <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
     <!-- Text shown on widget when first loaded -->
-    <string name="widget_initial_text">Touch to select music.</string>
-    <string name="app_name">Okosama Media Player</string>
+    <string name="widget_initial_text">タッチで曲を選択</string>
+    <string name="app_name">お子様メディアプレイヤー</string>
     
     <!-- Menu text for the music settings item [CHAR LIMIT=15] -->
-    <string name="settings">Music settings</string>
+    <string name="settings">設定</string>
 
     <!-- Category title for audio focus in music settings -->
     <string name="audio_focus_category_title">Audio Focus</string>
@@ -350,36 +349,36 @@
     <string name="notification_artist_album" msgid="2128095771677061443">"<xliff:g id="ALBUM">%2$s</xliff:g>"\n"<xliff:g id="ARTIST">%1$s</xliff:g>"</string>
     <!-- Do not translate. This is the separator character used when building the string that shows number of albums and songs. -->
     <string name="albumsongseparator">, </string>
-    <string name="updateing">Reading library now...</string>
-    <string name="empty_data">Now playing queue is empty.</string>
-    <string name="effect_menu">Effect</string>
-    <string name="setting_menu">Setting</string>
-    <string name="cant_play_media">Sorry, this player cannot play the specified media.</string>
-    <string name="need_restart_because_sdcard_status_change">Please reboot this application because status of the SD card is changed.¥nApplication was closed forcely.</string>
+    <string name="updateing">ライブラリを読み込み中です。</string>
+    <string name="empty_data">再生キューには曲がないです。</string>
+    <string name="effect_menu">音響効果</string>
+    <string name="setting_menu">設定</string>
+    <string name="cant_play_media">指定されたメディアはこのプレイヤーでは再生できません。</string>
+    <string name="need_restart_because_sdcard_status_change">SDカードの状態が変わったので、すみませんが再起動してください。強制的にアプリを終了しました。</string>
     
     <string name="twitter_consumer_key">Zeg3AGGq1muwWgcZ9Qrw</string>
     <string name="twitter_consumer_secret">oMLphzSbP54JCZroFm9x9Y2l4IFvpAOWIpjZsdek</string>
 	<string name="twitter_callback_url">okosamamediaplayer://twitter</string>    
-	<string name="tweet">Tweet</string>
-	<string name="tweetAuthTitle">You pushed the Twitter button.</string>
-	<string name="twitterAuth">You need web authorization of the Twitter for tweet from this application.</string>
-	<string name="twitterAuthButton">Authorize</string>
-	<string name="auth_success">Succeed to the web authorization of the Twitter.</string>
-	<string name="auth_failed">Failed to the web authorization of the Twitter.</string>
-	<string name="nowplaying_tag">#NowPlaying</string>
-	<string name="unknown_song_name">unknown</string>		
-	<string name="artist_label">[artist]</string>		
-	<string name="album_label">[album]</string>		
-	<string name="song_label">[track]</string>
+	<string name="tweet">つぶやく</string>
+	<string name="tweetAuthTitle">tweetを行うボタンが押されました。</string>
+	<string name="twitterAuth">このアプリケーションからtweetするためには、twitterのweb認証が必要です。</string>
+	<string name="twitterAuthButton">認証をする</string>
+	<string name="auth_success">twitterの認証に成功しました。</string>
+	<string name="auth_failed">twitterの認証に失敗したようです。</string>
+			<string name="nowplaying_tag">#NowPlaying</string>
+	<string name="unknown_song_name">不明</string>		
+	<string name="artist_label">[アーティスト]</string>		
+	<string name="album_label">[アルバム]</string>		
+	<string name="song_label">[トラック]</string>
 			
-    <string name="enable_headset_plug_and_play_title">Headset plug and play</string>
-    <string name="enable_headset_plug_and_play_summary">Auto play when headset connected. Auto stop when headset disconnected.</string>
-    <string name="enable_media_change_vibrate_title">Vibrate when media changing</string>
-    <string name="enable_media_change_vibrate_summary">Do notification by the vibration when first¥,next¥,or previous media play starting.</string>
-    <string name="vibrate_intensity_title">Vibration time of the when media changing</string>
-    <string name="vibrate_intensity_summary">Vibration time of the when media changing[second](now=%s)</string>
-    <string name="enable_animation_title">Animation enabled</string>
-    <string name="enable_animation_summary">animation that no mean and no variant enabled</string>
+    <string name="enable_headset_plug_and_play_title">ヘッドホン接続で再生</string>
+    <string name="enable_headset_plug_and_play_summary">キューに曲があり、サービスが有効なときにヘッドホンがさされたら、即時再生する</string>
+    <string name="enable_media_change_vibrate_title">曲変更時にバイブ</string>
+    <string name="enable_media_change_vibrate_summary">曲が新しく再生される、次の曲へ行くなどしたとき、バイブレーションで通知する</string>
+    <string name="vibrate_intensity_title">曲変更時のバイブの長さ</string>
+    <string name="vibrate_intensity_summary">曲の変更時のバイブレーションの強さを、ミリ単位で設定(現在値=%s)</string>
+    <string name="enable_animation_title">無価値なアニメーションをさせる</string>
+    <string name="enable_animation_summary">何の意味もない、無価値なアニメーションが有効かどうか</string>
     <string-array name="animation_level_entries">
         <item>1</item>
         <item>2</item>
@@ -390,11 +389,11 @@
         <item>2</item>
         <item>3</item>
    	</string-array>
-   	<string name="audio_animation_category_title">Animation settings</string>
-    <string name="animation_level_title">Strength of the animation</string>
-    <string name="animation_level_summary">animation strength(bigger is stronger)(now=%s)</string>
-    <string name="animation_speed_title">animation speed</string>
-    <string name="animation_speed_summary">animation speed[second](now=%s)</string>
+   	<string name="audio_animation_category_title">アニメーションの設定</string>
+    <string name="animation_level_title">無価値なアニメーションの強さ</string>
+    <string name="animation_level_summary">何の意味もない、無価値なアニメーションの強度を設定(大きいほど強い)</string>
+    <string name="animation_speed_title">無価値なアニメーションの速さ</string>
+    <string name="animation_speed_summary">何の意味もない、無価値なアニメーションの速さを設定(秒)</string>
     <string-array name="animation_speed_entries">
         <item>0.3 second</item>
         <item>0.4 second</item>
@@ -416,11 +415,11 @@
         <item>1500</item>
         <item>2000</item>
    	</string-array>
-    <string name="sdcard_cant_read">This application only playing media in the SD card of your phone.But now SD card cannot read.Please close this application and take SD card readable, and reboot this application.</string>
-    <string name="left_move_text">If your finger release now, move to the tab that indicated by above icon.</string>
-    <string name="right_move_text">if your finger release now, move to the tab that indicated by above icon.</string>
-    <string name="headset_disconnect_and_pause">Pause the media because headset disconnected.</string>
-    <string name="headset_connect_and_play">Play the media because headset connected.</string>
+    <string name="sdcard_cant_read">このアプリはSDカード上のメディアを再生するアプリですが、現在、SDカードを読み取れない状態のようです。アプリを終了し、SDカードを読める状態にしてから、アプリを再起動して下さい。</string>
+    <string name="left_move_text">今、指を離すと上のアイコンのタブに移動します。</string>
+    <string name="right_move_text">今、指を離すと上のアイコンのタブに移動します。</string>
+    <string name="headset_disconnect_and_pause">ヘッドホンが切断されたので、再生を一時停止しました。</string>
+    <string name="headset_connect_and_play">ヘッドホンが接続されたので、再生を再開しました。</string>
     
 </resources>
 

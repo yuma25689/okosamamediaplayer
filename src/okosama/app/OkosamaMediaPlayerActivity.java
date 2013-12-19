@@ -107,7 +107,6 @@ implements ServiceConnection, Database.Defs {
                 Message msg = handler.obtainMessage(AppStatus.RESTART);
                 handler.removeMessages(AppStatus.RESTART);
                 handler.sendMessageDelayed(msg, 1);
-				
 				return;
 			}
 			if( PlayControlPanel.getInstance().isEnabled() != bEnabled )
@@ -173,7 +172,8 @@ implements ServiceConnection, Database.Defs {
 		externalRef = externalRef_;
 		if( bChg )
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(ControlIDs.ID_NOT_SPECIFIED, true);
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
+			.reScanMediaAndUpdateTabPage(ControlIDs.ID_NOT_SPECIFIED, true);
 		}
 	}
 
@@ -1105,28 +1105,20 @@ implements ServiceConnection, Database.Defs {
 //	        startActivity(Intent.createChooser(i, title));
 	    }
 
-//	    @Override
-//	    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//	        switch (requestCode) {
-//	            case SCAN_DONE:
-//	                if (resultCode == RESULT_CANCELED) {
-//	                    finish();
-//	                } else {
-//	                    getAlbumCursor(mAdapter.getQueryHandler(), null);
-//	                }
-//	                break;
-//
-//	            case NEW_PLAYLIST:
-//	                if (resultCode == RESULT_OK) {
-//	                    Uri uri = intent.getData();
-//	                    if (uri != null) {
-//	                        long [] list = MusicUtils.getSongListForAlbum(this, Long.parseLong(mCurrentAlbumId));
-//	                        MusicUtils.addToPlaylist(this, list, Long.parseLong(uri.getLastPathSegment()));
-//	                    }
-//	                }
-//	                break;
-//	        }
-//	    }
+	    @Override
+	    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+	        switch (requestCode) {
+	            case DeleteItems.DELETE_REQUEST_CODE:
+	                if (resultCode == DeleteItems.DELETE_DONE) 
+	                {
+	        			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
+	        					ControlIDs.TAB_ID_MEDIA,
+	        					true
+	        				);	                	
+	                }
+	                break;
+	        }
+	    }
 
 
 
@@ -1236,24 +1228,6 @@ implements ServiceConnection, Database.Defs {
 			
 			return b;
 			
-//	        Cursor cursor;
-//	        switch (item.getItemId()) {
-//	            case PARTY_SHUFFLE:
-//	                MusicUtils.togglePartyShuffle();
-//	                break;
-//
-//	            case SHUFFLE_ALL:
-//	                cursor = MusicUtils.query(this, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-//	                        new String [] { MediaStore.Audio.Media._ID},
-//	                        MediaStore.Audio.Media.IS_MUSIC + "=1", null,
-//	                        MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
-//	                if (cursor != null) {
-//	                    MusicUtils.shuffleAll(this, cursor);
-//	                    cursor.close();
-//	                }
-//	                return true;
-//	        }
-//	        return super.onOptionsItemSelected(item);
 	    }
 
 	    private static int timeImgResIds[] = {

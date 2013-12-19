@@ -51,7 +51,7 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 		menu.add(0, PLAY_SELECTION, 0, R.string.play_selection);
 		SubMenu sub = menu.addSubMenu(0, ADD_TO_PLAYLIST, 0, R.string.add_to_playlist);
 		Database.makePlaylistMenu(activity, sub);
-		menu.add(0, USE_AS_RINGTONE, 0, R.string.ringtone_menu);
+		// menu.add(0, USE_AS_RINGTONE, 0, R.string.ringtone_menu);
 		menu.add(0, DELETE_ITEM, 0, R.string.delete_item);
 		AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfoIn;
 		mSelectedPosition =  mi.position;
@@ -122,17 +122,17 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 	   case DELETE_ITEM: {
 	       long [] list = new long[1];
 	       list[0] = (int) mSelectedId;
-	       int[] listType = new int[] { MediaInfo.MEDIA_TYPE_VIDEO };		
+	       int[] listType = new int[] { MediaInfo.MEDIA_TYPE_AUDIO };		
 	       Bundle b = new Bundle();
 	       String f = activity.getString(R.string.delete_song_desc); 
 	       String desc = String.format(f, mCurrentTrackName);
-	       b.putString("description", desc);
+	       b.putString(DeleteItems.TITLE_KEY, desc);
 	       b.putLongArray(DeleteItems.ITEMID_KEY, list);
 	       b.putIntArray(DeleteItems.TYPEID_KEY, listType);
 	       Intent intent = new Intent();
 	       intent.setClass(activity, okosama.app.DeleteItems.class);
 	       intent.putExtras(b);
-	       activity.startActivityForResult(intent, -1);
+	       activity.startActivityForResult(intent, DeleteItems.DELETE_REQUEST_CODE);
 	       return true;
 	   }
 	

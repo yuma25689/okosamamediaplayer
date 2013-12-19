@@ -1,6 +1,7 @@
 package okosama.app.behavior;
 
 import okosama.app.ControlIDs;
+import okosama.app.DeleteItems;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.CreatePlaylist;
@@ -15,6 +16,7 @@ import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AlbumColumns;
@@ -128,19 +130,33 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
             Database.addToPlaylist(activity, list, playlist);
             return true;
         }
-//        case DELETE_ITEM: {
-//            long [] list = Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
-//            String f = activity.getString(R.string.delete_album_desc); 
-//            String desc = String.format(f, mCurrentAlbumName);
-//            Bundle b = new Bundle();
-//            b.putString("description", desc);
-//            b.putLongArray("items", list);
-//            Intent intent = new Intent();
-//            intent.setClass(this, DeleteItems.class);
-//            intent.putExtras(b);
-//            startActivityForResult(intent, -1);
-//            return true;
-//      }
+        case DELETE_ITEM: {
+            
+            MediaInfo [] list;
+            list = Database.getSongListForAlbum(activity, Long.parseLong(mCurrentAlbumId));
+            String f = activity.getString(R.string.delete_album_desc); 
+            String desc = String.format(f, mCurrentAlbumName);
+            Bundle b = new Bundle();
+    		long[] listId = new long[list.length];		
+    		int[] listType = new int[list.length];		
+            
+    		int i=0;
+    		for( MediaInfo mi : list )
+    		{
+    			listId[i] = mi.getId();
+    			listType[i] = mi.getMediaType();
+    			i++;
+    		}
+            
+ 	       	b.putString(DeleteItems.TITLE_KEY, desc);
+            b.putLongArray(DeleteItems.ITEMID_KEY, listId);
+		    b.putIntArray(DeleteItems.TYPEID_KEY, listType);
+            Intent intent = new Intent();
+            intent.setClass(activity, DeleteItems.class);
+            intent.putExtras(b);
+            activity.startActivityForResult(intent, DeleteItems.DELETE_REQUEST_CODE);
+            return true;
+      }
         case SEARCH: {
             doSearch();
             return true;

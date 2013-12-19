@@ -24,11 +24,11 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	boolean bLeftShow = false;
 	boolean bRightShow = false;
 	
-	public static final int SHOW_MOVEINFO_RECOGNIZE_PLAY_LEFT = 0;
-	public static final int SHOW_MOVEINFO_RECOGNIZE_PLAY_RIGHT = 0;
+	public static final int SHOW_MOVEINFO_RECOGNIZE_PLAY_LEFT = 5;
+	public static final int SHOW_MOVEINFO_RECOGNIZE_PLAY_RIGHT = 5;
 	// フリックでどれだけ動かした後で離したら隣のタブへ移動するか
-	public static final int MOVE_RECOGNIZE_PLAY_LEFT = 100;
-	public static final int MOVE_RECOGNIZE_PLAY_RIGHT =100;
+	public static final int MOVE_RECOGNIZE_PLAY_LEFT = 140;
+	public static final int MOVE_RECOGNIZE_PLAY_RIGHT =140;
 
 	SparseArray<MoveTabInfo> mapMoveTabIdIdx = new SparseArray<MoveTabInfo>();
 	public void setMoveTabInfo( int idx, MoveTabInfo tabInfo )
@@ -46,14 +46,13 @@ public class TouchHookRelativeLayout extends RelativeLayout {
     int currentY;   //Viewの上辺座標：Y軸
     int offsetX;    //画面タッチ位置の座標：X軸
     int offsetY;    //画面タッチ位置の座標：Y軸
-	
+
 	public TouchHookRelativeLayout(Context context) {
 		super(context);
 	}
     public TouchHookRelativeLayout(Context context, AttributeSet att) {
         super(context, att);
     }
-     	
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent event)  {
 	    // タッチされたらまずonInterceptTouchEventが呼ばれる
@@ -80,18 +79,15 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	        currentX = getLeft();
 	        currentY = getTop();
 	        offsetX = x;
-	        offsetY = y;
-	    	
+	        offsetY = y;   	
 	        break;
 	    case MotionEvent.ACTION_UP:
             // layout(orgX, orgY, orgX + getWidth(), orgY + getHeight());
             // bRet = true;
 	        break;
-	    }		
-	     
+	    }
 	    return bRet;
 	}
-	 
 	@Override
 	public boolean onTouchEvent(MotionEvent event)  {
 	    // ここでtrueを返すとイベントはここで終了
@@ -107,17 +103,19 @@ public class TouchHookRelativeLayout extends RelativeLayout {
             currentX -= diffX;
             offsetX = x;
             offsetY = y;
-            boolean bShow = false;
+            //boolean bShow = false;
             // bRet = true;
-            if( SHOW_MOVEINFO_RECOGNIZE_PLAY_RIGHT < orgX - currentX )
+            if( bLeftShow == false && SHOW_MOVEINFO_RECOGNIZE_PLAY_RIGHT < orgX - currentX )
             {
                 // 右へ一定以上はなれたらタブの移動の表示を開始
-            	bShow = updateTabInfoPanel( MoveTabInfo.RIGHT_1 );
+            	//bShow = 
+            	updateTabInfoPanel( MoveTabInfo.RIGHT_1 );
             }
-            else if( SHOW_MOVEINFO_RECOGNIZE_PLAY_LEFT < orgX + currentX )
+            else if( bRightShow == false && SHOW_MOVEINFO_RECOGNIZE_PLAY_LEFT < orgX + currentX )
             {
                 // 左へ一定以上はなれたらタブの移動の表示を開始
-            	bShow = updateTabInfoPanel( MoveTabInfo.LEFT_1 );
+            	//bShow = 
+            	updateTabInfoPanel( MoveTabInfo.LEFT_1 );
             }
 			// layout( currentX, currentY, currentX + getWidth(), currentY + getHeight() );
 //            if( bShow == false )
@@ -178,12 +176,12 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	    			// TODO:たぶん、共通化できる
 	    			if( ti.tabInfoIndex == MoveTabInfo.RIGHT_1 && bLeftShow == false )
 	    			{
-	    				TabMoveRightInfoPanel.insertToLayout(this);
+	    				//TabMoveRightInfoPanel.insertToLayout(this);
 	                	bRightShow = true;
 	    			}
 	    			else if( ti.tabInfoIndex == MoveTabInfo.LEFT_1 && bRightShow == false )
 	    			{
-	    				TabMoveLeftInfoPanel.insertToLayout(this);
+	    				//TabMoveLeftInfoPanel.insertToLayout(this);
 	                	bLeftShow = true;	    				
 	    			}
     			}
@@ -208,24 +206,23 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	        									ti.getTabImageResId()));
 	        					RelativeLayout.LayoutParams lpIv = (LayoutParams) iv.getLayoutParams();
         						
-	        					lpIv.addRule(RelativeLayout.CENTER_VERTICAL);
-//	        					switch( ti.getImageVertialAlign() )
-//	        					{
-//	        					case MoveTabInfo.VERTIAL_CENTER:
-//		        					lpIv.addRule(RelativeLayout.CENTER_VERTICAL);
-//		        					break;
-//	        					case MoveTabInfo.VERTIAL_TOP:
-//		        					lpIv.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-//	        						break;
-//	        					case MoveTabInfo.VERTIAL_BOTTOM:
-//		        					lpIv.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//	        						break;
-//	        						
-//	        					}
+	        					switch( ti.getImageVertialAlign() )
+	        					{
+	        					case MoveTabInfo.VERTIAL_CENTER:
+	        						lpIv.addRule(RelativeLayout.CENTER_VERTICAL);
+	        						break;
+	        					case MoveTabInfo.VERTIAL_TOP:
+	        						lpIv.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+	        						break;
+	        					case MoveTabInfo.VERTIAL_BOTTOM:
+	        						lpIv.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+	        						break;
+	        					}
+	        					
 	        				}
 	        			}
             			// パネルを表示
-            			rl.setVisibility(View.VISIBLE);
+	        			rl.setVisibility(View.VISIBLE);
         			}
     				int parent_width = getWidth();
     				int border_right = OkosamaMediaPlayerActivity.dispInfo.getCorrectionXConsiderDensity(
@@ -340,9 +337,36 @@ public class TouchHookRelativeLayout extends RelativeLayout {
         			{
     					iv.setImageDrawable(null);    					
             			// パネルを非表示
-            			rl.setVisibility(View.GONE);
-        				TabMoveLeftInfoPanel.removeToLayout(this);
-        				TabMoveRightInfoPanel.removeToLayout(this);            			
+            			// rl.setVisibility(View.GONE);
+        				int parent_width = getWidth();    					
+        				int width = OkosamaMediaPlayerActivity.dispInfo.getCorrectionXConsiderDensity( 
+        						INFO_SHOW_PANEL_WIDTH_DIP );    					
+    					int x = 0;
+    					if( currentX < 0 )
+    					{
+    						x = parent_width; 
+    					}
+    					else
+    					{
+    						x = -1 * width;
+    					}
+    					// なるべく簡単なフリックで到達するように、移動量をFLICK_MOVE_SPEED倍する
+        				int y = OkosamaMediaPlayerActivity.dispInfo.getCorrectionYConsiderDensity(
+        						currentY);
+        				int height = OkosamaMediaPlayerActivity.dispInfo.getCorrectionYConsiderDensity(
+        						currentY ) + getHeight();
+        				
+        				//rl.layout(x, y, x + width, y + height);
+        				
+        				RelativeLayout.LayoutParams lp = (LayoutParams) rl.getLayoutParams();
+        				lp.leftMargin = x;
+        				lp.topMargin = y;
+        				lp.width = 0;	// 非表示
+        				lp.height = height;
+        				rl.setLayoutParams(lp);
+    					
+        				// TabMoveLeftInfoPanel.removeToLayout(this);
+        				// TabMoveRightInfoPanel.removeToLayout(this);            			
             			ti.setShowing(false);
     				}
         		}

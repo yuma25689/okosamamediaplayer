@@ -10,6 +10,8 @@ import okosama.app.adapter.IAdapterUpdate;
 import okosama.app.behavior.TrackListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.panel.MoveTabInfo;
+import okosama.app.panel.TabMoveLeftInfoPanel;
+import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
@@ -106,6 +108,13 @@ public class TabPageNowPlaylist extends TabPage {
 			// componentContainer.addView( btn.getView() );
 			i++;
 		}
+		rightPanel = new TabMoveRightInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		leftPanel = new TabMoveLeftInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		
+		rightPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		leftPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		rightPanel.insertToLayout(tabBaseLayout);
+		leftPanel.insertToLayout(tabBaseLayout);
 		
 		return 0;
 	}

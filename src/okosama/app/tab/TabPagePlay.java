@@ -9,6 +9,8 @@ import okosama.app.panel.MoveTabInfo;
 import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
 import okosama.app.panel.SubControlPanel;
+import okosama.app.panel.TabMoveLeftInfoPanel;
+import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.panel.TimeControlPanel;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -143,6 +145,13 @@ public class TabPagePlay extends TabPage {
 //		tabBaseLayout.addView( activity.getPlayCP().getView() );
 		tabBaseLayout.setBackgroundResource(R.color.gradiant_test);
 		// tabBaseLayout.setOnTouchListener(new TabViewTouchListener(0,0));
+		rightPanel = new TabMoveRightInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		leftPanel = new TabMoveLeftInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		
+		rightPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		leftPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		rightPanel.insertToLayout(tabBaseLayout);
+		leftPanel.insertToLayout(tabBaseLayout);
 		
 		activity.updatePlayStateButtonImage();
 		
@@ -157,6 +166,8 @@ public class TabPagePlay extends TabPage {
 			NowPlayingControlPanel.insertToLayout(tabBaseLayout);
 			TimeControlPanel.insertToLayout(tabBaseLayout);
 			PlayControlPanel.insertToLayout(tabBaseLayout);
+			rightPanel.insertToLayout(tabBaseLayout);
+			leftPanel.insertToLayout(tabBaseLayout);			
 		}
 		super.setActivate(bActivate);
 	}

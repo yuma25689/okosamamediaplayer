@@ -7,19 +7,19 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 public class TabMoveRightInfoPanel extends ControlPanel {
-	static TabMoveRightInfoPanel instance;
-	public static void createInstance(Activity activity)
+	TabMoveRightInfoPanel instance;
+	public void createInstance(Activity activity)
 	{
 		if( instance == null )
 		{
 			instance = new TabMoveRightInfoPanel(activity);
 		}
 	}
-	public static TabMoveRightInfoPanel getInstance()
+	public TabMoveRightInfoPanel getInstance()
 	{
 		return instance;
 	}
-	public static void insertToLayout( ViewGroup tabBaseLayout )
+	public void insertToLayout( ViewGroup tabBaseLayout )
 	{
 		if( instance != null && instance.getView() != null )
 		{
@@ -40,7 +40,7 @@ public class TabMoveRightInfoPanel extends ControlPanel {
 			Log.e("error","insert tab move right info panel");
 		}
 	}
-	public static void removeToLayout( ViewGroup tabBaseLayout )
+	public void removeToLayout( ViewGroup tabBaseLayout )
 	{
 		if( instance != null && instance.getView() != null )
 		{

@@ -11,6 +11,8 @@ import okosama.app.behavior.AlbumListBehavior;
 import okosama.app.behavior.ArtistListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.panel.MoveTabInfo;
+import okosama.app.panel.TabMoveLeftInfoPanel;
+import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
@@ -115,11 +117,19 @@ public class TabPageArtist extends TabPage {
 			// ボタンをこのタブ子項目として追加
 			// addChild( creationData[i].getInternalID(), lst );
 			tabBaseLayout.addView( widget.getView() );
+			
 			// ボタンを配置
 			// これは、setActivateで行う
 			// componentContainer.addView( btn.getView() );
 			i++;
 		}
+		rightPanel = new TabMoveRightInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		leftPanel = new TabMoveLeftInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		rightPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		leftPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		rightPanel.insertToLayout(tabBaseLayout);
+		leftPanel.insertToLayout(tabBaseLayout);
+		
 		
 		//////////////////////// image /////////////////////
 

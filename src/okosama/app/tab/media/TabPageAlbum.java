@@ -9,7 +9,8 @@ import okosama.app.R;
 import okosama.app.behavior.AlbumListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.panel.MoveTabInfo;
-import okosama.app.panel.TouchHookRelativeLayout;
+import okosama.app.panel.TabMoveLeftInfoPanel;
+import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
@@ -17,7 +18,6 @@ import okosama.app.tab.TabPage;
 import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
@@ -49,6 +49,7 @@ public class TabPageAlbum extends TabPage {
 	@Override
 	public int create(int panelLayoutID) {
 		// フリック入力対応
+		
 		ArrayList<MoveTabInfo> arrMti = new ArrayList<MoveTabInfo>();
 		// 左フリック時の設定
 		MoveTabInfo mti = new MoveTabInfo();
@@ -136,8 +137,12 @@ public class TabPageAlbum extends TabPage {
 			i++;
 		}
 		// lst.getView().setOnTouchListener(new TabListViewTouchListener(0,0));
-		
-		
+		rightPanel = new TabMoveRightInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		leftPanel = new TabMoveLeftInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		rightPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		leftPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		rightPanel.insertToLayout(tabBaseLayout);
+		leftPanel.insertToLayout(tabBaseLayout);
 		// Log.e("album flick setting","ok");
 		
 		return 0;

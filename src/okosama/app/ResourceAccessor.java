@@ -226,7 +226,10 @@ public final class ResourceAccessor {
 	        sFormatBuilder.setLength(0);
 	        sFormatter.format(f, Integer.valueOf(numalbums));
 	        songs_albums.append(sFormatBuilder);
-	        songs_albums.append(context.getString(R.string.albumsongseparator));
+	        if( 0 < songs_albums.length() )
+	        {
+	        	songs_albums.append(context.getString(R.string.albumsongseparator));
+	        }
 	    }
     	// ‹È”‚ðÝ’è
         if (numsongs == 1) {

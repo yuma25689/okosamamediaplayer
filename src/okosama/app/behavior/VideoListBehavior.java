@@ -100,21 +100,21 @@ public class VideoListBehavior extends IListBehavior implements Database.Defs {
 //	       return true;
 //	   }
 		
-	   case DELETE_ITEM: {
-//	       long [] list = new long[1];
-//	       list[0] = (int) mSelectedId;
-	       Bundle b = new Bundle();
-	       String f = activity.getString(R.string.delete_song_desc); 
-	       String desc = String.format(f, mCurrentTrackName);
-	       b.putString("description", desc);
-	       b.putLongArray(DeleteItems.ITEMID_KEY, listId);
-	       b.putIntArray(DeleteItems.TYPEID_KEY, listType);
-	       Intent intent = new Intent();
-	       intent.setClass(activity, okosama.app.DeleteItems.class);
-	       intent.putExtras(b);
-	       activity.startActivityForResult(intent, -1);
-	       return true;
-	   }
+//	   case DELETE_ITEM: {
+////	       long [] list = new long[1];
+////	       list[0] = (int) mSelectedId;
+//	       Bundle b = new Bundle();
+//	       String f = activity.getString(R.string.delete_song_desc); 
+//	       String desc = String.format(f, mCurrentTrackName);
+//	       b.putString("description", desc);
+//	       b.putLongArray(DeleteItems.ITEMID_KEY, listId);
+//	       b.putIntArray(DeleteItems.TYPEID_KEY, listType);
+//	       Intent intent = new Intent();
+//	       intent.setClass(activity, okosama.app.DeleteItems.class);
+//	       intent.putExtras(b);
+//	       activity.startActivityForResult(intent, DeleteItems.DELETE_REQUEST_CODE);
+//	       return true;
+//	   }
 	
 //	   case SEARCH:
 //	       doSearch();

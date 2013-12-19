@@ -59,29 +59,6 @@ public class TabPageMedia extends TabPage {
 		tabBaseLayout.setBackgroundResource(R.color.gradiant_test2);
 		// メディアの場所トグルボタン
 		// external
-//		toggleEx = DroidWidgetKit.getInstance().MakeToggleButton();
-//		TabComponentPropertySetter externalBtnCreationData
-//		= new TabComponentPropertySetter(
-//			ControlIDs.EXTERNAL_TAB_BUTTON, this, ComponentType.TOGGLEBUTTON,
-//			50, 155 + 2, 80, 80,
-//			null, R.drawable.external_btn_image,
-//			"", ScaleType.FIT_XY
-//		);
-//		toggleEx.acceptConfigurator(externalBtnCreationData);
-		
-		// toggleのアクション
-//		SparseArray< IViewAction > actMapTemp2
-//		= new SparseArray< IViewAction >();
-//		actMapTemp2.put( IViewAction.ACTION_ID_ONTOGGLEON, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_EXTERNAL, true ) );
-//		actMapTemp2.put( IViewAction.ACTION_ID_ONTOGGLEOFF, new ToggleChangeAction( ToggleChangeAction.TOGGLE_ID_EXTERNAL, false ) );
-//		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp2 );	
-//		toggleEx.acceptConfigurator(actionSetter);
-
-		// tabBaseLayout.addView( toggleEx.getView() );
-		// このパネルにTabMediaSelectが追加される
-		// このパネルが表示されるとき、TabMediaSelectが表示される
-//		tabContent = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabStocker().createMediaTab(
-//				pageContainer, tabBaseLayout);
 		resetTabContent();
 		return 0;
 	}

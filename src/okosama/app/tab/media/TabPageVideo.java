@@ -10,6 +10,8 @@ import okosama.app.behavior.TrackListBehavior;
 import okosama.app.behavior.VideoListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.panel.MoveTabInfo;
+import okosama.app.panel.TabMoveLeftInfoPanel;
+import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
@@ -131,6 +133,12 @@ public class TabPageVideo extends TabPage {
 			
 			i++;
 		}
+		rightPanel = new TabMoveRightInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		leftPanel = new TabMoveLeftInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());		
+		rightPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		leftPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		rightPanel.insertToLayout(tabBaseLayout);
+		leftPanel.insertToLayout(tabBaseLayout);
 		
 		//////////////////////// image /////////////////////
 

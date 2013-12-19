@@ -13,6 +13,8 @@ import okosama.app.panel.MoveTabInfo;
 import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
 import okosama.app.panel.SubControlPanel;
+import okosama.app.panel.TabMoveLeftInfoPanel;
+import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.panel.TimeControlPanel;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabChangeAnimation;
@@ -85,6 +87,14 @@ public class TabPageVideoView extends TabPage implements OnTouchListener {
 		videoView.setLayoutParams(lpVideoView);
 		videoView.setOnTouchListener(this);
 		tabBaseLayout.addView( videoView );
+
+		rightPanel = new TabMoveRightInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		leftPanel = new TabMoveLeftInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		
+		rightPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		leftPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+		rightPanel.insertToLayout(tabBaseLayout);
+		leftPanel.insertToLayout(tabBaseLayout);
 		
 		return 0;
 	}
@@ -96,13 +106,15 @@ public class TabPageVideoView extends TabPage implements OnTouchListener {
 			SubControlPanel.insertToLayout(tabBaseLayout);
 			TimeControlPanel.insertToLayout(tabBaseLayout);
 			PlayControlPanel.insertToLayout(tabBaseLayout);
+			rightPanel.insertToLayout(tabBaseLayout);
+			leftPanel.insertToLayout(tabBaseLayout);			
 			// NowPlayingControlPanel.insertToLayout(tabBaseLayout);			
 		}
 		else
 		{
 			TimeControlPanel.removeToLayout(tabBaseLayout);		
 			PlayControlPanel.removeToLayout(tabBaseLayout);
-			SubControlPanel.removeToLayout(tabBaseLayout);			
+			SubControlPanel.removeToLayout(tabBaseLayout);
 		}
 		
 	}

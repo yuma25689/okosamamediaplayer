@@ -225,14 +225,21 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	    		long[] listId = new long[list.length];		
 	    		int[] listType = new int[list.length];		
 	            
+	    		int i=0;
+	    		for( MediaInfo mi : list )
+	    		{
+	    			listId[i] = mi.getId();
+	    			listType[i] = mi.getMediaType();
+	    			i++;
+	    		}
+	 	       	b.putString("description", desc);
 	            b.putLongArray(DeleteItems.ITEMID_KEY, listId);
 			    b.putIntArray(DeleteItems.TYPEID_KEY, listType);
 	            
 	            Intent intent = new Intent();
 	            intent.setClass(activity, okosama.app.DeleteItems.class);
 	            intent.putExtras(b);
-	            // TODO: Žó‚¯Žæ‚ê‚é‚æ‚¤‚É‚Å‚«‚Ä‚¢‚È‚¢
-	            activity.startActivityForResult(intent, -1);
+	            activity.startActivityForResult(intent, DeleteItems.DELETE_REQUEST_CODE);
 	            return true;
 	        }
 	        

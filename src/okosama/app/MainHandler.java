@@ -93,8 +93,6 @@ public class MainHandler extends Handler {
 	        		PlayControlPanel.createInstance(mActivity);
 	        		SubControlPanel.createInstance(mActivity);
 	        		NowPlayingControlPanel.createInstance(mActivity);
-	        		TabMoveRightInfoPanel.createInstance(mActivity);
-	        		TabMoveLeftInfoPanel.createInstance(mActivity);
 		            
 	        		// 初期化されていなければ、タブを作成
 	        		// このアクティビティのレイアウトクラスを渡す

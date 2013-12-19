@@ -28,8 +28,14 @@ import android.widget.TextView;
 
 public class DeleteItems extends Activity
 {
+	public static final int DELETE_REQUEST_CODE = 444;
+	
+	public static final int DELETE_NOT_DONE = 0;
+	public static final int DELETE_DONE = 1;
+	
 	public static final String ITEMID_KEY = "items";
 	public static final String TYPEID_KEY = "types";
+	public static final String TITLE_KEY = "description";
     private TextView mPrompt;
     private Button mButton;
     private long [] mItemList;
@@ -52,12 +58,13 @@ public class DeleteItems extends Activity
         ((Button)findViewById(R.id.cancel)).setOnClickListener(new View.OnClickListener() {
             @Override
 			public void onClick(View v) {
+            	setResult(DELETE_NOT_DONE);
                 finish();
             }
         });
 
         Bundle b = getIntent().getExtras();
-        String desc = b.getString("description");
+        String desc = b.getString(TITLE_KEY);
         mItemList = b.getLongArray(ITEMID_KEY);
         mTypeList = b.getIntArray(TYPEID_KEY);
         
@@ -69,6 +76,7 @@ public class DeleteItems extends Activity
 		public void onClick(View v) {
             // delete the selected item(s)
             Database.deleteTracks(DeleteItems.this, mItemList, mTypeList);
+        	setResult(DELETE_DONE);            
             finish();
         }
     };

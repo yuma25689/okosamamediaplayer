@@ -9,6 +9,8 @@ import okosama.app.R;
 import okosama.app.behavior.PlaylistListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.panel.MoveTabInfo;
+import okosama.app.panel.TabMoveLeftInfoPanel;
+import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
@@ -106,6 +108,13 @@ public class TabPagePlayList extends TabPage {
 			// ボタンをこのタブ子項目として追加
 			// addChild( creationData[i].getInternalID(), lst );
 			tabBaseLayout.addView( widget.getView() );
+
+			rightPanel = new TabMoveRightInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+			leftPanel = new TabMoveLeftInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+			rightPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+			leftPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
+			rightPanel.insertToLayout(tabBaseLayout);
+			leftPanel.insertToLayout(tabBaseLayout);
 			
 			// ボタンを配置
 			// これは、setActivateで行う
