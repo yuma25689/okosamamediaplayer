@@ -90,10 +90,10 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
         } else {
             menu.setHeaderTitle(mCurrentAlbumName);
         }
-        if (!mIsUnknownAlbum || !mIsUnknownArtist) {
-        	// TODO 定数SEARCHを作っても良いが、サンプルでそうなっていない。なぜか調べる
-            menu.add(0, SEARCH, 0, R.string.search_title);
-        }
+//        if (!mIsUnknownAlbum || !mIsUnknownArtist) {
+//        	// TODO 定数SEARCHを作っても良いが、サンプルでそうなっていない。なぜか調べる
+//            menu.add(0, SEARCH, 0, R.string.search_title);
+//        }
 	}
 
 	// TODO: とりあえず、新しいプレイリストの作成と項目の削除はコメントにしてある

@@ -132,7 +132,7 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
                 menu.setHeaderTitle(activity.getString(R.string.unknown_artist_name));
             } else {
                 menu.setHeaderTitle(mCurrentArtistName);
-                menu.add(0, SEARCH, 0, R.string.search_title);
+//                menu.add(0, SEARCH, 0, R.string.search_title);
             }
             return;
         } else if (itemtype == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {

@@ -52,7 +52,7 @@ public class TabPageNowPlaylist extends TabPage {
 		MoveTabInfo mtiR = new MoveTabInfo();
 		mtiR.setTabInfoIndex( MoveTabInfo.RIGHT_1 );
 		mtiR.setTabId(ControlIDs.TAB_ID_PLAY);
-		mtiR.setTabPageId(TabPage.TABPAGE_ID_VIDEO_VIEW);
+		mtiR.setTabPageId(TabPage.TABPAGE_ID_PLAY_SUB);
 		mtiR.setPanelId(R.id.right_move_panel);
 		mtiR.setImageViewId(R.id.right_move_image);
 		mtiR.setTabImageResId(R.drawable.video_normal);

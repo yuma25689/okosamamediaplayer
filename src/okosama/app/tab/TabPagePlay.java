@@ -12,6 +12,10 @@ import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TabMoveLeftInfoPanel;
 import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.panel.TimeControlPanel;
+import android.view.MotionEvent;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -20,7 +24,8 @@ import android.widget.RelativeLayout;
  * @author 25689
  *
  */
-public class TabPagePlay extends TabPage {
+public class TabPagePlay extends TabPage implements OnTouchListener {
+	boolean bPanelShow = true;
 
 	public TabPagePlay( Tab parent, LinearLayout ll, RelativeLayout rl ) {
 		super();
@@ -44,7 +49,7 @@ public class TabPagePlay extends TabPage {
 		MoveTabInfo mti = new MoveTabInfo();
 		mti.setTabInfoIndex( MoveTabInfo.LEFT_1 );
 		mti.setTabId(ControlIDs.TAB_ID_PLAY);
-		mti.setTabPageId(TabPage.TABPAGE_ID_VIDEO_VIEW);
+		mti.setTabPageId(TabPage.TABPAGE_ID_NOW_PLAYLIST);
 		mti.setPanelId(R.id.left_move_panel);
 		mti.setImageViewId(R.id.left_move_image);
 		mti.setTabImageResId(R.drawable.video_normal);
@@ -144,6 +149,17 @@ public class TabPagePlay extends TabPage {
 //		tabBaseLayout.addView( activity.getTimeCP().getView() );
 //		tabBaseLayout.addView( activity.getPlayCP().getView() );
 		tabBaseLayout.setBackgroundResource(R.color.gradiant_test);
+		
+		// TODO: サーフィスビューをいっぱいに入れる
+		SurfaceView videoView 
+		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoView();
+		RelativeLayout.LayoutParams lpVideoView
+		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+        		0, 0 
+        );
+		videoView.setLayoutParams(lpVideoView);
+		videoView.setOnTouchListener(this);
+		tabBaseLayout.addView( videoView );
 		// tabBaseLayout.setOnTouchListener(new TabViewTouchListener(0,0));
 		rightPanel = new TabMoveRightInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
 		leftPanel = new TabMoveLeftInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
@@ -170,6 +186,34 @@ public class TabPagePlay extends TabPage {
 			leftPanel.insertToLayout(tabBaseLayout);			
 		}
 		super.setActivate(bActivate);
+	}
+	public void updateControlPanel()
+	{
+		if( bPanelShow )
+		{
+			updateControlPanel();
+			// NowPlayingControlPanel.insertToLayout(tabBaseLayout);			
+		}
+		else
+		{
+			TimeControlPanel.removeToLayout(tabBaseLayout);		
+			PlayControlPanel.removeToLayout(tabBaseLayout);
+			SubControlPanel.removeToLayout(tabBaseLayout);
+		}
+		
+	}
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch (event.getAction() & MotionEvent.ACTION_MASK) {
+        case MotionEvent.ACTION_DOWN:
+        	//Log.e("action down","come");
+        	bPanelShow = !bPanelShow;
+        	updateControlPanel();
+            break;
+        }
+		
+		return false;
 	}
 	
 }

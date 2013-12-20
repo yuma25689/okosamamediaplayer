@@ -92,28 +92,28 @@ public class TabPlayContent extends Tab {
 		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(actionSetter);
 		rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).getView());
 		// ビデオビュータブ
-		mapBtn.put( TabPage.TABPAGE_ID_VIDEO_VIEW, DroidWidgetKit.getInstance().MakeButton() );
-		tabBtnCreationData = new TabComponentPropertySetter(
-			ControlIDs.VIDEO_VIEW_TAB_BUTTON, null, ComponentType.BUTTON, 
-			( BUTTON_WIDTH + 5 ) * 2, 0, 
-			BUTTON_WIDTH, BUTTON_HEIGHT,
-			R.drawable.video_select_image,
-			R.drawable.no_image,//R.drawable.tab4_btn_not_select_no_shadow2, 
-			"", ScaleType.FIT_XY 
-		);
-		mapBtn.get(TabPage.TABPAGE_ID_VIDEO_VIEW).acceptConfigurator(tabBtnCreationData);
-		actMapTemp = new SparseArray< IViewAction >();
-		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( 
-				this.getInternalID(), TabPage.TABPAGE_ID_VIDEO_VIEW ) );
-		actionSetter = new TabComponentActionSetter( actMapTemp );			
-		mapBtn.get(TabPage.TABPAGE_ID_VIDEO_VIEW).acceptConfigurator(actionSetter);
-		rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_VIDEO_VIEW).getView());
+//		mapBtn.put( TabPage.TABPAGE_ID_VIDEO_VIEW, DroidWidgetKit.getInstance().MakeButton() );
+//		tabBtnCreationData = new TabComponentPropertySetter(
+//			ControlIDs.VIDEO_VIEW_TAB_BUTTON, null, ComponentType.BUTTON, 
+//			( BUTTON_WIDTH + 5 ) * 2, 0, 
+//			BUTTON_WIDTH, BUTTON_HEIGHT,
+//			R.drawable.video_select_image,
+//			R.drawable.no_image,//R.drawable.tab4_btn_not_select_no_shadow2, 
+//			"", ScaleType.FIT_XY 
+//		);
+//		mapBtn.get(TabPage.TABPAGE_ID_VIDEO_VIEW).acceptConfigurator(tabBtnCreationData);
+//		actMapTemp = new SparseArray< IViewAction >();
+//		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( 
+//				this.getInternalID(), TabPage.TABPAGE_ID_VIDEO_VIEW ) );
+//		actionSetter = new TabComponentActionSetter( actMapTemp );			
+//		mapBtn.get(TabPage.TABPAGE_ID_VIDEO_VIEW).acceptConfigurator(actionSetter);
+//		rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_VIDEO_VIEW).getView());
 		
 		RelativeLayout rlCont = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_contents);
 		// タブの追加
 		addChild( TabPage.TABPAGE_ID_PLAY_SUB, new TabPagePlay( this, pageContainer, rlCont ) );
 		addChild( TabPage.TABPAGE_ID_NOW_PLAYLIST, new TabPageNowPlaylist( this, pageContainer, rlCont ) );
-		addChild( TabPage.TABPAGE_ID_VIDEO_VIEW, new TabPageVideoView( this, pageContainer, rlCont ) );
+		// addChild( TabPage.TABPAGE_ID_VIDEO_VIEW, new TabPageVideoView( this, pageContainer, rlCont ) );
 	
 		//rlHooter.setBackgroundResource(R.color.gradiant_test4);
 		rlCont.setBackgroundResource(R.color.gradiant_tab_base);

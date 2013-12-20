@@ -117,7 +117,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
             	//bShow = 
             	updateTabInfoPanel( MoveTabInfo.LEFT_1 );
             }
-			// layout( currentX, currentY, currentX + getWidth(), currentY + getHeight() );
+			layout( currentX, currentY, currentX + getWidth(), currentY + getHeight() );
 //            if( bShow == false )
 //            {
 //            	// それ以外の場合、クリア？
@@ -128,7 +128,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	    case MotionEvent.ACTION_DOWN:
 	        break;
 	    case MotionEvent.ACTION_UP:
-            // layout(orgX, orgY, orgX + getWidth(), orgY + getHeight());
+            layout(orgX, orgY, orgX + getWidth(), orgY + getHeight());
             // 必要がある場合、タブの移動を行う
 	    	if( nextMoveTabInfo != null )
 	    	{
@@ -146,6 +146,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	    return bRet;
 	}
 	
+	RelativeLayout rlPanel = null;
 	/**
 	 * 移動先タブ情報表示パネルの設定
 	 * @return true:成功 false:失敗
@@ -178,22 +179,24 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	    			{
 	    				//TabMoveRightInfoPanel.insertToLayout(this);
 	                	bRightShow = true;
+	        			rlPanel = (RelativeLayout) findViewById( ti.getPanelId() );
 	    			}
 	    			else if( ti.tabInfoIndex == MoveTabInfo.LEFT_1 && bRightShow == false )
 	    			{
 	    				//TabMoveLeftInfoPanel.insertToLayout(this);
 	                	bLeftShow = true;	    				
+	        			rlPanel = (RelativeLayout) findViewById( ti.getPanelId() );
 	    			}
     			}
             	// タブ取得
-        		RelativeLayout rl = (RelativeLayout) findViewById( ti.getPanelId() );
-        		if( rl != null )
+        		if( rlPanel != null )
         		{
+        			/*
         			if( ti.isShowing() == false )
         			{
 	        			// パネルのイメージを設定
-	        			ImageView iv = (ImageView) rl.findViewById( ti.getImageViewId() );
-	        			if( iv != null )
+	        			ImageView iv = (ImageView) rlPanel.findViewById( ti.getImageViewId() );
+	        			if( false )//iv != null )
 	        			{
 	        				if( ti.getTabImageResId() != null )
 	        				{
@@ -222,8 +225,8 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	        				}
 	        			}
             			// パネルを表示
-	        			rl.setVisibility(View.VISIBLE);
-        			}
+	        			rlPanel.setVisibility(View.VISIBLE);
+        			}*/
     				int parent_width = getWidth();
     				int border_right = OkosamaMediaPlayerActivity.dispInfo.getCorrectionXConsiderDensity(
     						MOVE_RECOGNIZE_PLAY_RIGHT
@@ -252,25 +255,30 @@ public class TouchHookRelativeLayout extends RelativeLayout {
     				int height = OkosamaMediaPlayerActivity.dispInfo.getCorrectionYConsiderDensity(
     						currentY ) + getHeight();
     				
-    				//rl.layout(x, y, x + width, y + height);
-    				
-    				RelativeLayout.LayoutParams lp = (LayoutParams) rl.getLayoutParams();
-    				lp.leftMargin = x;
-    				lp.topMargin = y;
-    				lp.width = width;
-    				lp.height = height;
-    				rl.setLayoutParams(lp);
-    				
-    				if( ti.isShowing() == false )
+    				// rlPanel.layout(x, y, x + width, y + height);
+
+    				if( ti.isShowing() == true )
     				{
-                      	ti.setShowing(true);	    				
+        				//rlPanel.layout(x, y, x + width, y + height);
+    				}
+    				else
+    				{
+    				
+//	    				RelativeLayout.LayoutParams lp = (LayoutParams) rlPanel.getLayoutParams();
+//	    				lp.leftMargin = x;
+//	    				lp.topMargin = y;
+//	    				lp.width = width;
+//	    				lp.height = height;
+//	    				rlPanel.setLayoutParams(lp);
+//    				
+//                      	ti.setShowing(true);	    				
     				}
                 	if( ( bRightShow &&  border_right < -1 * currentX ) 
                 	|| ( bLeftShow && border_left < width + x ) )
                 	{
                 		// 今離したら移動する場合
                 		// 背景の透明度を下げる
-                		rl.setBackgroundColor(
+                		rlPanel.setBackgroundColor(
                 			OkosamaMediaPlayerActivity.getResourceAccessor().getColor(color.move_info_move));
                 		nextMoveTabInfo = ti;
                 	}
@@ -279,7 +287,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
                 		Log.d("x","=" + x);
                 		Log.d("width","=" + width);
                 		// そうでない
-                		rl.setBackgroundColor(
+                		rlPanel.setBackgroundColor(
                 			OkosamaMediaPlayerActivity.getResourceAccessor().getColor(color.move_info_moving));
                 		nextMoveTabInfo = null;
                 	}

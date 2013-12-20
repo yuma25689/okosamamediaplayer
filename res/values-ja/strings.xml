@@ -272,7 +272,7 @@
     <string name="settings">設定</string>
 
     <!-- Category title for audio focus in music settings -->
-    <string name="audio_focus_category_title">Audio Focus</string>
+    <string name="audio_focus_category_title">アプリの動作</string>
 
     <!-- Title and summary for 'enable focus loss ducking' preference checkbox -->
     <string name="enable_focus_loss_ducking_title">Focus loss ducking</string>
