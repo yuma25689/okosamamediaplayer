@@ -25,7 +25,6 @@ import android.widget.RelativeLayout;
  *
  */
 public class TabPagePlay extends TabPage implements OnTouchListener {
-	boolean bPanelShow = true;
 
 	public TabPagePlay( Tab parent, LinearLayout ll, RelativeLayout rl ) {
 		super();
@@ -169,6 +168,7 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 		rightPanel.insertToLayout(tabBaseLayout);
 		leftPanel.insertToLayout(tabBaseLayout);
 		
+		this.setCtrlPanelShowFlg(true);
 		activity.updatePlayStateButtonImage();
 		
 		return 0;
@@ -182,25 +182,16 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 			NowPlayingControlPanel.insertToLayout(tabBaseLayout);
 			TimeControlPanel.insertToLayout(tabBaseLayout);
 			PlayControlPanel.insertToLayout(tabBaseLayout);
-			rightPanel.insertToLayout(tabBaseLayout);
-			leftPanel.insertToLayout(tabBaseLayout);			
+			if( rightPanel != null )
+			{
+				rightPanel.insertToLayout(tabBaseLayout);
+			}
+			if( leftPanel != null )
+			{
+				leftPanel.insertToLayout(tabBaseLayout);
+			}
 		}
 		super.setActivate(bActivate);
-	}
-	public void updateControlPanel()
-	{
-		if( bPanelShow )
-		{
-			updateControlPanel();
-			// NowPlayingControlPanel.insertToLayout(tabBaseLayout);			
-		}
-		else
-		{
-			TimeControlPanel.removeToLayout(tabBaseLayout);		
-			PlayControlPanel.removeToLayout(tabBaseLayout);
-			SubControlPanel.removeToLayout(tabBaseLayout);
-		}
-		
 	}
 	
 	@Override
@@ -208,7 +199,6 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
         case MotionEvent.ACTION_DOWN:
         	//Log.e("action down","come");
-        	bPanelShow = !bPanelShow;
         	updateControlPanel();
             break;
         }

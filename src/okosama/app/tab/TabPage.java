@@ -9,8 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import okosama.app.MusicSettingsActivity;
 import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.panel.NowPlayingControlPanel;
+import okosama.app.panel.PlayControlPanel;
+import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TabMoveLeftInfoPanel;
 import okosama.app.panel.TabMoveRightInfoPanel;
+import okosama.app.panel.TimeControlPanel;
 import okosama.app.panel.TouchHookRelativeLayout;
 
 /**
@@ -19,6 +23,15 @@ import okosama.app.panel.TouchHookRelativeLayout;
  *
  */
 public abstract class TabPage extends TabComponentParent {
+	boolean bPanelShow = false;
+	public boolean getCtrlPanelShowFlg()
+	{
+		return bPanelShow;
+	}
+	public void setCtrlPanelShowFlg(boolean b)
+	{
+		bPanelShow = b;
+	}
 
 //	Animation animIn = null;
 //	Animation animOut = null;
@@ -45,6 +58,7 @@ public abstract class TabPage extends TabComponentParent {
 	public static final int TABPAGE_ID_MEDIA_IMPL = 12;
 	public static final int TABPAGE_ID_PLAY_SUB = 13;
 	public static final int TABPAGE_ID_VIDEO_VIEW = 14;
+	public static final int TABPAGE_ID_CONTROLLER = 15;
 	
 	// private boolean bPrevActivate = false;
 	
@@ -128,4 +142,32 @@ public abstract class TabPage extends TabComponentParent {
 	{
 		return null;
 	}
+	public void updateControlPanel()
+	{
+		if( bPanelShow )
+		{
+			SubControlPanel.insertToLayout(tabBaseLayout);
+			NowPlayingControlPanel.insertToLayout(tabBaseLayout);
+			TimeControlPanel.insertToLayout(tabBaseLayout);
+			PlayControlPanel.insertToLayout(tabBaseLayout);
+			if( rightPanel != null )
+			{
+				rightPanel.insertToLayout(tabBaseLayout);
+			}
+			if( leftPanel != null )
+			{
+				leftPanel.insertToLayout(tabBaseLayout);
+			}
+			// NowPlayingControlPanel.insertToLayout(tabBaseLayout);			
+		}
+		else
+		{
+			TimeControlPanel.removeToLayout(tabBaseLayout);		
+			NowPlayingControlPanel.removeToLayout(tabBaseLayout);
+			SubControlPanel.removeToLayout(tabBaseLayout);
+			PlayControlPanel.removeToLayout(tabBaseLayout);			
+		}
+		
+	}
+	
 }

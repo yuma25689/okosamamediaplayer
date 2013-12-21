@@ -22,6 +22,7 @@ public interface ControlIDs {
 	public static final int VIDEO_TAB_BUTTON = 114;
 	public static final int VIDEO_VIEW_TAB_BUTTON = 115;
 	public static final int PLAYLIST_TAB_BUTTON = 116;
+	public static final int CONTROLLER_TAB_BUTTON = 116;
 	
 	public static final int TIME_HOUR10_BUTTON = 150;
 	public static final int TIME_HOUR1_BUTTON = 151;

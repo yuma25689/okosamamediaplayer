@@ -86,6 +86,25 @@ implements ServiceConnection, Database.Defs {
 		return stateStocker;
 	}
 	
+	public int getCurrentTabPageId()
+	{
+		int tabPageId = TabPage.TABPAGE_ID_NONE;
+		int mainTab = tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MAIN);
+        if( mainTab == TabPage.TABPAGE_ID_MEDIA )
+        {
+        	// 選択されたタブページがメディアタブだった場合
+        	// 子となるメディアタブも更新させる
+        	tabPageId = tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA);
+        }
+        else if( mainTab == TabPage.TABPAGE_ID_PLAY )
+        {
+        	// 選択されたタブページがプレイタブだった場合
+        	// 子となるプレイタブも更新させる
+        	tabPageId = tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_PLAY);
+        }    
+        return tabPageId;
+	}
+	
     // ポーズ中？
     private boolean paused = false;
     public boolean isPaused()
@@ -354,7 +373,7 @@ implements ServiceConnection, Database.Defs {
 	public int getCurrentDisplayId( int internalID )
 	{
 		// tabStocker.setCurrentTabId(internalID, iDispId);
-		tabStocker.getTabPageIdMap().get(internalID);
+		// tabStocker.getTabPageIdMap().get(internalID);
 		
 		if( 0 <= tabStocker.getTabPageIdMap().indexOfKey( internalID ))
 		{

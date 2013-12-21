@@ -5,6 +5,7 @@ import okosama.app.ControlIDs;
 import okosama.app.MusicSettingsActivity;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.action.ControllerShowHideAction;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.factory.DroidWidgetKit;
@@ -131,23 +132,21 @@ public class Tab extends TabComponentParent {
 		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );	
 		mapBtn.get(TabPage.TABPAGE_ID_MEDIA).acceptConfigurator(actionSetter);
 		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_MEDIA).getView());
-		// プレイリストタブボタン
-//		mapBtn.put( TabPage.TABPAGE_ID_NOW_PLAYLIST, DroidWidgetKit.getInstance().MakeButton() );
-//		tabBtnCreationData
-//		= new TabComponentPropertySetter(
-//			ControlIDs.PLAYLIST_TAB_BUTTON, null, ComponentType.BUTTON,
-//			230, 40, 100, 100,
-//			null, R.drawable.now_playlist_button_image,
-//			"", ScaleType.FIT_XY
-//		);
-//		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(tabBtnCreationData);		
-//		actMapTemp
-//		= new SparseArray< IViewAction >();
-//		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( 
-//				this.getInternalID(),
-//				TabPage.TABPAGE_ID_NOW_PLAYLIST ) );
-//		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
-//		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).getView());				
+		// コントローラボタン
+		mapBtn.put( TabPage.TABPAGE_ID_CONTROLLER, DroidWidgetKit.getInstance().MakeButton() );
+		tabBtnCreationData
+		= new TabComponentPropertySetter(
+			ControlIDs.CONTROLLER_TAB_BUTTON, null, ComponentType.BUTTON,
+			380, 40, 100, 100,
+			null, R.drawable.controller_button_image,
+			"", ScaleType.FIT_XY
+		);
+		mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).acceptConfigurator(tabBtnCreationData);		
+		actMapTemp
+		= new SparseArray< IViewAction >();
+		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new ControllerShowHideAction() );
+		mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
+		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).getView());				
 		
 		RelativeLayout rlCont = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_contents);
 		
@@ -202,8 +201,8 @@ public class Tab extends TabComponentParent {
 	public void setCurrentTab(int tabPageId,boolean save)
 	{
 		Log.d("tab.setCurrentTab", "tab:" + tabPageId);
-		synchronized( OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim )
-		{
+		//synchronized( OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim )
+		//{
 			OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(
 					true, internalID,tabPageId);
 			boolean bOutExec = false;
@@ -239,7 +238,7 @@ public class Tab extends TabComponentParent {
 	        	OkosamaMediaPlayerActivity.getResourceAccessor().tabAnim.SetTabSelectionLock(
 	        			false, internalID,tabPageId);
 	        }
-		}
+		//}
 
 	}
 
