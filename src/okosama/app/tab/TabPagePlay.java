@@ -156,6 +156,7 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
         		0, 0 
         );
+		videoView.setVisibility(View.GONE);
 		videoView.setLayoutParams(lpVideoView);
 		videoView.setOnTouchListener(this);
 		tabBaseLayout.addView( videoView );

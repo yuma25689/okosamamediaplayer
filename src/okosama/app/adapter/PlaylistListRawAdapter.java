@@ -256,7 +256,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
             protected Integer doInBackground(Cursor... params) {
-            	Log.e("playlist - doInBackground","start");
+            	Log.i("playlist - doInBackground","start");
             	items.clear();
             	bLastError = false;
             	
@@ -279,7 +279,7 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
 	        		{
 	        			return -1;
 	        		}
-	            	Log.e("playlist - doInBackground","moveToFirst");
+	            	Log.i("playlist - doInBackground","moveToFirst");
 	            	if( 0 < cursor.getCount() )
 	            	{
 	            	

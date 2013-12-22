@@ -50,8 +50,6 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	private ArrayList<TrackData> allItems = new ArrayList<TrackData>();
 	// TODO:次へボタン等
 	int maxShowCount = 500;
-    	
-    // private final Drawable mNowListOverlay;
 
 	MediaInfo [] playlist = null;
     private final BitmapDrawable mDefaultAlbumIcon;
@@ -87,8 +85,6 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     int mAlbumIdIdx;
     //int mAlbumArtIndex;
     
-    // 外部からの設定値保持用
-	// TODO: 意味の調査
     boolean mIsNowPlaying;
     //boolean mIsQueueView;
     public static final int FILTER_NORMAL = 1;
@@ -136,6 +132,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     static class ViewHolder {
         TextView line1;
         TextView line2;
+        TextView line3;
         TextView duration;
         ImageView icon;        
         ImageView play_indicator;
@@ -178,14 +175,6 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
         // mQueryHandler = new QueryHandler(currentactivity.getContentResolver(), this );
     }
     
-//    public void setActivity(OkosamaMediaPlayerActivity newactivity) {
-//        mActivity = newactivity;
-//    }
-    
-//    public QueryHandler getQueryHandler() {
-//        return mQueryHandler;
-//    }
-    
     /**
      * カラムのインデックスを設定
      * @param cursor
@@ -207,7 +196,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
                 mAudioIdIdx = cursor.getColumnIndexOrThrow(
                         MediaStore.Audio.Playlists.Members.AUDIO_ID);
             } catch (IllegalArgumentException ex) {
-                mAudioIdIdx = cursor.getColumnIndexOrThrow(BaseColumns._ID);
+                mAudioIdIdx = cursor.getColumnIndexOrThrow(MediaColumns._ID);
                 return 1;
             }
             
@@ -232,18 +221,11 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     	if (v == null) {
     	   ViewHolder vh = new ViewHolder();
 	       v = inflater.inflate(iLayoutId, null);     	   
-           // イメージは、エディットモードの時のみ表示する
-//           ImageView iv = (ImageView) v.findViewById(R.id.icon);
-//           if (mActivity.isEditMode()) {
-//               iv.setVisibility(View.VISIBLE);
-//               iv.setImageResource(R.drawable.ic_mp_move);
-//           } else {
-//               iv.setVisibility(View.GONE);
-//           }
            
            // viewholderに各ビューを設定し、タグに設定する
            vh.line1 = (TextView) v.findViewById(R.id.line1);
            vh.line2 = (TextView) v.findViewById(R.id.line2);
+           vh.line3 = (TextView) v.findViewById(R.id.line3);
            vh.duration = (TextView) v.findViewById(R.id.duration);
            vh.icon = (ImageView) v.findViewById(R.id.icon);
 	       vh.icon.setBackgroundDrawable(mDefaultAlbumIcon);
@@ -275,7 +257,6 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
         // cursor.copyStringToBuffer(mTitleIdx, vh.buffer1);
         vh.line1.setText(data.getTrackTitle());
        
-        
         // 時間を取得、設定
         int secs = (int) (data.getTrackDuration()) / 1000; // .getInt(mDurationIdx) / 1000;
         if (secs == 0) {
@@ -284,30 +265,48 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
             vh.duration.setText(ResourceAccessor.makeTimeString(context, secs));
         }
         
-        final StringBuilder builder = mBuilder;
-        builder.delete(0, builder.length());
+//        final StringBuilder builder = mBuilder;
+//        builder.delete(0, builder.length());
 
         // アーティスト名が取得できたら、ビューに設定
         String name = data.getTrackArtist();
         if (name == null || name.equals(MediaStore.UNKNOWN_STRING)) {
-            builder.append(mUnknownArtist);
-        } else {
-            builder.append(name);
-        }
-        int len = builder.length();
-        if (vh.buffer2.length < len) {
-            vh.buffer2 = new char[len];
-        }
-        builder.getChars(0, len, vh.buffer2, 0);
-        vh.line2.setText(vh.buffer2, 0, len);
+            //builder.append(mUnknownArtist);
+        	name = mUnknownArtist;
+        } 
+//        else {
+//            builder.append(name);
+//        }
+//        int len = builder.length();
+//        if (vh.buffer2.length < len) {
+//            vh.buffer2 = new char[len];
+//        }
+        //builder.getChars(0, len, vh.buffer2, 0);
+        vh.line2.setText(name);//vh.buffer2, 0, len);
 
-        ImageView iv = vh.icon;        
+        // ジャンルが取得できたら、ビューに設定
+        String genre = mActivity.getGenreStocker().getGenreOfAudioString( 
+        		data.getTrackAudioId() );
+//        Log.i("genre-get",data.getTrackId() + " " + data.getTrackAudioId() 
+//        		+ " " + data.getTrackTitle() + genre );
+        if( genre != null )
+        {
+        	vh.line3.setText(genre);
+        	vh.line3.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+        	vh.line3.setVisibility(View.GONE);
+        }
+        
+        ImageView iv = vh.icon;
         String art = data.getTrackAlbumArt();//cursor.getString(mAlbumArtIndex);
         long aid = Long.parseLong(data.getTrackAlbumId() );//cursor.getLong(0);
         if ( art == null || art.length() == 0) {
             iv.setImageDrawable(null);
         } else {
-            Drawable d = MediaPlayerUtil.getCachedArtwork(mActivity, aid, mDefaultAlbumIcon);
+            Drawable d = MediaPlayerUtil.getCachedArtwork(
+            		mActivity, aid, mDefaultAlbumIcon);
             iv.setImageDrawable(d);
         }
         
@@ -328,24 +327,12 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
             }
         }
         
-        // Determining whether and where to show the "now playing indicator
-        // is tricky, because we don't actually keep track of where the songs
-        // in the current playlist came from after they've started playing.
-        //
-        // If the "current playlists" is shown, then we can simply match by position,
-        // otherwise, we need to match by id. Match-by-id gets a little weird if
-        // a song appears in a playlist more than once, and you're in edit-playlist
-        // mode. In that case, both items will have the "now playing" indicator.
-        // For this reason, we don't show the play indicator at all when in edit
-        // playlist mode (except when you're viewing the "current playlist",
-        // which is not really a playlist)
         if ( (mIsNowPlaying && pos == id) ||
              (!mIsNowPlaying && !mDisableNowPlayingIndicator 
             		 && data.getTrackAudioId() == id)) {
         	// 再生中で再生中のものか、
         	// 再生中でなく、NowPlayingIndicatorを表示しない設定でもなく、現在設定使用としているのが待機中の曲と同じなら
         	// プレイリストのイメージを設定？
-        	// TODO:プレイリストのイメージというのがどういうものか分からないので、確認する
         	ivInd.setImageResource(R.drawable.indicator_ic_mp_playing_list);
         	ivInd.setVisibility(View.VISIBLE);
         } else {
@@ -376,14 +363,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     	}
     	bDataUpdating = true;
     	Log.i("stockMediaDataFromDevice","start");
-    	
-//    	if (mActivity.isFinishing() && cursor != null ) {
-//        	// アクティビティが終了中で、まだカーソルが残っている場合、カーソルをクローズ
-//            cursor.close();
-//            cursor = null;
-//        }
-        //Database.getInstance(mActivity).setCursor( Database.SongCursorName, cursor );
-    	
+     	
     	if( page != null )
     	{
     		page.startUpdate();
@@ -397,8 +377,6 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
             	Log.i("doInBackground","start");
             	
             	// カーソルをループする
-            	// Cursor cursor = params[0];
-    			// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistID( null );        	
     			Cursor cursor = Database.getInstance(
     					OkosamaMediaPlayerActivity.isExternalRef()
     			).createTrackCursor(null, null);			
@@ -410,7 +388,8 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
         		}
         		
         		try {
-	        		if( 0 > getColumnIndices(cursor) || mActivity.getAdapter(TabPage.TABPAGE_ID_ALBUM) == null )
+	        		if( 0 > getColumnIndices(cursor) 
+	        		|| mActivity.getAdapter(TabPage.TABPAGE_ID_ALBUM) == null )
 	        		{
 	        			return -1;
 	        		}
@@ -438,7 +417,9 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 			            		if( data.getTrackAlbumId() != null )
 			            		{
 				        			data.setTrackAlbumArt(
-				        					((AlbumListRawAdapter)mActivity.getAdapter(TabPage.TABPAGE_ID_ALBUM)).getAlbumArtFromId(Integer.parseInt(data.getTrackAlbumId())));
+				        					((AlbumListRawAdapter)mActivity.getAdapter(
+				        						TabPage.TABPAGE_ID_ALBUM)).getAlbumArtFromId(
+				        								Integer.parseInt(data.getTrackAlbumId())));
 			            		}
 			            	    allItems.add(data);
 			        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
@@ -466,17 +447,11 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
             	// 格納終了
             	// 二重管理になってしまっているが、アダプタにも同様のデータを格納する
             	updateList();
-            	// TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_SONG);
             	if( arrPage.isEmpty() == false )
             	{
             		for( TabPage page : arrPage )
             			page.endUpdate();
             	}
-//            	TabPage page2 = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_PLAY).getChild(TabPage.TABPAGE_ID_NOW_PLAYLIST);
-//            	if( page2 != null )
-//            	{
-//            		page2.endUpdate();
-//            	}
             	
             	bDataUpdating = false;            	
             }
@@ -491,21 +466,9 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
      * @return
      */
     boolean isShowData(TrackData data)
-    {
-    	// TODO: 現状、自動でキューを表示するかそうでないかを切り替えているが、
-    	// 自動ではなく、ユーザに選択させる
-    	// boolean bShow = true;
-    	// boolean bQueueExists = false;
- 
-//    	if( playlist != null && 0 < playlist.length )
-//    	{
-//    		bQueueExists = true;
-//    		Log.d("debug","queue exists");
-//    	}
-    	
-    	if( mFilterType == this.FILTER_NOW_QUEUE 
-    	|| mFilterType == this.FILTER_PLAYLIST )
-    	// if( bQueueExists == true )
+    {    	
+    	if( mFilterType == FILTER_NOW_QUEUE 
+    	|| mFilterType == FILTER_PLAYLIST )
     	{
     		if( playlist != null )
     		{
@@ -523,7 +486,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     		}
 			return false;
     	}
-    	else if( mFilterType == this.FILTER_NORMAL )
+    	else if( mFilterType == FILTER_NORMAL )
     	{
 	    	// albumIDのチェック
 	    	if( albumId != null && 0 < albumId.length() ) 
@@ -565,7 +528,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     	
     	// 検索条件のリセット
     	playlist = null;
-    	if( mFilterType == this.FILTER_NOW_QUEUE ) 
+    	if( mFilterType == FILTER_NOW_QUEUE ) 
     	{
         	if (MediaPlayerUtil.sService == null) 
         	{
@@ -583,7 +546,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	    		Log.e("Error", "sService getQueue RemoteException occured!");
 	    	}
     	}
-    	else if( mFilterType == this.FILTER_PLAYLIST )
+    	else if( mFilterType == FILTER_PLAYLIST )
     	{
     		Log.d("parseLong",OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getPlaylistID());
     		playlist = Database.getSongListForPlaylist(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
@@ -607,8 +570,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	    		}
 	    	    add(data);
 	    	    currentAllAudioIds.add(data.getTrackAudioId());
-	        	// Log.d("updateData - add","data" + data.getTrackId() + " name:" + data.getTrackTitle() + " albumId:" + data.getTrackAlbumId() );    	    
-	    		if( maxShowCount < this.getCount() )
+	        	if( maxShowCount < this.getCount() )
 	    		{
 	    			// maxの表示件数以上は、表示しない
 	    			// TODO:ページきりかえ未対応なので、最初のmaxShowCount件しか表示できていない

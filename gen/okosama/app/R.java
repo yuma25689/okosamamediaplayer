@@ -268,7 +268,7 @@ public final class R {
     public static final class id {
         public static final int EmptyShowPanel=0x7f0c0017;
         public static final int TabCommonProgressPanel=0x7f0c0019;
-        public static final int action_start_auth=0x7f0c0025;
+        public static final int action_start_auth=0x7f0c0026;
         public static final int action_tweet=0x7f0c0000;
         public static final int album_appwidget=0x7f0c0002;
         public static final int artist=0x7f0c0004;
@@ -287,9 +287,10 @@ public final class R {
         public static final int left_move_panel=0x7f0c000e;
         public static final int line1=0x7f0c0022;
         public static final int line2=0x7f0c0023;
+        public static final int line3=0x7f0c0024;
         public static final int main_linearlayout=0x7f0c0010;
         public static final int main_relativelayout=0x7f0c0011;
-        public static final int play_indicator=0x7f0c0024;
+        public static final int play_indicator=0x7f0c0025;
         public static final int playlist=0x7f0c000b;
         public static final int progress_common=0x7f0c001a;
         public static final int prompt=0x7f0c0008;

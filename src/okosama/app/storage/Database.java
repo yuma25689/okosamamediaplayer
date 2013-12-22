@@ -485,6 +485,9 @@ public class Database {
         	mSortOrder = AudioColumns.TRACK + ", " + mSortOrder;
             // 音楽指定
             where.append(" AND " + AudioColumns.IS_MUSIC + "=1");
+            where.append(" AND " + AudioColumns.IS_ALARM + "=0");
+            where.append(" AND " + AudioColumns.IS_NOTIFICATION + "=0");
+            where.append(" AND " + AudioColumns.IS_PODCAST + "=0");
             // クエリ発行
             // Log.i("query1","query1");
 //            ret = queryhandler.doQuery(ctx, uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -552,13 +555,22 @@ public class Database {
         	strExOrIn = "internal";
         }        	
         Uri uri = MediaStore.Audio.Genres.Members.getContentUri(strExOrIn, genreId);
+        Log.i("genre - uri", "uri = " + uri);
         String[] cols = new String[] {
-        	MediaStore.Audio.Media._ID
+        	MediaStore.Audio.Media._ID //,
+        	//MediaStore.Audio.Genres.Members.AUDIO_ID
         };
 
+        StringBuilder where = new StringBuilder();
+        where.append(MediaColumns.TITLE + " != ''");
+        where.append(" AND " + AudioColumns.IS_MUSIC + "=1");
+        where.append(" AND " + AudioColumns.IS_ALARM + "=0");
+        where.append(" AND " + AudioColumns.IS_NOTIFICATION + "=0");
+        where.append(" AND " + AudioColumns.IS_PODCAST + "=0");
+        
         // クエリ発行
         ret = query(ctx, uri,
-        		cols, null, null, mSortOrder);
+        		cols, where.toString(), null, null);
         return ret;
     }
 
