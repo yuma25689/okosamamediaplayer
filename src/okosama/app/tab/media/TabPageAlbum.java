@@ -56,7 +56,7 @@ public class TabPageAlbum extends TabPage {
 		mti.setImageVertialAlign( MoveTabInfo.VERTIAL_TOP );
 		mti.setTabInfoIndex( MoveTabInfo.LEFT_1 );
 		mti.setTabId(ControlIDs.TAB_ID_MAIN);
-		mti.setTabPageId(TabPage.TABPAGE_ID_PLAY);
+		mti.setTabPageId(TabPage.TABPAGE_ID_NOW_PLAYLIST);
 		mti.setPanelId(R.id.left_move_panel);
 		mti.setImageViewId(R.id.left_move_image);
 		mti.setTabImageResId(R.drawable.brat_main_normal);

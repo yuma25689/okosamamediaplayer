@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import okosama.app.AppStatus;
-import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.factory.ListenerFactory;
 import okosama.app.panel.NowPlayingControlPanel;

@@ -13,7 +13,7 @@ import android.os.Message;
  */
 public final class TabSelectAction implements IViewAction {
 
-	public static final int MSG_ID_TAB_SELECT = 101;
+	// public static final int MSG_ID_TAB_SELECT = 101;
 	int tabId = ControlIDs.ID_NOT_SPECIFIED;
 	int tabPageId = TabPage.TABPAGE_ID_UNKNOWN;
 
@@ -46,17 +46,19 @@ public final class TabSelectAction implements IViewAction {
 			if( tabId != ControlIDs.ID_NOT_SPECIFIED && tabPageId != TabPage.TABPAGE_ID_NONE )
 			{			
 				// handlerに通知する
-				Message msg = Message.obtain();
-				msg.what = MSG_ID_TAB_SELECT;
-				msg.arg1 = tabId;
-				msg.arg2 = tabPageId;
-				msg.obj = false;
-                Handler hdr = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getHandler();                        
-                if( hdr == null )
-                {
-                	return -1;
-                }
-                hdr.sendMessage( msg );
+//				Message msg = Message.obtain();
+//				msg.what = MSG_ID_TAB_SELECT;
+//				msg.arg1 = tabId;
+//				msg.arg2 = tabPageId;
+//				msg.obj = false;
+//                Handler hdr = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getHandler();                        
+//                if( hdr == null )
+//                {
+//                	return -1;
+//                }
+//                hdr.sendMessage( msg );
+				// スレッド内でやったら落ちると思われる
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().selectTab(tabId,tabPageId,false);
 			}
 		}
 		return 0;

@@ -615,57 +615,6 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 		                    data.setArtistId( cursor.getString(mGroupArtistIdIdx));
 		            		groupDataTmp.put( i, data );
 	
-	//	            		Cursor childCursor = getChildrenCursor(cursor.getLong(mGroupArtistIdIdx));//,data.getArtistName());
-	//	            		if( childCursor == null )
-	//	            		{
-	//	            			Log.e("doInBackGround - ArtistAlbumListAdapter", "child cursoréÊìæÉGÉâÅ[");
-	//	            			return -1;
-	//	            		}
-	//	            		try {
-	//	            			if( 0 < childCursor.getCount() )
-	//		            		{
-	//		            			ArtistChildData[] childList = new ArtistChildData[childCursor.getCount()];
-	//		            			int j = 0;
-	//			            		childCursor.moveToFirst();
-	//			            		do 
-	//			            		{
-	//			                        ArtistChildData dataChild = new ArtistChildData();
-	//			                       
-	//			                        // albumñº
-	//			                        dataChild.setAlbumName(
-	//			                        	childCursor.getString(childCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM) ) 
-	//			                        );
-	//			                        // album ã»êî
-	//			                        dataChild.setNumOfSongs(
-	//			                        	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS))
-	//			                        );
-	//			                        // artist ã»êî
-	//			                        dataChild.setNumOfSongsForArtist( 
-	//			                        	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS_FOR_ARTIST))
-	//			                        );
-	//			                        // artistñº
-	//			                        dataChild.setArtistName(
-	//			                        	data.getArtistName()
-	//			                        	//childCursor.getString(childCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST))
-	//			                        );
-	//			                        // album art
-	//			                        dataChild.setAlbumArt(
-	//			                        		childCursor.getString(childCursor.getColumnIndexOrThrow(
-	//		                                AlbumColumns.ALBUM_ART))
-	//			                        );
-	//			                        // album id
-	//			                        dataChild.setAlbumId( childCursor.getString(0) );
-	//			                        
-	//			                        childList[j] = dataChild; 
-	//			                        		
-	//			                        j++;
-	//			            		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
-	//			            				childCursor.moveToNext() );
-	//			            		childDataTmp.put( i, childList);
-	//		            		}
-	//	            		} finally {
-	//	            			childCursor.close();
-	//	            		}
 	                		i++;
 		        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
 		        				cursor.moveToNext() );

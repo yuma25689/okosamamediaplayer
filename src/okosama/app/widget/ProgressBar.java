@@ -2,7 +2,6 @@ package okosama.app.widget;
 
 import android.app.Activity;
 import android.view.View;
-import okosama.app.R;
 import okosama.app.action.IViewAction;
 
 /**

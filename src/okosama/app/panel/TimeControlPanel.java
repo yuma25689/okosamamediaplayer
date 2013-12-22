@@ -142,13 +142,6 @@ public class TimeControlPanel extends ControlPanel {
 				40, 270, 200, 50
 				, null, drawable.no_image, "", ScaleType.FIT_XY
 			),		
-			// --------------------- PROGRESS
-			// TODO: 後で別に移す
-			new TabComponentPropertySetter(
-				ControlIDs.TIME_PROGRESS, null, ComponentType.PROGRESS, 
-				0, 125, 480, 40
-				, null, null, "", ScaleType.FIT_XY
-			),
 		};
 		// OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 	
@@ -160,7 +153,6 @@ public class TimeControlPanel extends ControlPanel {
 				,getTimesButton()[4]
 				,getTimesButton()[5]
 				,getDurationLabel()
-				,getProgressBar()
 			};
 		// ---- action
 		// Timeコンポーネント
@@ -177,9 +169,6 @@ public class TimeControlPanel extends ControlPanel {
 		actMapTimeClick5.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_SEC_10) );	
 		actMapTimeClick6.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_SEC_1) );	
 
-		// ProgressBar用 action
-		SparseArray< IViewAction > actMapProgress = new SparseArray< IViewAction >();
-		actMapProgress.put( IViewAction.ACTION_ID_ONCLICKSEEK, new MediaSeekAction() );	
 
 		TabComponentActionSetter actionSetterCont[] = {
 				new TabComponentActionSetter( actMapTimeClick1 )
@@ -189,7 +178,6 @@ public class TimeControlPanel extends ControlPanel {
 				,new TabComponentActionSetter( actMapTimeClick5 )
 				,new TabComponentActionSetter( actMapTimeClick6 )
 				,null
-				,new TabComponentActionSetter( actMapProgress )
 			};
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;

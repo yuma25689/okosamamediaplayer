@@ -3,15 +3,8 @@ package okosama.app.tab;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.action.IViewAction;
-import okosama.app.action.ToggleChangeAction;
-import okosama.app.factory.DroidWidgetKit;
-import okosama.app.tab.TabComponentPropertySetter.ComponentType;
-import okosama.app.widget.ToggleButton;
-import android.util.SparseArray;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ImageView.ScaleType;
 
 /**
  * メディア選択タブ

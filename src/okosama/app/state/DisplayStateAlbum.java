@@ -2,12 +2,10 @@ package okosama.app.state;
 
 
 
-import android.view.Menu;
 import android.view.MenuItem;
 import okosama.app.AppStatus;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.R;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
 

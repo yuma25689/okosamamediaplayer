@@ -2,8 +2,10 @@ package okosama.app.panel;
 
 import okosama.app.ControlIDs;
 import okosama.app.R;
+import okosama.app.R.drawable;
 import okosama.app.action.IViewAction;
 import okosama.app.action.MediaPlayPauseAction;
+import okosama.app.action.MediaSeekAction;
 import okosama.app.action.NextAction;
 import okosama.app.action.PrevAction;
 import okosama.app.factory.DroidWidgetKit;
@@ -100,12 +102,27 @@ public class PlayControlPanel extends ControlPanel {
 					30, 18, 100, 100
 					, null, R.drawable.back_button_image, "", ScaleType.FIT_XY
 				),
+				// --------------------- SONG
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_SONG_LABEL, null, ComponentType.LABEL, 
+					30, 160, 400, 50
+					, null, drawable.okosama_app_widget_bg, "", ScaleType.FIT_XY
+				),				
+				// --------------------- PROGRESS
+				// TODO: 後で別に移す
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_PROGRESS, null, ComponentType.PROGRESS, 
+					0, 125, 480, 40
+					, null, null, "", ScaleType.FIT_XY
+				),				
 		};
 	
 		absWidget widgets[] = {
 				getPlayPauseButton()
 				,getNextButton()
 				,getPrevButton()
+				,NowPlayingControlPanel.getInstance().getNowPlayingSongLabel()				
+				,TimeControlPanel.getInstance().getProgressBar()				
 			};
 		// ---- action
 		// Timeコンポーネント
@@ -115,11 +132,16 @@ public class PlayControlPanel extends ControlPanel {
 		actPlayClick.put( IViewAction.ACTION_ID_ONCLICK, new MediaPlayPauseAction() );	
 		actNextClick.put( IViewAction.ACTION_ID_ONCLICK, new NextAction() );	
 		actPrevClick.put( IViewAction.ACTION_ID_ONCLICK, new PrevAction() );	
+		// ProgressBar用 action
+		SparseArray< IViewAction > actMapProgress = new SparseArray< IViewAction >();
+		actMapProgress.put( IViewAction.ACTION_ID_ONCLICKSEEK, new MediaSeekAction() );	
 
 		TabComponentActionSetter actionSetterCont[] = {
 				new TabComponentActionSetter( actPlayClick )
 				,new TabComponentActionSetter( actNextClick )
 				,new TabComponentActionSetter( actPrevClick )
+				,null
+				,new TabComponentActionSetter( actMapProgress )				
 			};
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;
@@ -136,7 +158,6 @@ public class PlayControlPanel extends ControlPanel {
 			tabBaseLayout.addView( widget.getView() );
 			i++;
 		}
-		tabBaseLayout.setBackgroundResource(R.drawable.okosama_app_widget_bg);
 		return;
 		
 	}

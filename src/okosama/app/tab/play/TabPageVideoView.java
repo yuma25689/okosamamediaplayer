@@ -2,35 +2,23 @@ package okosama.app.tab.play;
 
 import java.util.ArrayList;
 
-import okosama.app.ControlDefs;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.adapter.IAdapterUpdate;
-import okosama.app.behavior.TrackListBehavior;
-import okosama.app.factory.DroidWidgetKit;
 import okosama.app.panel.MoveTabInfo;
-import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
 import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TabMoveLeftInfoPanel;
 import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.panel.TimeControlPanel;
 import okosama.app.tab.Tab;
-import okosama.app.tab.TabChangeAnimation;
-import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.tab.TabPage;
-import okosama.app.widget.List;
-import okosama.app.widget.absWidget;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ImageView.ScaleType;
 
 public class TabPageVideoView extends TabPage implements OnTouchListener {
 

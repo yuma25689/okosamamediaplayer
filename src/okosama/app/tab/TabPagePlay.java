@@ -47,8 +47,8 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 		// 左フリック時の設定
 		MoveTabInfo mti = new MoveTabInfo();
 		mti.setTabInfoIndex( MoveTabInfo.LEFT_1 );
-		mti.setTabId(ControlIDs.TAB_ID_PLAY);
-		mti.setTabPageId(TabPage.TABPAGE_ID_NOW_PLAYLIST);
+		mti.setTabId(ControlIDs.TAB_ID_MAIN);
+		mti.setTabPageId(TabPage.TABPAGE_ID_MEDIA);
 		mti.setPanelId(R.id.left_move_panel);
 		mti.setImageViewId(R.id.left_move_image);
 		mti.setTabImageResId(R.drawable.video_normal);
@@ -56,7 +56,7 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 		// 右フリック時の設定
 		MoveTabInfo mtiR = new MoveTabInfo();
 		mtiR.setTabInfoIndex( MoveTabInfo.RIGHT_1 );
-		mtiR.setTabId(ControlIDs.TAB_ID_PLAY);
+		mtiR.setTabId(ControlIDs.TAB_ID_MAIN);
 		mtiR.setTabPageId(TabPage.TABPAGE_ID_NOW_PLAYLIST);
 		mtiR.setPanelId(R.id.right_move_panel);
 		mtiR.setImageViewId(R.id.right_move_image);
@@ -176,6 +176,7 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 	@Override
 	public void setActivate( boolean bActivate )
 	{
+		super.setActivate(bActivate);		
 		if( bActivate )
 		{
 			SubControlPanel.insertToLayout(tabBaseLayout);
@@ -190,8 +191,12 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 			{
 				leftPanel.insertToLayout(tabBaseLayout);
 			}
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getControllerShowHideBtn().getView().setVisibility(View.GONE);
 		}
-		super.setActivate(bActivate);
+		else
+		{
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getControllerShowHideBtn().getView().setVisibility(View.VISIBLE);	
+		}
 	}
 	
 	@Override

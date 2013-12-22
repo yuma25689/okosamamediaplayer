@@ -5,17 +5,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import okosama.app.MusicSettingsActivity;
 import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
-import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TabMoveLeftInfoPanel;
 import okosama.app.panel.TabMoveRightInfoPanel;
-import okosama.app.panel.TimeControlPanel;
-import okosama.app.panel.TouchHookRelativeLayout;
 
 /**
  * タブの１つのページを模倣したクラス
@@ -105,7 +102,7 @@ public abstract class TabPage extends TabComponentParent {
 			{
 				addLayoutFromParent( tabBaseLayout, componentContainer );				
 			}
-
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getControllerShowHideBtn().getView().setVisibility(View.VISIBLE);
 		}
 		else
 		{
@@ -119,7 +116,6 @@ public abstract class TabPage extends TabComponentParent {
 			{
 				removeLayoutFromParent( tabBaseLayout, componentContainer );
 			}
-	
 		}
 		// bPrevActivate = bActivate;
 		super.setActivate(bActivate);
@@ -146,25 +142,25 @@ public abstract class TabPage extends TabComponentParent {
 	{
 		if( bPanelShow )
 		{
-			SubControlPanel.insertToLayout(tabBaseLayout);
-			NowPlayingControlPanel.insertToLayout(tabBaseLayout);
-			TimeControlPanel.insertToLayout(tabBaseLayout);
+			//SubControlPanel.insertToLayout(tabBaseLayout);
+			//NowPlayingControlPanel.insertToLayout(tabBaseLayout);
+			//TimeControlPanel.insertToLayout(tabBaseLayout);
 			PlayControlPanel.insertToLayout(tabBaseLayout);
-			if( rightPanel != null )
-			{
-				rightPanel.insertToLayout(tabBaseLayout);
-			}
-			if( leftPanel != null )
-			{
-				leftPanel.insertToLayout(tabBaseLayout);
-			}
+//			if( rightPanel != null )
+//			{
+//				rightPanel.insertToLayout(tabBaseLayout);
+//			}
+//			if( leftPanel != null )
+//			{
+//				leftPanel.insertToLayout(tabBaseLayout);
+//			}
 			// NowPlayingControlPanel.insertToLayout(tabBaseLayout);			
 		}
 		else
 		{
-			TimeControlPanel.removeToLayout(tabBaseLayout);		
-			NowPlayingControlPanel.removeToLayout(tabBaseLayout);
-			SubControlPanel.removeToLayout(tabBaseLayout);
+			//TimeControlPanel.removeToLayout(tabBaseLayout);		
+			//NowPlayingControlPanel.removeToLayout(tabBaseLayout);
+			//SubControlPanel.removeToLayout(tabBaseLayout);
 			PlayControlPanel.removeToLayout(tabBaseLayout);			
 		}
 		

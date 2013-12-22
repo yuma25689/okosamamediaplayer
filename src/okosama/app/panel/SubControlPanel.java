@@ -87,25 +87,25 @@ public class SubControlPanel extends ControlPanel {
 				// --------------------- SHUFFLE
 				new TabComponentPropertySetter(
 					ControlIDs.SHUFFLE_BUTTON, null, ComponentType.BUTTON, 
-					20, 420, 100, 100
+					20, 470, 100, 100
 					, null, drawable.no_image, "", ScaleType.FIT_XY
 				),
 				// --------------------- REPEAT
 				new TabComponentPropertySetter(
 					ControlIDs.REPEAT_BUTTON, null, ComponentType.BUTTON, 
-					200, 390, 100, 100
+					200, 460, 100, 100
 					, null, drawable.no_image, "", ScaleType.FIT_XY
 				),
 				// --------------------- STOP
 				new TabComponentPropertySetter(
 					ControlIDs.STOP_BUTTON, null, ComponentType.BUTTON, 
-					150, 500, 100, 100
+					150, 560, 100, 100
 					, null, R.drawable.stop_button_image, "", ScaleType.FIT_XY
 				),
 				// --------------------- TWITTER
 				new TabComponentPropertySetter(
 					ControlIDs.TWEET_BUTTON, null, ComponentType.BUTTON, 
-					370, 450, 80, 80
+					370, 500, 80, 80
 					, null, R.drawable.internal_btn_image, "", ScaleType.FIT_XY
 				),				
 		};

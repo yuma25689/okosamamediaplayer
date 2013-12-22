@@ -1,6 +1,5 @@
 package okosama.app;
 
-import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.AdapterStocker;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
@@ -35,6 +34,7 @@ import okosama.app.state.DisplayStateFactory;
 import okosama.app.state.IDisplayState;
 import okosama.app.state.StateStocker;
 import okosama.app.storage.Database;
+import okosama.app.storage.GenreStocker;
 import okosama.app.tab.*;
 import okosama.app.widget.Button;
 import okosama.app.widget.ExpList;
@@ -59,6 +59,30 @@ import okosama.app.widget.ButtonImpl;
 public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection, Database.Defs {
 	public static final String MEDIA_SERVICE_NOTIFY = "MediaServiceNotify";	
+
+	public void selectTab(int tabId, int tabPageId, boolean bForce)
+	{
+		// タブIDを更新
+		updateTabId( tabId, tabPageId, bForce );
+	
+		// リスナを更新
+		updateListeners(IDisplayState.STATUS_ON_CREATE);
+		updateListeners(IDisplayState.STATUS_ON_RESUME);
+		// メディアを更新
+		reScanMediaAndUpdateTabPage(tabId,false);
+		// 共通部分再描画
+		queueNextRefresh(100);
+		updatePlayStateButtonImage();
+	}
+	public Button controllerShowHideBtn = null;
+	public Button getControllerShowHideBtn()
+	{
+		if( controllerShowHideBtn == null )
+		{
+			controllerShowHideBtn = DroidWidgetKit.getInstance().MakeButton();
+		}
+		return controllerShowHideBtn;
+	}
 	
 	public SurfaceView surfaceView = null;
 	public SurfaceView getVideoView()
@@ -85,6 +109,12 @@ implements ServiceConnection, Database.Defs {
 	{
 		return stateStocker;
 	}
+	// ジャンル格納用
+	GenreStocker genreStocker = new GenreStocker();
+	public GenreStocker getGenreStocker()
+	{
+		return genreStocker;
+	}
 	
 	public int getCurrentTabPageId()
 	{
@@ -101,6 +131,11 @@ implements ServiceConnection, Database.Defs {
         	// 選択されたタブページがプレイタブだった場合
         	// 子となるプレイタブも更新させる
         	tabPageId = tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_PLAY);
+        }    
+        else
+        {
+        	// それ以外の場合、MainタブのID
+        	tabPageId = mainTab;
         }    
         return tabPageId;
 	}
@@ -650,7 +685,7 @@ implements ServiceConnection, Database.Defs {
 			if( stateStocker.getState(ControlIDs.TAB_ID_MAIN) != null )
 			{
 				// 前のタブのレシーバを登録解除
-				stateStocker.getState(ControlIDs.TAB_ID_MAIN).unregisterReceivers(IDisplayState.STATUS_ON_PAUSE);
+				stateStocker.getState(ControlIDs.TAB_ID_MAIN).unregisterReceivers(IDisplayState.STATUS_ON_DESTROY);
 			}
 			// 選択されているタブの変更
 			tabStocker.setCurrentTabPageId(ControlIDs.TAB_ID_MAIN, mainTab );
@@ -735,6 +770,8 @@ implements ServiceConnection, Database.Defs {
                 {
                 	stateMedia.ChangeDisplayBasedOnThisState(
                 			tabStocker.getTab(ControlIDs.TAB_ID_MEDIA));
+                	// 別のメインタブの子タブの選択をクリア
+                	// tabStocker.getTab(ControlIDs.TAB_ID_PLAY).setCurrentTab( TabPage.TABPAGE_ID_NONE, true );
                 }
         	}
     	}
@@ -792,6 +829,9 @@ implements ServiceConnection, Database.Defs {
             		Log.w("statePlayTab.ChangeDisplayBasedOnThisState", "come");
             		statePlayTab.ChangeDisplayBasedOnThisState(
             				tabStocker.getTab(ControlIDs.TAB_ID_PLAY));
+                	// 別のプレイタブを選択
+                	// tabStocker.getTab(ControlIDs.TAB_ID_PLAY).setCurrentTab( TabPage.TABPAGE_ID_PLAY_SUB, true );
+            		
                 }
         	}
     	}
@@ -875,12 +915,13 @@ implements ServiceConnection, Database.Defs {
 	 */
 	public void sendUpdateMessage(int tabID,int tabPageID, Boolean bForce)
 	{
-    	Message msg = Message.obtain();
-    	msg.what = TabSelectAction.MSG_ID_TAB_SELECT;
-    	msg.obj = bForce;
-    	msg.arg1 = tabID;
-    	msg.arg2 = tabPageID;
-    	handler.sendMessage(msg);
+//    	Message msg = Message.obtain();
+//    	msg.what = TabSelectAction.MSG_ID_TAB_SELECT;
+//    	msg.obj = bForce;
+//    	msg.arg1 = tabID;
+//    	msg.arg2 = tabPageID;
+//    	handler.sendMessage(msg);
+		selectTab(tabID,tabPageID,bForce);
 	}
 	
 	/**
@@ -972,9 +1013,10 @@ implements ServiceConnection, Database.Defs {
 					tabStocker.getCurrentTabPageId(tabID), page, bNotUpdateIfNotEmpty );
 		}
 		else	
-		if( tabID == ControlIDs.TAB_ID_PLAY )
+		//if( tabID == ControlIDs.TAB_ID_PLAY )
+		if( tabID == ControlIDs.TAB_ID_MAIN )
 		{
-			if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_PLAY) == TabPage.TABPAGE_ID_NOW_PLAYLIST )
+			if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MAIN) == TabPage.TABPAGE_ID_NOW_PLAYLIST )
 			{
 				// TODO: 現在、トラックと同じカーソルになっているが、考えた方がいいかもしれない
 				// NOWPLAYLIST

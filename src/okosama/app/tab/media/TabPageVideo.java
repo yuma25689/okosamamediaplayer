@@ -6,7 +6,6 @@ import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.adapter.TrackListRawAdapter;
-import okosama.app.behavior.TrackListBehavior;
 import okosama.app.behavior.VideoListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.panel.MoveTabInfo;
@@ -68,8 +67,8 @@ public class TabPageVideo extends TabPage {
 		// 右フリック時の設定
 		MoveTabInfo mtiR = new MoveTabInfo();
 		mtiR.setTabInfoIndex( MoveTabInfo.RIGHT_1 );
-		mtiR.setTabId(ControlIDs.TAB_ID_MEDIA);
-		mtiR.setTabPageId(TabPage.TABPAGE_ID_ALBUM);
+		mtiR.setTabId(ControlIDs.TAB_ID_MAIN);
+		mtiR.setTabPageId(TabPage.TABPAGE_ID_PLAY);
 		mtiR.setPanelId(R.id.right_move_panel);
 		mtiR.setImageViewId(R.id.right_move_image);
 		mtiR.setTabImageResId(R.drawable.albumtabbtn_normal);

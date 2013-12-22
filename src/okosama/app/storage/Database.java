@@ -28,6 +28,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.ArtistColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
+import android.provider.MediaStore.Audio.GenresColumns;
 import android.provider.MediaStore.Audio.PlaylistsColumns;
 import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
@@ -72,72 +73,10 @@ public class Database {
 	// Context
 	static OkosamaMediaPlayerActivity ctx = null;
 	
-	// Cursors保存用
-	// 2013/11/02 del ->
-	// カーソルの保持を削除
-//	public static final String AlbumCursorName ="AlbumCursor";
-//	public static final String ArtistCursorName ="ArtistCursor";
-//	public static final String SongCursorName ="SongCursor";
-//	public static final String PlaylistCursorName ="PlaylistCursor";
-//	HashMap<String,Cursor> CursorMap = new HashMap<String,Cursor>();
-	// 2013/11/02 del <-
-	
-	
 	// playlist定数
 	public static final String PlaylistName_NowPlaying = "nowplaying";
 	public static final String PlaylistName_Podcasts = "podcasts";
 	public static final String PlaylistName_RecentlyAdded = "recentlyadded";
-
-	// 2013/11/02 del ->	
-//	/**
-//	 * 指定された名前のカーソルを返却する
-//	 * @param cursorName
-//	 * @return
-//	 */
-//	public Cursor getCursor(String cursorName)
-//	{
-//		if( CursorMap.containsKey(cursorName) == false)
-//		{
-//			return null;
-//		}
-//		return CursorMap.get(cursorName);
-//	}
-	/**
-	 * 指定された名前のカーソルを設定する
-	 * @param cursorName
-	 * @param cursor
-	 */
-//	public void setCursor(String cursorName, Cursor cursor )
-//	{
-//		if( CursorMap.containsKey(cursorName) == true )
-//		{
-//			if( cursor == CursorMap.get(cursorName) )
-//			{
-//				return;
-//			}
-//			if( CursorMap.get(cursorName) != null 
-//			&& false == CursorMap.get(cursorName).isClosed() )
-//			{
-//				CursorMap.get(cursorName).close();
-//			}
-//		}		
-//		CursorMap.put( cursorName, cursor );
-//	}
-//	/**
-//	 * 全てのカーソルをクリアする
-//	 */
-//	public void clearCursor()
-//	{
-//		for( Map.Entry<String, Cursor> e : CursorMap.entrySet() )
-//		{
-//			if( false == e.getValue().isClosed() )
-//			{
-//				e.getValue().close();
-//			}
-//		}
-//		CursorMap.clear();
-//	}
-	// 2013/11/02 del <-	
 	
 	/**
 	 * 同期でクエリを発行する
@@ -196,28 +135,9 @@ public class Database {
         	uri = MediaStore.Audio.Artists.INTERNAL_CONTENT_URI;
         }
         
-        // Add in the filtering constraints
         // 引数で指定されたfilter用の単語で、SQLのwhere句を指定？
         // アーティスト名の一部の配列
         String [] keywords = null;
-//        if (filter != null) {
-//        	// 半角スペースでsplit
-//            String [] searchWords = filter.split(" ");
-//            keywords = new String[searchWords.length];
-//            Collator col = Collator.getInstance();
-//            col.setStrength(Collator.PRIMARY);
-//            for (int i = 0; i < searchWords.length; i++) {
-//                String key = MediaStore.Audio.keyFor(searchWords[i]);
-//                key = key.replace("\\", "\\\\");
-//                key = key.replace("%", "\\%");
-//                key = key.replace("_", "\\_");
-//                keywords[i] = '%' + key + '%';
-//            }
-//            for (int i = 0; i < searchWords.length; i++) {
-//                where.append(" AND ");
-//                where.append(AudioColumns.ARTIST_KEY + " LIKE ? ESCAPE '\\'");
-//            }
-//        }
         
         // カラムの設定
         String[] cols = new String[] {
@@ -465,12 +385,12 @@ public class Database {
         
         // コンテントプロバイダのuriを設定
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-        String external_string = "external";
-        if( get_external == false )
-        {
-        	uri = MediaStore.Video.Media.INTERNAL_CONTENT_URI;
-        	external_string = "internal";	// 多分、これでよい
-        }
+//        String external_string = "external";
+//        if( get_external == false )
+//        {
+//        	uri = MediaStore.Video.Media.INTERNAL_CONTENT_URI;
+//        	external_string = "internal";	// 多分、これでよい
+//        }
         
         // フィルタの設定
         // これは、アーティストかアルバムどちらでもよい
@@ -509,6 +429,11 @@ public class Database {
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.ARTIST_ID,
             MediaStore.Audio.Media.DURATION
+    };    
+    // カラム
+    private static final String mGenreCols[] = new String[] {
+            MediaStore.Audio.Genres._ID,
+            MediaStore.Audio.Genres.NAME,
     };    
     // プレイリストのカラム？
     static final String mPlaylistMemberCols[] = new String[] {
@@ -550,12 +475,12 @@ public class Database {
         
         // トラックのコンテントプロバイダのuriを設定
     	Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-    	String strExOrIn = "external";
-        if( get_external == false )
-        {
-        	uri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
-        	strExOrIn = "internal";
-        }        	
+//    	String strExOrIn = "external";
+//        if( get_external == false )
+//        {
+//        	uri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
+//        	strExOrIn = "internal";
+//        }        	
         
         	mSortOrder = AudioColumns.TRACK + ", " + mSortOrder;
             // 音楽指定
@@ -587,6 +512,56 @@ public class Database {
         //}
         return ret;
     }
+    /**
+     * ジャンルカーソルの作成
+     * @return Cursor
+     */
+    public Cursor createGenreCursor() 
+    {
+        Cursor ret = null;
+        // ソート条件に、名前を設定
+        //mSortOrder = GenresColumns.NAME;
+        // タイトルが空でないものを条件に
+        StringBuilder where = new StringBuilder();
+        where.append(GenresColumns.NAME + " != ''");
+
+        // フィルタを設定
+        // Add in the filtering constraints
+        String [] keywords = null;
+        
+        // ジャンルのコンテントプロバイダのuriを設定
+    	Uri uri = MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI;
+        
+        // クエリ発行
+        ret = query(ctx, uri,
+        		mGenreCols, where.toString(), keywords, GenresColumns.NAME);
+        return ret;
+    }
+    /**
+     * そのジャンルの全ての楽曲を取得したカーソルを作成
+     * @return Cursor
+     */
+    public Cursor createSongListCursorFromGenre(long genreId) 
+    {
+        Cursor ret = null;
+        
+        // トラックのコンテントプロバイダのuriを設定
+    	String strExOrIn = "external";
+        if( get_external == false )
+        {
+        	strExOrIn = "internal";
+        }        	
+        Uri uri = MediaStore.Audio.Genres.Members.getContentUri(strExOrIn, genreId);
+        String[] cols = new String[] {
+        	MediaStore.Audio.Media._ID
+        };
+
+        // クエリ発行
+        ret = query(ctx, uri,
+        		cols, null, null, mSortOrder);
+        return ret;
+    }
+
     /**
      * nowplayingカーソルクラス？
      * @author 25689
@@ -764,17 +739,17 @@ public class Database {
         /**
          * プレイリストの全てのidをログ出力？
          */
-        private void dump() {
-            String where = "(";
-            for (int i = 0; i < mSize; i++) {
-                where += mNowPlaying[i];
-                if (i < mSize - 1) {
-                    where += ",";
-                }
-            }
-            where += ")";
-            Log.i("NowPlayingCursor: ", where);
-        }
+//        private void dump() {
+//            String where = "(";
+//            for (int i = 0; i < mSize; i++) {
+//                where += mNowPlaying[i];
+//                if (i < mSize - 1) {
+//                    where += ",";
+//                }
+//            }
+//            where += ")";
+//            Log.i("NowPlayingCursor: ", where);
+//        }
 
         /**
          * 現在行の指定カラムの文字列取得？

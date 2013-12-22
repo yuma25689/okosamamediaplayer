@@ -21,7 +21,7 @@ public class DisplayStateNowPlaylist extends absDisplayStateMediaTab {
 	@Override
 	public long updateDisplay() {
 		long ret =  AppStatus.NO_REFRESH;
-		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(ControlIDs.TAB_ID_PLAY, false);
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(ControlIDs.TAB_ID_MAIN, false);
 		return ret;
 	}
 	@Override
@@ -32,7 +32,7 @@ public class DisplayStateNowPlaylist extends absDisplayStateMediaTab {
 		case MENU_UPDATE:
 			// NowPlaylistÇçƒìxí[ññÇ©ÇÁì«Ç›íºÇ∑
 			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
-				ControlIDs.TAB_ID_PLAY,
+				ControlIDs.TAB_ID_MAIN,
 				true
 			);
 			return 0;

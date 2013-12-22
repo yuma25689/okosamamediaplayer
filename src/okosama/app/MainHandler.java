@@ -88,11 +88,13 @@ public class MainHandler extends Handler {
 	        	{	                
 	                OkosamaMediaPlayerActivity.getResourceAccessor().initMotionSenser(mActivity);
 	                OkosamaMediaPlayerActivity.getResourceAccessor().initSound();
-	        		
+	
+	                // * 作成順番依存性有り
+	                // PlayControlPanelから、TimeControlPanelとNowPlayingControlPanelへの参照
 	        		TimeControlPanel.createInstance(mActivity);
-	        		PlayControlPanel.createInstance(mActivity);
-	        		SubControlPanel.createInstance(mActivity);
 	        		NowPlayingControlPanel.createInstance(mActivity);
+	        		SubControlPanel.createInstance(mActivity);
+	        		PlayControlPanel.createInstance(mActivity);
 		            
 	        		// 初期化されていなければ、タブを作成
 	        		// このアクティビティのレイアウトクラスを渡す
@@ -147,29 +149,30 @@ public class MainHandler extends Handler {
 	           	// 初期化時に、全てのメディアを取得する
 	           	// if( bDataRestored == false )
            		//Log.d("msg_init_end","force rescan");
+	           	mActivity.getGenreStocker().stockMediaDataFromDevice();
 	           	mActivity.getAdpStocker().initAllAdapter();
 	           	//mActivity.setForceRefreshFlag(false);
         		mActivity.queueNextRefresh(1000);
 	    		break;
         	}
-        	case TabSelectAction.MSG_ID_TAB_SELECT:
-        	{
-        		Log.w("tab select msg","id=" + message.arg1);
-        		// タブが選択された通知
-
-        		// タブIDを更新
-        		mActivity.updateTabId( message.arg1, message.arg2, (Boolean)message.obj );
-
-        		// リスナを更新
-        		mActivity.updateListeners(IDisplayState.STATUS_ON_CREATE);
-        		mActivity.updateListeners(IDisplayState.STATUS_ON_RESUME);
-            	// メディアを更新
-            	mActivity.reScanMediaAndUpdateTabPage(message.arg1,false);
-            	// 共通部分再描画
-        		mActivity.queueNextRefresh(100);
-        		mActivity.updatePlayStateButtonImage();
-        		break;
-        	}
+//        	case TabSelectAction.MSG_ID_TAB_SELECT:
+//        	{
+//        		Log.w("tab select msg","id=" + message.arg1);
+//        		// タブが選択された通知
+//
+//        		// タブIDを更新
+//        		mActivity.updateTabId( message.arg1, message.arg2, (Boolean)message.obj );
+//
+//        		// リスナを更新
+//        		mActivity.updateListeners(IDisplayState.STATUS_ON_CREATE);
+//        		mActivity.updateListeners(IDisplayState.STATUS_ON_RESUME);
+//            	// メディアを更新
+//            	mActivity.reScanMediaAndUpdateTabPage(message.arg1,false);
+//            	// 共通部分再描画
+//        		mActivity.queueNextRefresh(100);
+//        		mActivity.updatePlayStateButtonImage();
+//        		break;
+//        	}
 		}
 	}
 

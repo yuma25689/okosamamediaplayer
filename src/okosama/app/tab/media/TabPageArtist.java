@@ -2,12 +2,10 @@ package okosama.app.tab.media;
 
 import java.util.ArrayList;
 
-import okosama.app.AppStatus;
 import okosama.app.ControlDefs;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.behavior.AlbumListBehavior;
 import okosama.app.behavior.ArtistListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.panel.MoveTabInfo;
@@ -18,7 +16,6 @@ import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.tab.TabPage;
 import okosama.app.widget.ExpList;
-import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
 import android.graphics.Color;
 import android.view.ViewGroup;

@@ -42,8 +42,8 @@ public class TabPageNowPlaylist extends TabPage {
 		// 左フリック時の設定
 		MoveTabInfo mti = new MoveTabInfo();
 		mti.setTabInfoIndex( MoveTabInfo.LEFT_1 );
-		mti.setTabId(ControlIDs.TAB_ID_PLAY);
-		mti.setTabPageId(TabPage.TABPAGE_ID_PLAY_SUB);
+		mti.setTabId(ControlIDs.TAB_ID_MAIN);
+		mti.setTabPageId(TabPage.TABPAGE_ID_PLAY);
 		mti.setPanelId(R.id.left_move_panel);
 		mti.setImageViewId(R.id.left_move_image);
 		mti.setTabImageResId(R.drawable.brat_main_normal);
@@ -51,8 +51,8 @@ public class TabPageNowPlaylist extends TabPage {
 		// 右フリック時の設定
 		MoveTabInfo mtiR = new MoveTabInfo();
 		mtiR.setTabInfoIndex( MoveTabInfo.RIGHT_1 );
-		mtiR.setTabId(ControlIDs.TAB_ID_PLAY);
-		mtiR.setTabPageId(TabPage.TABPAGE_ID_PLAY_SUB);
+		mtiR.setTabId(ControlIDs.TAB_ID_MAIN);
+		mtiR.setTabPageId(TabPage.TABPAGE_ID_MEDIA);
 		mtiR.setPanelId(R.id.right_move_panel);
 		mtiR.setImageViewId(R.id.right_move_image);
 		mtiR.setTabImageResId(R.drawable.video_normal);

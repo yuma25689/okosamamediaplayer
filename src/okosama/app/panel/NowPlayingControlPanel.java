@@ -76,29 +76,22 @@ public class NowPlayingControlPanel extends ControlPanel {
 
 		//////////////////// button //////////////////////////
 		TabComponentPropertySetter creationData[] = {
-				// --------------------- SONG
-				new TabComponentPropertySetter(
-					ControlIDs.TIME_SONG_LABEL, null, ComponentType.LABEL, 
-					30, 160, 400, 50
-					, null, drawable.no_image, "", ScaleType.FIT_XY
-				),		
 				// --------------------- ARTIST
 				new TabComponentPropertySetter(
 					ControlIDs.TIME_ARTIST_LABEL, null, ComponentType.LABEL, 
-					35, 300, 400, 50
+					35, 300, 400, 80
 					, null, drawable.no_image, "", ScaleType.FIT_XY
 				),		
 				// --------------------- ALBUM
 				new TabComponentPropertySetter(
 					ControlIDs.TIME_ALBUM_LABEL, null, ComponentType.LABEL, 
-					35, 360, 400, 50
+					35, 380, 400, 80
 					, null, drawable.no_image, "", ScaleType.FIT_XY
 				),			
 		};
 	
 		absWidget widgets[] = {
-				getNowPlayingSongLabel()
-				,getNowPlayingArtistLabel()
+				getNowPlayingArtistLabel()
 				,getNowPlayingAlbumLabel()
 			};
 		// ---- action
@@ -132,6 +125,7 @@ public class NowPlayingControlPanel extends ControlPanel {
 			tabBaseLayout.addView( widget.getView() );
 			i++;
 		}
+		//tabBaseLayout.setBackgroundResource(R.drawable.okosama_app_widget_bg);		
 	}
 	Label nowPlayingSongLabel = null;
 	public Label getNowPlayingSongLabel()
