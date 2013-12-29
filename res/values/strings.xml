@@ -422,5 +422,9 @@
     <string name="headset_disconnect_and_pause">Pause the media because headset disconnected.</string>
     <string name="headset_connect_and_play">Play the media because headset connected.</string>
     
+    <string name="move_playtab_title">confirmation</string>
+    <string name="move_playtab_message">Are you sure move to playing information tab?(This dialog auto cancel %ssecond later.))</string>
+    <string name="alert_dialog_yes">Yes</string>
+    <string name="alert_dialog_no">No</string>
 </resources>
 

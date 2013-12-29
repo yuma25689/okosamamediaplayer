@@ -81,7 +81,7 @@ public class TabPageVideo extends TabPage {
         		0, 0
         );
 		// ステータスバーの取得、アイコンの設定
-		View v = tabBaseLayout.findViewById(R.id.top_info_bar);
+		View v = tabBaseLayout.findViewById(R.id.bottom_info_bar);
 	    ImageView icon = (ImageView) v.findViewById(R.id.icon);
 	    BitmapDrawable albumIcon 
 	    =  (BitmapDrawable)OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
@@ -98,7 +98,7 @@ public class TabPageVideo extends TabPage {
         		RelativeLayout.LayoutParams.FILL_PARENT,
 				RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-		lpList.addRule(RelativeLayout.BELOW,R.id.top_info_bar);
+		lpList.addRule(RelativeLayout.ABOVE,R.id.bottom_info_bar);
 		
 		TabComponentPropertySetter creationData[] = {
 			// ------------- TAB

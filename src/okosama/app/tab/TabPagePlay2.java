@@ -49,4 +49,14 @@ public class TabPagePlay2 extends TabPage {
 		
 		return 0;
 	}
+	@Override
+	public void setActivate( boolean bActivate )
+	{
+		super.setActivate(bActivate);
+		if( bActivate )
+		{
+			TabPagePlay tabPlay = (TabPagePlay) tabContent.getChild(TABPAGE_ID_PLAY_SUB);
+			tabPlay.updateAlbumArtOnThePlayTab();
+		}
+	}	
 }

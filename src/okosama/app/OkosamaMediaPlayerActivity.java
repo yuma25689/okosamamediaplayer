@@ -1,5 +1,6 @@
 package okosama.app;
 
+import okosama.app.action.MediaStopAction;
 import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.AdapterStocker;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
@@ -1067,6 +1068,9 @@ implements ServiceConnection, Database.Defs {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+		// îjä¸éûÇÕÅAã»Ç‡ÉNÉäÉA 
+		MediaStopAction stopAction = new MediaStopAction();
+		stopAction.doAction(null);
 		super.onDestroy();
 	}
 

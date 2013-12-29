@@ -9,17 +9,20 @@ import java.util.HashMap;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.TimerAlertDialog;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -562,9 +565,36 @@ public class MediaPlayerUtil {
 //        	OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().sendUpdateMessage( 
 //        			ControlIDs.TAB_ID_MAIN, TabPage.TABPAGE_ID_PLAY, true );
         	
-    		IViewAction action = new TabSelectAction( ControlIDs.TAB_ID_MAIN,
-    				TabPage.TABPAGE_ID_PLAY );
-    		action.doAction(null);
+        	OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+        	TimerAlertDialog.Builder dlgConfirm = new TimerAlertDialog.Builder(act);
+            // アラートダイアログのタイトルを設定します
+        	dlgConfirm.setTitle(R.string.move_playtab_title);
+            // アラートダイアログのメッセージを設定します
+        	dlgConfirm.setMessage(act.getString(R.string.move_playtab_message));
+            // アラートダイアログの肯定ボタンがクリックされた時に呼び出されるコールバックリスナーを登録します
+        	dlgConfirm.setPositiveButton(R.string.alert_dialog_yes,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                    		IViewAction action = new TabSelectAction( ControlIDs.TAB_ID_MAIN,
+                    				TabPage.TABPAGE_ID_PLAY );
+                    		action.doAction(null);                        	
+                        }
+                    });
+            // アラートダイアログの否定ボタンがクリックされた時に呼び出されるコールバックリスナーを登録します
+        	dlgConfirm.setNegativeButton(R.string.alert_dialog_no,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+            // アラートダイアログのキャンセルが可能かどうかを設定します
+        	dlgConfirm.setCancelable(true);
+        	// アラートダイアログを作成、表示します
+        	// TimerAlertDialog dlg = 
+			dlgConfirm.create();
+			dlgConfirm.show();
+        	// dlg.show();
         }
     }
     public static void addToCurrentPlaylist(Context context, MediaInfo [] list) {

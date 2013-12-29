@@ -273,6 +273,7 @@ public final class R {
         public static final int album_appwidget=0x7f0c0002;
         public static final int artist=0x7f0c0004;
         public static final int artistalbum=0x7f0c0015;
+        public static final int bottom_info_bar=0x7f0c001b;
         public static final int cancel=0x7f0c000a;
         public static final int control_back=0x7f0c0005;
         public static final int control_next=0x7f0c0007;
@@ -303,7 +304,6 @@ public final class R {
         public static final int tab_linearlayout=0x7f0c001c;
         public static final int tab_relativelayout_tabcontent=0x7f0c0016;
         public static final int title=0x7f0c0003;
-        public static final int top_info_bar=0x7f0c001b;
         public static final int trackname=0x7f0c0014;
     }
     public static final class layout {
@@ -380,6 +380,8 @@ public final class R {
  Do not translate. This is the separator character used when building the string that shows number of albums and songs. 
          */
         public static final int albumsongseparator=0x7f080065;
+        public static final int alert_dialog_no=0x7f08008f;
+        public static final int alert_dialog_yes=0x7f08008e;
         /**  All media screen title 
  All media screen title 
          */
@@ -509,6 +511,8 @@ The fast scroll thumb will show one character from this string depending on the 
  title of contextual music search menu 
          */
         public static final int mediasearch=0x7f080049;
+        public static final int move_playtab_message=0x7f08008d;
+        public static final int move_playtab_title=0x7f08008c;
         /**   Title of the music picker activity. 
   Title of the music picker activity. 
          */

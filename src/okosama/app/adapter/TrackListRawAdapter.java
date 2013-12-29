@@ -1,6 +1,8 @@
 package okosama.app.adapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
@@ -32,9 +34,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AlphabetIndexer;
 //import android.widget.AlphabetIndexer;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.SectionIndexer;
 //import android.widget.SectionIndexer;
 //import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -44,9 +48,13 @@ import android.widget.TextView;
  * @author 25689
  *
  */
-public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAdapterUpdate { 
+public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAdapterUpdate, SectionIndexer { 
 //implements SectionIndexer {
 
+	// private HashMap<String, Integer> mIndexer = new HashMap<String, Integer>();
+	private ArrayList<Integer> mSectionIndex = new ArrayList<Integer>();
+	private ArrayList<String> mSection = new ArrayList<String>();
+	private String[] sections;
 	private ArrayList<TrackData> allItems = new ArrayList<TrackData>();
 	// TODO:次へボタン等
 	int maxShowCount = 500;
@@ -117,11 +125,9 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     {
     	artistId = id;
     }
-    private final StringBuilder mBuilder = new StringBuilder();
+    // private final StringBuilder mBuilder = new StringBuilder();
     private final String mUnknownArtist;
-    
-    //private AlphabetIndexer mIndexer;
-    
+        
     private OkosamaMediaPlayerActivity mActivity = null;
     //private TrackQueryHandler mQueryHandler;
     // private QueryHandler mQueryHandler;
@@ -199,15 +205,6 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
                 mAudioIdIdx = cursor.getColumnIndexOrThrow(MediaColumns._ID);
                 return 1;
             }
-            
-            // インデクサの設定
-//            if (mIndexer != null) {
-//                mIndexer.setCursor(cursor);
-//            } else if (!mActivity.isEditMode()) {
-//                String alpha = mActivity.getString(R.string.fast_scroll_alphabet);
-//            
-//                mIndexer = new MusicAlphabetIndexer(cursor, mTitleIdx, alpha);
-//            }
         }
         return 0;
     }
@@ -559,9 +556,16 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     	ArrayList<TrackData> items = allItems;
     	clear();
     	
+        // インデクサの設定
+    	mSectionIndex.clear();
+    	mSection.clear();
+        String pre_initial = "";
+        // int index_num = 0;  
+    	
     	synchronized( allItems )
     	{
 			// Log.d("id", "itemCount:" + allItems.size() + " albumID:" + albumId );
+    		int index = 0;
 			for (TrackData data : items) {
 	    		// ここでフィルタをかけてしまう？
 	    		if( false == isShowData( data ) )
@@ -570,14 +574,31 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	    		}
 	    	    add(data);
 	    	    currentAllAudioIds.add(data.getTrackAudioId());
+	    	    
+	    	    // インデクサの設定
+	    	    String initial = data.getTrackTitle().substring(0, 1); // nameの頭文字を基準に区切る  
+	    	    if(!initial.equalsIgnoreCase(pre_initial)){ // 頭文字の判定(頭文字が変わったら追加)  
+	    	    	mSectionIndex.add( index );//+ index_num); 
+	    	        mSection.add(initial);
+	    	        // index_num++;
+	    	        pre_initial = initial;
+	    	    }
+	    	    
 	        	if( maxShowCount < this.getCount() )
 	    		{
 	    			// maxの表示件数以上は、表示しない
 	    			// TODO:ページきりかえ未対応なので、最初のmaxShowCount件しか表示できていない
 	    			break;
 	    		}
+	    	    index++;
 	    	}
     	}
+    	// インデクサの設定
+    	// ArrayList<String> sectionList = new ArrayList<String>(mSection.keySet());   
+        //Collections.sort(sectionList);    	
+        sections = new String[mSection.size()];  
+        mSection.toArray(sections);
+    	
     	notifyDataSetChanged();
     }
 
@@ -625,6 +646,19 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
    		{
    			mActivity.reScanMediaOfMediaTab(TabPage.TABPAGE_ID_SONG);
    		}
+	}
+	@Override
+	public int getPositionForSection(int section) {
+		// 指定されたセクションが始まるポジションのindexを返す
+		return mSectionIndex.get(section);
+	}
+	@Override
+	public int getSectionForPosition(int position) {
+		return 1;
+	}
+	@Override
+	public Object[] getSections() {
+		return sections;
 	}
 	
 }

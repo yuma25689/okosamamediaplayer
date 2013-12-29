@@ -555,7 +555,7 @@ public class Database {
         	strExOrIn = "internal";
         }        	
         Uri uri = MediaStore.Audio.Genres.Members.getContentUri(strExOrIn, genreId);
-        Log.i("genre - uri", "uri = " + uri);
+        // Log.i("genre - uri", "uri = " + uri);
         String[] cols = new String[] {
         	MediaStore.Audio.Media._ID //,
         	//MediaStore.Audio.Genres.Members.AUDIO_ID

@@ -101,7 +101,7 @@ public class TabPageAlbum extends TabPage {
         		RelativeLayout.LayoutParams.FILL_PARENT,
 				RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-		lpList.addRule(RelativeLayout.BELOW,R.id.top_info_bar);
+		lpList.addRule(RelativeLayout.ABOVE,R.id.bottom_info_bar);
 		lpList.addRule(RelativeLayout.RIGHT_OF,R.id.left_move_panel);
 		lpList.addRule(RelativeLayout.LEFT_OF,R.id.right_move_panel);
 		// ÉäÉXÉgÇÃçÏê¨

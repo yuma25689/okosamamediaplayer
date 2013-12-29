@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
-import android.view.View;
+// import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -250,10 +250,10 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 					x = (int)(x * FLICK_MOVE_SPEED);
 		            x = limitMaxCurrentX( x );
 		            
-    				int y = OkosamaMediaPlayerActivity.dispInfo.getCorrectionYConsiderDensity(
-    						currentY);
-    				int height = OkosamaMediaPlayerActivity.dispInfo.getCorrectionYConsiderDensity(
-    						currentY ) + getHeight();
+//    				int y = OkosamaMediaPlayerActivity.dispInfo.getCorrectionYConsiderDensity(
+//    						currentY);
+//    				int height = OkosamaMediaPlayerActivity.dispInfo.getCorrectionYConsiderDensity(
+//    						currentY ) + getHeight();
     				
     				// rlPanel.layout(x, y, x + width, y + height);
 

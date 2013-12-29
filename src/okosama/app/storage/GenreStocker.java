@@ -31,12 +31,15 @@ public class GenreStocker {
 	public ArrayList<GenreData> getGenreOfAudio( long audioId )
 	{
 		ArrayList<GenreData> ret = null;
-		Log.i("getGenreOfAudio", "allGenreOfAudio size=" + allGenreOfAudio.size() );
+		// Log.i("getGenreOfAudio", "allGenreOfAudio size=" + allGenreOfAudio.size() );
 		
-		if( allGenreOfAudio.containsKey(audioId) )
-		{
-			ret = allGenreOfAudio.get(audioId);
-		}
+		synchronized( allGenreOfAudio )
+    	{
+			if( allGenreOfAudio.containsKey(audioId) )
+			{
+				ret = allGenreOfAudio.get(audioId);
+			}
+    	}
 		return ret;
 	}
 	
@@ -134,31 +137,37 @@ public class GenreStocker {
 				            		
 					    			Cursor cursorAudio = Database.getInstance(
 					    					OkosamaMediaPlayerActivity.isExternalRef()
-					    			).createSongListCursorFromGenre(data.getGenreId());			
-							        // Log.i("Tag-Number of songs for this genre", data.getGenreName() + ":" + cursorAudio.getCount()+"");
-									if(cursorAudio.moveToFirst())
-									{
-										do{
-											int index=cursorAudio.getColumnIndexOrThrow(
-													MediaStore.Audio.Media._ID);
-											//String strAudioId = cursorAudio.getString(index);
-											long audioId = cursorAudio.getLong(index);
-											ArrayList<GenreData> arrGenreOfAudio = null;//new ArrayList<GenreData>();
-											if( allGenreOfAudio.containsKey(audioId) )
-											{
-												arrGenreOfAudio = allGenreOfAudio.get(audioId);
-											}
-											else
-											{
-												arrGenreOfAudio = new ArrayList<GenreData>();
-											}
-											arrGenreOfAudio.add(data);
-											// Log.i("stock - genre", audioId + " " + data.getGenreId() );
-											allGenreOfAudio.put(audioId, arrGenreOfAudio);
-										}while(
-											OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false
-											&& cursorAudio.moveToNext());
-									}
+					    			).createSongListCursorFromGenre(data.getGenreId());
+					    			try
+					    			{
+								        // Log.i("Tag-Number of songs for this genre", data.getGenreName() + ":" + cursorAudio.getCount()+"");
+										if(cursorAudio.moveToFirst())
+										{
+											do{
+												int index=cursorAudio.getColumnIndexOrThrow(
+														MediaStore.Audio.Media._ID);
+												//String strAudioId = cursorAudio.getString(index);
+												long audioId = cursorAudio.getLong(index);
+												ArrayList<GenreData> arrGenreOfAudio = null;//new ArrayList<GenreData>();
+												if( allGenreOfAudio.containsKey(audioId) )
+												{
+													arrGenreOfAudio = allGenreOfAudio.get(audioId);
+												}
+												else
+												{
+													arrGenreOfAudio = new ArrayList<GenreData>();
+												}
+												arrGenreOfAudio.add(data);
+												// Log.i("stock - genre", audioId + " " + data.getGenreId() );
+												allGenreOfAudio.put(audioId, arrGenreOfAudio);
+											}while(
+												OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false
+												&& cursorAudio.moveToNext());
+										}
+					        		} finally {
+					        			cursorAudio.close();
+					        		}
+										
 									allItems.add(data);
 				        		} while( 
 				        		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false 

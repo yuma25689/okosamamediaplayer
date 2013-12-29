@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.panel.MoveTabInfo;
 import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
@@ -12,9 +13,14 @@ import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TabMoveLeftInfoPanel;
 import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.panel.TimeControlPanel;
+import okosama.app.service.MediaPlayerUtil;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.View.OnTouchListener;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -70,28 +76,6 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
         );
 		tabBaseLayout.setLayoutParams(lp);
 		
-		// ---- action
-//		SparseArray< IViewAction > actMapTemp 
-//			= new SparseArray< IViewAction >();
-//		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( parent, tabId ) );
-//		TabComponentActionSetter actionSetter = new TabComponentActionSetter( actMapTemp );			
-//		tabButton.acceptConfigurator(actionSetter);
-		
-		//////////////////// button //////////////////////////
-//		TabComponentPropertySetter creationData[] = {
-//			// --------------------- STOP
-//			new TabComponentPropertySetter(
-//				ControlIDs.STOP_BUTTON, this, ComponentType.BUTTON, 
-//				150, 500, 100, 100
-//				, null, R.drawable.stop_button_image, "", ScaleType.FIT_XY
-//			),
-//			// --------------------- TWITTER
-//			new TabComponentPropertySetter(
-//				ControlIDs.TWEET_BUTTON, this, ComponentType.BUTTON, 
-//				370, 450, 80, 80
-//				, null, R.drawable.internal_btn_image, "", ScaleType.FIT_XY
-//			),
-//		};
 		
 		// 背景画像はなぜかsetActivateの担当なので、ここでは追加しない
 		
@@ -152,14 +136,21 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 		// TODO: サーフィスビューをいっぱいに入れる
 		SurfaceView videoView 
 		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoView();
-		RelativeLayout.LayoutParams lpVideoView
-		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-        		0, 0 
+//		RelativeLayout.LayoutParams lpVideoView
+//		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+//        		0, 0 
+//        );
+		RelativeLayout.LayoutParams lpVideoView 
+		= new RelativeLayout.LayoutParams(
+        		RelativeLayout.LayoutParams.FILL_PARENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT
         );
+		
 		videoView.setVisibility(View.GONE);
 		videoView.setLayoutParams(lpVideoView);
 		videoView.setOnTouchListener(this);
-		tabBaseLayout.addView( videoView );
+		// TODO:videoを使う時は、コメントを外す
+		// tabBaseLayout.addView( videoView );
 		// tabBaseLayout.setOnTouchListener(new TabViewTouchListener(0,0));
 		rightPanel = new TabMoveRightInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
 		leftPanel = new TabMoveLeftInfoPanel(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
@@ -180,6 +171,18 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 		super.setActivate(bActivate);		
 		if( bActivate )
 		{
+			SurfaceView videoView 
+			= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoView();
+			if( videoView.getParent() != null )
+			{
+				ViewParent v = videoView.getParent();
+				if( v instanceof ViewGroup )
+				{
+					((ViewGroup) v).removeView(videoView);
+				}
+			}			
+			tabBaseLayout.addView( videoView );
+			
 			SubControlPanel.insertToLayout(tabBaseLayout);
 			NowPlayingControlPanel.insertToLayout(tabBaseLayout);
 			TimeControlPanel.insertToLayout(tabBaseLayout);
@@ -192,19 +195,41 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 			{
 				leftPanel.insertToLayout(tabBaseLayout);
 			}
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getControllerShowHideBtn().getView().setVisibility(View.GONE);
+			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+			act.getControllerShowHideBtn().getView().setVisibility(View.GONE);
 		}
 		else
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getControllerShowHideBtn().getView().setVisibility(View.VISIBLE);	
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().
+			getControllerShowHideBtn().getView().setVisibility(View.VISIBLE);	
 		}
+	}
+	public void updateAlbumArtOnThePlayTab()
+	{
+		OkosamaMediaPlayerActivity act 
+		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();		
+		// できたら、アルバムアートを表示する
+        long currentalbumid = MediaPlayerUtil.getCurrentAlbumId();
+        AlbumListRawAdapter adp = (AlbumListRawAdapter)act.getAdapter(TABPAGE_ID_ALBUM);
+        String art = adp.getAlbumArtFromId((int)currentalbumid);
+    	Log.d("albumart - playpanel","albumID=" + currentalbumid + "art=" + art);
+        if( art != null && art != "")
+        {
+	        Drawable d = MediaPlayerUtil.getCachedArtwork(
+            		act, currentalbumid, null);
+	        tabBaseLayout.setBackgroundDrawable(d);
+        }
+        else
+        {
+        	tabBaseLayout.setBackgroundResource(R.color.gradiant_test);
+        }
 	}
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
         case MotionEvent.ACTION_DOWN:
-        	//Log.e("action down","come");
+        	Log.d("action down","come");
         	updateControlPanel();
             break;
         }

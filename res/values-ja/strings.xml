@@ -149,15 +149,15 @@
     <!-- Default name of album that doesn't have a name in the metadata -->
     <string name="unknown_album_name">アルバム認識不能</string>
     <!-- Toast after turning shuffle on -->
-    <string name="shuffle_on_notif">キューの曲をシャッフル再生します。つまり、順番をめちゃくちゃにして再生します。</string>
+    <string name="shuffle_on_notif">順番をめちゃくちゃにして再生します。</string>
     <!-- Toast after turning shuffle off -->
-    <string name="shuffle_off_notif">キューの曲をシャッフル再生をやめます。つまり、順番通りに再生されます。</string>
+    <string name="shuffle_off_notif">順番通りに再生します。</string>
     <!-- Toast after turning repeat off -->
-    <string name="repeat_off_notif">繰り返し再生をしません。</string>
+    <string name="repeat_off_notif">繰り返しません。</string>
     <!-- Toast after turning single repeat on -->
-    <string name="repeat_current_notif">現在再生中の曲を繰り返し再生し続けます。</string>
+    <string name="repeat_current_notif">現在曲を繰り返します。</string>
     <!-- Toast after turning repeat all on -->
-    <string name="repeat_all_notif">キューの全ての曲を再生し終わったら、もう一度最初の曲から再生します。</string>
+    <string name="repeat_all_notif">全曲を繰り返し再生します。</string>
     <!-- Individual song context menu item -->
     <string name="ringtone_menu">この曲を着信音にします。</string>
     <!-- Menu item -->
@@ -418,8 +418,13 @@
     <string name="sdcard_cant_read">このアプリはSDカード上のメディアを再生するアプリですが、現在、SDカードを読み取れない状態のようです。アプリを終了し、SDカードを読める状態にしてから、アプリを再起動して下さい。</string>
     <string name="left_move_text">今、指を離すと上のアイコンのタブに移動します。</string>
     <string name="right_move_text">今、指を離すと上のアイコンのタブに移動します。</string>
-    <string name="headset_disconnect_and_pause">ヘッドホンが切断されたので、再生を一時停止しました。</string>
-    <string name="headset_connect_and_play">ヘッドホンが接続されたので、再生を再開しました。</string>
+    <string name="headset_disconnect_and_pause">ヘッドホン切断のため、再生を一時停止。</string>
+    <string name="headset_connect_and_play">ヘッドホン接続のため、再生を再開。</string>
+    
+    <string name="move_playtab_title">確認</string>
+    <string name="move_playtab_message">再生画面に移動しますか？(後%s秒で自動的にキャンセルします)</string>
+    <string name="alert_dialog_yes">移動</string>
+    <string name="alert_dialog_no">このまま</string>
     
 </resources>
 

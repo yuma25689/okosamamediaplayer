@@ -15,7 +15,10 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;
@@ -177,6 +180,20 @@ public class Tab extends TabComponentParent {
 		// また、create時のタブIDは不明なので、setCurrentTabはここでは呼ばず、上位に呼ばせる。
 		
 		// rlCont.setBackgroundResource(R.color.gradiant_base);
+		// VideoViewは、使わないが、最初に突っ込むときになぜか画面がブラックアウトするので、
+		// ここで最初に突っ込んでおく（ここは起動時にくるところなので、ブラックアウトしても不自然さがないと思われる）
+		SurfaceView videoView 
+		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoView();
+		videoView.setVisibility(View.GONE);
+		if( videoView.getParent() != null )
+		{
+			ViewParent v = videoView.getParent();
+			if( v instanceof ViewGroup )
+			{
+				((ViewGroup) v).removeView(videoView);
+			}
+		}			
+		tabBaseLayout.addView( videoView );
 		
 		// タブのパネルを親から与えられたレイアウトに追加
 		componentContainer.addView(tabBaseLayout);
