@@ -238,7 +238,7 @@ public class MediaPlayerUtil {
         synchronized(sArtCache) {
             d = sArtCache.get(artIndex);
         }
-        if (d == null) {
+        if (d == null && defaultArtwork != null ) {
             d = defaultArtwork;
             final Bitmap icon = defaultArtwork.getBitmap();
             int w = icon.getWidth();
@@ -476,6 +476,14 @@ public class MediaPlayerUtil {
 //    }
     
     public static void playAll(Context context, MediaInfo [] list, int position, boolean force_shuffle) {
+    	boolean bAlreadyPlayed = false;
+		try {
+			bAlreadyPlayed = sService.isPlaying();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("playAll","service.isPlaying error=" + e.getMessage());
+		}
         if (list.length == 0 || sService == null) {
         	// プレイリストが空ならば、ログを出力、トーストを表示して終了
             Log.d("MusicUtils", "attempt to play empty song list");
@@ -565,37 +573,46 @@ public class MediaPlayerUtil {
 //        	OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().sendUpdateMessage( 
 //        			ControlIDs.TAB_ID_MAIN, TabPage.TABPAGE_ID_PLAY, true );
         	
-        	OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-        	TimerAlertDialog.Builder dlgConfirm = new TimerAlertDialog.Builder(act);
-            // アラートダイアログのタイトルを設定します
-        	dlgConfirm.setTitle(R.string.move_playtab_title);
-            // アラートダイアログのメッセージを設定します
-        	dlgConfirm.setMessage(act.getString(R.string.move_playtab_message));
-            // アラートダイアログの肯定ボタンがクリックされた時に呼び出されるコールバックリスナーを登録します
-        	dlgConfirm.setPositiveButton(R.string.alert_dialog_yes,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                    		IViewAction action = new TabSelectAction( ControlIDs.TAB_ID_MAIN,
-                    				TabPage.TABPAGE_ID_PLAY );
-                    		action.doAction(null);                        	
-                        }
-                    });
-            // アラートダイアログの否定ボタンがクリックされた時に呼び出されるコールバックリスナーを登録します
-        	dlgConfirm.setNegativeButton(R.string.alert_dialog_no,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-            // アラートダイアログのキャンセルが可能かどうかを設定します
-        	dlgConfirm.setCancelable(true);
-        	// アラートダイアログを作成、表示します
-        	// TimerAlertDialog dlg = 
+        }
+        // 下記の条件に一致する場合、タブを移動するかどうかのアラートを出力する
+    	OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+    	if( false == bAlreadyPlayed // メディアが再生中でなかった
+    			// 現在のタブがキューのタブでない
+    	&& false == ( act.getTabStocker().getCurrentTabId() == ControlIDs.TAB_ID_MAIN 
+    		&& act.getTabStocker().getCurrentTabId() == TabPage.TABPAGE_ID_NOW_PLAYLIST )
+    	)
+    	{
+        		
+	    	TimerAlertDialog.Builder dlgConfirm = new TimerAlertDialog.Builder(act);
+	        // アラートダイアログのタイトルを設定します
+	    	dlgConfirm.setTitle(R.string.move_playtab_title);
+	        // アラートダイアログのメッセージを設定します
+	    	dlgConfirm.setMessage(act.getString(R.string.move_playtab_message));
+	        // アラートダイアログの肯定ボタンがクリックされた時に呼び出されるコールバックリスナーを登録します
+	    	dlgConfirm.setPositiveButton(R.string.alert_dialog_yes,
+	                new DialogInterface.OnClickListener() {
+	                    @Override
+	                    public void onClick(DialogInterface dialog, int which) {
+	                		IViewAction action = new TabSelectAction( ControlIDs.TAB_ID_MAIN,
+	                				TabPage.TABPAGE_ID_PLAY );
+	                		action.doAction(null);                        	
+	                    }
+	                });
+	        // アラートダイアログの否定ボタンがクリックされた時に呼び出されるコールバックリスナーを登録します
+	    	dlgConfirm.setNegativeButton(R.string.alert_dialog_no,
+	                new DialogInterface.OnClickListener() {
+	                    @Override
+	                    public void onClick(DialogInterface dialog, int which) {
+	                    }
+	                });
+	        // アラートダイアログのキャンセルが可能かどうかを設定します
+	    	dlgConfirm.setCancelable(true);
+	    	// アラートダイアログを作成、表示します
+	    	// TimerAlertDialog dlg = 
 			dlgConfirm.create();
 			dlgConfirm.show();
-        	// dlg.show();
-        }
+	    	// dlg.show();
+    	}
     }
     public static void addToCurrentPlaylist(Context context, MediaInfo [] list) {
         if (sService == null) {
@@ -660,4 +677,28 @@ public class MediaPlayerUtil {
         }
     }
     
+    public static boolean isNowPlayingVideos()
+    {
+    	if( sService == null )
+    	{
+    		return false;
+    	}
+   		try {
+			int [] listType = sService.getMediaType();
+			
+			if( listType != null && 0 < listType.length)
+			{
+				if( listType[0] == MediaInfo.MEDIA_TYPE_VIDEO )
+				{
+					// キューにある項目の最初の１つがVideoだった時点で、Videoとみなす
+					// (現状、１つでもVideoならば全てVideoのはず)
+					return true;
+				}
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+   		return false;
+    }
 }

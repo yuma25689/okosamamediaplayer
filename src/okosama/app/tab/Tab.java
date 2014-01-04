@@ -32,7 +32,7 @@ import android.widget.ImageView.ScaleType;
  */
 public class Tab extends TabComponentParent {
 
-	public static int HDR_SIZE = 100;
+	//public static int HDR_SIZE = 100;
 	protected SparseArray<Button> mapBtn;
 	int iCurrentTabPageId;
 	// next force refresh

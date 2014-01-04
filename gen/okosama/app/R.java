@@ -322,12 +322,14 @@ public final class R {
         public static final int tab_layout_content_generic_progress=0x7f03000c;
         public static final int tab_layout_header=0x7f03000d;
         public static final int tab_layout_hooter=0x7f03000e;
-        public static final int tab_layout_sdcard_cant_read=0x7f03000f;
-        public static final int track_list_item=0x7f030010;
-        public static final int track_list_item_child=0x7f030011;
-        public static final int track_list_item_common=0x7f030012;
-        public static final int track_list_item_group=0x7f030013;
-        public static final int twitter_auth=0x7f030014;
+        public static final int tab_layout_left_hdr=0x7f03000f;
+        public static final int tab_layout_right_hooter=0x7f030010;
+        public static final int tab_layout_sdcard_cant_read=0x7f030011;
+        public static final int track_list_item=0x7f030012;
+        public static final int track_list_item_child=0x7f030013;
+        public static final int track_list_item_common=0x7f030014;
+        public static final int track_list_item_group=0x7f030015;
+        public static final int twitter_auth=0x7f030016;
     }
     public static final class plurals {
         /**  Toast confirming that song(s) was/were deleted. 

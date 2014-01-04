@@ -1,15 +1,11 @@
 package okosama.app;
 
-import okosama.app.action.TabSelectAction;
 import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
 import okosama.app.panel.SubControlPanel;
-import okosama.app.panel.TabMoveLeftInfoPanel;
-import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.panel.TimeControlPanel;
 import okosama.app.state.IDisplayState;
 import okosama.app.tab.TabPage;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -57,13 +53,14 @@ public class MainHandler extends Handler {
         			}
                 	next = stateMedia.updateDisplay();
                 }
-                else if( mActivity.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_PLAY)
-                		== TabPage.TABPAGE_ID_PLAY_SUB 
-                || mActivity.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_PLAY)
-        		== TabPage.TABPAGE_ID_VIDEO_VIEW )
+                else if( mActivity.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_MAIN)
+                		== TabPage.TABPAGE_ID_PLAY )
+                //|| mActivity.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_PLAY)
+        		//== TabPage.TABPAGE_ID_VIDEO_VIEW )
                 {
                 	IDisplayState statePlayTab 
                 	= mActivity.getStateStocker().getState(
+                		//ControlIDs.TAB_ID_PLAY
                 		ControlIDs.TAB_ID_PLAY
                 	);
         			if( statePlayTab == null )

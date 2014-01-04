@@ -96,14 +96,8 @@ public class TabPageAlbum extends TabPage {
 //		prog.setBackgroundResource(R.drawable.empty);
 		
 		// パネルにのせるリストの位置の設定
-		RelativeLayout.LayoutParams lpList 
-		= new RelativeLayout.LayoutParams(
-        		RelativeLayout.LayoutParams.FILL_PARENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-		lpList.addRule(RelativeLayout.ABOVE,R.id.bottom_info_bar);
-		lpList.addRule(RelativeLayout.RIGHT_OF,R.id.left_move_panel);
-		lpList.addRule(RelativeLayout.LEFT_OF,R.id.right_move_panel);
+		RelativeLayout.LayoutParams lpList = OkosamaMediaPlayerActivity.dispInfo.createLayoutParamsForTabContent();
+		
 		// リストの作成
 		TabComponentPropertySetter creationData[] = {
 			// リストの性質情報を設定

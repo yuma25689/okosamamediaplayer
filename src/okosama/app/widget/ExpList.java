@@ -41,7 +41,7 @@ public class ExpList extends absWidget {
 			}
 		});
 		impl.setGroupIndicator(
-				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getResources().getDrawable(
+				OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
 						R.drawable.exp_ind));
 		return 0;
 	}

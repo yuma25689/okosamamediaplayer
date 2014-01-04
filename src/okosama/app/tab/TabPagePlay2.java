@@ -57,6 +57,7 @@ public class TabPagePlay2 extends TabPage {
 		{
 			TabPagePlay tabPlay = (TabPagePlay) tabContent.getChild(TABPAGE_ID_PLAY_SUB);
 			tabPlay.updateAlbumArtOnThePlayTab();
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().selectTab(TabPage.TABPAGE_ID_PLAY,TABPAGE_ID_PLAY_SUB,false);
 		}
 	}	
 }

@@ -4,6 +4,8 @@ import android.view.MenuItem;
 import okosama.app.AppStatus;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.behavior.TrackListBehavior;
+import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
 
@@ -21,7 +23,8 @@ public class DisplayStateNowPlaylist extends absDisplayStateMediaTab {
 	@Override
 	public long updateDisplay() {
 		long ret =  AppStatus.NO_REFRESH;
-		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(ControlIDs.TAB_ID_MAIN, false);
+		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
+				ControlIDs.TAB_ID_MAIN, false);
 		return ret;
 	}
 	@Override
@@ -41,7 +44,14 @@ public class DisplayStateNowPlaylist extends absDisplayStateMediaTab {
 	}
 	@Override
 	public int updateStatus() {
-		OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().updateStatus();
+		if( MediaPlayerUtil.isNowPlayingVideos() )
+		{
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoAdp().updateStatus();
+		}
+		else
+		{
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().updateStatus();
+		}
 		return 0;
 	}
 	

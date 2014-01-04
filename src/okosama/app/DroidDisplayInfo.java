@@ -119,15 +119,25 @@ public final class DroidDisplayInfo {
 				orgWidthOfBk 
 					= ControlDefs.APP_BASE_WIDTH;//(backgroundImgBase.getIntrinsicWidth());// / metrics.density;
 				// プログラム内でのクライアント領域のサイズと、元の画像のサイズとの比率を求める
-		        heightScaleCorrectDensity
-		        	=  clientHeightPixels 
+				if( isPortrait() )
+				{
+			        heightScaleCorrectDensity
+			        	=  clientHeightPixels 
+			        		/ orgHeightOfBk;
+			        widthScaleCorrectDensity 
+			        =  metrics.widthPixels 
+			        		/ orgWidthOfBk;
+				}
+				else
+				{
+			        heightScaleCorrectDensity
+		        	= metrics.widthPixels 
 		        		/ orgHeightOfBk;
-		        widthScaleCorrectDensity 
-		        =  metrics.widthPixels 
-		        		/ orgWidthOfBk;
-				;
-			    
-				
+			        widthScaleCorrectDensity 
+			        = clientHeightPixels
+			        		/ orgWidthOfBk;
+				}
+			
 				// handlerに通知する
 				Message msg = Message.obtain();
 				msg.what = DisplayInfo.MSG_INIT_END;
@@ -145,8 +155,9 @@ public final class DroidDisplayInfo {
 	 * 
 	 */
 	public int getCorrectionXConsiderDensity( int orgX )
-	{
-		int ret = (int)( widthScaleCorrectDensity * orgX );
+	{		
+		int ret = 0;
+		ret = (int)( widthScaleCorrectDensity * orgX );
 		return ret;
 	}	
 	/**
@@ -185,5 +196,18 @@ public final class DroidDisplayInfo {
 	 */
 	public void setViewForMeasureBarHeight(View viewForMeasureBarHeight) {
 		this.viewForMeasureBarHeight = viewForMeasureBarHeight;
-	}	
+	}
+	
+	/**
+	 * 縦向きかどうか
+	 * @return true:縦 false:横
+	 */
+	public boolean isPortrait()
+	{
+		if( metrics.widthPixels < metrics.heightPixels )
+		{
+			return true;
+		}
+		return false;
+	}
 }

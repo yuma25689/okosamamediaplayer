@@ -30,7 +30,7 @@ public class TabMediaSelect extends Tab {
 	static final int BUTTON_WIDTH = 90;
 	static final int BUTTON_HEIGHT = 90;
 	// このタブのフッタの大きさ
-	static final int HOOTER_SIZE = BUTTON_HEIGHT + Tab.HDR_SIZE;
+	//static final int HOOTER_SIZE = BUTTON_HEIGHT + Tab.HDR_SIZE;
 	
 	/**
 	 * コンストラクタ 親とほぼ同様 タブIDに、TAB_ID_MEDIAを利用する

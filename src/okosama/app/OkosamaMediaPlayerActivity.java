@@ -18,6 +18,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -211,7 +212,7 @@ implements ServiceConnection, Database.Defs {
 	}
 	// サービスのトークン
 	// TODO:Trying to unbind with null tokenというエラーが発生
-    private static ServiceToken mToken;
+    private static ServiceToken mToken = null;
     
     // 楽曲の検索に、Externalを利用
     private static boolean externalRef = true;// false;
@@ -389,8 +390,10 @@ implements ServiceConnection, Database.Defs {
 				pref.getInt( String.valueOf( ControlIDs.TAB_ID_MAIN ), TabPage.TABPAGE_ID_MEDIA) );
 		setCurrentDisplayId( ControlIDs.TAB_ID_MEDIA, 
 				pref.getInt( String.valueOf( ControlIDs.TAB_ID_MEDIA ), TabPage.TABPAGE_ID_ARTIST ) );
-		setCurrentDisplayId( ControlIDs.TAB_ID_PLAY, 
-				pref.getInt( String.valueOf( ControlIDs.TAB_ID_PLAY ), TabPage.TABPAGE_ID_PLAY_SUB ) );
+		setCurrentDisplayId( ControlIDs.TAB_ID_PLAY,
+						TabPage.TABPAGE_ID_PLAY_SUB );//,
+				//pref.getInt( String.valueOf( ControlIDs.TAB_ID_PLAY ),
+						//TabPage.TABPAGE_ID_PLAY_SUB );
 		
 	}
 	/**
@@ -427,6 +430,7 @@ implements ServiceConnection, Database.Defs {
         // タイトルバーを非表示に？
         requestWindowFeature(Window.FEATURE_NO_TITLE);
  
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         // ビューの設定
         setContentView(R.layout.main);
  
@@ -462,7 +466,8 @@ implements ServiceConnection, Database.Defs {
 		updateTimeDisplay(0);
         
         // サービスへの接続を開始
-        if( 0 == MediaPlayerUtil.getServiceConnectionCount() )
+        if( 0 == MediaPlayerUtil.getServiceConnectionCount() 
+        || MediaPlayerUtil.sService == null )	// 横での起動対応
         {
         	// 絶対に１つしか接続されないようにする
         	mToken = MediaPlayerUtil.bindToService(this, this);
@@ -499,9 +504,18 @@ implements ServiceConnection, Database.Defs {
 		RelativeLayout.LayoutParams lp = 
 				new RelativeLayout.LayoutParams(
 						LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		
-        lp.topMargin = yCorrect;
-        lp.leftMargin = xCorrect;
+		// ここで、縦横の変換をかます
+		// ソースコードに書いてある座標、大きさは縦用のものがだが、横向きの場合、横用に変換して座標を返す		
+		if( true == dispInfo.isPortrait() )
+		{
+	        lp.topMargin = yCorrect;
+	        lp.leftMargin = xCorrect;
+		}
+		else
+		{
+			lp.leftMargin = yCorrect;
+			lp.topMargin = xCorrect;
+		}
         // このアプリケーションでは、bottomとrightのmarginはゼロだが・・・。
         lp.bottomMargin = 0;
         lp.rightMargin = 0;
@@ -543,28 +557,59 @@ implements ServiceConnection, Database.Defs {
 		{
 			heightCorrect = dispInfo.getCorrectionYConsiderDensity(height);
 		}
-		int xCorrect = dispInfo.getCorrectionXConsiderDensity(left);
+		int xCorrect = 0;
+			xCorrect = dispInfo.getCorrectionXConsiderDensity(left);
+//		}
+//		else
+//		{
+//			xCorrect = dispInfo.getCorrectionYConsiderDensity(top);			
+//		}
 		int yCorrect = 0;
 		int topRule = RelativeLayout.ALIGN_PARENT_TOP;
+//		if(dispInfo.isPortrait())
+//		{		
+			yCorrect = dispInfo.getCorrectionYConsiderDensity(top);
+//		}
+//		else
+//		{
+//			yCorrect = dispInfo.getCorrectionXConsiderDensity(left);
+//		}
+
 		if( yCorrect < 0 )
 		{
 			yCorrect = -1 * dispInfo.getCorrectionYConsiderDensity(top);
 			topRule = RelativeLayout.ALIGN_PARENT_BOTTOM;
 		}
+//		else
+//		{
+//			yCorrect = dispInfo.getCorrectionYConsiderDensity(top);
+//		}
+		
+		RelativeLayout.LayoutParams lp = null;
+
+		// ここで、縦横の変換をかます
+		// ソースコードに書いてある座標、大きさは縦用のものがだが、横向きの場合、横用に変換して座標を返す		
+		if( true == dispInfo.isPortrait() )
+		{
+			lp = new RelativeLayout.LayoutParams(
+					widthCorrect, heightCorrect);
+	        lp.topMargin = yCorrect;
+	        lp.leftMargin = xCorrect;
+	        // このアプリケーションでは、bottomとrightのmarginはゼロだが・・・。
+	        lp.bottomMargin = 0;
+	        lp.rightMargin = 0;
+		}
 		else
 		{
-			yCorrect = dispInfo.getCorrectionYConsiderDensity(top);
+			lp = new RelativeLayout.LayoutParams(
+					heightCorrect, widthCorrect);
+	        lp.topMargin = xCorrect;
+	        lp.leftMargin = yCorrect;
+	        // このアプリケーションでは、bottomとrightのmarginはゼロだが・・・。
+	        lp.bottomMargin = 0;
+	        lp.rightMargin = 0;
 		}
 		
-		RelativeLayout.LayoutParams lp = 
-				new RelativeLayout.LayoutParams(
-						widthCorrect, heightCorrect);
-		
-        lp.topMargin = yCorrect;
-        lp.leftMargin = xCorrect;
-        // このアプリケーションでは、bottomとrightのmarginはゼロだが・・・。
-        lp.bottomMargin = 0;
-        lp.rightMargin = 0;
         lp.addRule(topRule);//RelativeLayout.ALIGN_PARENT_TOP);
         lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         
@@ -573,12 +618,25 @@ implements ServiceConnection, Database.Defs {
 	RelativeLayout.LayoutParams createLayoutParamForAbsolutePos(
 			int width, int height, int left, int top )
 	{
-		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-        		(width), (height));
-        lp.topMargin = ( top );
-        lp.leftMargin = ( left );
-        lp.bottomMargin = 0;
-        lp.rightMargin = 0;
+		RelativeLayout.LayoutParams lp = null;
+		if( true == dispInfo.isPortrait() )
+		{
+			lp = new RelativeLayout.LayoutParams(
+	        		(height), (width));			
+	        lp.topMargin = ( top );
+	        lp.leftMargin = ( left );
+	        lp.bottomMargin = 0;
+	        lp.rightMargin = 0;
+		}
+		else
+		{
+			lp = new RelativeLayout.LayoutParams(
+	        		(width), (height));			
+	        lp.topMargin = left;
+	        lp.leftMargin = top;
+	        lp.bottomMargin = 0;
+	        lp.rightMargin = 0;
+		}
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         
@@ -659,6 +717,11 @@ implements ServiceConnection, Database.Defs {
         // モーションセンサの登録解除
         getResourceAccessor().rereaseMotionSenser();
         
+        // サービスとの連携がされていないのに、Activity終了が起こる場合
+//        if( MediaPlayerUtil.sService == null && mToken != null )
+//        {
+//        	
+//        }
 		super.onPause();
 	}
 	
@@ -897,11 +960,12 @@ implements ServiceConnection, Database.Defs {
 	        }
 			
 			int id = tabPageId;//mActivity.getCurrentDisplayId( ControlIDs.TAB_ID_PLAY );
-			if( TabPage.TABPAGE_ID_NONE == id 
-			|| TabPage.TABPAGE_ID_UNKNOWN == id )
-			{
+			// PlaySubが強制的に選択
+//			if( TabPage.TABPAGE_ID_NONE == id 
+//			|| TabPage.TABPAGE_ID_UNKNOWN == id )
+//			{
 				id = TabPage.TABPAGE_ID_PLAY_SUB;
-			}
+//			}
 			setPlayTabSelection( id, bForce );
 		}
 		
@@ -996,6 +1060,10 @@ implements ServiceConnection, Database.Defs {
 	 */
 	public void reScanMediaAndUpdateTabPage(int tabID, boolean bForce)
 	{
+		if( null == tabStocker.getTab(tabID) )
+		{
+			return;
+		}
 		boolean bNotUpdateIfNotEmpty = !bForce;
 		// 現在選択中のタブによって操作を変更
 		boolean bUpdateOccur = false;
@@ -1022,14 +1090,30 @@ implements ServiceConnection, Database.Defs {
 				// TODO: 現在、トラックと同じカーソルになっているが、考えた方がいいかもしれない
 				// NOWPLAYLIST
 				// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
-				TrackListRawAdapter adp = (TrackListRawAdapter)adpStocker.get(TabPage.TABPAGE_ID_SONG);
-				adp.setFilterType(TrackListRawAdapter.FILTER_NOW_QUEUE);
-				bUpdateOccur = 
-		    	adpStocker.stockMediaDataFromDevice( 
-						TabPage.TABPAGE_ID_SONG, page, bNotUpdateIfNotEmpty );
-				if( bUpdateOccur == false )
+				if( MediaPlayerUtil.isNowPlayingVideos() )
 				{
-					adp.updateList();
+					VideoListRawAdapter adp = (VideoListRawAdapter)adpStocker.get(TabPage.TABPAGE_ID_VIDEO);
+					
+					bUpdateOccur = 
+			    	adpStocker.stockMediaDataFromDevice( 
+							TabPage.TABPAGE_ID_VIDEO, page, bNotUpdateIfNotEmpty );
+					if( bUpdateOccur == false )
+					{
+						adp.updateList();
+					}
+
+				}
+				else
+				{
+					TrackListRawAdapter adp = (TrackListRawAdapter)adpStocker.get(TabPage.TABPAGE_ID_SONG);
+					adp.setFilterType(TrackListRawAdapter.FILTER_NOW_QUEUE);
+					bUpdateOccur = 
+			    	adpStocker.stockMediaDataFromDevice( 
+							TabPage.TABPAGE_ID_SONG, page, bNotUpdateIfNotEmpty );
+					if( bUpdateOccur == false )
+					{
+						adp.updateList();
+					}
 				}
 			}
 		}
@@ -1058,7 +1142,7 @@ implements ServiceConnection, Database.Defs {
         stateStocker.unResisterReceiverAll();
 		
 		//try {
-			if( MediaPlayerUtil.sService != null ) //&& false == MediaPlayerUtil.sService.isPlaying() )
+			if(mToken != null)// MediaPlayerUtil.sService != null ) //&& false == MediaPlayerUtil.sService.isPlaying() )
 			{
 				// サービスの登録解除
 			    MediaPlayerUtil.unbindFromService(mToken);

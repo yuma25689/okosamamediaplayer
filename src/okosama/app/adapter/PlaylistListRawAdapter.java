@@ -314,7 +314,6 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
             protected void onPostExecute(Integer ret) 
             {
             	Log.i("onPostExecute","ret=" + ret );
-            	
             	if( ret < 0 )
             	{
                 	bLastError = true;

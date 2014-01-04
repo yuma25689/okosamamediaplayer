@@ -1,6 +1,7 @@
 package okosama.app.tab;
 
 import okosama.app.ControlIDs;
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.tab.media.TabMediaSelect;
 import okosama.app.tab.play.TabPlayContent;
@@ -58,7 +59,14 @@ public class TabStocker {
             	,pageContainer
             	,componentContainer 
             );
-	        tabMain.create(R.layout.tab_layout_header);
+			if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+			{
+				tabMain.create(R.layout.tab_layout_header);
+			}
+			else
+			{
+				tabMain.create(R.layout.tab_layout_left_hdr);
+			}
 	        putTab(ControlIDs.TAB_ID_MAIN,tabMain);
 		}
         return tabMain;
@@ -77,7 +85,15 @@ public class TabStocker {
 		if( tabMedia == null )
 		{
 			tabMedia = new TabMediaSelect( ControlIDs.TAB_ID_MEDIA, pageContainer, componentContainer );
-			tabMedia.create(R.layout.tab_layout_hooter);
+			if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+			{
+				tabMedia.create(R.layout.tab_layout_hooter);
+			}
+			else
+			{
+				tabMedia.create(R.layout.tab_layout_right_hooter);
+			}
+			
 			putTab(ControlIDs.TAB_ID_MEDIA,tabMedia);
 		}
 		return tabMedia;
@@ -101,7 +117,14 @@ public class TabStocker {
 		{
 			tabPlayCont = new TabPlayContent( 
 					ControlIDs.TAB_ID_PLAY, pageContainer, componentContainer );
-			tabPlayCont.create(R.layout.tab_layout_hooter);
+			if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+			{
+				tabPlayCont.create(R.layout.tab_layout_hooter);
+			}
+			else
+			{
+				tabPlayCont.create(R.layout.tab_layout_right_hooter);
+			}
 			putTab(ControlIDs.TAB_ID_PLAY,tabPlayCont);
 		}
 		return tabPlayCont;

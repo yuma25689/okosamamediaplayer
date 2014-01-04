@@ -422,7 +422,7 @@
     <string name="headset_connect_and_play">ヘッドホン接続のため、再生を再開。</string>
     
     <string name="move_playtab_title">確認</string>
-    <string name="move_playtab_message">再生画面に移動しますか？(後%s秒で自動的にキャンセルします)</string>
+    <string name="move_playtab_message">再生を開始します。再生画面に移動しますか？(後%s秒で自動的にキャンセルします)</string>
     <string name="alert_dialog_yes">移動</string>
     <string name="alert_dialog_no">このまま</string>
     

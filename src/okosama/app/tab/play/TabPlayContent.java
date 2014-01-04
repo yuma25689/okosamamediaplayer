@@ -21,7 +21,7 @@ import android.widget.RelativeLayout;
 public class TabPlayContent extends Tab {
 	static final int BUTTON_WIDTH = 90;
 	static final int BUTTON_HEIGHT = 90;
-	static final int HOOTER_SIZE = BUTTON_HEIGHT + Tab.HDR_SIZE;
+	//static final int HOOTER_SIZE = BUTTON_HEIGHT + Tab.HDR_SIZE;
 	
 	public TabPlayContent(int ID, LinearLayout ll, ViewGroup rl) {
 		super(ControlIDs.TAB_ID_PLAY, ll, rl);

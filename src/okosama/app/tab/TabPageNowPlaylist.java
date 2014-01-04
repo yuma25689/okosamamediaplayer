@@ -8,15 +8,23 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.adapter.IAdapterUpdate;
 import okosama.app.behavior.TrackListBehavior;
+import okosama.app.behavior.VideoListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.panel.MoveTabInfo;
+import okosama.app.panel.NowPlayingControlPanel;
+import okosama.app.panel.PlayControlPanel;
+import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TabMoveLeftInfoPanel;
 import okosama.app.panel.TabMoveRightInfoPanel;
+import okosama.app.panel.TimeControlPanel;
+import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;
@@ -91,7 +99,12 @@ public class TabPageNowPlaylist extends TabPage {
 				, "", ScaleType.FIT_XY
 			)
 		};
-		List lst = DroidWidgetKit.getInstance().MakeList( new TrackListBehavior() );
+		List lst = OkosamaMediaPlayerActivity.getResourceAccessor().getNowPlayingListView();//new TrackListBehavior());
+		//DroidWidgetKit.getInstance().MakeList( new TrackListBehavior() );
+		if( lst.getView() != null && lst.getView().getParent() != null )
+		{
+			((ViewGroup)lst.getView().getParent()).removeView(lst.getView());
+		}
 		widgets.add(lst);
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;
@@ -148,6 +161,32 @@ public class TabPageNowPlaylist extends TabPage {
 			}
 		}
 		super.endUpdate();
+	}
+	@Override
+	public void setActivate( boolean bActivate )
+	{
+		if( bActivate )
+		{
+			// NowPlayingのリストは、ここで必ず表示前にAdapterとbehaviorを設定し直す
+			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+			List lst = OkosamaMediaPlayerActivity.getResourceAccessor().getNowPlayingListView();			
+       		if( MediaPlayerUtil.isNowPlayingVideos() )
+       		{
+       			// 現在、ビデオが再生対象の場合
+       			// AdapterとBehaviorをVideoに設定する
+       			lst.setAdapter( act.getVideoAdp() );
+       			lst.setBehavior(new VideoListBehavior());
+       		}
+       		else
+       		{
+       			// 現在、オーディオが再生対象の場合
+       			// AdapterとBehaviorをTrackに設定する
+       			lst.setAdapter( act.getTrackAdp() );
+       			lst.setBehavior(new TrackListBehavior());       			
+       			
+       		}
+		}
+		super.setActivate(bActivate);		
 	}
 	
 }

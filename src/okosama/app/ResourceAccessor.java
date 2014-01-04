@@ -11,8 +11,12 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Locale;
 
+import okosama.app.behavior.IListBehavior;
+import okosama.app.behavior.TrackListBehavior;
+import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabChangeAnimation;
 import okosama.app.widget.Button;
+import okosama.app.widget.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,6 +33,7 @@ import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Environment;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.SurfaceView;
 
 /**
  * リソースにアクセスするためのクラス
@@ -52,8 +57,18 @@ public final class ResourceAccessor {
 	{
 		motionObserver.release();
 	}	
-	public ArrayList<Button> commonBtns = null;
+	//public ArrayList<Button> commonBtns = null;
 
+	public List nowPlayingListView = null;
+	public List getNowPlayingListView()	//IListBehavior _behavior)
+	{
+		if( nowPlayingListView == null )
+		{
+			nowPlayingListView = DroidWidgetKit.getInstance().MakeList(null);//_behavior);
+		}
+		return nowPlayingListView;
+	}
+	
 	public static final int SOUND_MAX_COUNT = 9;
 	public static final int SOUND_RES_IDS[] =
 		{
