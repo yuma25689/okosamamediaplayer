@@ -1,6 +1,7 @@
 package okosama.app.panel;
 
 import okosama.app.ControlIDs;
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.R.drawable;
 import okosama.app.factory.DroidWidgetKit;
@@ -25,6 +26,12 @@ public class NowPlayingControlPanel extends ControlPanel {
 			instance = new NowPlayingControlPanel(activity);
 		}
 	}
+	public static void deleteInstance()
+	{
+		removeFromParent();
+		instance = null;
+		
+	}	
 	public static NowPlayingControlPanel getInstance()
 	{
 		return instance;
@@ -33,14 +40,7 @@ public class NowPlayingControlPanel extends ControlPanel {
 	{
 		if( instance != null && instance.getView() != null )
 		{
-			if( instance.getView().getParent() != null )
-			{
-				ViewParent v = instance.getView().getParent();
-				if( v instanceof ViewGroup )
-				{
-					((ViewGroup) v).removeView(instance.getView());
-				}
-			}
+			OkosamaMediaPlayerActivity.removeFromParent(instance.getView());
 
 //			if( -1 == tabBaseLayout.indexOfChild(instance.getView()) )
 //			{
@@ -53,18 +53,11 @@ public class NowPlayingControlPanel extends ControlPanel {
 			Log.e("error","insert sub control panel");
 		}
 	}
-	public static void removeToLayout( ViewGroup tabBaseLayout )
+	public static void removeFromParent() //ViewGroup tabBaseLayout )
 	{
 		if( instance != null && instance.getView() != null )
 		{
-			if( instance.getView().getParent() != null )
-			{
-				ViewParent v = instance.getView().getParent();
-				if( v instanceof ViewGroup )
-				{
-					((ViewGroup) v).removeView(instance.getView());
-				}
-			}
+			OkosamaMediaPlayerActivity.removeFromParent(instance.getView());
 
 			parent = null;				
 		}

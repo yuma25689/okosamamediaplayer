@@ -252,6 +252,17 @@ public abstract class TabComponentParent implements ITabComponent {
 	 * q€–Ú‚ÌƒNƒŠƒA
 	 */
 	public void clearChild() {
+		for( int i=0; i < children.size(); i++ ) {
+			if( children.valueAt(i) instanceof TabComponentParent )
+			{
+				((TabComponentParent)children.valueAt(i)).clearWidgets();
+			}
+        }
 		children.clear();
 	}
+	void clearWidgets()
+	{
+		widgets.clear();
+	}
+	
 }

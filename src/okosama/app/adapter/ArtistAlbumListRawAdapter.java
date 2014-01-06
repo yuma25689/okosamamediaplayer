@@ -34,6 +34,7 @@ import android.widget.TextView;
  */
 public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter implements IAdapterUpdate {//<ArtistGroupData,ArtistChildData> {
 	
+	boolean deleted = false;
 	TabPage page;
 	boolean bDataUpdating = false;
 	boolean bLastError = false;
@@ -461,7 +462,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
                     childList[j] = dataChild; 
                     		
                     j++;
-        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
+        		} while( deleted == false && 
         				childCursor.moveToNext() );
         		childDataTmp.put( groupPosition, childList);
         		childData.put(groupPosition, childList );
@@ -616,13 +617,13 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 		            		groupDataTmp.put( i, data );
 	
 	                		i++;
-		        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
+		        		} while( deleted == false && //OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
 		        				cursor.moveToNext() );
 	            	}
             	} finally {
             		cursor.close();
             	}
-        		if( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() )
+        		if( deleted ) //OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() )
         		{
         			return -2;
         		}
@@ -714,6 +715,13 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
    		{
    			mActivity.reScanMediaOfMediaTab(TabPage.TABPAGE_ID_ARTIST);
    		}
+	}
+
+	@Override
+	public void clearAdapterData() {
+		deleted = true;
+		groupData.clear();
+		childData.clear();
 	}
 	
 }

@@ -118,6 +118,14 @@ public class TabPageAlbum extends TabPage {
 					List.LISTID_ALBUM,lst);
 			widgets.add(lst);
 		}
+		else
+		{
+			if( -1 == widgets.indexOf(lst) )
+			{
+				widgets.add(lst);
+				OkosamaMediaPlayerActivity.removeFromParent(lst.getView());
+			}			
+		}
 		
 		// ‚±‚Ìƒpƒlƒ‹‚É‚Ì‚¹‚½‘S‚Ä‚Ìwidget‚Ì«¿‚ğİ’è
 		creationData[0].setColorBack(Color.WHITE);

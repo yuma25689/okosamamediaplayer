@@ -164,6 +164,7 @@ public class Tab extends TabComponentParent {
 		= new SparseArray< IViewAction >();
 		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new ControllerShowHideAction() );
 		mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
+		OkosamaMediaPlayerActivity.removeFromParent(mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).getView());
 		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).getView());				
 		
 		RelativeLayout rlCont = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_contents);
@@ -185,15 +186,7 @@ public class Tab extends TabComponentParent {
 		SurfaceView videoView 
 		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoView();
 		videoView.setVisibility(View.GONE);
-		if( videoView.getParent() != null )
-		{
-			ViewParent v = videoView.getParent();
-			if( v instanceof ViewGroup )
-			{
-				((ViewGroup) v).removeView(videoView);
-			}
-		}			
-		tabBaseLayout.addView( videoView );
+		OkosamaMediaPlayerActivity.removeFromParent( videoView );
 		
 		// タブのパネルを親から与えられたレイアウトに追加
 		componentContainer.addView(tabBaseLayout);
@@ -272,6 +265,32 @@ public class Tab extends TabComponentParent {
 	        }
 		//}
 
+	}
+	/**
+	 * このタブを破棄する
+	 */
+	public void destroy()
+	{
+		if( tabBaseLayout != null )
+		{
+			RelativeLayout rlHdr = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_header);
+			if( rlHdr != null )
+			{
+				rlHdr.removeAllViews();
+			}
+			RelativeLayout rlHooter = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_hooter);
+			if( rlHooter != null )
+			{
+				rlHooter.removeAllViews();
+			}
+			tabBaseLayout.removeAllViews();
+		}
+		if( componentContainer != null )
+		{
+			componentContainer.removeAllViews();
+		}
+		this.clearChild();
+		this.mapBtn.clear();
 	}
 
 }

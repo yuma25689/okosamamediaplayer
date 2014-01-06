@@ -161,9 +161,8 @@ public abstract class TabPage extends TabComponentParent {
 			//TimeControlPanel.removeToLayout(tabBaseLayout);		
 			//NowPlayingControlPanel.removeToLayout(tabBaseLayout);
 			//SubControlPanel.removeToLayout(tabBaseLayout);
-			PlayControlPanel.removeToLayout(tabBaseLayout);			
+			PlayControlPanel.removeFromParent();	//ToLayout(tabBaseLayout);			
 		}
 		
-	}
-	
+	}	
 }

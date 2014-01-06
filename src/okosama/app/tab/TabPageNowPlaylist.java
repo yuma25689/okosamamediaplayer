@@ -103,9 +103,12 @@ public class TabPageNowPlaylist extends TabPage {
 		//DroidWidgetKit.getInstance().MakeList( new TrackListBehavior() );
 		if( lst.getView() != null && lst.getView().getParent() != null )
 		{
-			((ViewGroup)lst.getView().getParent()).removeView(lst.getView());
+			OkosamaMediaPlayerActivity.removeFromParent(lst.getView());
 		}
-		widgets.add(lst);
+		if( -1 == widgets.indexOf(lst) )
+		{
+			widgets.add(lst);
+		}			
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;
 		for( absWidget widget : widgets )

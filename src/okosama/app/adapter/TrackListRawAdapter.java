@@ -51,6 +51,7 @@ import android.widget.TextView;
 public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAdapterUpdate, SectionIndexer { 
 //implements SectionIndexer {
 
+	boolean deleted = false;
 	// private HashMap<String, Integer> mIndexer = new HashMap<String, Integer>();
 	private ArrayList<Integer> mSectionIndex = new ArrayList<Integer>();
 	private ArrayList<String> mSection = new ArrayList<String>();
@@ -419,14 +420,14 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 				        								Integer.parseInt(data.getTrackAlbumId())));
 			            		}
 			            	    allItems.add(data);
-			        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
-			        				cursor.moveToNext() );
+			        		} while( deleted == false //OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
+			        				&& cursor.moveToNext() );
 		            	}
 	        		}
         		} finally {
         			cursor.close();
         		}
-        		if( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() )
+        		if( deleted ) //OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() )
         			return -2;
         		
                 return 0;
@@ -659,6 +660,11 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	@Override
 	public Object[] getSections() {
 		return sections;
+	}
+	@Override
+	public void clearAdapterData() {
+		deleted = true;
+		this.clear();		
 	}
 	
 }

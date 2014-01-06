@@ -236,5 +236,31 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 		
 		return false;
 	}
-	
+	public void updateControlPanel()
+	{
+		bPanelShow = !bPanelShow;
+		if( bPanelShow )
+		{
+			SubControlPanel.insertToLayout(tabBaseLayout);
+			NowPlayingControlPanel.insertToLayout(tabBaseLayout);
+			TimeControlPanel.insertToLayout(tabBaseLayout);
+			PlayControlPanel.insertToLayout(tabBaseLayout);
+//			if( rightPanel != null )
+//			{
+//				rightPanel.insertToLayout(tabBaseLayout);
+//			}
+//			if( leftPanel != null )
+//			{
+//				leftPanel.insertToLayout(tabBaseLayout);
+//			}
+			// NowPlayingControlPanel.insertToLayout(tabBaseLayout);			
+		}
+		else
+		{
+			TimeControlPanel.removeFromParent();		
+			NowPlayingControlPanel.removeFromParent();
+			SubControlPanel.removeFromParent();
+			PlayControlPanel.removeFromParent();	//ToLayout(tabBaseLayout);			
+		}
+	}
 }

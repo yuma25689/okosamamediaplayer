@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 public class MainHandler extends Handler {
 
+	static int INIT_ALL_REFRESH = 103;
 	boolean bInitEnd = false;
 	OkosamaMediaPlayerActivity mActivity = null;
 	
@@ -73,10 +74,26 @@ public class MainHandler extends Handler {
                 mActivity.queueNextRefresh(next);
                 break;
 			}
+    		case AppStatus.INIT_ALL_REFRESH:
+	           	mActivity.getGenreStocker().stockMediaDataFromDevice();
+	           	mActivity.getAdpStocker().initAllAdapter();    			
+    			break;
         	case DisplayInfo.MSG_INIT_END:
         	{
+        		boolean bTabForceReset = false;
+        		if( message.obj != null )
+        		{
+        			bTabForceReset = (Boolean) message.obj;
+        		}
         		boolean bTabSelectReset = false;
         		// 現状、これがOnResume時のディスプレイ初期化後に飛んでくる
+                // * 作成順番依存性有り
+        		// パネルの作成
+        		// 回転時にも作成し直すものとする
+        		TimeControlPanel.createInstance(mActivity);
+        		NowPlayingControlPanel.createInstance(mActivity);
+        		SubControlPanel.createInstance(mActivity);
+        		PlayControlPanel.createInstance(mActivity);	        		
 	        	if( bInitEnd == true )
 	        	{
 	        		// もう既に初期化済ならば、何もしない？
@@ -88,21 +105,24 @@ public class MainHandler extends Handler {
 	
 	                // * 作成順番依存性有り
 	                // PlayControlPanelから、TimeControlPanelとNowPlayingControlPanelへの参照
-	        		TimeControlPanel.createInstance(mActivity);
-	        		NowPlayingControlPanel.createInstance(mActivity);
-	        		SubControlPanel.createInstance(mActivity);
-	        		PlayControlPanel.createInstance(mActivity);
-		            
-	        		// 初期化されていなければ、タブを作成
+//	        		TimeControlPanel.createInstance(mActivity);
+//	        		NowPlayingControlPanel.createInstance(mActivity);
+//	        		SubControlPanel.createInstance(mActivity);
+//	        		PlayControlPanel.createInstance(mActivity);
+//		            
+	        	}
+	        	if( bInitEnd == false || bTabForceReset == true )
+	        	{
+	        		// 初期化されていないか、強制作成の場合（今のところ、それがくるのは向き変更）、タブを作成
 	        		// このアクティビティのレイアウトクラスを渡す
 	        		if( mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MAIN) == null )
-	        		{ 
+	        		{
 	        			mActivity.getTabStocker().createTabMain(
 	        				mActivity.getMainPageContainer(),
 	        				mActivity.getMainComponentContainer()
     					);
 	        			bTabSelectReset = true;
-	        		}
+	        		}	        		
 	        	}
 	    		bInitEnd = true;
 	        	
@@ -146,8 +166,11 @@ public class MainHandler extends Handler {
 	           	// 初期化時に、全てのメディアを取得する
 	           	// if( bDataRestored == false )
            		//Log.d("msg_init_end","force rescan");
-	           	mActivity.getGenreStocker().stockMediaDataFromDevice();
-	           	mActivity.getAdpStocker().initAllAdapter();
+//	           	mActivity.getGenreStocker().stockMediaDataFromDevice();
+//	           	mActivity.getAdpStocker().initAllAdapter();
+//	           	Message msgInitAllRef = new Message();
+//	           	msgInitAllRef.what = AppStatus.INIT_ALL_REFRESH;
+//	           	sendMessageDelayed(msgInitAllRef, 300);
 	           	//mActivity.setForceRefreshFlag(false);
         		mActivity.queueNextRefresh(1000);
 	    		break;

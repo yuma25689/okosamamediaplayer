@@ -36,6 +36,7 @@ import android.widget.TextView;
 public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> 
 implements IAdapterUpdate, SectionIndexer {
     
+	boolean deleted = false;
 	SparseArray<String> mapIdAndArt = new SparseArray<String>();
 	public String getAlbumArtFromId(int id)
 	{
@@ -293,13 +294,13 @@ implements IAdapterUpdate, SectionIndexer {
 		        			data.setAlbumArtist(cursor.getString(mArtistIdx));
 		        			data.setAlbumArt(cursor.getString(mAlbumArtIndex));
 		        			items.add(data);
-		        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false 
+		        		} while( deleted == false //OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false 
 		        			&& cursor.moveToNext() );
 	            	}
             	} finally {
             		cursor.close();
             	}
-        		if( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() )
+        		if( deleted ) //OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() )
         		{
         			return -2;
         		}
@@ -408,4 +409,11 @@ implements IAdapterUpdate, SectionIndexer {
    			mActivity.reScanMediaOfMediaTab(TabPage.TABPAGE_ID_ALBUM);
    		}		
 	}
+	@Override
+	public void clearAdapterData() {
+		deleted = true;
+		items = null;
+		this.clear();
+	}
+	
  }

@@ -41,7 +41,8 @@ public class List extends absWidget {
 				behavior.onItemClick(l, v, pos, id);
 			}
         });
-		impl.setDivider(OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.list_divider_tesuri));
+		impl.setDivider(OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
+				R.drawable.list_divider_tesuri));
 		impl.setFastScrollEnabled(true);
 		
 		return 0;

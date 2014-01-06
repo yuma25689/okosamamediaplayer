@@ -16,6 +16,7 @@ public final class AppStatus {
     public static final int REFRESH = 1001;
     public static final int NO_REFRESH = -10;
     public static final int DEFAULT_REFRESH_MS = 500;
+    public static final int INIT_ALL_REFRESH = 1002;
 
     public static final int RESTART = 999;
     

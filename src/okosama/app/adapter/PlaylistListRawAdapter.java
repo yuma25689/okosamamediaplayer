@@ -35,6 +35,7 @@ import android.widget.TextView;
  *
  */
 public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implements IAdapterUpdate {
+	boolean deleted = false;
     private static final long RECENTLY_ADDED_PLAYLIST = -1;
     //private static final long ALL_SONGS_PLAYLIST = -2;
     //private static final long PODCASTS_PLAYLIST = -3;
@@ -302,11 +303,15 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
 		        			// ‚»‚ñ‚ÈƒJƒ‰ƒ€‚Í‚È‚¢
 		        			// data.setPlaylistCount(cursor.getString(mCountIdx));
 		        			items.add(data);
-		        		} while( cursor.moveToNext() );
+		        		} while( deleted == false
+		        			&& cursor.moveToNext() );
 	            	}
         		} finally {
         			cursor.close();
         		}
+        		if( deleted ) //OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() )
+        			return -2;
+        		
                 return 0;
             }
 
@@ -388,6 +393,12 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
    			mActivity.reScanMediaOfMediaTab(TabPage.TABPAGE_ID_PLAYLIST);
    		}		           		
 		
+	}
+	@Override
+	public void clearAdapterData() {
+		deleted = true;
+		items = null;
+		this.clear();		
 	}
    
  }

@@ -247,7 +247,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			// Adapter�̍쐬
 			if( activity.getAlbumAdp() == null )
 			{
-				Log.e("AlbumAdapter","re create");
+				Log.i("AlbumAdapter","re create");
 				activity.putAdapter(//setAlbumAdp(
 					TabPage.TABPAGE_ID_ALBUM,
 					new AlbumListRawAdapter(
@@ -471,7 +471,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			// Adapter�̍쐬
 			if( activity.getVideoAdp() == null )
 			{
-				Log.e("VideoAdapter","re create");
+				Log.i("VideoAdapter","re create");
 				activity.putAdapter(
 					TabPage.TABPAGE_ID_VIDEO,
 					new VideoListRawAdapter(

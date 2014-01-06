@@ -2,6 +2,7 @@ package okosama.app.panel;
 
 import okosama.app.ControlDefs;
 import okosama.app.ControlIDs;
+import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.R.drawable;
 import okosama.app.action.IViewAction;
@@ -37,6 +38,12 @@ public class TimeControlPanel extends ControlPanel {
 			instance = new TimeControlPanel(activity);
 		}
 	}
+	public static void deleteInstance()
+	{
+		removeFromParent();
+		instance = null;
+		
+	}
 	public static TimeControlPanel getInstance()
 	{
 		return instance;
@@ -45,14 +52,7 @@ public class TimeControlPanel extends ControlPanel {
 	{
 		if( instance != null && instance.getView() != null )
 		{
-			if( instance.getView().getParent() != null )
-			{
-				ViewParent v = instance.getView().getParent();
-				if( v instanceof ViewGroup )
-				{
-					((ViewGroup) v).removeView(instance.getView());
-				}
-			}
+			OkosamaMediaPlayerActivity.removeFromParent(instance.getView());
 
 //			if( -1 == tabBaseLayout.indexOfChild(instance.getView()) )
 //			{
@@ -65,18 +65,19 @@ public class TimeControlPanel extends ControlPanel {
 			Log.e("error","insert sub control panel");
 		}
 	}
-	public static void removeToLayout( ViewGroup tabBaseLayout )
+	public static void removeFromParent()//ViewGroup tabBaseLayout )
 	{
 		if( instance != null && instance.getView() != null )
 		{
-			if( instance.getView().getParent() != null )
-			{
-				ViewParent v = instance.getView().getParent();
-				if( v instanceof ViewGroup )
-				{
-					((ViewGroup) v).removeView(instance.getView());
-				}
-			}
+			OkosamaMediaPlayerActivity.removeFromParent( instance.getView() );
+//			if( instance.getView().getParent() != null )
+//			{
+//				ViewParent v = instance.getView().getParent();
+//				if( v instanceof ViewGroup )
+//				{
+//					((ViewGroup) v).removeView(instance.getView());
+//				}
+//			}
 
 			parent = null;				
 		}

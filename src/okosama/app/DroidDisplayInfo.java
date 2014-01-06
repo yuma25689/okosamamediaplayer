@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.Window;
 
 /**
@@ -56,7 +58,8 @@ public final class DroidDisplayInfo {
 	 */
 	public void init( Activity _activity,
 			View _viewForMeasureBarHeight,
-			Handler handler )
+			Handler handler,
+			boolean bForceTabRecreate )
 	{
 		this.activity = _activity;
 		this.viewForMeasureBarHeight = _viewForMeasureBarHeight;
@@ -70,14 +73,15 @@ public final class DroidDisplayInfo {
 //	        backgroundImgBase = OkosamaMediaPlayerActivity.getResourceAccessor()
 //	        		.getResourceDrawable(R.drawable.background_3);
 		}
-		updateDisplayMetrics();
+		updateDisplayMetrics(bForceTabRecreate);
 	}
 	
 	/**
 	 * Activity‚Ì‰æ–Ê‚ÌMetrics‚ð“à•”‚ÉŠi”[‚·‚é
 	 */
-	public void updateDisplayMetrics()
+	public void updateDisplayMetrics(boolean b)
 	{
+		final Boolean bForceTabRecreate = b;
 		clear();
 
 		if( activity == null )
@@ -141,6 +145,7 @@ public final class DroidDisplayInfo {
 				// handler‚É’Ê’m‚·‚é
 				Message msg = Message.obtain();
 				msg.what = DisplayInfo.MSG_INIT_END;
+				msg.obj = bForceTabRecreate;
 				// msg.arg1 = DisplayInfo.MSG_INIT_END;
 				handler.sendMessage( msg );
 		    }
@@ -210,4 +215,5 @@ public final class DroidDisplayInfo {
 		}
 		return false;
 	}
+	
 }

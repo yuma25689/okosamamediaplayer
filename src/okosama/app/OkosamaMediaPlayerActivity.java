@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,6 +51,8 @@ import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
@@ -438,6 +441,7 @@ implements ServiceConnection, Database.Defs {
         Database.setActivity( this );
         // handlerクラス作成
         handler = new MainHandler( this );
+        handler.sendEmptyMessage(AppStatus.INIT_ALL_REFRESH);
         // ボリュームを音楽用に設定する
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         
@@ -678,7 +682,7 @@ implements ServiceConnection, Database.Defs {
     	// 画面のサイズ等の情報を更新する
 		// 終わったらhandlerッセージが送られる
 		// 現在、そこで初めて画面位置の初期化を行っている
-        dispInfo.init(this, componentContainer, handler);
+        dispInfo.init(this, componentContainer, handler,false);
         
         //bForceRefresh = true;
         paused = false;
@@ -693,6 +697,8 @@ implements ServiceConnection, Database.Defs {
 
 	@Override
 	protected void onPause() {
+		handler.removeMessages(AppStatus.INIT_ALL_REFRESH);
+		
 		// マップをループして、全部の設定を保存
 		Editor editor = getPreferences(MODE_PRIVATE).edit();
 		// 現在選択されているタブID
@@ -1137,6 +1143,39 @@ implements ServiceConnection, Database.Defs {
 	}
 
 	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+		//if( newConfig.orientation // == ActivityInfo.CONFIG_ORIENTATION )
+		//{
+			// 向きの変更によってActivity終了の場合
+	        // TODO: コントロールパネルは、縦横変更時にレイアウトの再調整が必要なので、ここで消してしまう？
+	        NowPlayingControlPanel.deleteInstance();
+	        SubControlPanel.deleteInstance();
+	        PlayControlPanel.deleteInstance();
+	        TimeControlPanel.deleteInstance();
+	        
+	        // 危険かもしれないが、ビットマップをクリアしてしまう？
+	        // getResourceAccessor().clearAllBitmap();
+	        
+	        // タブを破棄
+	        Tab tab = tabStocker.getTab(ControlIDs.TAB_ID_MAIN);
+	        if( tab != null )
+	        {
+	        	tab.destroy();
+	        }
+	        
+	        getTabStocker().clear();
+	        
+	        // アダプタを破棄？
+	        // getAdpStocker().clear();
+	        //System.gc();
+	        
+	        dispInfo.init(this, componentContainer, handler, true);
+	        
+		//}
+		
+	}
+	@Override
 	protected void onDestroy() {
         // 全てのレシーバの登録解除
         stateStocker.unResisterReceiverAll();
@@ -1152,6 +1191,26 @@ implements ServiceConnection, Database.Defs {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+		int change = getChangingConfigurations();
+		Log.d("onDestroy", "getChangingConfigurations() :" + change + " (" + String.format("0x%08x", change) + ")");  
+		
+//		if( change == ActivityInfo.CONFIG_ORIENTATION )
+//		{
+//			// 向きの変更によってActivity終了の場合
+//	        // TODO: コントロールパネルは、縦横変更時にレイアウトの再調整が必要なので、ここで消してしまう？
+//	        NowPlayingControlPanel.deleteInstance();
+//	        SubControlPanel.deleteInstance();
+//	        PlayControlPanel.deleteInstance();
+//	        TimeControlPanel.deleteInstance();
+//	        
+//	        // 危険かもしれないが、ビットマップをクリアしてしまう？
+//	        // getResourceAccessor().clearAllBitmap();
+//	        
+//	        getTabStocker().clear();
+//	        getAdpStocker().clear();
+//	        System.gc();
+//		}
+			  
 		// 破棄時は、曲もクリア 
 		MediaStopAction stopAction = new MediaStopAction();
 		stopAction.doAction(null);
@@ -1453,5 +1512,16 @@ implements ServiceConnection, Database.Defs {
 	        mToast.setText(resid);
 	        mToast.show();
 	    }
+		static public void removeFromParent( View v )
+		{
+			if( v.getParent() != null )
+			{
+				ViewParent p = v.getParent();
+				if( p instanceof ViewGroup )
+				{
+					((ViewGroup) p).removeView(v);
+				}
+			}			
+		}
 	    
 }

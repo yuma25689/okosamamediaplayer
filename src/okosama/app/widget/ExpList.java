@@ -40,9 +40,10 @@ public class ExpList extends absWidget {
 				return false;
 			}
 		});
-		impl.setGroupIndicator(
-				OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
-						R.drawable.exp_ind));
+		// TODO: 現状、xmlの切り替えの画像は通常ロードだが、できたら自前メソッドで画質を悪くしてロードしたい
+		impl.setGroupIndicator(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getResources().getDrawable(R.drawable.exp_ind));
+				//OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
+				//		R.drawable.exp_ind));
 		return 0;
 	}
 

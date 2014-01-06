@@ -96,6 +96,15 @@ public class TabPagePlayList extends TabPage {
 			// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 			widgets.add(lst);
 		}
+		else
+		{
+			if( -1 == widgets.indexOf(lst) )
+			{
+				widgets.add(lst);
+				OkosamaMediaPlayerActivity.removeFromParent(lst.getView());
+			}			
+		}
+		
 		int i=0;
 		
 		for( absWidget widget : widgets )

@@ -30,9 +30,10 @@ public final class DisplayInfo {
 	 */
 	public void init(Activity activity,
 			View viewForMeasureBarHeight,
-			Handler handler)
+			Handler handler,
+			boolean bTabForceReset)
 	{
-		_impl.init(activity,viewForMeasureBarHeight,handler);
+		_impl.init(activity,viewForMeasureBarHeight,handler,bTabForceReset);
 	}
 	
 	/**

@@ -100,9 +100,9 @@ public class TabPageVideoView extends TabPage implements OnTouchListener {
 		}
 		else
 		{
-			TimeControlPanel.removeToLayout(tabBaseLayout);		
-			PlayControlPanel.removeToLayout(tabBaseLayout);
-			SubControlPanel.removeToLayout(tabBaseLayout);
+			TimeControlPanel.removeFromParent();//ToLayout(tabBaseLayout);		
+			PlayControlPanel.removeFromParent();//ToLayout(tabBaseLayout);
+			SubControlPanel.removeFromParent();//ToLayout(tabBaseLayout);
 		}
 		
 	}

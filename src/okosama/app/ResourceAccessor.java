@@ -163,6 +163,10 @@ public final class ResourceAccessor {
 			soundPool.release();
 		}
 	}
+	public void clearAllBitmap()
+	{
+		bmpArray.clear();
+	}
 	public Bitmap createBitmapFromDrawableId( int id )
 	{
 		BitmapFactory.Options options = new BitmapFactory.Options();

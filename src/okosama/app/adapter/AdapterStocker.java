@@ -86,6 +86,11 @@ public class AdapterStocker {
 	
 	public void clear()
 	{
+		for( int i=0; i < array.size(); i++ )
+		{
+			IAdapterUpdate adp = array.get(array.keyAt(i));
+			adp.clearAdapterData();
+		}		
         array.clear();
 	}
 }

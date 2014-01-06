@@ -100,7 +100,12 @@ public class TabPageArtist extends TabPage {
 		{
 			ExpandableListView view = ((ExpandableListView) lst.getView());
 			view.setAdapter(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getArtistAdp());
-			view.invalidateViews();
+			// view.invalidateViews();
+			if( -1 == widgets.indexOf(lst) )
+			{
+				widgets.add(lst);
+				OkosamaMediaPlayerActivity.removeFromParent(lst.getView());
+			}
 		}
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
 		int i=0;

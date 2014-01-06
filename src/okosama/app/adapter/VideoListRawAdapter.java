@@ -31,7 +31,7 @@ import android.widget.TextView;
  *
  */
 public class VideoListRawAdapter extends ArrayAdapter<VideoData> implements IAdapterUpdate { 
-
+	boolean deleted = false;
 	private ArrayList<VideoData> allItems = new ArrayList<VideoData>();
 	// TODO:ŽŸ‚Öƒ{ƒ^ƒ““™
 	int maxShowCount = 80;
@@ -294,14 +294,14 @@ public class VideoListRawAdapter extends ArrayAdapter<VideoData> implements IAda
 	//		        					((AlbumListRawAdapter)mActivity.getAdapter(TabPage.TABPAGE_ID_ALBUM)).getAlbumArtFromId(Integer.parseInt(data.getTrackAlbumId())));
 			          		// Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
 			            	    allItems.add(data);
-			        		} while( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
-			        				cursor.moveToNext() );
+			        		} while( deleted == false // OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
+			        				&& cursor.moveToNext() );
 		            	}
 	        		}
         		} finally {
         			cursor.close();
         		}
-        		if( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() )
+        		if( deleted )//OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() )
         			return -2;
         		
                 return 0;
@@ -441,6 +441,11 @@ public class VideoListRawAdapter extends ArrayAdapter<VideoData> implements IAda
    		{
    			mActivity.reScanMediaOfMediaTab(TabPage.TABPAGE_ID_VIDEO);
    		}
+	}
+	@Override
+	public void clearAdapterData() {
+		deleted = true;
+		this.clear();		
 	}
 	
 }
