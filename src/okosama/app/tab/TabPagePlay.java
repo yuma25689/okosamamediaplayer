@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.action.IViewAction;
 import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.panel.MoveTabInfo;
 import okosama.app.panel.NowPlayingControlPanel;
@@ -14,6 +15,7 @@ import okosama.app.panel.TabMoveLeftInfoPanel;
 import okosama.app.panel.TabMoveRightInfoPanel;
 import okosama.app.panel.TimeControlPanel;
 import okosama.app.service.MediaPlayerUtil;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -30,7 +32,12 @@ import android.widget.RelativeLayout;
  * @author 25689
  *
  */
-public class TabPagePlay extends TabPage implements OnTouchListener {
+public class TabPagePlay extends TabPage { //implements OnTouchListener {
+
+	boolean bPanelShowPlay = true;
+	public boolean getPanelShowPlay() {
+		return bPanelShowPlay;
+	}
 
 	public TabPagePlay( Tab parent, LinearLayout ll, RelativeLayout rl ) {
 		super();
@@ -148,7 +155,7 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 		
 		videoView.setVisibility(View.GONE);
 		videoView.setLayoutParams(lpVideoView);
-		videoView.setOnTouchListener(this);
+		// videoView.setOnTouchListener(this);
 		// TODO:videoを使う時は、コメントを外す
 		// tabBaseLayout.addView( videoView );
 		// tabBaseLayout.setOnTouchListener(new TabViewTouchListener(0,0));
@@ -196,12 +203,12 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 				leftPanel.insertToLayout(tabBaseLayout);
 			}
 			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-			act.getControllerShowHideBtn().getView().setVisibility(View.GONE);
+			// act.getControllerShowHideBtn().getView().setVisibility(View.GONE);
 		}
 		else
 		{
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().
-			getControllerShowHideBtn().getView().setVisibility(View.VISIBLE);	
+			// OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().
+			// getControllerShowHideBtn().getView().setVisibility(View.VISIBLE);	
 		}
 	}
 	public void updateAlbumArtOnThePlayTab()
@@ -224,27 +231,48 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
         	tabBaseLayout.setBackgroundResource(R.color.gradiant_test);
         }
 	}
-	
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		switch (event.getAction() & MotionEvent.ACTION_MASK) {
-        case MotionEvent.ACTION_DOWN:
-        	Log.d("action down","come");
-        	updateControlPanel();
-            break;
-        }
-		
-		return false;
-	}
-	public void updateControlPanel()
+
+//	int firstX = 0;
+//	int firstY = 0;
+//	@Override
+//	public boolean onTouch(View v, MotionEvent event) {
+//		int x = (int) event.getRawX();
+//		int y = (int) event.getRawY();
+//		switch (event.getAction() & MotionEvent.ACTION_MASK) {
+//        case MotionEvent.ACTION_DOWN:
+//        	firstX = x;
+//        	firstY = y;
+//			break;
+//        case MotionEvent.ACTION_UP:
+//			Rect outRect = new Rect(
+//					firstX - TOUCH_RECOGNIZE_SPOT_SIZE/2,
+//					firstY - TOUCH_RECOGNIZE_SPOT_SIZE/2,
+//					firstX - TOUCH_RECOGNIZE_SPOT_SIZE/2 + TOUCH_RECOGNIZE_SPOT_SIZE,
+//					firstY - TOUCH_RECOGNIZE_SPOT_SIZE/2 + TOUCH_RECOGNIZE_SPOT_SIZE);
+//			// outRect.inset(-1*CLICKABLE_OFFSET, -1*CLICKABLE_OFFSET);
+//			if( outRect.contains(x,y) )
+//			{
+//	        	updateControlPanelPlay(!bPanelShowPlay);
+//			}        	
+//            break;
+//        }
+//		return false;
+//	}
+	public void updateControlPanelPlay(boolean bPanelShowPlay_)
 	{
-		bPanelShow = !bPanelShow;
-		if( bPanelShow )
+		bPanelShowPlay = bPanelShowPlay_;
+		updateControlPanelPlay();
+	}
+	public void updateControlPanelPlay()
+	{
+		if( bPanelShowPlay )
 		{
 			SubControlPanel.insertToLayout(tabBaseLayout);
 			NowPlayingControlPanel.insertToLayout(tabBaseLayout);
 			TimeControlPanel.insertToLayout(tabBaseLayout);
 			PlayControlPanel.insertToLayout(tabBaseLayout);
+			bPanelShow = true;
+			
 //			if( rightPanel != null )
 //			{
 //				rightPanel.insertToLayout(tabBaseLayout);
@@ -261,6 +289,7 @@ public class TabPagePlay extends TabPage implements OnTouchListener {
 			NowPlayingControlPanel.removeFromParent();
 			SubControlPanel.removeFromParent();
 			PlayControlPanel.removeFromParent();	//ToLayout(tabBaseLayout);			
+			bPanelShow = false;			
 		}
 	}
 }

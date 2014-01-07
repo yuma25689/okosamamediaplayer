@@ -3,18 +3,24 @@ package okosama.app.panel;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.R.color;
 import okosama.app.R.drawable;
 import okosama.app.factory.DroidWidgetKit;
+import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.Label;
 import okosama.app.widget.LabelImpl;
 import okosama.app.widget.absWidget;
 import android.app.Activity;
+import android.os.RemoteException;
+import android.text.TextUtils.TruncateAt;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
 
 public class NowPlayingControlPanel extends ControlPanel {
 	static NowPlayingControlPanel instance;
@@ -59,7 +65,15 @@ public class NowPlayingControlPanel extends ControlPanel {
 		{
 			OkosamaMediaPlayerActivity.removeFromParent(instance.getView());
 
-			parent = null;				
+			parent = null;
+			
+			// marquee対応
+			if( instance.getNowPlayingSongLabel() != null && instance.getNowPlayingSongLabel().getView() != null )
+			{
+				LabelImpl tv = ((LabelImpl)instance.getNowPlayingSongLabel().getView());
+				tv.setEllipsize(null);
+			}
+			
 		}
 	}
 
@@ -67,22 +81,48 @@ public class NowPlayingControlPanel extends ControlPanel {
 		super(activity);
 		resetPanelViews(R.layout.tab_layout_content_generic);
 
-		//////////////////// button //////////////////////////
-		TabComponentPropertySetter creationData[] = {
-				// --------------------- ARTIST
-				new TabComponentPropertySetter(
-					ControlIDs.TIME_ARTIST_LABEL, null, ComponentType.LABEL, 
-					35, 300, 400, 80
-					, null, drawable.no_image, "", ScaleType.FIT_XY
-				),		
-				// --------------------- ALBUM
-				new TabComponentPropertySetter(
-					ControlIDs.TIME_ALBUM_LABEL, null, ComponentType.LABEL, 
-					35, 380, 400, 80
-					, null, drawable.no_image, "", ScaleType.FIT_XY
-				),			
-		};
-	
+		TabComponentPropertySetter creationData[] = null;
+		
+		if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+		{
+			
+			//////////////////// button //////////////////////////
+			TabComponentPropertySetter creationDataPort[] = {
+					// --------------------- ARTIST
+					new TabComponentPropertySetter(
+						ControlIDs.TIME_ARTIST_LABEL, null, ComponentType.LABEL, 
+						35, 320, 400, 80
+						, null, drawable.no_image, "", ScaleType.FIT_XY
+					),		
+					// --------------------- ALBUM
+					new TabComponentPropertySetter(
+						ControlIDs.TIME_ALBUM_LABEL, null, ComponentType.LABEL, 
+						35, 380, 400, 80
+						, null, drawable.no_image, "", ScaleType.FIT_XY
+					),			
+			};
+			creationData = creationDataPort;
+		}
+		else
+		{
+			//////////////////// button //////////////////////////
+			TabComponentPropertySetter creationDataHorz[] = {
+					// --------------------- ARTIST
+					new TabComponentPropertySetter(
+						ControlIDs.TIME_ARTIST_LABEL, null, ComponentType.LABEL, 
+						300, 135, 80, 400
+						, null, drawable.no_image, "", ScaleType.FIT_XY
+					),		
+					// --------------------- ALBUM
+					new TabComponentPropertySetter(
+						ControlIDs.TIME_ALBUM_LABEL, null, ComponentType.LABEL, 
+						400, 130, 80, 400
+						, null, drawable.no_image, "", ScaleType.FIT_XY
+					),			
+			};
+			creationData = creationDataHorz;
+			
+		}
 		absWidget widgets[] = {
 				getNowPlayingArtistLabel()
 				,getNowPlayingAlbumLabel()
@@ -126,10 +166,22 @@ public class NowPlayingControlPanel extends ControlPanel {
 		if( nowPlayingSongLabel == null )
 		{
 			nowPlayingSongLabel = DroidWidgetKit.getInstance().MakeLabel();
+			if( null != nowPlayingSongLabel.getView() )
+			{
+				TextView tv = ((TextView)nowPlayingSongLabel.getView());
+				tv.setTextColor(
+						OkosamaMediaPlayerActivity.getResourceAccessor().getColor(
+								android.R.color.primary_text_light_nodisable));
+				tv.setSingleLine(); // 文字列を1行で表示. これがないと複数行に渡って表示されてしまうので、スクロールできない
+				tv.setFocusableInTouchMode(true);				
+				//tv.setEllipsize(TruncateAt.MARQUEE);
+				tv.setGravity(Gravity.CENTER);
+				tv.setTextSize(32.0f);
+			}
 		}		
 		return nowPlayingSongLabel;
 	}
-    public void setNowPlayingSongLabel(String strValue)
+    public void updateNowPlayingSongLabel(String strValue)
     {
     	if( nowPlayingSongLabel == null
     	|| nowPlayingSongLabel.getView() == null 
@@ -137,7 +189,33 @@ public class NowPlayingControlPanel extends ControlPanel {
     	{
     		return;
     	}
-    	((LabelImpl)nowPlayingSongLabel.getView()).setText(strValue);
+		LabelImpl tv = ((LabelImpl)nowPlayingSongLabel.getView());
+    	try {
+			if( MediaPlayerUtil.sService != null && MediaPlayerUtil.sService.isPlaying() )
+			{
+				//tv.setSingleLine(); // 文字列を1行で表示. これがないと複数行に渡って表示されてしまうので、スクロールできない
+				//tv.setFocusableInTouchMode(true);	
+				if( TruncateAt.MARQUEE != tv.getEllipsize() )
+				{
+					Log.d("marquee","set");
+					tv.setEllipsize(TruncateAt.MARQUEE);
+					tv.requestFocus();
+				}
+			}
+			else
+			{
+				tv.setEllipsize(null);    		
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	if( strValue.equals( tv.getText() ))
+    	{
+    		// いちいち設定し直すとMarqueeが効いていないように見えるため、テキストが同じ場合は、更新しない
+    		return;
+    	}
+    	tv.setText(strValue);
     	return;
     }	
 	Label nowPlayingArtistLabel = null;
@@ -146,6 +224,7 @@ public class NowPlayingControlPanel extends ControlPanel {
 		if( nowPlayingArtistLabel == null )
 		{
 			nowPlayingArtistLabel = DroidWidgetKit.getInstance().MakeLabel();
+			((TextView)nowPlayingArtistLabel.getView()).setTextSize(22.0f);			
 		}		
 		return nowPlayingArtistLabel;
 	}
@@ -166,6 +245,7 @@ public class NowPlayingControlPanel extends ControlPanel {
 		if( nowPlayingAlbumLabel == null )
 		{
 			nowPlayingAlbumLabel = DroidWidgetKit.getInstance().MakeLabel();
+			((TextView)nowPlayingAlbumLabel.getView()).setTextSize(18.0f);			
 		}		
 		return nowPlayingAlbumLabel;
 	}
@@ -183,7 +263,7 @@ public class NowPlayingControlPanel extends ControlPanel {
 	public static void clearNowPlayingDisplays() {
 		if( NowPlayingControlPanel.getInstance() != null )
 		{
-			NowPlayingControlPanel.getInstance().setNowPlayingSongLabel("");
+			NowPlayingControlPanel.getInstance().updateNowPlayingSongLabel("");
 			NowPlayingControlPanel.getInstance().setNowPlayingArsistLabel("");
 			NowPlayingControlPanel.getInstance().setNowPlayingAlbumLabel("");
 		}

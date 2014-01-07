@@ -76,33 +76,70 @@ public class SubControlPanel extends ControlPanel {
 		super(activity);
 		resetPanelViews(R.layout.tab_layout_content_generic);
 
-		//////////////////// button //////////////////////////
-		TabComponentPropertySetter creationData[] = {
-				// --------------------- SHUFFLE
-				new TabComponentPropertySetter(
-					ControlIDs.SHUFFLE_BUTTON, null, ComponentType.BUTTON, 
-					20, 470, 100, 100
-					, null, drawable.no_image, "", ScaleType.FIT_XY
-				),
-				// --------------------- REPEAT
-				new TabComponentPropertySetter(
-					ControlIDs.REPEAT_BUTTON, null, ComponentType.BUTTON, 
-					200, 460, 100, 100
-					, null, drawable.no_image, "", ScaleType.FIT_XY
-				),
-				// --------------------- STOP
-				new TabComponentPropertySetter(
-					ControlIDs.STOP_BUTTON, null, ComponentType.BUTTON, 
-					150, 560, 100, 100
-					, null, R.drawable.stop_button_image, "", ScaleType.FIT_XY
-				),
-				// --------------------- TWITTER
-				new TabComponentPropertySetter(
-					ControlIDs.TWEET_BUTTON, null, ComponentType.BUTTON, 
-					370, 500, 80, 80
-					, null, R.drawable.internal_btn_image, "", ScaleType.FIT_XY
-				),				
-		};
+		TabComponentPropertySetter creationData[] = null;
+		
+		if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+		{
+			//////////////////// button //////////////////////////
+			TabComponentPropertySetter creationDataPort[] = {
+					// --------------------- SHUFFLE
+					new TabComponentPropertySetter(
+						ControlIDs.SHUFFLE_BUTTON, null, ComponentType.BUTTON, 
+						20, 470, 100, 100
+						, null, drawable.no_image, "", ScaleType.FIT_XY
+					),
+					// --------------------- REPEAT
+					new TabComponentPropertySetter(
+						ControlIDs.REPEAT_BUTTON, null, ComponentType.BUTTON, 
+						200, 460, 100, 100
+						, null, drawable.no_image, "", ScaleType.FIT_XY
+					),
+					// --------------------- STOP
+					new TabComponentPropertySetter(
+						ControlIDs.STOP_BUTTON, null, ComponentType.BUTTON, 
+						150, 560, 100, 100
+						, null, R.drawable.stop_button_image, "", ScaleType.FIT_XY
+					),
+					// --------------------- TWITTER
+					new TabComponentPropertySetter(
+						ControlIDs.TWEET_BUTTON, null, ComponentType.BUTTON, 
+						370, 500, 80, 80
+						, null, R.drawable.internal_btn_image, "", ScaleType.FIT_XY
+					),				
+			};
+			creationData = creationDataPort;
+		}
+		else
+		{
+			//////////////////// button //////////////////////////
+			TabComponentPropertySetter creationDataHorz[] = {
+					// --------------------- SHUFFLE
+					new TabComponentPropertySetter(
+						ControlIDs.SHUFFLE_BUTTON, null, ComponentType.BUTTON, 
+						40, 580, 100, 100
+						, null, drawable.no_image, "", ScaleType.FIT_XY
+					),
+					// --------------------- REPEAT
+					new TabComponentPropertySetter(
+						ControlIDs.REPEAT_BUTTON, null, ComponentType.BUTTON, 
+						350, 610, 100, 100
+						, null, drawable.no_image, "", ScaleType.FIT_XY
+					),
+					// --------------------- STOP
+					new TabComponentPropertySetter(
+						ControlIDs.STOP_BUTTON, null, ComponentType.BUTTON, 
+						130, 360, 100, 100
+						, null, R.drawable.stop_button_image, "", ScaleType.FIT_XY
+					),
+					// --------------------- TWITTER
+					new TabComponentPropertySetter(
+						ControlIDs.TWEET_BUTTON, null, ComponentType.BUTTON, 
+						370, 500, 80, 80
+						, null, R.drawable.internal_btn_image, "", ScaleType.FIT_XY
+					),				
+			};
+			creationData = creationDataHorz;			
+		}
 	
 		absWidget widgets[] = {
 				getShuffleButton()

@@ -8,6 +8,7 @@ import okosama.app.R.drawable;
 import okosama.app.action.IViewAction;
 import okosama.app.action.MediaSeekAction;
 import okosama.app.action.TimeButtonClickAction;
+import okosama.app.action.TimeButtonFlickDownAction;
 import okosama.app.factory.DroidWidgetKit;
 // import okosama.app.tab.ITabComponent;
 import okosama.app.tab.TabComponentActionSetter;
@@ -26,6 +27,7 @@ import android.view.ViewParent;
 //import android.view.LayoutInflater;
 //import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 //import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;
 
@@ -89,63 +91,128 @@ public class TimeControlPanel extends ControlPanel {
 
 		createTimesButton();
 
-		//////////////////// button //////////////////////////
-		TabComponentPropertySetter creationData[] = {
-			// ------------- HOUR
-			new TabComponentPropertySetter(
-				ControlIDs.TIME_HOUR10_BUTTON, null, ComponentType.BUTTON, 
-				22, 240, 
-				ControlDefs.TIMECHAR_WIDTH, 
-				ControlDefs.TIMECHAR_HEIGHT
-				, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
-			),
-			new TabComponentPropertySetter(
-				ControlIDs.TIME_HOUR1_BUTTON, null, ComponentType.BUTTON, 
-				92, 240, 
-				ControlDefs.TIMECHAR_WIDTH, 
-				ControlDefs.TIMECHAR_HEIGHT
-				, R.drawable.num3_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
-			),
-
-			// ------------- MINUTE
-			new TabComponentPropertySetter(
-				ControlIDs.TIME_MINUTE10_BUTTON, null, ComponentType.BUTTON, 
-				167, 230, 
-				ControlDefs.TIMECHAR_WIDTH, 
-				ControlDefs.TIMECHAR_HEIGHT
-				, R.drawable.num4_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
-			),
-			new TabComponentPropertySetter(
-				ControlIDs.TIME_MINUTE1_BUTTON, null, ComponentType.BUTTON, 
-				237, 215, 
-				ControlDefs.TIMECHAR_WIDTH, 
-				ControlDefs.TIMECHAR_HEIGHT
-				, R.drawable.num6_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
-			),
-			// --------------------- SECOND
-			new TabComponentPropertySetter(
-				ControlIDs.TIME_SECOND10_BUTTON, null, ComponentType.BUTTON, 
-				303, 230, 
-				ControlDefs.TIMECHAR_WIDTH, 
-				ControlDefs.TIMECHAR_HEIGHT
-				, R.drawable.num8_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY 
-			),
-			new TabComponentPropertySetter(
-				ControlIDs.TIME_SECOND1_BUTTON, null, ComponentType.BUTTON, 
-				373, 215, 
-				ControlDefs.TIMECHAR_WIDTH, 
-				ControlDefs.TIMECHAR_HEIGHT
-				, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
-			),
-			// --------------------- DURATION
-			new TabComponentPropertySetter(
-				ControlIDs.TIME_DURATION_LABEL, null, ComponentType.LABEL, 
-				40, 270, 200, 50
-				, null, drawable.no_image, "", ScaleType.FIT_XY
-			),		
-		};
-		// OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		TabComponentPropertySetter creationData[] = null;
+		
+		if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+		{
+			//////////////////// button //////////////////////////
+			TabComponentPropertySetter creationDataPort[] = {
+				// ------------- HOUR
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_HOUR10_BUTTON, null, ComponentType.BUTTON, 
+					22, 240, 
+					ControlDefs.TIMECHAR_WIDTH, 
+					ControlDefs.TIMECHAR_HEIGHT
+					, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
+				),
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_HOUR1_BUTTON, null, ComponentType.BUTTON, 
+					92, 240, 
+					ControlDefs.TIMECHAR_WIDTH, 
+					ControlDefs.TIMECHAR_HEIGHT
+					, R.drawable.num3_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
+				),
 	
+				// ------------- MINUTE
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_MINUTE10_BUTTON, null, ComponentType.BUTTON, 
+					167, 230, 
+					ControlDefs.TIMECHAR_WIDTH, 
+					ControlDefs.TIMECHAR_HEIGHT
+					, R.drawable.num4_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
+				),
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_MINUTE1_BUTTON, null, ComponentType.BUTTON, 
+					237, 215, 
+					ControlDefs.TIMECHAR_WIDTH, 
+					ControlDefs.TIMECHAR_HEIGHT
+					, R.drawable.num6_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
+				),
+				// --------------------- SECOND
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_SECOND10_BUTTON, null, ComponentType.BUTTON, 
+					303, 230, 
+					ControlDefs.TIMECHAR_WIDTH, 
+					ControlDefs.TIMECHAR_HEIGHT
+					, R.drawable.num8_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY 
+				),
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_SECOND1_BUTTON, null, ComponentType.BUTTON, 
+					373, 215, 
+					ControlDefs.TIMECHAR_WIDTH, 
+					ControlDefs.TIMECHAR_HEIGHT
+					, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
+				),
+				// --------------------- DURATION
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_DURATION_LABEL, null, ComponentType.LABEL, 
+					370, 340, 200, 50
+					, null, drawable.no_image, "", ScaleType.FIT_XY
+				),		
+			};
+			creationData = creationDataPort;
+			// OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		}
+		else
+		{
+			//////////////////// button //////////////////////////
+			TabComponentPropertySetter creationDataHorz[] = {
+				// ------------- HOUR
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_HOUR10_BUTTON, null, ComponentType.BUTTON, 
+					170, 92, 
+					ControlDefs.TIMECHAR_WIDTH, 
+					ControlDefs.TIMECHAR_HEIGHT
+					, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
+				),
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_HOUR1_BUTTON, null, ComponentType.BUTTON, 
+					180, 177, 
+					ControlDefs.TIMECHAR_WIDTH, 
+					ControlDefs.TIMECHAR_HEIGHT
+					, R.drawable.num3_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
+				),
+	
+				// ------------- MINUTE
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_MINUTE10_BUTTON, null, ComponentType.BUTTON, 
+					200, 262, 
+					ControlDefs.TIMECHAR_WIDTH, 
+					ControlDefs.TIMECHAR_HEIGHT
+					, R.drawable.num4_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
+				),
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_MINUTE1_BUTTON, null, ComponentType.BUTTON, 
+					215, 347, 
+					ControlDefs.TIMECHAR_WIDTH, 
+					ControlDefs.TIMECHAR_HEIGHT
+					, R.drawable.num6_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
+				),
+				// --------------------- SECOND
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_SECOND10_BUTTON, null, ComponentType.BUTTON, 
+					230, 432, 
+					ControlDefs.TIMECHAR_WIDTH, 
+					ControlDefs.TIMECHAR_HEIGHT
+					, R.drawable.num8_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY 
+				),
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_SECOND1_BUTTON, null, ComponentType.BUTTON, 
+					215, 518, 
+					ControlDefs.TIMECHAR_WIDTH, 
+					ControlDefs.TIMECHAR_HEIGHT
+					, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
+				),
+				// --------------------- DURATION
+				new TabComponentPropertySetter(
+					ControlIDs.TIME_DURATION_LABEL, null, ComponentType.LABEL, 
+					270, 140
+					, 50, 200
+					, null, drawable.no_image, "", ScaleType.FIT_XY
+				),		
+			};
+			creationData = creationDataHorz;			
+		}
 		absWidget widgets[] = {
 				getTimesButton()[0]
 				,getTimesButton()[1]
@@ -157,27 +224,32 @@ public class TimeControlPanel extends ControlPanel {
 			};
 		// ---- action
 		// Timeコンポーネント
-		SparseArray< IViewAction > actMapTimeClick1 = new SparseArray< IViewAction >();
-		SparseArray< IViewAction > actMapTimeClick2 = new SparseArray< IViewAction >();
-		SparseArray< IViewAction > actMapTimeClick3 = new SparseArray< IViewAction >();
-		SparseArray< IViewAction > actMapTimeClick4 = new SparseArray< IViewAction >();
-		SparseArray< IViewAction > actMapTimeClick5 = new SparseArray< IViewAction >();
-		SparseArray< IViewAction > actMapTimeClick6 = new SparseArray< IViewAction >();
-		actMapTimeClick1.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_HOUR_10) );	
-		actMapTimeClick2.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_HOUR_1) );	
-		actMapTimeClick3.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_MINUTE_10) );	
-		actMapTimeClick4.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_MINUTE_1) );	
-		actMapTimeClick5.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_SEC_10) );	
-		actMapTimeClick6.put( IViewAction.ACTION_ID_ONCLICK, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_SEC_1) );	
-
+		SparseArray< IViewAction > actMapTime1 = new SparseArray< IViewAction >();
+		SparseArray< IViewAction > actMapTime2 = new SparseArray< IViewAction >();
+		SparseArray< IViewAction > actMapTime3 = new SparseArray< IViewAction >();
+		SparseArray< IViewAction > actMapTime4 = new SparseArray< IViewAction >();
+		SparseArray< IViewAction > actMapTime5 = new SparseArray< IViewAction >();
+		SparseArray< IViewAction > actMapTime6 = new SparseArray< IViewAction >();
+		actMapTime1.put( IViewAction.ACTION_ID_ONFLICKUP, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_HOUR_10) );	
+		actMapTime2.put( IViewAction.ACTION_ID_ONFLICKUP, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_HOUR_1) );	
+		actMapTime3.put( IViewAction.ACTION_ID_ONFLICKUP, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_MINUTE_10) );	
+		actMapTime4.put( IViewAction.ACTION_ID_ONFLICKUP, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_MINUTE_1) );	
+		actMapTime5.put( IViewAction.ACTION_ID_ONFLICKUP, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_SEC_10) );	
+		actMapTime6.put( IViewAction.ACTION_ID_ONFLICKUP, new TimeButtonClickAction(TimeButtonClickAction.TIME_ID_SEC_1) );	
+		actMapTime1.put( IViewAction.ACTION_ID_ONFLICKDOWN, new TimeButtonFlickDownAction(TimeButtonFlickDownAction.TIME_ID_HOUR_10) );	
+		actMapTime2.put( IViewAction.ACTION_ID_ONFLICKDOWN, new TimeButtonFlickDownAction(TimeButtonFlickDownAction.TIME_ID_HOUR_1) );	
+		actMapTime3.put( IViewAction.ACTION_ID_ONFLICKDOWN, new TimeButtonFlickDownAction(TimeButtonFlickDownAction.TIME_ID_MINUTE_10) );	
+		actMapTime4.put( IViewAction.ACTION_ID_ONFLICKDOWN, new TimeButtonFlickDownAction(TimeButtonFlickDownAction.TIME_ID_MINUTE_1) );	
+		actMapTime5.put( IViewAction.ACTION_ID_ONFLICKDOWN, new TimeButtonFlickDownAction(TimeButtonFlickDownAction.TIME_ID_SEC_10) );	
+		actMapTime6.put( IViewAction.ACTION_ID_ONFLICKDOWN, new TimeButtonFlickDownAction(TimeButtonFlickDownAction.TIME_ID_SEC_1) );	
 
 		TabComponentActionSetter actionSetterCont[] = {
-				new TabComponentActionSetter( actMapTimeClick1 )
-				,new TabComponentActionSetter( actMapTimeClick2 )
-				,new TabComponentActionSetter( actMapTimeClick3 )
-				,new TabComponentActionSetter( actMapTimeClick4 )
-				,new TabComponentActionSetter( actMapTimeClick5 )
-				,new TabComponentActionSetter( actMapTimeClick6 )
+				new TabComponentActionSetter( actMapTime1 )
+				,new TabComponentActionSetter( actMapTime2 )
+				,new TabComponentActionSetter( actMapTime3 )
+				,new TabComponentActionSetter( actMapTime4 )
+				,new TabComponentActionSetter( actMapTime5 )
+				,new TabComponentActionSetter( actMapTime6 )
 				,null
 			};
 		// ボタンを作成、位置を合わせ、アクションを設定し、レイアウトに配置
@@ -207,6 +279,10 @@ public class TimeControlPanel extends ControlPanel {
 		if( durationLabel == null )
 		{
 			durationLabel = DroidWidgetKit.getInstance().MakeLabel();
+			((TextView)durationLabel.getView()).setTextColor(
+					OkosamaMediaPlayerActivity.getResourceAccessor().getColor(
+							android.R.color.secondary_text_dark));
+			((TextView)durationLabel.getView()).setTextSize(32.0f);			
 		}		
 		return durationLabel;
 	}

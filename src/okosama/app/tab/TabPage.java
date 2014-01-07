@@ -102,7 +102,13 @@ public abstract class TabPage extends TabComponentParent {
 			{
 				addLayoutFromParent( tabBaseLayout, componentContainer );				
 			}
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getControllerShowHideBtn().getView().setVisibility(View.VISIBLE);
+			TabPage page = (TabPage) OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getCurrentTabPage();
+			if( null != page )
+			{
+				page.updateControlPanel();
+			}
+			
+			// OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getControllerShowHideBtn().getView().setVisibility(View.VISIBLE);
 		}
 		else
 		{

@@ -576,9 +576,10 @@ public class MediaPlayerUtil {
         }
         // 下記の条件に一致する場合、タブを移動するかどうかのアラートを出力する
     	OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-    	if( false == bAlreadyPlayed // メディアが再生中でなかった
+    	if( // false == bAlreadyPlayed // メディアが再生中でなかった
     			// 現在のタブがキューのタブでない
-    	&& false == ( act.getTabStocker().getCurrentTabId() == ControlIDs.TAB_ID_MAIN 
+    	//&& 
+    		false == ( act.getTabStocker().getCurrentTabId() == ControlIDs.TAB_ID_MAIN 
     		&& act.getTabStocker().getCurrentTabId() == TabPage.TABPAGE_ID_NOW_PLAYLIST )
     	)
     	{

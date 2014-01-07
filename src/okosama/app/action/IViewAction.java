@@ -13,6 +13,10 @@ public interface IViewAction {
 	public static final int ACTION_ID_ONTOGGLEON = 2;
 	public static final int ACTION_ID_ONTOGGLEOFF = 3;
 	public static final int ACTION_ID_ONCLICKSEEK = 4;
+	public static final int ACTION_ID_ONFLICKUP = 5;
+	public static final int ACTION_ID_ONFLICKDOWN = 6;
+	public static final int ACTION_ID_ONFLICKLEFT = 7;
+	public static final int ACTION_ID_ONFLICKRIGHT = 8;
 	
 	/**
 	 * アクションを実行する

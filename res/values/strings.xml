@@ -68,7 +68,8 @@
 
     <!-- Delete confirmation dialog when deleting a single song -->
     <string name="delete_song_desc">\"<xliff:g id="song">%s</xliff:g>\" will be permanently deleted from the SD card.</string>
-
+    <string name="delete_video_desc">\"<xliff:g id="video">%s</xliff:g>\" will be permanently deleted from the SD card.</string>
+    
     <!-- Delete confirmation dialog, confirmation button text -->
     <string name="delete_confirm_button_text">OK</string>
     <!-- Toast confirming that song(s) was/were deleted. -->
@@ -78,7 +79,13 @@
         <!-- delete confirmation message for 0 or more than 1 songs -->
         <item quantity="other"><xliff:g id="songs_to_delete">%d</xliff:g> songs were deleted.</item>
     </plurals>
-
+    <plurals name="NNNvideosdeleted">
+        <!-- delete confirmation message for 1 song -->
+        <item quantity="one">1 video was deleted.</item>
+        <!-- delete confirmation message for 0 or more than 1 songs -->
+        <item quantity="other"><xliff:g id="video_to_delete">%d</xliff:g> videos were deleted.</item>
+    </plurals>
+    
     <!-- shown in dialog while the media scanner is starting up -->
     <string name="scanning">Scanning SD card\u2026</string>
 
@@ -351,7 +358,7 @@
     <!-- Do not translate. This is the separator character used when building the string that shows number of albums and songs. -->
     <string name="albumsongseparator">, </string>
     <string name="updateing">Reading library now...</string>
-    <string name="empty_data">Now playing queue is empty.</string>
+    <string name="empty_data">Selected playlist is empty.</string>
     <string name="effect_menu">Effect</string>
     <string name="setting_menu">Setting</string>
     <string name="cant_play_media">Sorry, this player cannot play the specified media.</string>
@@ -426,5 +433,9 @@
     <string name="move_playtab_message">Are you sure move to playing information tab?(This dialog auto cancel %ssecond later.))</string>
     <string name="alert_dialog_yes">Yes</string>
     <string name="alert_dialog_no">No</string>
+    
+    <!-- Toast after clear -->
+    <string name="clear_notif">Stop playing and cleared the selected playlist.</string>
+    
 </resources>
 

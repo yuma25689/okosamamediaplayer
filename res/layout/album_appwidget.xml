@@ -18,7 +18,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:background="@drawable/okosama_app_widget_bg">
+    android:background="@drawable/okosama_app_widget_bg2">
 
    <LinearLayout
         android:id="@+id/album_appwidget"

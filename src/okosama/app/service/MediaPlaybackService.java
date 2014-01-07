@@ -50,6 +50,7 @@ import android.provider.MediaStore.Audio.AudioColumns;
 import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.view.SurfaceHolder;
+import android.view.WindowManager;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -1519,11 +1520,20 @@ public class MediaPlaybackService extends Service {
      * ファイルオープンより前もってプレイバックを開始する？
      */
     public void play() {
-        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN);
-        mAudioManager.registerMediaButtonEventReceiver(new ComponentName(this.getPackageName(),
-                MediaButtonIntentReceiver.class.getName()));
-
+        if( this.getCurrentType() == MediaInfo.MEDIA_TYPE_VIDEO )
+        {
+            // Keep screen on
+        	OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);  
+        }
+        else
+        {
+        	// Keep screen off
+        	OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);        	
+	        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
+	                AudioManager.AUDIOFOCUS_GAIN);
+	        mAudioManager.registerMediaButtonEventReceiver(new ComponentName(this.getPackageName(),
+	                MediaButtonIntentReceiver.class.getName()));
+        }
         if (mPlayer.isInitialized()) {
         	// 準備OK中であれば
             // if we are at the end of the song, go to the next song first
@@ -1681,6 +1691,9 @@ public class MediaPlaybackService extends Service {
      */
     public void pause() {
         synchronized(this) {
+        	// Keep screen off
+        	OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);        	
+        	
         	// このクラスをロック
             if (isPlaying()) {
             	// 再生中であれば
@@ -2054,7 +2067,7 @@ public class MediaPlaybackService extends Service {
     
     private int removeTracksInternal(int first, int last) {
         synchronized (this) {
-        	// 暮らすロック
+        	// クラスロック
             if (last < first) return 0;
             if (first < 0) first = 0;
             if (last >= mPlayListLen) last = mPlayListLen - 1;
@@ -2468,6 +2481,9 @@ public class MediaPlaybackService extends Service {
         }
 
         public void stop() {
+        	// Keep screen off
+        	// OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);        	
+        	
             mMediaPlayer.reset();
             mIsInitialized = false;
         }

@@ -21,6 +21,9 @@ public class DisplayStatePlaySub extends absDisplayState {
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
 		// ÉvÉåÉCëIëâÊñ Ç÷ÇÃêÿÇËë÷Ç¶
 		tab.setCurrentTab(TabPage.TABPAGE_ID_PLAY_SUB, true);
+		//OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+		//act.getControllerShowHideBtn().getView().setVisibility(View.GONE);
+		
 		//IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_PLAY );
 		//action.doAction(null);
 		return 0;
@@ -98,7 +101,7 @@ public class DisplayStatePlaySub extends absDisplayState {
 				if( TimeControlPanel.getInstance() != null )
 				{
 					TimeControlPanel.getInstance().setDurationLabel(MediaPlayerUtil.sService.duration() / 1000);
-					NowPlayingControlPanel.getInstance().setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
+					NowPlayingControlPanel.getInstance().updateNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
 					NowPlayingControlPanel.getInstance().setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
 					NowPlayingControlPanel.getInstance().setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
 					TimeControlPanel.getInstance().getProgressBar().setMax((int)(MediaPlayerUtil.sService.duration()));
@@ -107,7 +110,7 @@ public class DisplayStatePlaySub extends absDisplayState {
 				}
 				// act.setPlayPauseButtonImage();
 				act.updateTimeDisplay(pos/1000);
-		    	Log.d("playsub - updateDisplay", "come position=" + pos );
+		    	// Log.d("playsub - updateDisplay", "come position=" + pos );
 		    }
         }
         catch( RemoteException ex )

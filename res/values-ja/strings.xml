@@ -68,7 +68,8 @@
 
     <!-- Delete confirmation dialog when deleting a single song -->
     <string name="delete_song_desc">曲\"<xliff:g id="song">%s</xliff:g>\" をSDカードから消しますけど、いいですか？</string>
-
+    <string name="delete_video_desc">動画\"<xliff:g id="video">%s</xliff:g>\" をSDカードから消しますけど、いいですか？</string>
+    
     <!-- Delete confirmation dialog, confirmation button text -->
     <string name="delete_confirm_button_text">やる</string>
     <!-- Toast confirming that song(s) was/were deleted. -->
@@ -78,7 +79,13 @@
         <!-- delete confirmation message for 0 or more than 1 songs -->
         <item quantity="other"><xliff:g id="songs_to_delete">%d</xliff:g> 曲消しました。</item>
     </plurals>
-
+    <plurals name="NNNvideosdeleted">
+        <!-- delete confirmation message for 1 song -->
+        <item quantity="one">動画を１つ消しました。</item>
+        <!-- delete confirmation message for 0 or more than 1 songs -->
+        <item quantity="other"><xliff:g id="videos_to_delete">%d</xliff:g> つの動画を消しました。</item>
+    </plurals>
+    
     <!-- shown in dialog while the media scanner is starting up -->
     <string name="scanning">SDカードスキャン中\u2026</string>
 
@@ -425,6 +432,9 @@
     <string name="move_playtab_message">再生を開始します。再生画面に移動しますか？(後%s秒で自動的にキャンセルします)</string>
     <string name="alert_dialog_yes">移動</string>
     <string name="alert_dialog_no">このまま</string>
+
+    <!-- Toast after clear -->
+    <string name="clear_notif">再生停止し、再生対象を全て片付けました。</string>
     
 </resources>
 

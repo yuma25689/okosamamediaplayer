@@ -1,7 +1,9 @@
 package okosama.app.action;
 
+import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.service.MediaPlayerUtil;
+import okosama.app.state.IDisplayState;
 // import android.R;
 import android.os.RemoteException;
 // import android.view.View;
@@ -33,10 +35,24 @@ public final class MediaSeekAction implements IViewAction {
 		
 		long seekVal = (Long)param;
 		try {
-			if( MediaPlayerUtil.sService != null 
-			&& MediaPlayerUtil.sService.isPlaying() == true )
+			
+			if( MediaPlayerUtil.sService != null ) 
 			{
-				MediaPlayerUtil.sService.seek( seekVal );
+		        if( MediaPlayerUtil.sService.isPlaying() 
+		        		|| MediaPlayerUtil.sService.getAudioId() != -1 )
+		        {
+		        	MediaPlayerUtil.sService.seek( seekVal );
+		        	// ÇªÇÃèÍå¿ÇËÇ≈àÍìxÇæÇØéûä‘ìôÇçXêVÇ∑ÇÈ
+                	IDisplayState statePlayTab 
+                	= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getStateStocker().getState(
+                		//ControlIDs.TAB_ID_PLAY
+                		ControlIDs.TAB_ID_PLAY
+                	);
+        			if( statePlayTab != null )
+        			{
+            			statePlayTab.updateDisplay();        				
+        			}		        	
+		        }
 			}
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

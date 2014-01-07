@@ -3,6 +3,7 @@ package okosama.app.tab;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -57,7 +58,10 @@ public class TabPagePlay2 extends TabPage {
 		{
 			TabPagePlay tabPlay = (TabPagePlay) tabContent.getChild(TABPAGE_ID_PLAY_SUB);
 			tabPlay.updateAlbumArtOnThePlayTab();
-			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().selectTab(TabPage.TABPAGE_ID_PLAY,TABPAGE_ID_PLAY_SUB,false);
+			tabPlay.updateControlPanelPlay(true);
+//			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+//			act.getControllerShowHideBtn().getView().setVisibility(View.GONE);
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().selectTab(TabPage.TABPAGE_ID_PLAY,TABPAGE_ID_PLAY_SUB,false);			
 		}
 	}	
 }

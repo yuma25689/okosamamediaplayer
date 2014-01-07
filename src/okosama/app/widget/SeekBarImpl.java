@@ -1,5 +1,6 @@
 package okosama.app.widget;
 
+import okosama.app.OkosamaMediaPlayerActivity;
 import android.content.Context;
 import android.widget.SeekBar;
 
@@ -12,7 +13,7 @@ import android.widget.SeekBar;
 public class SeekBarImpl extends SeekBar {
 
 	public SeekBarImpl(Context context) {
-		super(context,null,android.R.attr.progressBarStyleHorizontal);
+		super(context,null,android.R.attr.progressBarStyleHorizontal);	
 		// このアプリケーション特有の設定
 		setPadding(0,0,0,0);
 	}

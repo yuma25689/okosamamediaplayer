@@ -491,12 +491,12 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		}
 		else if( type == ComponentType.LABEL )
 		{
-			TextView txt = null;
-			if( v instanceof TextView )
-			{
-				txt = (TextView)v;
-			}
-			txt.setTextSize(18.0f);
+//			TextView txt = null;
+//			if( v instanceof TextView )
+//			{
+//				txt = (TextView)v;
+//			}
+			//txt.setTextSize(18.0f);
 		}
 		else if( type == ComponentType.PROGRESS )
 		{

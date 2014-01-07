@@ -6,11 +6,11 @@ import android.os.RemoteException;
 import android.util.Log;
 
 /**
- * 時間をクリックした時に実行するアクション
+ * 時間をフリックダウンした時に実行するアクション
  * @author 25689
  *
  */
-public final class TimeButtonClickAction implements IViewAction {
+public final class TimeButtonFlickDownAction implements IViewAction {
 
 	public static final int TIME_ID_UNKNOWN = -5;
 	public static final int TIME_ID_HOUR_10 = 10 * 60 * 60;
@@ -21,7 +21,7 @@ public final class TimeButtonClickAction implements IViewAction {
 	public static final int TIME_ID_SEC_1 = 1;
 	int timeID = TIME_ID_UNKNOWN;
 
-	public TimeButtonClickAction(int timeID_) {
+	public TimeButtonFlickDownAction(int timeID_) {
 		super();
 		this.timeID = timeID_;
 	}
@@ -46,12 +46,12 @@ public final class TimeButtonClickAction implements IViewAction {
 	        	long pos = MediaPlayerUtil.sService.position();
 	        	long posSec = pos / 1000;
 	        	
-	        	posSec += this.timeID;
-	        	if( ( MediaPlayerUtil.sService.duration() / 1000 ) 
-	        			< posSec )
+	        	posSec -= this.timeID;
+	        	if( posSec < 0 )
 	        	{
-	        		IViewAction action = new NextAction();
-	        		action.doAction(null);
+	        		posSec = 0;
+	        		//IViewAction action = new PrevAction();
+	        		//action.doAction(null);
 	        	}
 	        	MediaSeekAction action = new MediaSeekAction();
 	        	action.doAction( posSec * 1000 );
@@ -61,7 +61,7 @@ public final class TimeButtonClickAction implements IViewAction {
         }
         catch( RemoteException ex )
         {
-        	Log.e("error - timebuttonclick", ex.getMessage() );
+        	Log.e("error - timebuttonflickdown", ex.getMessage() );
         }
 		return 0;
 	}

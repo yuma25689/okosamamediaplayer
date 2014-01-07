@@ -24,6 +24,7 @@ import android.util.SparseArray;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ImageView.ScaleType;
+import android.widget.RelativeLayout;
 
 public class PlayControlPanel extends ControlPanel {
 	static PlayControlPanel instance;
@@ -76,41 +77,84 @@ public class PlayControlPanel extends ControlPanel {
 		super(activity);
 		resetPanelViews(R.layout.tab_layout_content_generic);
 
-		//////////////////// button //////////////////////////
-		TabComponentPropertySetter creationData[] = {
-				// --------------------- PLAY
-				new TabComponentPropertySetter(
-					ControlIDs.PLAY_BUTTON, null, ComponentType.BUTTON, 
-					180, 10, 80, 100
-					, null, R.drawable.play_button_image, "", ScaleType.FIT_XY
-				),
-				// --------------------- NEXT
-				new TabComponentPropertySetter(
-					ControlIDs.NEXT_BUTTON, null, ComponentType.BUTTON, 
-					360, 6, 100, 100
-					, null, R.drawable.next_button_image, "", ScaleType.FIT_XY
-				),
-				// --------------------- PREV
-				new TabComponentPropertySetter(
-					ControlIDs.PREV_BUTTON, null, ComponentType.BUTTON, 
-					30, 18, 100, 100
-					, null, R.drawable.back_button_image, "", ScaleType.FIT_XY
-				),
-				// --------------------- SONG
-				new TabComponentPropertySetter(
-					ControlIDs.TIME_SONG_LABEL, null, ComponentType.LABEL, 
-					30, 160, 400, 50
-					, null, drawable.okosama_app_widget_bg, "", ScaleType.FIT_XY
-				),				
-				// --------------------- PROGRESS
-				// TODO: Œã‚Å•Ê‚ÉˆÚ‚·
-				new TabComponentPropertySetter(
-					ControlIDs.TIME_PROGRESS, null, ComponentType.PROGRESS, 
-					0, 125, 480, 40
-					, null, null, "", ScaleType.FIT_XY
-				),				
-		};
-	
+		TabComponentPropertySetter creationData[] = null;
+		if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+		{
+			//////////////////// button //////////////////////////
+			TabComponentPropertySetter creationDataPort[] = {
+					// --------------------- PLAY
+					new TabComponentPropertySetter(
+						ControlIDs.PLAY_BUTTON, null, ComponentType.BUTTON, 
+						180, 10, 80, 100
+						, null, R.drawable.play_button_image, "", ScaleType.FIT_XY
+					),
+					// --------------------- NEXT
+					new TabComponentPropertySetter(
+						ControlIDs.NEXT_BUTTON, null, ComponentType.BUTTON, 
+						360, 6, 100, 100
+						, null, R.drawable.next_button_image, "", ScaleType.FIT_XY
+					),
+					// --------------------- PREV
+					new TabComponentPropertySetter(
+						ControlIDs.PREV_BUTTON, null, ComponentType.BUTTON, 
+						30, 18, 100, 100
+						, null, R.drawable.back_button_image, "", ScaleType.FIT_XY
+					),
+					// --------------------- SONG
+					new TabComponentPropertySetter(
+						ControlIDs.TIME_SONG_LABEL, null, ComponentType.LABEL, 
+						30, 160, 400, 50
+						, null, drawable.okosama_app_widget_bg2, "", ScaleType.FIT_XY
+					),				
+					// --------------------- PROGRESS
+					// TODO: Œã‚Å•Ê‚ÉˆÚ‚·
+					new TabComponentPropertySetter(
+						ControlIDs.TIME_PROGRESS, null, ComponentType.PROGRESS, 
+						0, 125, 480, 40
+						, null, null, "", ScaleType.FIT_XY
+					),				
+			};
+			creationData = creationDataPort;
+		}
+		else
+		{
+			//////////////////// button //////////////////////////
+			TabComponentPropertySetter creationDataHorz[] = {
+					// --------------------- PLAY
+					new TabComponentPropertySetter(
+						ControlIDs.PLAY_BUTTON, null, ComponentType.BUTTON, 
+						180, 10, 80, 100
+						, null, R.drawable.play_button_image, "", ScaleType.FIT_XY
+					),
+					// --------------------- NEXT
+					new TabComponentPropertySetter(
+						ControlIDs.NEXT_BUTTON, null, ComponentType.BUTTON, 
+						30, 6, 100, 100
+						, null, R.drawable.next_button_image, "", ScaleType.FIT_XY
+					),
+					// --------------------- PREV
+					new TabComponentPropertySetter(
+						ControlIDs.PREV_BUTTON, null, ComponentType.BUTTON, 
+						360, 18, 100, 100
+						, null, R.drawable.back_button_image, "", ScaleType.FIT_XY
+					),
+					// --------------------- SONG
+					new TabComponentPropertySetter(
+						ControlIDs.TIME_SONG_LABEL, null, ComponentType.LABEL, 
+						40, 160, 50, 400
+						, null, drawable.okosama_app_widget_bg2, "", ScaleType.FIT_XY
+					),				
+					// --------------------- PROGRESS
+					// TODO: Œã‚Å•Ê‚ÉˆÚ‚·
+					new TabComponentPropertySetter(
+						ControlIDs.TIME_PROGRESS, null, ComponentType.PROGRESS, 
+						0, 0, 40, RelativeLayout.LayoutParams.FILL_PARENT
+						, null, null, "", ScaleType.FIT_XY
+					),				
+			};
+			creationData = creationDataHorz;			
+			
+		}
 		absWidget widgets[] = {
 				getPlayPauseButton()
 				,getNextButton()

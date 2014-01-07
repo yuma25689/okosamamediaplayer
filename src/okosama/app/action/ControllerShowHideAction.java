@@ -29,11 +29,12 @@ public final class ControllerShowHideAction implements IViewAction {
 	public int doAction( Object param ) {
 		
 		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-		int iTabId = act.getTabStocker().getCurrentTabId();
-		int iCurrentTabPageId = act.getCurrentTabPageId();
-		if( null != act.getTabStocker().getTab(iTabId) )
+//		int iTabId = act.getTabStocker().getCurrentTabId();
+//		int iCurrentTabPageId = act.getCurrentTabPageId();
+		TabPage page = (TabPage) act.getCurrentTabPage();
+		if( null != page )//act.getTabStocker().getTab(iTabId) )
 		{
-			TabPage page = (TabPage) act.getTabStocker().getTab(iTabId).getChild(iCurrentTabPageId);
+			// TabPage page = (TabPage) act.getTabStocker().getTab(iTabId).getChild(iCurrentTabPageId);
 			page.setCtrlPanelShowFlg(!(page.getCtrlPanelShowFlg()));
 			page.updateControlPanel();
 		}

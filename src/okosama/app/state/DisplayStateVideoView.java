@@ -97,7 +97,7 @@ public class DisplayStateVideoView extends absDisplayStateMediaTab {
 				if( TimeControlPanel.getInstance() != null )
 				{
 					TimeControlPanel.getInstance().setDurationLabel(MediaPlayerUtil.sService.duration() / 1000);
-					NowPlayingControlPanel.getInstance().setNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
+					NowPlayingControlPanel.getInstance().updateNowPlayingSongLabel(MediaPlayerUtil.sService.getTrackName());
 					NowPlayingControlPanel.getInstance().setNowPlayingArsistLabel(MediaPlayerUtil.sService.getArtistName());
 					NowPlayingControlPanel.getInstance().setNowPlayingAlbumLabel(MediaPlayerUtil.sService.getAlbumName());
 					TimeControlPanel.getInstance().getProgressBar().setMax((int)(MediaPlayerUtil.sService.duration()));
@@ -106,7 +106,7 @@ public class DisplayStateVideoView extends absDisplayStateMediaTab {
 				}
 				// act.setPlayPauseButtonImage();
 				act.updateTimeDisplay(pos/1000);
-		    	Log.e("videoview - updateDisplay", "come position=" + pos );
+		    	// Log.e("videoview - updateDisplay", "come position=" + pos );
 		    }
         }
         catch( RemoteException ex )

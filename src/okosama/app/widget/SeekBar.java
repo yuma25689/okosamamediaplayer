@@ -100,7 +100,8 @@ public class SeekBar extends absWidget {
 					public void onStopTrackingTouch(
 							android.widget.SeekBar seekBar) {
 						// TODO Auto-generated method stub
-						actionMap.get( IViewAction.ACTION_ID_ONCLICKSEEK, null ).doAction(new Long(seekBar.getProgress()));
+						actionMap.get( IViewAction.ACTION_ID_ONCLICKSEEK, null ).doAction(
+								new Long(seekBar.getProgress()));
 						
 					}
 				}

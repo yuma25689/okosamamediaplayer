@@ -1087,8 +1087,8 @@ public class Database {
 	    	{
 	    		listVideo[i] = lstVideoId.get(i);
 	    	}
-	    	// TODO: ビデオの削除
-	    	// deleteVideoTracks(context, listVideo);
+	    	// ビデオの削除
+	    	deleteVideoTracks(context, listVideo);
     	}
     }
     public static void deleteAudioTracks(Context context, long [] list ) {
@@ -1157,6 +1157,74 @@ public class Database {
         // in the media content domain, so update everything.
         context.getContentResolver().notifyChange(Uri.parse("content://media"), null);
     }
+    public static void deleteVideoTracks(Context context, long [] list ) {
+        
+        String [] cols = new String [] { 
+        		MediaStore.Video.Media._ID, MediaStore.Video.Media.DATA };
+        StringBuilder where = new StringBuilder();
+        where.append(MediaStore.Video.Media._ID + " IN (");
+        for (int i = 0; i < list.length; i++) {
+            where.append(list[i]);
+            if (i < list.length - 1) {
+                where.append(",");
+            }
+        }
+        where.append(")");
+        Cursor c = query(context, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, cols,
+                where.toString(), null, null);
+
+        if (c != null) {
+
+            // step 1: remove selected tracks from the current playlist, as well
+            // as from the album art cache
+            try {
+                c.moveToFirst();
+                while (! c.isAfterLast()) {
+                    // remove from current playlist
+                    long id = c.getLong(0);
+                    MediaPlayerUtil.sService.removeTrack(id);
+//                    // remove from album art cache
+//                    long artIndex = c.getLong(2);
+//                    synchronized(MediaPlayerUtil.sArtCache) {
+//                    	MediaPlayerUtil.sArtCache.remove(artIndex);
+//                    }
+                    c.moveToNext();
+                }
+            } catch (RemoteException ex) {
+            }
+
+            // step 2: remove selected tracks from the database
+            context.getContentResolver().delete(
+            		MediaStore.Video.Media.EXTERNAL_CONTENT_URI, where.toString(), null);
+
+            // step 3: remove files from card
+            c.moveToFirst();
+            while (! c.isAfterLast()) {
+                String name = c.getString(1);
+                File f = new File(name);
+                try {  // File.delete can throw a security exception
+                    if (!f.delete()) {
+                        // I'm not sure if we'd ever get here (deletion would
+                        // have to fail, but no exception thrown)
+                        Log.e("MusicUtils", "Failed to delete file " + name);
+                    }
+                    c.moveToNext();
+                } catch (SecurityException ex) {
+                    c.moveToNext();
+                }
+            }
+            c.close();
+        }
+
+        String message = context.getResources().getQuantityString(
+                R.plurals.NNNvideosdeleted, list.length, Integer.valueOf(list.length));
+        
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        // We deleted a number of tracks, which could affect any number of things
+        // in the media content domain, so update everything.
+        context.getContentResolver().notifyChange(Uri.parse("content://media"), null);
+    }
+
     public static MediaInfo [] getSongListForPlaylist(Context context, long plid) {
         final String[] ccols = new String[] { MediaStore.Audio.Playlists.Members.AUDIO_ID };
         Cursor cursor = query(context, MediaStore.Audio.Playlists.Members.getContentUri("external", plid),

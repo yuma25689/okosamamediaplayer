@@ -201,7 +201,7 @@ implements ServiceConnection, Database.Defs {
 		{
 			try {
 				if( MediaPlayerUtil.sService != null 
-				&& MediaPlayerUtil.sService.getQueue() != null
+				&& 0 <= MediaPlayerUtil.sService.getQueuePosition() 
 				&& MediaPlayerUtil.sService.getCurrentType() == MediaInfo.MEDIA_TYPE_VIDEO )
 				{
 					getVideoView().setVisibility(View.VISIBLE);
@@ -792,6 +792,21 @@ implements ServiceConnection, Database.Defs {
         return iRet;
 	}
 	/**
+	 * 現在選択されているタブページを取得する
+	 * @return
+	 */
+	public ITabComponent getCurrentTabPage()
+	{
+		ITabComponent page = null;
+		int iTabId = getTabStocker().getCurrentTabId();
+		int iCurrentTabPageId = getCurrentTabPageId();
+		if( null != getTabStocker().getTab(iTabId) )
+		{
+			page = getTabStocker().getTab(iTabId).getChild(iCurrentTabPageId);
+		}
+		return page;
+	}
+	/**
 	 * メディアタブ内のタブページを選択する
 	 * @param subTab 新しく選択したいタブページのID
 	 * @param bForceRefresh 強制リフレッシュフラグ
@@ -1145,6 +1160,15 @@ implements ServiceConnection, Database.Defs {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+		// マップをループして、全部の設定を保存
+		Editor editor = getPreferences(MODE_PRIVATE).edit();
+		// 現在選択されているタブID
+		for(int i=0; i < tabStocker.getTabPageIdMap().size(); ++i ) {
+			editor.putInt( String.valueOf( tabStocker.getTabPageIdMap().keyAt(i) ),
+					tabStocker.getTabPageIdMap().valueAt(i) );
+		}
+		editor.commit();
+
 		//if( newConfig.orientation // == ActivityInfo.CONFIG_ORIENTATION )
 		//{
 			// 向きの変更によってActivity終了の場合
@@ -1498,7 +1522,8 @@ implements ServiceConnection, Database.Defs {
 		        {
 		        	if( null != timeBtns[i].getView() )
 		        	{
-		        		((ButtonImpl)timeBtns[i].getView()).setImageBitmap( getResourceAccessor().createBitmapFromDrawableId(timeImgResIds[ timeArgs[i] ]) );
+		        		((ButtonImpl)timeBtns[i].getView()).setImageBitmap( getResourceAccessor().createBitmapFromDrawableId(
+		        				timeImgResIds[ timeArgs[i] ]) );
 		        	}
 		        }
 	        }

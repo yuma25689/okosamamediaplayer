@@ -4,8 +4,11 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R.color;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
+import okosama.app.tab.ITabComponent;
 import okosama.app.tab.Tab;
+import okosama.app.tab.TabPagePlay;
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -18,6 +21,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 
 	static final int INFO_SHOW_PANEL_WIDTH_DIP = 150;
 	static final double FLICK_MOVE_SPEED = 1;
+	static final int TOUCH_RECOGNIZE_SPOT_SIZE = 100; 
 	
 	MoveTabInfo nextMoveTabInfo = null;
 	
@@ -42,6 +46,8 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	static final int PLAY = 20;
 	int orgX = 0;
 	int orgY = 0;
+	int firstX = 0;
+	int firstY = 0;
     int currentX;   //Viewの左辺座標：X軸
     int currentY;   //Viewの上辺座標：Y軸
     int offsetX;    //画面タッチ位置の座標：X軸
@@ -62,7 +68,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
         int x = (int) event.getRawX();
         int y = (int) event.getRawY();
 		
-        switch(event.getAction()) {
+        switch(event.getAction() & MotionEvent.ACTION_MASK ) {
         case MotionEvent.ACTION_MOVE:
         	int diffX = offsetX - x;
             int diffY = offsetY - y;
@@ -96,7 +102,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
         int x = (int) event.getRawX();
         int y = (int) event.getRawY();
 		
-        switch(event.getAction()) {
+        switch(event.getAction() & MotionEvent.ACTION_MASK ) {
         case MotionEvent.ACTION_MOVE:
         	int diffX = offsetX - x;
             // int diffY = offsetY - y;
@@ -126,6 +132,8 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 //            }
         	break;
 	    case MotionEvent.ACTION_DOWN:
+	    	firstX = x;
+	    	firstY = y;
 	        break;
 	    case MotionEvent.ACTION_UP:
             layout(orgX, orgY, orgX + getWidth(), orgY + getHeight());
@@ -138,9 +146,27 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	    		action.doAction(null);
 	    		nextMoveTabInfo = null;
 	    	}
-	    	
             // 全てのタブ移動パネル情報をクリアする
             clearAllMoveTabInfoPanel();
+            
+            // ここに入れるのは残念だが、Playタブの場合、
+            // 必要があればビュータップ時にコンパネ表示を消去する
+            ITabComponent page = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getCurrentTabPage();
+            if( page != null && page instanceof TabPagePlay )
+            {
+    			Rect outRect = new Rect(
+    					firstX - TOUCH_RECOGNIZE_SPOT_SIZE/2,
+    					firstY - TOUCH_RECOGNIZE_SPOT_SIZE/2,
+    					firstX - TOUCH_RECOGNIZE_SPOT_SIZE/2 + TOUCH_RECOGNIZE_SPOT_SIZE,
+    					firstY - TOUCH_RECOGNIZE_SPOT_SIZE/2 + TOUCH_RECOGNIZE_SPOT_SIZE);
+    			// outRect.inset(-1*CLICKABLE_OFFSET, -1*CLICKABLE_OFFSET);
+    			if( outRect.contains(x,y) )
+    			{	            	
+	            	TabPagePlay pagePlay = (TabPagePlay) page;
+	            	pagePlay.updateControlPanelPlay(!pagePlay.getPanelShowPlay());
+    			}
+            }
+            
 	        break;
 	    }
 	    return bRet;
