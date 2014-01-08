@@ -176,7 +176,7 @@ public class NowPlayingControlPanel extends ControlPanel {
 				tv.setFocusableInTouchMode(true);				
 				//tv.setEllipsize(TruncateAt.MARQUEE);
 				tv.setGravity(Gravity.CENTER);
-				tv.setTextSize(32.0f);
+				tv.setTextSize(24.0f);//tv.getHeight()-2);//32.0f);
 			}
 		}		
 		return nowPlayingSongLabel;

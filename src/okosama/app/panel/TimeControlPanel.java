@@ -282,7 +282,7 @@ public class TimeControlPanel extends ControlPanel {
 			((TextView)durationLabel.getView()).setTextColor(
 					OkosamaMediaPlayerActivity.getResourceAccessor().getColor(
 							android.R.color.secondary_text_dark));
-			((TextView)durationLabel.getView()).setTextSize(32.0f);			
+			((TextView)durationLabel.getView()).setTextSize(24.0f);//32.0f);			
 		}		
 		return durationLabel;
 	}

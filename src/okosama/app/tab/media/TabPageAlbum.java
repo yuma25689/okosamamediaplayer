@@ -76,9 +76,10 @@ public class TabPageAlbum extends TabPage {
 		// ÉpÉlÉãÇÃà íuÇê›íË
 		RelativeLayout.LayoutParams lp 
 		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-        	0, 0, ControlDefs.APP_BASE_WIDTH, ControlDefs.APP_BASE_HEIGHT
+        	0, 0// , ControlDefs.APP_BASE_WIDTH, ControlDefs.APP_BASE_HEIGHT
         );
 		tabBaseLayout.setLayoutParams(lp);
+		updateProgressPanel = (ViewGroup)tabBaseLayout.findViewById(R.id.TabCommonProgressPanel ); 
 		
 		// TODO:âΩÇ‚Ç¡ÇƒÇÈÇ©í≤ç∏ ???
 //		View v = tabBaseLayout.findViewById(R.id.top_info_bar);

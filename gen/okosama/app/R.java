@@ -48,12 +48,12 @@ public final class R {
          */
         public static final int expanding_child_background=0x7f07000d;
         public static final int gradiant_base=0x7f07000f;
-        public static final int gradiant_notify=0x7f070010;
-        public static final int gradiant_tab_base=0x7f070011;
-        public static final int gradiant_test=0x7f070012;
-        public static final int gradiant_test2=0x7f070013;
-        public static final int gradiant_test3=0x7f070014;
-        public static final int gradiant_test4=0x7f070015;
+        public static final int gradiant_blue=0x7f070010;
+        public static final int gradiant_darkgray=0x7f070011;
+        public static final int gradiant_gray=0x7f070012;
+        public static final int gradiant_notify=0x7f070013;
+        public static final int gradiant_red=0x7f070014;
+        public static final int gradiant_tab_base=0x7f070015;
         public static final int gray=0x7f070006;
         public static final int green=0x7f070001;
         public static final int lightgray=0x7f070005;

@@ -72,7 +72,7 @@ public class TabPageNowPlaylist extends TabPage {
         		0, 0
         );
 		tabBaseLayout.setLayoutParams(lp);
-		tabBaseLayout.setBackgroundResource(R.color.gradiant_test3);
+		tabBaseLayout.setBackgroundResource(R.color.gradiant_red);
 		updateProgressPanel = (ViewGroup)tabBaseLayout.findViewById(R.id.TabCommonProgressPanel );
 		EmptyPanel = (ViewGroup)tabBaseLayout.findViewById(R.id.EmptyShowPanel );
 		if( EmptyPanel != null )

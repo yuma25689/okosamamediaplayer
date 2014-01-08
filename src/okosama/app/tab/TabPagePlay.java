@@ -138,7 +138,8 @@ public class TabPagePlay extends TabPage { //implements OnTouchListener {
 //		tabBaseLayout.addView( activity.getSubCP().getView() );
 //		tabBaseLayout.addView( activity.getTimeCP().getView() );
 //		tabBaseLayout.addView( activity.getPlayCP().getView() );
-		tabBaseLayout.setBackgroundResource(R.color.gradiant_test);
+		// TODO: 裏画面と背景を合わせることでなんとかそれっぽく見えているが、実は裏画面いっぱいにフィットしていない
+		tabBaseLayout.setBackgroundResource(R.color.gradiant_tab_base);
 		
 		// TODO: サーフィスビューをいっぱいに入れる
 		SurfaceView videoView 
@@ -147,7 +148,8 @@ public class TabPagePlay extends TabPage { //implements OnTouchListener {
 //		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
 //        		0, 0 
 //        );
-		RelativeLayout.LayoutParams lpVideoView = OkosamaMediaPlayerActivity.dispInfo.createLayoutParamsForTabContent();
+		RelativeLayout.LayoutParams lpVideoView 
+		= OkosamaMediaPlayerActivity.dispInfo.createLayoutParamsForTabContent();
 //		= new RelativeLayout.LayoutParams(
 //        		RelativeLayout.LayoutParams.FILL_PARENT,
 //				RelativeLayout.LayoutParams.WRAP_CONTENT
@@ -202,7 +204,7 @@ public class TabPagePlay extends TabPage { //implements OnTouchListener {
 			{
 				leftPanel.insertToLayout(tabBaseLayout);
 			}
-			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+			// OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 			// act.getControllerShowHideBtn().getView().setVisibility(View.GONE);
 		}
 		else
@@ -220,6 +222,7 @@ public class TabPagePlay extends TabPage { //implements OnTouchListener {
         AlbumListRawAdapter adp = (AlbumListRawAdapter)act.getAdapter(TABPAGE_ID_ALBUM);
         String art = adp.getAlbumArtFromId((int)currentalbumid);
     	Log.d("albumart - playpanel","albumID=" + currentalbumid + "art=" + art);
+    	// TODO: ちゃんとやる
         if( art != null && art != "")
         {
 	        Drawable d = MediaPlayerUtil.getCachedArtwork(
@@ -228,7 +231,7 @@ public class TabPagePlay extends TabPage { //implements OnTouchListener {
         }
         else
         {
-        	tabBaseLayout.setBackgroundResource(R.color.gradiant_test);
+        	tabBaseLayout.setBackgroundResource(R.color.gradiant_tab_base);
         }
 	}
 

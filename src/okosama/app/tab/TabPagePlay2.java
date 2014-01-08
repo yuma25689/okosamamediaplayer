@@ -41,7 +41,7 @@ public class TabPagePlay2 extends TabPage {
         		0, 0
         );
 		tabBaseLayout.setLayoutParams(lp);
-		tabBaseLayout.setBackgroundResource(R.color.gradiant_test3);
+		tabBaseLayout.setBackgroundResource(R.color.gradiant_tab_base);
 
 		tabContent = OkosamaMediaPlayerActivity.getResourceAccessor()
 				.getActivity().getTabStocker().createPlayTab(

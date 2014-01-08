@@ -49,7 +49,7 @@ public class TabPageMedia extends TabPage {
         		0, 0
         );
 		tabBaseLayout.setLayoutParams(lp);
-		tabBaseLayout.setBackgroundResource(R.color.gradiant_test2);
+		tabBaseLayout.setBackgroundResource(R.color.gradiant_blue);
 		// メディアの場所トグルボタン
 		// external
 		resetTabContent();

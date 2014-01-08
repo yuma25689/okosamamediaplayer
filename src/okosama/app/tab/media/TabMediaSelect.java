@@ -27,8 +27,8 @@ import android.widget.ImageView.ScaleType;
  */
 public class TabMediaSelect extends Tab {
 	// このタブのボタンの大きさ
-	static final int BUTTON_WIDTH = 90;
-	static final int BUTTON_HEIGHT = 90;
+	public static final int BUTTON_WIDTH = 90;
+	public static final int BUTTON_HEIGHT = 90;
 	// このタブのフッタの大きさ
 	//static final int HOOTER_SIZE = BUTTON_HEIGHT + Tab.HDR_SIZE;
 	

@@ -63,7 +63,7 @@ public class TabPageVideoView extends TabPage implements OnTouchListener {
         		0, 0
         );
 		tabBaseLayout.setLayoutParams(lp);
-		tabBaseLayout.setBackgroundResource(R.color.gradiant_test3);
+		tabBaseLayout.setBackgroundResource(R.color.gradiant_red);
 		
 		// TODO: サーフィスビューをいっぱいに入れる
 		SurfaceView videoView 

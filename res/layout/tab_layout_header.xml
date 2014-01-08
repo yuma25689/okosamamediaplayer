@@ -9,6 +9,8 @@
         android:id="@+id/tab_header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:padding="2dp"
         >
     </RelativeLayout>
     <RelativeLayout 
