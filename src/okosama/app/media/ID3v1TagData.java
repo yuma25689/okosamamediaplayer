@@ -1,4 +1,4 @@
-package okosama.app.audio;
+package okosama.app.media;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -124,34 +124,7 @@ public class ID3v1TagData implements IAudioTagData {
 	public static final int ID3_V1_GENRE_BYTE_COUNT = 1;
 	
 	byte bufferID3v1[] = null;
-	
-	public String readStreamAsString(FileInputStream fis, int len) throws IOException
-	{
-		String strRet = null;
-		if( len == fis.read(bufferID3v1, 0, len ) )
-		{
-			// 読み込まれた長さがlenと等しい場合のみ、読み込み成功
-			
-			// byte配列を、Stringに変換する
-			// エンコードの取得
-			ByteEncoder encoder = new ByteEncoder();
-			
-			//String strEncName = 
-			encoder.encode(bufferID3v1, len, strRet);
-			
-		}
-		return strRet;
-	}
-	public Byte readStreamAsByte(FileInputStream fis) throws IOException
-	{
-		bufferID3v1[0] = 0x00;
-		if( 1 == fis.read(bufferID3v1, 0, 1 ) )
-		{
-			// 読み込まれた長さがlenと等しい場合のみ、読み込み成功
-		}
-		return bufferID3v1[0];
-	}
-	
+		
 	/**
 	 * このメソッドの場所はあまり正しくないかもしれない
 	 * @param fis
@@ -163,12 +136,12 @@ public class ID3v1TagData implements IAudioTagData {
 		
 		try 
 		{
-			artist = readStreamAsString( fis, ID3_V1_ARTIST_BYTE_COUNT );
-			album = readStreamAsString( fis, ID3_V1_ALBUM_BYTE_COUNT );
-			year = readStreamAsString( fis, ID3_V1_YEAR_BYTE_COUNT );
-			comment = readStreamAsString( fis, ID3_V1_COMMENT_BYTE_COUNT );
-			trackNumber = readStreamAsByte( fis );
-			genre = readStreamAsByte( fis );
+			artist = StreamReadUtil.readStreamAsString( fis, bufferID3v1, ID3_V1_ARTIST_BYTE_COUNT );
+			album = StreamReadUtil.readStreamAsString( fis, bufferID3v1, ID3_V1_ALBUM_BYTE_COUNT );
+			year = StreamReadUtil.readStreamAsString( fis, bufferID3v1, ID3_V1_YEAR_BYTE_COUNT );
+			comment = StreamReadUtil.readStreamAsString( fis, bufferID3v1, ID3_V1_COMMENT_BYTE_COUNT );
+			trackNumber = StreamReadUtil.readStreamAsByte( fis );
+			genre = StreamReadUtil.readStreamAsByte( fis );
 		} catch( IOException ex )
 		{
 			ex.printStackTrace();

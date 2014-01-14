@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -69,6 +70,7 @@ public class TweetActivity extends Activity {
                     mTwitter.updateStatus(params[0]);
                     return true;
                 } catch (TwitterException e) {
+                	Log.e("tweeté∏îs",e.getErrorMessage() + " " + e.getErrorCode() + " " + e.getMessage() );
                     e.printStackTrace();
                     return false;
                 }

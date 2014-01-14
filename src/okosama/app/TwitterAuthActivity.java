@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,6 +27,9 @@ public class TwitterAuthActivity extends Activity {
         setContentView(R.layout.twitter_auth);
 	    mTwitter = TwitterUtils.getTwitterInstance(this);
         mCallbackURL = getString(R.string.twitter_callback_url);
+//    	StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//    	StrictMode.setThreadPolicy(policy);                	
+                
         findViewById(R.id.action_start_auth).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,6 +52,7 @@ public class TwitterAuthActivity extends Activity {
                     mRequestToken = mTwitter.getOAuthRequestToken(mCallbackURL);
                     return mRequestToken.getAuthorizationURL();
                 } catch (TwitterException e) {
+                	Log.e("auth fail",e.getMessage() + " " + e.getErrorCode() + " " + e.getErrorMessage());
                     e.printStackTrace();
                 }
                 return null;
@@ -54,6 +60,7 @@ public class TwitterAuthActivity extends Activity {
 
             @Override
             protected void onPostExecute(String url) {
+            	Log.e("TweetAuth - onPostExe","url=" + url);
                 if (url != null) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);

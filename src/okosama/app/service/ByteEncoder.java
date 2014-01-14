@@ -27,7 +27,7 @@ public class ByteEncoder {
 			strRet = new String( bytes, Charset.defaultCharset().name() );
 			//DEFAULT_CHARSET_NAME ); // API level 9が必要?-> Charset.defaultCharset() );
 			
-			// エンコードが正しいかチェックを行う
+			// エンコードが正しい(デフォルトと一致しているか)かチェックを行う
 			if( isEncodeCorrect( Charset.defaultCharset().name(),
 					bytes, len, strRet ) )
 			{

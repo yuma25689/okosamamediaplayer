@@ -7,6 +7,7 @@ import twitter4j.auth.AccessToken;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 public class TwitterUtils {
     private static final String TOKEN = "token";
@@ -23,6 +24,8 @@ public class TwitterUtils {
         String consumerKey = context.getString(R.string.twitter_consumer_key);
         String consumerSecret = context.getString(R.string.twitter_consumer_secret);
 
+        Log.d("comsumerKey",consumerKey);
+        Log.d("consumerSecret",consumerSecret);
         TwitterFactory factory = new TwitterFactory();
         Twitter twitter = factory.getInstance();
         twitter.setOAuthConsumer(consumerKey, consumerSecret);

@@ -1,4 +1,4 @@
-package okosama.app.audio;
+package okosama.app.media;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,7 +18,6 @@ public class AudioTagParser implements IAudioTagParser {
 		// fileをストリームにロード
 		try {
 			inStream = new FileInputStream(fileName);
-			
 			// ID3タグを持つファイルかどうか調べる
 			int iRet = haveID3(inStream);
 			if ( NOT_HAVE_ID3 == iRet
@@ -41,6 +40,8 @@ public class AudioTagParser implements IAudioTagParser {
 			{
 				// 既にhaveID3を実行済みの場合、最後尾から125バイト前にシーク済み
 				data = new ID3v1TagData();
+				// データをロード
+				data.Load( inStream );
 			}
 			
 			inStream.close();

@@ -1,4 +1,4 @@
-package okosama.app.audio;
+package okosama.app.media;
 
 public interface IAudioTagParser {
 

@@ -1,4 +1,4 @@
-package okosama.app.audio;
+package okosama.app.media;
 
 import java.io.FileInputStream;
 
