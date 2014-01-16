@@ -1,5 +1,16 @@
 package okosama.app.behavior;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
+
 import okosama.app.DeleteItems;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
@@ -14,6 +25,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -53,6 +65,7 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 		Database.makePlaylistMenu(activity, sub);
 		// menu.add(0, USE_AS_RINGTONE, 0, R.string.ringtone_menu);
 		menu.add(0, DELETE_ITEM, 0, R.string.delete_item);
+		menu.add(0, SHOW_ITEM_INFORMATION, 0, R.string.show_item_information);
 		AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfoIn;
 		mSelectedPosition =  mi.position;
 		// Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.isExternalRef()).getCursor(Database.SongCursorName);
@@ -90,7 +103,35 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 			MediaPlayerUtil.playAll(activity, listMedia, position);
 			return true;
 		}
-	
+		case SHOW_ITEM_INFORMATION:
+		{
+			TrackData data = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().getItem(mSelectedPosition);
+			//Log.d("track_filename",data.getTrackData());
+			File file = new File(data.getTrackData());
+			AudioFile f;
+			try {
+				f = AudioFileIO.read(file);
+				Tag tag = f.getTag();
+				int cnt = tag.getFieldCount();
+			} catch (CannotReadException e) {
+				Log.e("file_info_get_error",e.getMessage());
+				//e.printStackTrace();
+			} catch (IOException e) {
+				Log.e("file_info_get_error",e.getMessage());
+				//e.printStackTrace();
+			} catch (TagException e) {
+				Log.e("file_info_get_error",e.getMessage());
+				//e.printStackTrace();
+			} catch (ReadOnlyFileException e) {
+				Log.e("file_info_get_error",e.getMessage());				
+				//e.printStackTrace();
+			} catch (InvalidAudioFrameException e) {
+				Log.e("file_info_get_error",e.getMessage());				
+				// e.printStackTrace();
+			}
+			// AudioHeader = f.getAudioHeader();			
+		}
+		break;
 	   case QUEUE: {
 		   MediaInfo [] list = new MediaInfo[] { 
 				   new MediaInfo(mSelectedId,MediaInfo.MEDIA_TYPE_AUDIO) };

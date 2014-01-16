@@ -887,6 +887,7 @@ public class Database {
         public final static int SCAN_DONE = 11;
         public final static int QUEUE = 12;
         public final static int CHILD_MENU_BASE = 13; // this should be the last item
+        public final static int SHOW_ITEM_INFORMATION = 14;
     }
   
     /**

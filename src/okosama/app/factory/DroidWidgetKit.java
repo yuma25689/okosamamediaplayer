@@ -4,7 +4,10 @@ import android.app.Activity;
 import okosama.app.behavior.IExpListBehavior;
 import okosama.app.behavior.IListBehavior;
 import okosama.app.widget.Button;
+import okosama.app.widget.Combo;
+import okosama.app.widget.Edit;
 import okosama.app.widget.ExpList;
+import okosama.app.widget.Image;
 import okosama.app.widget.Label;
 import okosama.app.widget.List;
 import okosama.app.widget.ProgressBar;
@@ -58,5 +61,23 @@ public class DroidWidgetKit implements IWidgetKit {
 	{
 		SeekBar ret = new SeekBar(activity);
 		return ret;
-	}	
+	}
+	@Override
+	public Image MakeImage()
+	{
+		return new Image(activity);
+	}
+	@Override
+	public Edit MakeEdit()
+	{
+		return new Edit(activity);
+	}
+	
+	@Override
+	public Combo MakeCombo()
+	{
+		return new Combo(activity);
+	}
+	
+	
 }

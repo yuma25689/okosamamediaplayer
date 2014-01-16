@@ -22,8 +22,25 @@ public interface ControlIDs {
 	public static final int VIDEO_TAB_BUTTON = 114;
 	public static final int VIDEO_VIEW_TAB_BUTTON = 115;
 	public static final int PLAYLIST_TAB_BUTTON = 116;
-	public static final int CONTROLLER_TAB_BUTTON = 116;
-	
+	public static final int CONTROLLER_TAB_BUTTON = 117;
+	public static final int SRCH_TAB_BUTTON = 118;
+	// åüçıÉpÉlÉã
+	public static final int SEARCH_BUTTON = 120;
+	public static final int SEARCH_SONG_ICON = 221;
+	public static final int SEARCH_SONG_EDIT = 121;
+	public static final int SEARCH_ARTIST_ICON = 222;
+	public static final int SEARCH_ARTIST_EDIT = 122;
+	public static final int SEARCH_ALBUM_ICON = 223;
+	public static final int SEARCH_ALBUM_EDIT = 123;
+	public static final int SEARCH_ARTIST_SPINNER = 124;
+	public static final int SEARCH_ALBUM_SPINNER = 125;
+	public static final int SEARCH_GENRE_ICON = 226;
+	public static final int SEARCH_GENRE_SPINNER = 126;
+	public static final int SEARCH_PLAYLIST_ICON = 227;
+	public static final int SEARCH_PLAYLIST_EDIT = 127;
+	public static final int SEARCH_VIDEO_ICON = 228;
+	public static final int SEARCH_VIDEO_EDIT = 128;
+
 	public static final int TIME_HOUR10_BUTTON = 150;
 	public static final int TIME_HOUR1_BUTTON = 151;
 	public static final int TIME_MINUTE10_BUTTON = 152;

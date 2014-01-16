@@ -2438,7 +2438,9 @@ public class MediaPlaybackService extends Service {
                 mMediaPlayer.reset();
                 mMediaPlayer.setOnPreparedListener(null);
                 if (path.startsWith("content://")) {
-                    mMediaPlayer.setDataSource(MediaPlaybackService.this, Uri.parse(path));
+                	Uri uri = Uri.parse(path);
+                	// String strFileName = uri.getLastPathSegment();// test—p
+                    mMediaPlayer.setDataSource(MediaPlaybackService.this, uri);
                 } else {
                     mMediaPlayer.setDataSource(path);
                 }

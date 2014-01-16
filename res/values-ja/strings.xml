@@ -59,7 +59,8 @@
     <string name="delete_item">削除</string>
     <!-- Menu item to play back all the songs in the currently showing list in list order -->
     <string name="play_all">全て再生</string>
-
+    <string name="show_item_information">詳細の表示</string>
+    
     <!-- Delete confirmation dialog when deleting an entire artist -->
     <string name="delete_artist_desc">アーティスト\"<xliff:g id="artist">%s</xliff:g>\"の全ての曲をSDカードから消しますが、いいでしょうか？</string>
 

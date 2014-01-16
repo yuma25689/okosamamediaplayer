@@ -56,6 +56,8 @@ public abstract class TabPage extends TabComponentParent {
 	public static final int TABPAGE_ID_PLAY_SUB = 13;
 	public static final int TABPAGE_ID_VIDEO_VIEW = 14;
 	public static final int TABPAGE_ID_CONTROLLER = 15;
+	public static final int TABPAGE_ID_SEARCH = 16;
+	public static final int TABPAGE_ID_AUDIO_INFO = 17;
 	
 	// private boolean bPrevActivate = false;
 	

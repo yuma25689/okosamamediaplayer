@@ -59,6 +59,10 @@ public abstract class TabComponentParent implements ITabComponent {
 	}
 
 	protected ViewGroup tabBaseLayout = null;
+	public ViewGroup getTabBaseLayout()
+	{
+		return tabBaseLayout;
+	}
 	protected ViewGroup updateProgressPanel = null;
 	protected ArrayList<absWidget> widgets = new ArrayList<absWidget>();
 

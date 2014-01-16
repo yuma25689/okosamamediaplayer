@@ -59,7 +59,8 @@
     <string name="delete_item">Delete</string>
     <!-- Menu item to play back all the songs in the currently showing list in list order -->
     <string name="play_all">Play all</string>
-
+    <string name="show_item_information">Property</string>
+    
     <!-- Delete confirmation dialog when deleting an entire artist -->
     <string name="delete_artist_desc">All songs by <xliff:g id="artist">%s</xliff:g> will be permanently deleted from the SD card.</string>
 

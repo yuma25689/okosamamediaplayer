@@ -6,6 +6,7 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.ControllerShowHideAction;
 import okosama.app.action.IViewAction;
+import okosama.app.action.SearchPanelShowHideAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
@@ -18,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ImageView.ScaleType;
@@ -105,7 +105,7 @@ public class Tab extends TabComponentParent {
 		mapBtn.put( TabPage.TABPAGE_ID_PLAY, DroidWidgetKit.getInstance().MakeButton() );
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
 			ControlIDs.PLAY_TAB_BUTTON, null, ComponentType.BUTTON, 
-			10, 40, 100, 100, 
+			10, 5, 100, 100, 
 			null, R.drawable.music_tab_button_image,
 			"", ScaleType.FIT_XY
 		);
@@ -122,7 +122,7 @@ public class Tab extends TabComponentParent {
 		tabBtnCreationData
 		= new TabComponentPropertySetter(
 			ControlIDs.NOW_PLAYLIST_TAB_BUTTON, null, ComponentType.BUTTON,
-			120, 40, 100, 100,
+			120, 5, 100, 100,
 			null, R.drawable.now_playlist_button_image,
 			"", ScaleType.FIT_XY
 		);
@@ -139,7 +139,7 @@ public class Tab extends TabComponentParent {
 		tabBtnCreationData
 		= new TabComponentPropertySetter(
 			ControlIDs.MEDIA_TAB_BUTTON, null, ComponentType.BUTTON,
-			230, 40, 100, 100,
+			230, 5, 100, 100,
 			null, R.drawable.sdcard_choice_button_image,
 			"", ScaleType.FIT_XY
 		);
@@ -155,7 +155,7 @@ public class Tab extends TabComponentParent {
 		tabBtnCreationData
 		= new TabComponentPropertySetter(
 			ControlIDs.CONTROLLER_TAB_BUTTON, null, ComponentType.BUTTON,
-			380, 40, 100, 100,
+			360, 5, 100, 100,
 			null, R.drawable.controller_button_image,
 			"", ScaleType.FIT_XY
 		);
@@ -166,6 +166,22 @@ public class Tab extends TabComponentParent {
 		mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
 		OkosamaMediaPlayerActivity.removeFromParent(mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).getView());
 		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).getView());				
+		// 検索パネル表示ボタン
+		mapBtn.put( TabPage.TABPAGE_ID_SEARCH, act.getSearchPanelShowHideBtn() );
+		tabBtnCreationData
+		= new TabComponentPropertySetter(
+			ControlIDs.SRCH_TAB_BUTTON, null, ComponentType.BUTTON,
+			470, 5, 100, 100,
+			null, R.drawable.filter_btn_image,
+			"", ScaleType.FIT_XY
+		);
+		mapBtn.get(TabPage.TABPAGE_ID_SEARCH).acceptConfigurator(tabBtnCreationData);		
+		actMapTemp
+		= new SparseArray< IViewAction >();
+		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new SearchPanelShowHideAction() );
+		mapBtn.get(TabPage.TABPAGE_ID_SEARCH).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
+		OkosamaMediaPlayerActivity.removeFromParent(mapBtn.get(TabPage.TABPAGE_ID_SEARCH).getView());
+		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_SEARCH).getView());				
 		
 		RelativeLayout rlCont = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_contents);
 		

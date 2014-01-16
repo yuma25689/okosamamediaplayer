@@ -4,6 +4,7 @@ import okosama.app.tab.ITabComponentConfigurator;
 import okosama.app.tab.TabLeaf;
 import android.app.Activity;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 
 public class absWidget extends TabLeaf {
 	int visibleFlag = View.VISIBLE;
@@ -24,6 +25,13 @@ public class absWidget extends TabLeaf {
 		if( this.getView() != null )
 		{
 			this.getView().setVisibility(visibleFlag);
+		}
+	}
+	public void resetLayoutParams( LayoutParams lp )
+	{
+		if( this.getView() != null )
+		{
+			this.getView().setLayoutParams(lp);
 		}
 	}
 	public absWidget(Activity activity) {

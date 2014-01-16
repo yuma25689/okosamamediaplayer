@@ -17,4 +17,7 @@ public interface IWidgetKit {
 	Label MakeLabel();
 	ProgressBar MakeProgressBar();
 	SeekBar MakeSeekBar();
+	Image MakeImage();
+	Edit MakeEdit();
+	Combo MakeCombo();
 }

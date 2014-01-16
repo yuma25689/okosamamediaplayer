@@ -88,6 +88,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     int mTitleIdx;
     int mArtistIdx;
     int mDurationIdx;
+    int mDataIdx;
     int mAudioIdIdx;
     int mArtistIdIdx;
     int mAlbumIdx;
@@ -192,6 +193,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
         	// タイトル、アーティスト、時間
             mTitleIdx = cursor.getColumnIndexOrThrow(MediaColumns.TITLE);
             mArtistIdx = cursor.getColumnIndexOrThrow(AudioColumns.ARTIST);
+            mDataIdx = cursor.getColumnIndexOrThrow(AudioColumns.DATA);
             mDurationIdx = cursor.getColumnIndexOrThrow(AudioColumns.DURATION);
             mArtistIdIdx = cursor.getColumnIndexOrThrow(AudioColumns.ARTIST_ID);
             mAlbumIdx = cursor.getColumnIndexOrThrow(AudioColumns.ALBUM);
@@ -405,6 +407,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 			        			// 全ての要素をループする
 			            		data.setTrackId( cursor.getLong(0));
 			            		data.setTrackTitle(cursor.getString(mTitleIdx));
+			            		data.setTrackData(cursor.getString(mDataIdx));
 			            		data.setTrackArtist(cursor.getString(mArtistIdx));
 			            		data.setTrackDuration(cursor.getLong(mDurationIdx));
 			            		data.setTrackAudioId(cursor.getLong(mAudioIdIdx));

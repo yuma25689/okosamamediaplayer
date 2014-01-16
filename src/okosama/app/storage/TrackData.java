@@ -20,8 +20,7 @@ public class TrackData implements Serializable {
 	
 	long trackId;
 	String trackTitle;
-	// Data stream •s—v
-	// String trackData;
+	String trackData;
 	String trackGenre;
 	String trackAlbum;
 	String trackAlbumId;
@@ -180,5 +179,17 @@ public class TrackData implements Serializable {
 	 */
 	public void setTrackAlbumId(String trackAlbumId) {
 		this.trackAlbumId = trackAlbumId;
+	}
+	/**
+	 * @return the trackData
+	 */
+	public String getTrackData() {
+		return trackData;
+	}
+	/**
+	 * @param trackData the trackData to set
+	 */
+	public void setTrackData(String trackData) {
+		this.trackData = trackData;
 	}
 }

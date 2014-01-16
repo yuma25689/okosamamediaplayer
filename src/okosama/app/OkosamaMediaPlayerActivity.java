@@ -88,6 +88,15 @@ implements ServiceConnection, Database.Defs {
 		}
 		return controllerShowHideBtn;
 	}
+	public Button searchPanelShowHideBtn = null;
+	public Button getSearchPanelShowHideBtn()
+	{
+		if( searchPanelShowHideBtn == null )
+		{
+			searchPanelShowHideBtn = DroidWidgetKit.getInstance().MakeButton();
+		}
+		return searchPanelShowHideBtn;
+	}
 	
 	public SurfaceView surfaceView = null;
 	public SurfaceView getVideoView()

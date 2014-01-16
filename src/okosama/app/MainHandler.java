@@ -2,6 +2,7 @@ package okosama.app;
 
 import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
+import okosama.app.panel.SearchPanel;
 import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TimeControlPanel;
 import okosama.app.state.IDisplayState;
@@ -93,7 +94,8 @@ public class MainHandler extends Handler {
         		TimeControlPanel.createInstance(mActivity);
         		NowPlayingControlPanel.createInstance(mActivity);
         		SubControlPanel.createInstance(mActivity);
-        		PlayControlPanel.createInstance(mActivity);	        		
+        		PlayControlPanel.createInstance(mActivity);
+        		SearchPanel.createInstance(mActivity);
 	        	if( bInitEnd == true )
 	        	{
 	        		// Ç‡Ç§ä˘Ç…èâä˙âªçœÇ»ÇÁÇŒÅAâΩÇ‡ÇµÇ»Ç¢ÅH
