@@ -1,15 +1,29 @@
 package okosama.app.panel;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.R.drawable;
 import okosama.app.action.IViewAction;
+import okosama.app.adapter.AlbumSpinnerAdapter;
+import okosama.app.adapter.ArtistSpinnerAdapter;
+import okosama.app.adapter.GenreSpinnerAdapter;
+import okosama.app.adapter.PlaylistSpinnerAdapter;
+import okosama.app.adapter.TrackSpinnerAdapter;
+import okosama.app.adapter.VideoSpinnerAdapter;
 import okosama.app.factory.DroidWidgetKit;
+import okosama.app.storage.AlbumData;
+import okosama.app.storage.ArtistGroupData;
+import okosama.app.storage.FilterData;
+import okosama.app.storage.GenreData;
 import okosama.app.tab.TabComponentActionSetter;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabPage;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
+import okosama.app.widget.AutoCompleteEdit;
 import okosama.app.widget.Button;
 import okosama.app.widget.Combo;
 import okosama.app.widget.Edit;
@@ -22,7 +36,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView.ScaleType;
-import android.widget.SpinnerAdapter;
 
 public class SearchPanel extends ControlPanel {
 	static final int SEARCH_PANEL_TYPE_SONG = 1;
@@ -48,15 +61,28 @@ public class SearchPanel extends ControlPanel {
 	Image imgPlaylist;
 	Image imgGenre;
 	Image imgVideo;
-	Edit edtSong;
-	Edit edtArtist;
-	Edit edtAlbum;
-	Edit edtPlaylist;
-	Edit edtVideo;
+	AutoCompleteEdit edtSong;
+	AutoCompleteEdit edtArtist;
+	AutoCompleteEdit edtAlbum;
+	AutoCompleteEdit edtPlaylist;
+	AutoCompleteEdit edtVideo;
 	Combo cmbArtist;
 	Combo cmbAlbum;
 	Combo cmbGenre;
+	
+	public void clearAllControlValue()
+	{
+		edtSong.clearValue();
+		edtArtist.clearValue();
+		edtAlbum.clearValue();
+		edtPlaylist.clearValue();
+		edtVideo.clearValue();
+		cmbArtist.clearValue();
+		cmbAlbum.clearValue();
+		cmbGenre.clearValue();
 		
+	}
+	
 	static SearchPanel instance;
 	public static void createInstance(Activity activity)
 	{
@@ -179,16 +205,16 @@ public class SearchPanel extends ControlPanel {
 						20, 260, 80, 80
 			        );
 				lpLine1Val = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						120, 525, 300, 100
+						120, 525, 300, LayoutParams.WRAP_CONTENT//100
 			        );
 				lpLine2Val = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						116, 428, 300, 100
+						116, 428, 300, LayoutParams.WRAP_CONTENT//100
 			        );
 				lpLine3Val = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						110, 340, 300, 100
+						110, 340, 300, LayoutParams.WRAP_CONTENT//100
 			        );
 				lpLine4Val = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						117, 250, 300, 100
+						117, 250, 300, LayoutParams.WRAP_CONTENT//100
 			        );
 		}
 		//////////////////// control settings //////////////////////////			
@@ -294,11 +320,11 @@ public class SearchPanel extends ControlPanel {
 		imgGenre = DroidWidgetKit.getInstance().MakeImage();
 		imgVideo = DroidWidgetKit.getInstance().MakeImage();
 		imgPlaylist = DroidWidgetKit.getInstance().MakeImage();
-		edtSong = DroidWidgetKit.getInstance().MakeEdit();
-		edtArtist = DroidWidgetKit.getInstance().MakeEdit();
-		edtAlbum = DroidWidgetKit.getInstance().MakeEdit();
-		edtPlaylist = DroidWidgetKit.getInstance().MakeEdit();
-		edtVideo = DroidWidgetKit.getInstance().MakeEdit();
+		edtSong = DroidWidgetKit.getInstance().MakeAutoCompleteEdit();
+		edtArtist = DroidWidgetKit.getInstance().MakeAutoCompleteEdit();
+		edtAlbum = DroidWidgetKit.getInstance().MakeAutoCompleteEdit();
+		edtPlaylist = DroidWidgetKit.getInstance().MakeAutoCompleteEdit();
+		edtVideo = DroidWidgetKit.getInstance().MakeAutoCompleteEdit();
 		cmbArtist = DroidWidgetKit.getInstance().MakeCombo();
 		cmbAlbum = DroidWidgetKit.getInstance().MakeCombo();
 		cmbGenre = DroidWidgetKit.getInstance().MakeCombo();
@@ -369,6 +395,8 @@ public class SearchPanel extends ControlPanel {
 	 */
 	void switchPanelType(int panelTypeCode)
 	{
+		// 値を一旦クリア
+		clearAllControlValue();
 		switch( panelTypeCode )
 		{
 		case SEARCH_PANEL_TYPE_SONG:
@@ -493,19 +521,101 @@ public class SearchPanel extends ControlPanel {
 			cmbAlbum.setVisible(View.GONE);			
 			break;
 		}
+		// Songのテキスト
+		TrackSpinnerAdapter adpSong = new TrackSpinnerAdapter(
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
+				panelTypeCode,
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().getAllItems());
+		edtSong.setAdapter(adpSong);
 		
 		// Spinnerとエディットボックスの補完の設定
 //		cmbArtist.setAdapter(
 //				(SpinnerAdapter) OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getArtistAdp());
+		// Albumのスピナ
+		AlbumSpinnerAdapter adpAlbum = new AlbumSpinnerAdapter(
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
+				panelTypeCode,
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getAlbumAdp().getItems());
 		cmbAlbum.setAdapter(
-				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getAlbumAdp());
+			adpAlbum
+		);
+		adpAlbum.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// AlbumのEdit
+		edtAlbum.setAdapter(adpAlbum);
 		
-//		  ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-//		    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//		    // アイテムを追加します
-//		adapter.add("red");
-//		adapter.add("green");
-//		adapter.add("blue");
-//		Spinner spinner = (Spinner) findViewById(id.spinner);		
+		// Artistのスピナ
+		ArrayList<ArtistGroupData> arrArtist = new ArrayList<ArtistGroupData>();
+		HashMap<Integer,ArtistGroupData> groupDataMap = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getArtistAdp().getGroupData();
+		for( ArtistGroupData data : groupDataMap.values() )
+		{
+			arrArtist.add(data);
+		}
+		ArtistSpinnerAdapter adpArtist = new ArtistSpinnerAdapter(
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
+				panelTypeCode,
+				arrArtist
+				);
+		cmbAlbum.setAdapter(
+			adpArtist
+		);
+		adpArtist.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		// ArtistのEdit
+		edtArtist.setAdapter(adpArtist);
+
+		// Genreのスピナ
+		GenreSpinnerAdapter adpGenre = new GenreSpinnerAdapter(
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
+				panelTypeCode,
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getGenreStocker().getDistinctItems());
+		cmbGenre.setAdapter(
+				adpGenre
+		);
+		adpGenre.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		// PlaylistのEdit
+		PlaylistSpinnerAdapter adpPlaylist = new PlaylistSpinnerAdapter(
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
+				panelTypeCode,
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getPlaylistAdp().getItems());
+		edtPlaylist.setAdapter(adpPlaylist);
+		
+		
+		// VideoのEdit
+		VideoSpinnerAdapter adpVideo = new VideoSpinnerAdapter(
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
+				panelTypeCode,
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoAdp().getAllItems());
+		
+		edtVideo.setAdapter(adpVideo);
+	}
+	
+	public FilterData getFilterData()
+	{
+		FilterData data = new FilterData();
+		
+		data.setStrSong(edtSong.getText());
+		data.setStrArtist(edtArtist.getText());
+		data.setStrAlbum(edtAlbum.getText());
+		data.setStrPlaylist( edtPlaylist.getText() );
+		data.setStrVideo( edtVideo.getText() );
+		ArtistGroupData artistData = (ArtistGroupData) cmbArtist.getSelectedItem();
+		AlbumData albumData = (AlbumData) cmbAlbum.getSelectedItem();
+		GenreData genreData = (GenreData) cmbGenre.getSelectedItem();
+		if( artistData != null )
+		{
+			data.setArtistId(artistData.getArtistId());
+		}
+		if( albumData != null )
+		{
+			data.setAlbumId(albumData.getAlbumId());
+		}
+		if( genreData != null )
+		{
+			data.setGenreId(genreData.getGenreId());
+		}
+		
+		
+		return data;
 	}
 }

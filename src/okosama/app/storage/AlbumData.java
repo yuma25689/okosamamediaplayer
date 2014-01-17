@@ -59,5 +59,11 @@ public class AlbumData implements Serializable {
 	public void setAlbumArt(String albumArt) {
 		this.albumArt = albumArt;
 	}
+
 	
+	@Override
+	public String toString()
+	{
+		return this.albumName;
+	}
 }

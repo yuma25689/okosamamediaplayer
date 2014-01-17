@@ -72,5 +72,11 @@ public class ArtistGroupData implements Serializable {
 	public void setNumOfTracks(int numOfTracks) {
 		this.numOfTracks = numOfTracks;
 	}
+
+	@Override
+	public String toString()
+	{
+		return this.artistName;
+	}
 	
 }

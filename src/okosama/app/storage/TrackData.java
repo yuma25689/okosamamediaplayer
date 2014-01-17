@@ -15,7 +15,7 @@ public class TrackData implements Serializable {
 	{
 		// filter typeを設定し、それによって返却文字列を変更してみる？
 		// filter用
-		return trackArtistId + trackAlbumId;//trackGenre + trackAlbum + trackArtist; 
+		return trackTitle;//trackArtistId + trackAlbumId;//trackGenre + trackAlbum + trackArtist; 
 	}
 	
 	long trackId;
@@ -192,4 +192,5 @@ public class TrackData implements Serializable {
 	public void setTrackData(String trackData) {
 		this.trackData = trackData;
 	}
+	
 }

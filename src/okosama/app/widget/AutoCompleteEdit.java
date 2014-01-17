@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 
 /**
  * このアプリケーションで利用するボタンのハンドル
@@ -11,9 +13,9 @@ import android.view.View;
  * @author 25689
  *
  */
-public class Edit extends absWidget {
+public class AutoCompleteEdit extends absWidget {
 	
-	public Edit( Activity activity )
+	public AutoCompleteEdit( Activity activity )
 	{
 		super( activity );
 		create();
@@ -22,13 +24,13 @@ public class Edit extends absWidget {
 	/**
 	 * 実装クラス
 	 */
-	private EditImpl impl;
+	private AutoCompleteEditImpl impl;
 
 	/**
 	 * 実装クラスの設定
 	 * @param impl
 	 */
-	public void setImpl(EditImpl impl) {
+	public void setImpl(AutoCompleteEditImpl impl) {
 		this.impl = impl;
 	}
 	
@@ -60,13 +62,17 @@ public class Edit extends absWidget {
 	@Override
 	public int create() {
 		// TODO もっと汎用性のあるやり方にできるはず
-		impl = new EditImpl(activity);
+		impl = new AutoCompleteEditImpl(activity);
 		return 0;
 	}
 
 	@Override
 	public View getView() {
 		return impl;
+	}
+	public void setAdapter(ArrayAdapter<?> a)
+	{
+		impl.setAdapter(a);
 	}
 	public void clearValue()
 	{

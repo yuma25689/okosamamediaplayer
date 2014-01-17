@@ -3,6 +3,7 @@ package okosama.app.factory;
 import android.app.Activity;
 import okosama.app.behavior.IExpListBehavior;
 import okosama.app.behavior.IListBehavior;
+import okosama.app.widget.AutoCompleteEdit;
 import okosama.app.widget.Button;
 import okosama.app.widget.Combo;
 import okosama.app.widget.Edit;
@@ -71,6 +72,11 @@ public class DroidWidgetKit implements IWidgetKit {
 	public Edit MakeEdit()
 	{
 		return new Edit(activity);
+	}
+	@Override
+	public AutoCompleteEdit MakeAutoCompleteEdit()
+	{
+		return new AutoCompleteEdit(activity);
 	}
 	
 	@Override

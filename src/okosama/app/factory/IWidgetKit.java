@@ -19,5 +19,6 @@ public interface IWidgetKit {
 	SeekBar MakeSeekBar();
 	Image MakeImage();
 	Edit MakeEdit();
+	AutoCompleteEdit MakeAutoCompleteEdit();
 	Combo MakeCombo();
 }

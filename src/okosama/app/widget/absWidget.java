@@ -65,4 +65,7 @@ public class absWidget extends TabLeaf {
 	{
 		return;
 	}
+	public void clearValue()
+	{
+	}
 }

@@ -73,6 +73,16 @@ public class Combo extends absWidget {
 	public void setAdapter(SpinnerAdapter a)
 	{
 		impl.setAdapter(a);
-	}	
-	
+	}
+	public void clearValue()
+	{
+		impl.setAdapter(null);
+		// TODO:これでうまくいくとは思えないが・・・
+		// impl.setSelection(-1);
+	}
+
+	public Object getSelectedItem()
+	{
+		return impl.getSelectedItem();
+	}
 }

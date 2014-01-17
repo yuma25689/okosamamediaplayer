@@ -194,6 +194,23 @@ public class GenreStocker {
         return 0;
     }
 	
+	//private ArrayList<GenreData> distinctItems = new ArrayList<GenreData>();
+	public ArrayList<GenreData> getDistinctItems()
+	{
+		return allItems;
+//		ArrayList<String> names = new ArrayList<String>();
+//		for( GenreData data : allItems )
+//		{
+//			distinctItems.clear();
+//			if( false == names.contains(data.getGenreName()) )
+//			{
+//				names.add(data.getGenreName());
+//				distinctItems.add(data);
+//			}
+//		}
+//		return distinctItems;		
+	}
+    
 	
 	
 }

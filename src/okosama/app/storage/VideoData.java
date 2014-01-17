@@ -64,7 +64,7 @@ public class VideoData implements Serializable {
 	{
 		// filter typeを設定し、それによって返却文字列を変更してみる？
 		// filter用
-		return videoId + title;//trackGenre + trackAlbum + trackArtist; 
+		return title;//videoId + title;//trackGenre + trackAlbum + trackArtist; 
 	}
 	
 	long videoId;

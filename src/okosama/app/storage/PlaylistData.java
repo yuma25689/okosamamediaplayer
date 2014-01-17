@@ -46,5 +46,10 @@ public class PlaylistData implements Serializable {
 	public void setPlaylistName(String playlistName) {
 		this.playlistName = playlistName;
 	}
+	@Override
+	public String toString()
+	{
+		return this.playlistName;
+	}
 	
 }
