@@ -169,7 +169,7 @@ public class VideoListRawAdapter extends ArrayAdapter<VideoData> implements IAda
         // バッファに、タイトルの文字列を一度取得後、ビューに設定？TODO:なぜ？
         // data.getTrackTitle();
         // cursor.copyStringToBuffer(mTitleIdx, vh.buffer1);
-        vh.line1.setText(data.getTitle());
+        vh.line1.setText(data.getName());
        
         // 時間を取得、設定
         int secs = (int) (data.getDuration()) / 1000; // .getInt(mDurationIdx) / 1000;
@@ -284,8 +284,8 @@ public class VideoListRawAdapter extends ArrayAdapter<VideoData> implements IAda
 			        		{
 			            		VideoData data = new VideoData();
 			        			// 全ての要素をループする
-			            		data.setVideoId( cursor.getLong(mVideoIdIdx));
-			            		data.setTitle(cursor.getString(mTitleIdx));
+			            		data.setDataId( cursor.getInt(mVideoIdIdx));
+			            		data.setName(cursor.getString(mTitleIdx));
 			            		data.setArtist(cursor.getString(mArtistIdx));
 			            		data.setDuration(cursor.getLong(mDurationIdx));
 			            		data.setType(cursor.getString(mMineTypeIdx));
@@ -384,7 +384,7 @@ public class VideoListRawAdapter extends ArrayAdapter<VideoData> implements IAda
 	    			continue;
 	    		}
 	    	    add(data);
-	    	    currentAllVideoIds.add(data.getVideoId());
+	    	    currentAllVideoIds.add(data.getDataId());
 	        	// Log.d("updateData - add","data" + data.getTrackId() + " name:" + data.getTrackTitle() + " albumId:" + data.getTrackAlbumId() );    	    
 	    		if( maxShowCount < this.getCount() )
 	    		{

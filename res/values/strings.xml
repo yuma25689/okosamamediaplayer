@@ -437,6 +437,18 @@
     
     <!-- Toast after clear -->
     <string name="clear_notif">Stop playing and cleared the selected playlist.</string>
+    <string name="video_">video</string>
+    <string name="playlist_">playlist</string>
+    <string name="genre_">genre</string>
+    <string name="album_">album</string>
+    <string name="artist_">artist</string>
     
+    <string name="no_selection">not selected</string>
+    
+    <string name="srch_song_hint">Input track name</string>
+    <string name="srch_artist_hint">Input artist name</string>
+    <string name="srch_album_hint">Input album name</string>
+    <string name="srch_playlist_hint">Input playlist name</string>
+    <string name="srch_video_hint">Input video name</string>
 </resources>
 

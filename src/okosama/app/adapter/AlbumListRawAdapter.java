@@ -1,6 +1,7 @@
 package okosama.app.adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
@@ -37,10 +38,11 @@ public class AlbumListRawAdapter extends ArrayAdapter<AlbumData>
 implements IAdapterUpdate, SectionIndexer {
     
 	boolean deleted = false;
-	SparseArray<String> mapIdAndArt = new SparseArray<String>();
-	public String getAlbumArtFromId(int id)
+	//SparseArray<String> mapIdAndArt = new SparseArray<String>();
+	HashMap<Long,String> mapIdAndArt = new HashMap<Long,String>();
+	public String getAlbumArtFromId(long id)
 	{
-		if( mapIdAndArt.indexOfKey(id) < 0 )
+		if( mapIdAndArt.containsKey(id) == false )
 		{
 			return null;
 		}
@@ -178,7 +180,7 @@ implements IAdapterUpdate, SectionIndexer {
     	}
  
         // アルバム名を取得、ビューに設定
-        String name = data.getAlbumName();
+        String name = data.getName();
         String displayname = name;
         boolean unknown = name == null || name.equals(MediaStore.UNKNOWN_STRING); 
         if (unknown) {
@@ -199,7 +201,7 @@ implements IAdapterUpdate, SectionIndexer {
         // We don't actually need the path to the thumbnail file,
         // we just use it to see if there is album art or not
         String art = data.getAlbumArt();//cursor.getString(mAlbumArtIndex);
-        long aid = data.getAlbumId();//cursor.getLong(0);
+        long aid = data.getDataId();//cursor.getLong(0);
         if (unknown || art == null || art.length() == 0) {
             iv.setImageDrawable(null);
         } else {
@@ -226,7 +228,7 @@ implements IAdapterUpdate, SectionIndexer {
     	mapIdAndArt.clear();
     	for (AlbumData data : items) {
     	    add(data);
-    	    mapIdAndArt.put(data.getAlbumId(), data.getAlbumArt());
+    	    mapIdAndArt.put(data.getDataId(), data.getAlbumArt());
         	// Log.i("updateData - add","data" + data.getAlbumId() + " name:" + data.getAlbumName() );    	    
     	}
     	notifyDataSetChanged();
@@ -289,8 +291,8 @@ implements IAdapterUpdate, SectionIndexer {
 		        		{
 		            		AlbumData data = new AlbumData();
 		        			// 全ての要素をループする
-		            		data.setAlbumId(cursor.getInt(0));
-		        			data.setAlbumName(cursor.getString(mAlbumIdx));
+		            		data.setDataId(cursor.getInt(0));
+		        			data.setName(cursor.getString(mAlbumIdx));
 		        			data.setAlbumArtist(cursor.getString(mArtistIdx));
 		        			data.setAlbumArt(cursor.getString(mAlbumArtIndex));
 		        			items.add(data);

@@ -181,11 +181,11 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
     	// タイトルの設定
        // TextView tv = (TextView) view.findViewById(R.id.line1);
         
-        String name = data.getPlaylistName();
+        String name = data.getName();
         vh.line1.setText(name);
         
         // idを取得？
-        long id = data.getPlaylistId();
+        long id = data.getDataId();
         
         // idの種類によって、アイコンの画像を変える
         ImageView iv = vh.icon;//(ImageView) view.findViewById(R.id.icon);
@@ -289,11 +289,11 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
 		        		{
 		            		PlaylistData data = new PlaylistData();
 		        			// 全ての要素をループする
-		            		data.setPlaylistId(cursor.getLong(mIdIdx));
-		        			data.setPlaylistName(cursor.getString(mTitleIdx));
-		        	        if( 0 <= data.getPlaylistId() ) {
+		            		data.setDataId(cursor.getLong(mIdIdx));
+		        			data.setName(cursor.getString(mTitleIdx));
+		        	        if( 0 <= data.getDataId() ) {
 		        	        	MediaInfo[] songlists = Database.getSongListForPlaylist( 
-		        		        		mActivity, data.getPlaylistId() );
+		        		        		mActivity, data.getDataId() );
 		        		        if( songlists != null )
 		        		        {
 		        		        	data.setPlaylistCount(String.valueOf(songlists.length));

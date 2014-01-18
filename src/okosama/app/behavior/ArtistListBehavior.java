@@ -120,9 +120,9 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
             ArtistGroupData data 
             = (ArtistGroupData)adapter.getGroup(gpos);
     		
-            mCurrentArtistId = data.getArtistId();
+            mCurrentArtistId = String.valueOf(data.getDataId());
             //artistCursor.getString(artistCursor.getColumnIndexOrThrow(BaseColumns._ID));
-            mCurrentArtistName = data.getArtistName(); 
+            mCurrentArtistName = data.getName(); 
             		//artistCursor.getString(artistCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST));
             mCurrentAlbumId = null;
             mIsUnknownArtist = mCurrentArtistName == null ||

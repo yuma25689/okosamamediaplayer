@@ -232,7 +232,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 
         // カーソルから値を取得して、ビューに設定する
         // アーティスト
-        String artist = data.getArtistName();// cursor.getString(mGroupArtistIdx);
+        String artist = data.getName();// cursor.getString(mGroupArtistIdx);
         String displayartist = artist;
         boolean unknown = artist == null || artist.equals(MediaStore.UNKNOWN_STRING);
         if (unknown) {
@@ -254,7 +254,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
         // TODO:何か、それではアーティストの別のアルバムでも再生中になってしまう気がするが、
         // このリストではアルバムの区別はないのかも
         long currentartistid = MediaPlayerUtil.getCurrentArtistId();
-        long artistid = Long.parseLong(data.getArtistId()); // cursor.getLong(mGroupArtistIdIdx);
+        long artistid = data.getDataId(); // cursor.getLong(mGroupArtistIdIdx);
         if (currentartistid == artistid && !isexpanded) {
             vh.play_indicator.setImageDrawable(mNowPlayingOverlay);
         } else {
@@ -419,7 +419,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 			return childData.get(groupPosition).length;
 		}
 		ArtistGroupData data = (ArtistGroupData) getGroup(groupPosition);
-		Cursor childCursor = getChildrenCursor(Long.parseLong(data.getArtistId()));
+		Cursor childCursor = getChildrenCursor(data.getDataId());
 		if( childCursor == null )
 		{
 			return 0;
@@ -448,7 +448,7 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
                     );
                     // artist名
                     dataChild.setArtistName(
-                    	data.getArtistName()
+                    	data.getName()
                     	//childCursor.getString(childCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST))
                     );
                     // album art
@@ -610,10 +610,10 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 		                    
 		            		// 全ての要素をループする
 		                    data.setGroupId(i);
-		                    data.setArtistName( cursor.getString(mGroupArtistIdx) );
+		                    data.setName( cursor.getString(mGroupArtistIdx) );
 		                    data.setNumOfAlbums( cursor.getInt(mGroupAlbumIdx) );
 		                    data.setNumOfTracks( cursor.getInt(mGroupSongIdx) );
-		                    data.setArtistId( cursor.getString(mGroupArtistIdIdx));
+		                    data.setDataId( cursor.getLong(mGroupArtistIdIdx));
 		            		groupDataTmp.put( i, data );
 	
 	                		i++;

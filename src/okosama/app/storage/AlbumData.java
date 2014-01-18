@@ -2,37 +2,41 @@ package okosama.app.storage;
 
 import java.io.Serializable;
 
-public class AlbumData implements Serializable {
+import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.R;
+import android.provider.MediaStore;
+
+public class AlbumData implements Serializable, ISimpleData {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8832540249308517413L;
-	int albumId;
+	long albumId;
 	String albumName;
 	String albumArtist;
 	String albumArt;
 	/**
 	 * @return the albumId
 	 */
-	public int getAlbumId() {
+	public long getDataId() {
 		return albumId;
 	}
 	/**
 	 * @param albumId the albumId to set
 	 */
-	public void setAlbumId(int albumId) {
+	public void setDataId(long albumId) {
 		this.albumId = albumId;
 	}
 	/**
 	 * @return the albumName
 	 */
-	public String getAlbumName() {
+	public String getName() {
 		return albumName;
 	}
 	/**
 	 * @param albumName the albumName to set
 	 */
-	public void setAlbumName(String albumName) {
+	public void setName(String albumName) {
 		this.albumName = albumName;
 	}
 	/**
@@ -64,6 +68,15 @@ public class AlbumData implements Serializable {
 	@Override
 	public String toString()
 	{
-		return this.albumName;
+		String name = this.albumName;//getArtistName();
+		String displayname = name;
+		boolean unknown = name == null || name.equals(MediaStore.UNKNOWN_STRING);
+		if (unknown) {
+			displayname = OkosamaMediaPlayerActivity.getResourceAccessor().getString(R.string.unknown_album_name);		
+		}
+		
+		return displayname;//this.artistName;
+		
+		//return this.albumName;
 	}
 }

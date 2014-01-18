@@ -32,8 +32,8 @@ public class FilterData {
 	/**
 	 * @param i the albumId to set
 	 */
-	public void setAlbumId(int i) {
-		this.albumId = String.valueOf(i);
+	public void setAlbumId(String i) {
+		this.albumId = i;
 	}
 	/**
 	 * @return the genreId

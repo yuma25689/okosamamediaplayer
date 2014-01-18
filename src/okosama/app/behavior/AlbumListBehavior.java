@@ -46,7 +46,7 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 		{
 			return;
 		}
-		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(String.valueOf(act.getAlbumAdp().getItem(position).getAlbumId() ) );
+		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(String.valueOf(act.getAlbumAdp().getItem(position).getDataId() ) );
 		// act.getTrackAdp().setAlbumId(String.valueOf(act.getAlbumAdp().getItem(position).getAlbumId() ) );
 		act.getTrackAdp().setFilterType(TrackListRawAdapter.FILTER_NORMAL);
 		act.getTrackAdp().updateList();
@@ -77,9 +77,9 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
         = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getAlbumAdp().getItem(mi.position);
 
         // albumCursor.moveToPosition(mi.position);
-        mCurrentAlbumId = String.valueOf(data.getAlbumId());//albumCursor.getString(albumCursor.getColumnIndexOrThrow(BaseColumns._ID));
-        mCurrentAlbumName = data.getAlbumName();//albumCursor.getString(albumCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM));
-        mCurrentArtistNameForAlbum = data.getAlbumName();// albumCursor.getString(
+        mCurrentAlbumId = String.valueOf(data.getDataId());//albumCursor.getString(albumCursor.getColumnIndexOrThrow(BaseColumns._ID));
+        mCurrentAlbumName = data.getName();//albumCursor.getString(albumCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM));
+        mCurrentArtistNameForAlbum = data.getName();// albumCursor.getString(
         		//albumCursor.getColumnIndexOrThrow(AlbumColumns.ARTIST));
         mIsUnknownArtist = mCurrentArtistNameForAlbum == null ||
                 mCurrentArtistNameForAlbum.equals(MediaStore.UNKNOWN_STRING);

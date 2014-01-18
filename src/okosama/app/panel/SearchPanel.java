@@ -3,6 +3,7 @@ package okosama.app.panel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import okosama.app.ControlDefs;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
@@ -12,6 +13,7 @@ import okosama.app.adapter.AlbumSpinnerAdapter;
 import okosama.app.adapter.ArtistSpinnerAdapter;
 import okosama.app.adapter.GenreSpinnerAdapter;
 import okosama.app.adapter.PlaylistSpinnerAdapter;
+import okosama.app.adapter.SpinnerArrayAdapter;
 import okosama.app.adapter.TrackSpinnerAdapter;
 import okosama.app.adapter.VideoSpinnerAdapter;
 import okosama.app.factory.DroidWidgetKit;
@@ -19,6 +21,8 @@ import okosama.app.storage.AlbumData;
 import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.FilterData;
 import okosama.app.storage.GenreData;
+import okosama.app.storage.PlaylistData;
+import okosama.app.storage.VideoData;
 import okosama.app.tab.TabComponentActionSetter;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabPage;
@@ -26,18 +30,25 @@ import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.AutoCompleteEdit;
 import okosama.app.widget.Button;
 import okosama.app.widget.Combo;
-import okosama.app.widget.Edit;
 import okosama.app.widget.Image;
 import okosama.app.widget.absWidget;
 import android.app.Activity;
+//import android.graphics.Color;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView.ScaleType;
 
 public class SearchPanel extends ControlPanel {
+	
+	static final int VALUE_CTRL_WIDTH = 380;
+	static final int PANEL_WIDTH_PORTRAIT = ControlDefs.APP_BASE_WIDTH;
+	static final int PANEL_WIDTH_HORIZONTAL = ControlDefs.APP_BASE_WIDTH;
+	static final int TOP_IF_PANEL_NOT_EXISTS = 0;//250;
+	
 	static final int SEARCH_PANEL_TYPE_SONG = 1;
 	static final int SEARCH_PANEL_TYPE_ALBUM = 2;
 	static final int SEARCH_PANEL_TYPE_PLAYLIST = 3;
@@ -54,6 +65,7 @@ public class SearchPanel extends ControlPanel {
 	LayoutParams lpLine3Val;
 	LayoutParams lpLine4Val;
 	
+	static String mNoSelection;
 	Button btnSrch;
 	Image imgSong;
 	Button imgArtist;
@@ -80,8 +92,13 @@ public class SearchPanel extends ControlPanel {
 		cmbArtist.clearValue();
 		cmbAlbum.clearValue();
 		cmbGenre.clearValue();
-		
 	}
+	View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+		@Override
+		public boolean onTouch(View view, MotionEvent motionEvent) {
+			return true;
+		}
+	};
 	
 	static SearchPanel instance;
 	public static void createInstance(Activity activity)
@@ -106,7 +123,9 @@ public class SearchPanel extends ControlPanel {
 	{
 		if( instance != null && instance.getView() != null )
 		{
+			
 			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+	        mNoSelection = act.getString(R.string.no_selection);
 			switch( act.getCurrentTabPageId() )
 			{
 			case TabPage.TABPAGE_ID_SONG:
@@ -128,11 +147,26 @@ public class SearchPanel extends ControlPanel {
 				// 種別がない場合は、表示させない
 				return;
 			}
-			
+			if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+			{
+				instance.getView().setLayoutParams( 
+						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+					0, 150, PANEL_WIDTH_PORTRAIT, PANEL_WIDTH_PORTRAIT )
+				);
+			}
+			else
+			{
+				instance.getView().setLayoutParams( 
+						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+					0, 150, PANEL_WIDTH_HORIZONTAL, PANEL_WIDTH_HORIZONTAL )
+				);				
+			}
 			OkosamaMediaPlayerActivity.removeFromParent(instance.getView());
 			//if( -1 == tabBaseLayout.indexOfChild(instance.getView()) )
 			//{
 			tabBaseLayout.addView(instance.getView());
+			instance.getView().setBackgroundResource(R.color.search_bk);
+			
 			parent = tabBaseLayout;
 			//}
 		}
@@ -160,61 +194,61 @@ public class SearchPanel extends ControlPanel {
 		if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
 		{
 			lpSrchBtn = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-					380, 510, 100, 100
+					0, TOP_IF_PANEL_NOT_EXISTS + 370, PANEL_WIDTH_HORIZONTAL, 100
 			);
 			lpLine1Icon = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-					20, 530, 80, 80
+					20, TOP_IF_PANEL_NOT_EXISTS + 280, 80, 80
 		        );
 				lpLine2Icon = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-					16, 440, 80, 80
+					16, TOP_IF_PANEL_NOT_EXISTS + 190, 80, 80
 			    );
 				lpLine3Icon = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						22, 350, 80, 80
+						22, TOP_IF_PANEL_NOT_EXISTS + 100, 80, 80
 			        );
 				lpLine4Icon = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						20, 260, 80, 80
+						20, TOP_IF_PANEL_NOT_EXISTS + 10, 80, 80
 			        );
 				lpLine1Val = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						120, 525, 300, 100
+						120, TOP_IF_PANEL_NOT_EXISTS + 275, VALUE_CTRL_WIDTH - 2, 100
 			        );
 				lpLine2Val = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						116, 428, 300, 100
+						116, TOP_IF_PANEL_NOT_EXISTS + 178, VALUE_CTRL_WIDTH - 4, 100
 			        );
 				lpLine3Val = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						110, 340, 300, 100
+						110, TOP_IF_PANEL_NOT_EXISTS + 90, VALUE_CTRL_WIDTH - 8, 100
 			        );
 				lpLine4Val = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						117, 250, 300, 100
+						117, TOP_IF_PANEL_NOT_EXISTS, VALUE_CTRL_WIDTH - 5, 100
 			        );
 		}
 		else
-		{
+		{			
 			lpSrchBtn = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-					380, 510, 100, 100
+					0, TOP_IF_PANEL_NOT_EXISTS + 370, PANEL_WIDTH_HORIZONTAL, 100
 			);
 			lpLine1Icon = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-					20, 530, 80, 80
+					20, TOP_IF_PANEL_NOT_EXISTS + 280, 80, 80
 		        );
 				lpLine2Icon = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-					16, 440, 80, 80
+					16, TOP_IF_PANEL_NOT_EXISTS + 190, 80, 80
 			    );
 				lpLine3Icon = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						22, 350, 80, 80
+						22, TOP_IF_PANEL_NOT_EXISTS + 100, 80, 80
 			        );
 				lpLine4Icon = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						20, 260, 80, 80
+						20, TOP_IF_PANEL_NOT_EXISTS + 10, 80, 80
 			        );
 				lpLine1Val = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						120, 525, 300, LayoutParams.WRAP_CONTENT//100
+						120, TOP_IF_PANEL_NOT_EXISTS + 275, VALUE_CTRL_WIDTH - 9, 100
 			        );
 				lpLine2Val = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						116, 428, 300, LayoutParams.WRAP_CONTENT//100
+						116, TOP_IF_PANEL_NOT_EXISTS + 178, VALUE_CTRL_WIDTH - 4, 100
 			        );
 				lpLine3Val = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						110, 340, 300, LayoutParams.WRAP_CONTENT//100
+						110, TOP_IF_PANEL_NOT_EXISTS + 90, VALUE_CTRL_WIDTH - 8, 100
 			        );
 				lpLine4Val = OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-						117, 250, 300, LayoutParams.WRAP_CONTENT//100
+						117, TOP_IF_PANEL_NOT_EXISTS, VALUE_CTRL_WIDTH - 5, 100
 			        );
 		}
 		//////////////////// control settings //////////////////////////			
@@ -289,7 +323,7 @@ public class SearchPanel extends ControlPanel {
 				new TabComponentPropertySetter(
 					ControlIDs.SEARCH_GENRE_ICON, null, ComponentType.IMAGE, 
 					lpLine2Icon
-					, null, drawable.filter_normal, "", ScaleType.FIT_XY
+					, null, drawable.genre_normal, "", ScaleType.FIT_XY
 				),
 				// --------------------- GenreEdit
 				new TabComponentPropertySetter(
@@ -321,10 +355,15 @@ public class SearchPanel extends ControlPanel {
 		imgVideo = DroidWidgetKit.getInstance().MakeImage();
 		imgPlaylist = DroidWidgetKit.getInstance().MakeImage();
 		edtSong = DroidWidgetKit.getInstance().MakeAutoCompleteEdit();
+		edtSong.setHint(R.string.srch_song_hint);
 		edtArtist = DroidWidgetKit.getInstance().MakeAutoCompleteEdit();
+		edtArtist.setHint(R.string.srch_artist_hint);
 		edtAlbum = DroidWidgetKit.getInstance().MakeAutoCompleteEdit();
+		edtAlbum.setHint(R.string.srch_album_hint);
 		edtPlaylist = DroidWidgetKit.getInstance().MakeAutoCompleteEdit();
+		edtPlaylist.setHint(R.string.srch_playlist_hint);
 		edtVideo = DroidWidgetKit.getInstance().MakeAutoCompleteEdit();
+		edtVideo.setHint(R.string.srch_video_hint);
 		cmbArtist = DroidWidgetKit.getInstance().MakeCombo();
 		cmbAlbum = DroidWidgetKit.getInstance().MakeCombo();
 		cmbGenre = DroidWidgetKit.getInstance().MakeCombo();
@@ -386,7 +425,7 @@ public class SearchPanel extends ControlPanel {
 			tabBaseLayout.addView( widget.getView() );
 			i++;
 		}
-	
+		this.getView().setOnTouchListener(mTouchListener);
 	}
 
 	/**
@@ -524,7 +563,7 @@ public class SearchPanel extends ControlPanel {
 		// Songのテキスト
 		TrackSpinnerAdapter adpSong = new TrackSpinnerAdapter(
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
-				panelTypeCode,
+				android.R.layout.simple_spinner_item,
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().getAllItems());
 		edtSong.setAdapter(adpSong);
 		
@@ -534,8 +573,14 @@ public class SearchPanel extends ControlPanel {
 		// Albumのスピナ
 		AlbumSpinnerAdapter adpAlbum = new AlbumSpinnerAdapter(
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
-				panelTypeCode,
-				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getAlbumAdp().getItems());
+				android.R.layout.simple_spinner_item,
+				//R.layout.track_list_item_group,
+				AlbumSpinnerAdapter.convertItems(
+						OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getAlbumAdp().getItems()//,
+						//new AlbumData()
+					)
+				);
+		
 		cmbAlbum.setAdapter(
 			adpAlbum
 		);
@@ -552,10 +597,14 @@ public class SearchPanel extends ControlPanel {
 		}
 		ArtistSpinnerAdapter adpArtist = new ArtistSpinnerAdapter(
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
-				panelTypeCode,
-				arrArtist
+				android.R.layout.simple_spinner_item,				
+				//R.layout.track_list_item_group,
+				ArtistSpinnerAdapter.convertItems(
+						arrArtist//,
+						//new ArtistGroupData()
+					)
 				);
-		cmbAlbum.setAdapter(
+		cmbArtist.setAdapter(
 			adpArtist
 		);
 		adpArtist.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -564,28 +613,47 @@ public class SearchPanel extends ControlPanel {
 		edtArtist.setAdapter(adpArtist);
 
 		// Genreのスピナ
-		GenreSpinnerAdapter adpGenre = new GenreSpinnerAdapter(
+		SpinnerArrayAdapter<GenreData> adpGenre = new SpinnerArrayAdapter<GenreData>(
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
-				panelTypeCode,
-				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getGenreStocker().getDistinctItems());
+				android.R.layout.simple_spinner_item,
+				SpinnerArrayAdapter.convertItems(
+						OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getGenreStocker().getDistinctItems(),
+						new GenreData(),
+						R.string.genre_
+					)
+				);
 		cmbGenre.setAdapter(
 				adpGenre
 		);
 		adpGenre.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
 		// PlaylistのEdit
-		PlaylistSpinnerAdapter adpPlaylist = new PlaylistSpinnerAdapter(
+		SpinnerArrayAdapter<PlaylistData> adpPlaylist = new SpinnerArrayAdapter<PlaylistData>(		
+		// PlaylistSpinnerAdapter adpPlaylist = new PlaylistSpinnerAdapter(
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
-				panelTypeCode,
-				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getPlaylistAdp().getItems());
+				android.R.layout.simple_spinner_item,				
+				//R.layout.track_list_item_group,
+				SpinnerArrayAdapter.convertItems(
+						OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getPlaylistAdp().getItems(),
+						new PlaylistData(),
+						R.string.playlist_
+					)
+				);
 		edtPlaylist.setAdapter(adpPlaylist);
 		
 		
 		// VideoのEdit
-		VideoSpinnerAdapter adpVideo = new VideoSpinnerAdapter(
-				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
-				panelTypeCode,
-				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoAdp().getAllItems());
+		SpinnerArrayAdapter<VideoData> adpVideo = new SpinnerArrayAdapter<VideoData>(		
+		// VideoSpinnerAdapter adpVideo = new VideoSpinnerAdapter(
+			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
+			android.R.layout.simple_spinner_item,				
+			//R.layout.track_list_item_group,
+			SpinnerArrayAdapter.convertItems(
+				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoAdp().getAllItems(),
+				new VideoData(),
+				R.string.video_
+			)
+		);
 		
 		edtVideo.setAdapter(adpVideo);
 	}
@@ -604,18 +672,16 @@ public class SearchPanel extends ControlPanel {
 		GenreData genreData = (GenreData) cmbGenre.getSelectedItem();
 		if( artistData != null )
 		{
-			data.setArtistId(artistData.getArtistId());
+			data.setArtistId(String.valueOf(artistData.getDataId()));
 		}
 		if( albumData != null )
 		{
-			data.setAlbumId(albumData.getAlbumId());
+			data.setAlbumId(String.valueOf(albumData.getDataId()));
 		}
 		if( genreData != null )
 		{
-			data.setGenreId(genreData.getGenreId());
+			data.setGenreId(genreData.getDataId());
 		}
-		
-		
 		return data;
 	}
 }

@@ -83,17 +83,18 @@ public class Button extends absWidget {
 	@Override
 	public void configureAction()
 	{
-//		if( actionMap.get( IViewAction.ACTION_ID_ONCLICK, null ) != null )
-//		{
-//			impl.setOnClickListener(new View.OnClickListener() {
-//	            @Override
-//				public void onClick(View v) {
-//	                // クリック時の処理
-//	            	actionMap.get( IViewAction.ACTION_ID_ONCLICK )
-//	            		.doAction(v);
-//	            }
-//	        });
-//		}
+		if( actionMap.get( IViewAction.ACTION_ID_ONCLICK, null ) != null )
+		{
+			impl.setOnClickListener(new View.OnClickListener() {
+	            @Override
+				public void onClick(View v) {
+	                // クリック時の処理
+	            	actionMap.get( IViewAction.ACTION_ID_ONCLICK )
+	            		.doAction(v);
+	            }
+	        });
+		}
+		/*
 		if( 
 			actionMap.get( IViewAction.ACTION_ID_ONCLICK, null ) != null
 		|| actionMap.get( IViewAction.ACTION_ID_ONFLICKUP, null ) != null 
@@ -204,5 +205,6 @@ public class Button extends absWidget {
 				}
 			});
 		}
+		*/
 	}
 }

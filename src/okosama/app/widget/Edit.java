@@ -81,5 +81,9 @@ public class Edit extends absWidget {
 		}
 		return ret;
 	}
+	public void setHint(int resId)
+	{
+		impl.setHint(resId);
+	}
 	
 }

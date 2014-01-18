@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.storage.AlbumData;
 import okosama.app.storage.ArtistGroupData;
+import okosama.app.storage.PlaylistData;
+import okosama.app.storage.TrackData;
 // import okosama.app.storage.QueryHandler;
 // import android.content.AsyncQueryHandler;
 import android.content.Context;
@@ -23,13 +26,14 @@ import android.widget.TextView;
 public class ArtistSpinnerAdapter extends ArrayAdapter<ArtistGroupData> { 
 //implements IAdapterUpdate, SectionIndexer {
     
-	private LayoutInflater inflater;
-	// private ArrayList<ArtistGroupData> items;
-	private int iLayoutId;
+//	private LayoutInflater inflater;
+//	// private ArrayList<ArtistGroupData> items;
+//	private int iLayoutId;
 	private ArrayList<ArtistGroupData> items = new ArrayList<ArtistGroupData>();
-	private ArrayList<String> unknownArtistIds = new ArrayList<String>();
+	private static ArrayList<Long> unknownArtistIds = new ArrayList<Long>();
     // private OkosamaMediaPlayerActivity mActivity;
-	private final String mUnknownArtist;
+//	private final String mUnknownArtist;
+	//private static String mNoSelection;
 
     // Viewのホルダ？
     static class ViewHolder {
@@ -48,63 +52,66 @@ public class ArtistSpinnerAdapter extends ArrayAdapter<ArtistGroupData> {
     		int layout, ArrayList<ArtistGroupData> items) {
         super(currentactivity, layout, items );
 
-        this.iLayoutId = layout;
-        this.inflater 
-        = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mUnknownArtist = currentactivity.getString(R.string.unknown_album_name);
+//        this.iLayoutId = layout;
+//        this.inflater 
+//        = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        mUnknownArtist = currentactivity.getString(R.string.unknown_album_name);
+        //mNoSelection = currentactivity.getString(R.string.no_selection);
         
         // アクティビティの設定
         // クエリハンドラの作成
         // mActivity = currentactivity;
         // mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
-        setItems(items);
+        // ArrayList<ArtistGroupData> itemsTmp = (ArrayList<ArtistGroupData>) items.clone();
+        
+        // setItems(items);
 
     }
 
     /**
      * 新しいビューの作成？
      */
-    @Override
-    public View getView(int pos, View convertView, ViewGroup parent) {
-    	View v = convertView;  
-    	if (v == null) {
-    	   ViewHolder vh = new ViewHolder();
-	       v = inflater.inflate(iLayoutId, null); 
-	       vh.line1 = (TextView) v.findViewById(R.id.line1);
-	       v.setTag(vh);
-    	}
-	    bindView(v,pos);
-    	return v;
-    }
-
-    /**
-     * ビューとデータを紐つける
-     */
-    //@Override
-    public void bindView(View view, int pos) {
-        
-       	// タグからビューホルダーを取得
-        ViewHolder vh = (ViewHolder) view.getTag();
-        // positionからデータを取得
-    	ArtistGroupData data = getItem(pos);
-    	
-    	if( data == null )
-    	{
-    		// データがないというのは、完全におかしい状態だが・・
-    		 vh.line1.setText("");
-    		 return;
-    	}
- 
-        // アルバム名を取得、ビューに設定
-        String name = data.getArtistName();
-        String displayname = name;
-        boolean unknown = name == null || name.equals(MediaStore.UNKNOWN_STRING); 
-        if (unknown) {
-            displayname = mUnknownArtist;
-        }
-        vh.line1.setText(displayname);
-        
-    }
+//    @Override
+//    public View getView(int pos, View convertView, ViewGroup parent) {
+//    	View v = convertView;  
+//    	if (v == null) {
+//    	   ViewHolder vh = new ViewHolder();
+//	       v = inflater.inflate(iLayoutId, null); 
+//	       vh.line1 = (TextView) v.findViewById(R.id.line1);
+//	       v.setTag(vh);
+//    	}
+//	    bindView(v,pos);
+//    	return v;
+//    }
+//
+//    /**
+//     * ビューとデータを紐つける
+//     */
+//    //@Override
+//    public void bindView(View view, int pos) {
+//        
+//       	// タグからビューホルダーを取得
+//        ViewHolder vh = (ViewHolder) view.getTag();
+//        // positionからデータを取得
+//    	ArtistGroupData data = getItem(pos);
+//    	
+//    	if( data == null )
+//    	{
+//    		// データがないというのは、完全におかしい状態だが・・
+//    		 vh.line1.setText("");
+//    		 return;
+//    	}
+// 
+//        // アルバム名を取得、ビューに設定
+//        String name = data.getArtistName();
+//        String displayname = name;
+//        boolean unknown = name == null || name.equals(MediaStore.UNKNOWN_STRING); 
+//        if (unknown) {
+//            displayname = mUnknownArtist;
+//        }
+//        vh.line1.setText(displayname);
+//        
+//    }
     
     /**
      * データの変更？
@@ -121,17 +128,17 @@ public class ArtistSpinnerAdapter extends ArrayAdapter<ArtistGroupData> {
 	/**
 	 * @param items the items to set
 	 */
-	public void setItems(ArrayList<ArtistGroupData> items) {
+	public static ArrayList<ArtistGroupData> convertItems(ArrayList<ArtistGroupData> items) {
 		unknownArtistIds.clear();
 		ArrayList<Integer> arrRemove = new ArrayList<Integer>();
         int index = 0;
 		for( ArtistGroupData data : items )
 		{
-	        String name = data.getArtistName();
+	        String name = data.getName();
 	        boolean unknown = name == null || name.equals(MediaStore.UNKNOWN_STRING); 
 			if( unknown )
 			{
-		        unknownArtistIds.add(data.getArtistId());
+		        unknownArtistIds.add(data.getDataId());
 		        if( 1 < unknownArtistIds.size())
 		        {
 		        	arrRemove.add(index);
@@ -144,6 +151,18 @@ public class ArtistSpinnerAdapter extends ArrayAdapter<ArtistGroupData> {
 		{
 			items.remove(arrRemove.get(i-1));
 		}
-		this.items = items;
+        ArrayList<ArtistGroupData> itemsTmp = new ArrayList<ArtistGroupData>(items.size());
+        itemsTmp.addAll(items);
+        
+        ArtistGroupData dataNoSelect = new ArtistGroupData();
+        dataNoSelect.setDataId(-1);
+        String name = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getString(R.string.artist_);        
+        String noSelection = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getString(R.string.no_selection);
+        
+        dataNoSelect.setName(name + ":" + noSelection);
+        itemsTmp.add(0,dataNoSelect);        
+		
+        return itemsTmp;
+		//this.items = itemsTmp;
 	}	
  }

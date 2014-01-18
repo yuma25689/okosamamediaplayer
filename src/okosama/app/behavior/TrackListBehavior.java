@@ -86,7 +86,7 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 //		        MediaStore.Audio.Media.ALBUM));
 //		mCurrentArtistNameForAlbum = cursor.getString(cursor.getColumnIndexOrThrow(
 //		        MediaStore.Audio.Media.ARTIST));
-		mCurrentTrackName = data.getTrackTitle(); //cursor.getString(cursor.getColumnIndexOrThrow(
+		mCurrentTrackName = data.getName(); //cursor.getString(cursor.getColumnIndexOrThrow(
 		        //MediaColumns.TITLE));
 		menu.setHeaderTitle(mCurrentTrackName);
 	}

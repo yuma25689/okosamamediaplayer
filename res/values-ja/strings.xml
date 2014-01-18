@@ -436,6 +436,17 @@
 
     <!-- Toast after clear -->
     <string name="clear_notif">再生停止し、再生対象を全て片付けました。</string>
+    <string name="video_">動画</string>
+    <string name="playlist_">プレイリスト</string>
+    <string name="genre_">ジャンル</string>
+    <string name="album_">アルバム</string>
+    <string name="artist_">アーティスト</string>
+    <string name="no_selection">未指定</string>
     
+    <string name="srch_song_hint">曲名を入力</string>
+    <string name="srch_artist_hint">アーティスト名を入力</string>
+    <string name="srch_album_hint">アルバム名を入力</string>
+    <string name="srch_playlist_hint">プレイリスト名を入力</string>
+    <string name="srch_video_hint">動画名を入力</string>
 </resources>
 

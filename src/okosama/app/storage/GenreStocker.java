@@ -63,7 +63,7 @@ public class GenreStocker {
 				{
 					sb.append( GENRENAME_SEPARATE_STRING );
 				}
-				sb.append( data.getGenreName() );
+				sb.append( data.getName() );
 				
 				bFirst = false;
 			}
@@ -132,12 +132,12 @@ public class GenreStocker {
 				        		{
 				            		GenreData data = new GenreData();
 				        			// 全ての要素をループする
-				            		data.setGenreId( cursor.getLong(mGenreIdIdx) );
-				            		data.setGenreName( cursor.getString(mNameIdx) );
+				            		data.setDataId( cursor.getInt(mGenreIdIdx) );
+				            		data.setName( cursor.getString(mNameIdx) );
 				            		
 					    			Cursor cursorAudio = Database.getInstance(
 					    					OkosamaMediaPlayerActivity.isExternalRef()
-					    			).createSongListCursorFromGenre(data.getGenreId());
+					    			).createSongListCursorFromGenre(data.getDataId());
 					    			try
 					    			{
 								        // Log.i("Tag-Number of songs for this genre", data.getGenreName() + ":" + cursorAudio.getCount()+"");

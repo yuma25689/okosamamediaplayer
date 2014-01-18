@@ -1,9 +1,11 @@
 package okosama.app.adapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.storage.PlaylistData;
 import okosama.app.storage.TrackData;
 // import okosama.app.storage.QueryHandler;
 // import android.content.AsyncQueryHandler;
@@ -30,6 +32,7 @@ public class TrackSpinnerAdapter extends ArrayAdapter<TrackData> {
 	private ArrayList<Integer> unknownAlbumIds = new ArrayList<Integer>();
     // private OkosamaMediaPlayerActivity mActivity;
 	private final String mUnknownAlbum;
+	private final String mNoSelection;
 
     // Viewのホルダ？
     static class ViewHolder {
@@ -52,59 +55,58 @@ public class TrackSpinnerAdapter extends ArrayAdapter<TrackData> {
         this.inflater 
         = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mUnknownAlbum = currentactivity.getString(R.string.unknown_album_name);
-        
+        mNoSelection = currentactivity.getString(R.string.no_selection);
         // アクティビティの設定
         // クエリハンドラの作成
         // mActivity = currentactivity;
         // mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
         setItems(items);
-
     }
 
     /**
      * 新しいビューの作成？
      */
-    @Override
-    public View getView(int pos, View convertView, ViewGroup parent) {
-    	View v = convertView;  
-    	if (v == null) {
-    	   ViewHolder vh = new ViewHolder();
-	       v = inflater.inflate(iLayoutId, null); 
-	       vh.line1 = (TextView) v.findViewById(R.id.line1);
-	       v.setTag(vh);
-    	}
-	    bindView(v,pos);
-    	return v;
-    }
-
-    /**
-     * ビューとデータを紐つける
-     */
-    //@Override
-    public void bindView(View view, int pos) {
-        
-       	// タグからビューホルダーを取得
-        ViewHolder vh = (ViewHolder) view.getTag();
-        // positionからデータを取得
-        TrackData data = getItem(pos);
-    	
-    	if( data == null )
-    	{
-    		// データがないというのは、完全におかしい状態だが・・
-    		 vh.line1.setText("");
-    		 return;
-    	}
- 
-        // アルバム名を取得、ビューに設定
-        String name = data.getTrackTitle();
-        String displayname = name;
-        boolean unknown = name == null || name.equals(MediaStore.UNKNOWN_STRING); 
-        if (unknown) {
-            displayname = mUnknownAlbum;
-        }
-        vh.line1.setText(displayname);
-        
-    }
+//    @Override
+//    public View getView(int pos, View convertView, ViewGroup parent) {
+//    	View v = convertView;  
+//    	if (v == null) {
+//    	   ViewHolder vh = new ViewHolder();
+//	       v = inflater.inflate(iLayoutId, null); 
+//	       vh.line1 = (TextView) v.findViewById(R.id.line1);
+//	       v.setTag(vh);
+//    	}
+//	    bindView(v,pos);
+//    	return v;
+//    }
+//
+//    /**
+//     * ビューとデータを紐つける
+//     */
+//    //@Override
+//    public void bindView(View view, int pos) {
+//        
+//       	// タグからビューホルダーを取得
+//        ViewHolder vh = (ViewHolder) view.getTag();
+//        // positionからデータを取得
+//        TrackData data = getItem(pos);
+//    	
+//    	if( data == null )
+//    	{
+//    		// データがないというのは、完全におかしい状態だが・・
+//    		 vh.line1.setText("");
+//    		 return;
+//    	}
+// 
+//        // アルバム名を取得、ビューに設定
+//        String name = data.getTrackTitle();
+//        String displayname = name;
+//        boolean unknown = name == null || name.equals(MediaStore.UNKNOWN_STRING); 
+//        if (unknown) {
+//            displayname = mUnknownAlbum;
+//        }
+//        vh.line1.setText(displayname);
+//        
+//    }
     
     /**
      * データの変更？
@@ -144,6 +146,12 @@ public class TrackSpinnerAdapter extends ArrayAdapter<TrackData> {
 //		{
 //			items.remove(arrRemove.get(i-1));
 //		}
-		this.items = items;
+        ArrayList<TrackData> itemsTmp = new ArrayList<TrackData>(items.size());
+        itemsTmp.addAll(items);
+        TrackData dataNoSelect = new TrackData();
+        dataNoSelect.setDataId(-1);
+        dataNoSelect.setName(mNoSelection);
+        itemsTmp.add(0,dataNoSelect);        
+		this.items = itemsTmp;
 	}	
  }

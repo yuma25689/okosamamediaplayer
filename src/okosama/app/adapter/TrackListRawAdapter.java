@@ -255,7 +255,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
         // バッファに、タイトルの文字列を一度取得後、ビューに設定？TODO:なぜ？
         // data.getTrackTitle();
         // cursor.copyStringToBuffer(mTitleIdx, vh.buffer1);
-        vh.line1.setText(data.getTrackTitle());
+        vh.line1.setText(data.getName());
        
         // 時間を取得、設定
         int secs = (int) (data.getTrackDuration()) / 1000; // .getInt(mDurationIdx) / 1000;
@@ -405,8 +405,8 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 			        		{
 			            		TrackData data = new TrackData();
 			        			// 全ての要素をループする
-			            		data.setTrackId( cursor.getLong(0));
-			            		data.setTrackTitle(cursor.getString(mTitleIdx));
+			            		data.setDataId( cursor.getInt(0));
+			            		data.setName(cursor.getString(mTitleIdx));
 			            		data.setTrackData(cursor.getString(mDataIdx));
 			            		data.setTrackArtist(cursor.getString(mArtistIdx));
 			            		data.setTrackDuration(cursor.getLong(mDurationIdx));
@@ -580,7 +580,7 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	    	    currentAllAudioIds.add(data.getTrackAudioId());
 	    	    
 	    	    // インデクサの設定
-	    	    String initial = data.getTrackTitle().substring(0, 1); // nameの頭文字を基準に区切る  
+	    	    String initial = data.getName().substring(0, 1); // nameの頭文字を基準に区切る  
 	    	    if(!initial.equalsIgnoreCase(pre_initial)){ // 頭文字の判定(頭文字が変わったら追加)  
 	    	    	mSectionIndex.add( index );//+ index_num); 
 	    	        mSection.add(initial);

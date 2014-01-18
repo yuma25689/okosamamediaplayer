@@ -2,30 +2,30 @@ package okosama.app.storage;
 
 import java.io.Serializable;
 
-public class VideoData implements Serializable {
+public class VideoData implements Serializable, ISimpleData {
 	
 	/**
 	 * @return the videoId
 	 */
-	public long getVideoId() {
+	public long getDataId() {
 		return videoId;
 	}
 	/**
 	 * @param videoId the videoId to set
 	 */
-	public void setVideoId(long videoId) {
+	public void setDataId(long videoId) {
 		this.videoId = videoId;
 	}
 	/**
 	 * @return the title
 	 */
-	public String getTitle() {
+	public String getName() {
 		return title;
 	}
 	/**
 	 * @param title the title to set
 	 */
-	public void setTitle(String title) {
+	public void setName(String title) {
 		this.title = title;
 	}
 	/**

@@ -2,7 +2,7 @@ package okosama.app.storage;
 
 import java.io.Serializable;
 
-public class PlaylistData implements Serializable {
+public class PlaylistData implements Serializable,ISimpleData {
 	/**
 	 * 
 	 */
@@ -25,25 +25,25 @@ public class PlaylistData implements Serializable {
 	/**
 	 * @return the playlistId
 	 */
-	public long getPlaylistId() {
+	public long getDataId() {
 		return playlistId;
 	}
 	/**
 	 * @param playlistId the playlistId to set
 	 */
-	public void setPlaylistId(long playlistId) {
+	public void setDataId(long playlistId) {
 		this.playlistId = playlistId;
 	}
 	/**
 	 * @return the playlistName
 	 */
-	public String getPlaylistName() {
+	public String getName() {
 		return playlistName;
 	}
 	/**
 	 * @param playlistName the playlistName to set
 	 */
-	public void setPlaylistName(String playlistName) {
+	public void setName(String playlistName) {
 		this.playlistName = playlistName;
 	}
 	@Override

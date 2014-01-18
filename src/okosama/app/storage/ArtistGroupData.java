@@ -2,13 +2,18 @@ package okosama.app.storage;
 
 import java.io.Serializable;
 
-public class ArtistGroupData implements Serializable {
+import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.R;
+
+import android.provider.MediaStore;
+
+public class ArtistGroupData implements Serializable, ISimpleData {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1551599762543511030L;
 	long groupId;
-	String artistId;
+	long artistId;
 	String artistName;
 	int numOfAlbums;
 	int numOfTracks;
@@ -27,25 +32,25 @@ public class ArtistGroupData implements Serializable {
 	/**
 	 * @return the artistId
 	 */
-	public String getArtistId() {
+	public long getDataId() {
 		return artistId;
 	}
 	/**
 	 * @param artistId the artistId to set
 	 */
-	public void setArtistId(String artistId) {
+	public void setDataId(long artistId) {
 		this.artistId = artistId;
 	}
 	/**
 	 * @return the artistName
 	 */
-	public String getArtistName() {
+	public String getName() {
 		return artistName;
 	}
 	/**
 	 * @param artistName the artistName to set
 	 */
-	public void setArtistName(String artistName) {
+	public void setName(String artistName) {
 		this.artistName = artistName;
 	}
 	/**
@@ -76,7 +81,13 @@ public class ArtistGroupData implements Serializable {
 	@Override
 	public String toString()
 	{
-		return this.artistName;
+		String name = this.artistName;//getArtistName();
+		String displayname = name;
+		boolean unknown = name == null || name.equals(MediaStore.UNKNOWN_STRING);
+		if (unknown) {
+			displayname = OkosamaMediaPlayerActivity.getResourceAccessor().getString(R.string.unknown_artist_name);		
+		}
+		return displayname;//this.artistName;
 	}
 	
 }

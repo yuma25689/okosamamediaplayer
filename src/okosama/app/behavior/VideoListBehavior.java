@@ -36,7 +36,7 @@ public class VideoListBehavior extends IListBehavior implements Database.Defs {
         }
 		mSelectedPosition = position;
 		VideoData data = act.getVideoAdp().getItem(mSelectedPosition);
-		mSelectedId = data.getVideoId();
+		mSelectedId = data.getDataId();
 
 		/*
 		Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -67,15 +67,15 @@ public class VideoListBehavior extends IListBehavior implements Database.Defs {
 		AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfoIn;
 		mSelectedPosition =  mi.position;
 		VideoData data = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoAdp().getItem(mSelectedPosition);
-		mSelectedId = data.getVideoId();
-		mCurrentTrackName = data.getTitle();
+		mSelectedId = data.getDataId();
+		mCurrentTrackName = data.getName();
 		menu.setHeaderTitle(mCurrentTrackName);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-		mSelectedId = activity.getVideoAdp().getItem(mSelectedPosition).getVideoId();
+		mSelectedId = activity.getVideoAdp().getItem(mSelectedPosition).getDataId();
 		MediaInfo[] list = new MediaInfo[] { new MediaInfo( mSelectedId, MediaInfo.MEDIA_TYPE_VIDEO ) };		
 		long[] listId = new long[] { mSelectedId };		
 		int[] listType = new int[] { MediaInfo.MEDIA_TYPE_VIDEO };		

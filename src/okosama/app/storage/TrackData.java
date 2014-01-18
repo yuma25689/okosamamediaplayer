@@ -2,7 +2,7 @@ package okosama.app.storage;
 
 import java.io.Serializable;
 
-public class TrackData implements Serializable {
+public class TrackData implements Serializable, ISimpleData {
 	
 	/**
 	 * 
@@ -51,25 +51,25 @@ public class TrackData implements Serializable {
 	/**
 	 * @return the trackId
 	 */
-	public long getTrackId() {
+	public long getDataId() {
 		return trackId;
 	}
 	/**
 	 * @param trackId the trackId to set
 	 */
-	public void setTrackId(long trackId) {
+	public void setDataId(long trackId) {
 		this.trackId = trackId;
 	}
 	/**
 	 * @return the trackTitle
 	 */
-	public String getTrackTitle() {
+	public String getName() {
 		return trackTitle;
 	}
 	/**
 	 * @param trackTitle the trackTitle to set
 	 */
-	public void setTrackTitle(String trackTitle) {
+	public void setName(String trackTitle) {
 		this.trackTitle = trackTitle;
 	}
 	/**

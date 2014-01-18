@@ -3,7 +3,7 @@ package okosama.app.storage;
 import java.io.Serializable;
 // import java.util.ArrayList;
 
-public class GenreData implements Serializable {
+public class GenreData implements Serializable, ISimpleData {
 	/**
 	 * 
 	 */
@@ -33,25 +33,25 @@ public class GenreData implements Serializable {
 	/**
 	 * @return the genreId
 	 */
-	public long getGenreId() {
+	public long getDataId() {
 		return genreId;
 	}
 	/**
 	 * @param genreId the genreId to set
 	 */
-	public void setGenreId(long genreId) {
+	public void setDataId(long genreId) {
 		this.genreId = genreId;
 	}
 	/**
 	 * @return the genreName
 	 */
-	public String getGenreName() {
+	public String getName() {
 		return genreName;
 	}
 	/**
 	 * @param genreName the genreName to set
 	 */
-	public void setGenreName(String genreName) {
+	public void setName(String genreName) {
 		this.genreName = genreName;
 	}
 	@Override

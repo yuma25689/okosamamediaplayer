@@ -41,7 +41,7 @@ public class PlaylistListBehavior extends IListBehavior implements Database.Defs
 		{
 			return;
 		}
-		String playlistID = String.valueOf(act.getPlaylistAdp().getItem(position).getPlaylistId());
+		String playlistID = String.valueOf(act.getPlaylistAdp().getItem(position).getDataId());
 		Log.d("playlistID set",playlistID);
 		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistID(playlistID);
 		act.getTrackAdp().setFilterType(TrackListRawAdapter.FILTER_PLAYLIST);
@@ -84,11 +84,11 @@ public class PlaylistListBehavior extends IListBehavior implements Database.Defs
 
         switch (item.getItemId()) {
             case PLAY_SELECTION:
-            	MediaPlayerUtil.playPlaylist(activity, data.getPlaylistId());
+            	MediaPlayerUtil.playPlaylist(activity, data.getDataId());
                 break;
             case DELETE_PLAYLIST:
                 Uri uri = ContentUris.withAppendedId(
-                        MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, data.getPlaylistId());
+                        MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, data.getDataId());
                 activity.getContentResolver().delete(uri, null, null);
                 Toast.makeText(activity, R.string.playlist_deleted_message, Toast.LENGTH_SHORT).show();
 //                if (mPlaylistCursor.getCount() == 0) {
@@ -102,7 +102,7 @@ public class PlaylistListBehavior extends IListBehavior implements Database.Defs
             case RENAME_PLAYLIST:
                 Intent intent = new Intent();
                 intent.setClass(activity, RenamePlaylist.class);
-                intent.putExtra("rename", data.getPlaylistId());
+                intent.putExtra("rename", data.getDataId());
                 activity.startActivityForResult(intent, RENAME_PLAYLIST);
     			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
     					ControlIDs.TAB_ID_MEDIA,
