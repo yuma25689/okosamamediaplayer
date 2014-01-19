@@ -13,6 +13,8 @@ import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 //import okosama.app.storage.AlbumData;
 import okosama.app.storage.Database;
+import okosama.app.storage.FilterData;
+import okosama.app.storage.GenreData;
 // import okosama.app.storage.QueryHandler;
 import okosama.app.storage.TrackData;
 import okosama.app.tab.TabPage;
@@ -48,7 +50,8 @@ import android.widget.TextView;
  * @author 25689
  *
  */
-public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAdapterUpdate, SectionIndexer { 
+public class TrackListRawAdapter extends ArrayAdapter<TrackData> 
+implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData> { 
 //implements SectionIndexer {
 
 	boolean deleted = false;
@@ -572,7 +575,8 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
     		int index = 0;
 			for (TrackData data : items) {
 	    		// ここでフィルタをかけてしまう？
-	    		if( false == isShowData( data ) )
+	    		if( false == isShowData( data ) 
+	    		|| false == isFilterData( data ))
 	    		{
 	    			continue;
 	    		}
@@ -668,6 +672,104 @@ public class TrackListRawAdapter extends ArrayAdapter<TrackData> implements IAda
 	public void clearAdapterData() {
 		deleted = true;
 		this.clear();		
+	}
+	
+	FilterData filterData = null;
+	@Override
+	public void setFilterData(FilterData data) {
+		filterData = data;
+	}
+	/**
+	 *注:なんか変だけど、表示対象の場合、true
+	 */
+	@Override
+	public boolean isFilterData(TrackData data) {
+		boolean bRet = true;
+		if( filterData != null && data != null)
+		{
+			// アーティストID
+			// TODO: アーティスト名
+			if( filterData.getArtistId() != null )
+			{
+				if( data.getTrackArtistId() != null
+				&& filterData.getArtistId().equals(data.getTrackArtistId()) )
+				{
+					// アーティストがフィルタ対象？
+					// data.getTrackArtistId()は本当に入っているのだろうか・・・。TODO:調査
+					bRet = true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			// アルバムID
+			// TODO: アルバム名			
+			if( filterData.getAlbumId() != null )
+			{
+				if( data.getTrackAlbumId() != null
+				&& filterData.getAlbumId().equals(data.getTrackAlbumId()) )
+				{
+					// アーティストがフィルタ対象？
+					// data.getTrackArtistId()は本当に入っているのだろうか・・・。TODO:調査
+					bRet = true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			// ジャンルID			
+			if( filterData.getGenreId() != null )
+			{
+				ArrayList<GenreData> genres = mActivity.getGenreStocker().getGenreOfAudio( 
+		        		data.getTrackAudioId() );
+				if( genres != null )
+				{
+					boolean bNoHit = true;
+					for( GenreData genre : genres )
+					{
+						if( filterData.getGenreId().equals( String.valueOf(genre.getDataId() ) ) )
+						{
+							// ジャンルが一致
+							bRet = true;
+							bNoHit = false;
+						}
+					}
+					if( bNoHit )
+					{
+						return false;
+					}
+				}
+			}
+			// TODO:そんなものでフィルタをかける機能は不要とは思うが、念のためトラックIDも
+			
+			
+			// トラック名
+			if( filterData.getStrSong() != null && 0 < filterData.getStrSong().length() )
+			{
+				if( data.getName() != null
+				&& -1 != data.getName().indexOf(filterData.getStrSong()) )
+				{
+					// トラック名が一部一致
+					bRet = true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			
+		}
+		return bRet;
+	}
+	@Override
+	public void clearFilterData() {
+		filterData = null;
+	}
+	@Override
+	public FilterData getFilterData() {
+		return filterData;
 	}
 	
 }

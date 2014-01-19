@@ -28,6 +28,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
+import okosama.app.panel.SearchPanel;
 import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TimeControlPanel;
 import okosama.app.service.MediaInfo;
@@ -46,6 +47,7 @@ import okosama.app.widget.absWidget;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
@@ -1557,5 +1559,26 @@ implements ServiceConnection, Database.Defs {
 				}
 			}			
 		}
-	    
+		public boolean onKeyDown(int keyCode, KeyEvent event) {
+			if(keyCode != KeyEvent.KEYCODE_BACK){
+				return super.onKeyDown(keyCode, event);
+			}else{
+				// 検索パネルが出ている時は、Backキーで検索パネルのClose
+				TabPage page = (TabPage)getCurrentTabPage();
+				if( null != page )//act.getTabStocker().getTab(iTabId) )
+				{
+					if( SearchPanel.getInstance().getView() != null )
+					{
+						if(SearchPanel.getInstance().getView().getParent() != null 
+						&& page.getTabBaseLayout() == SearchPanel.getInstance().getView().getParent()	
+						)
+						{
+							removeFromParent(SearchPanel.getInstance().getView());
+							return false;
+						}
+					}
+				}
+				return super.onKeyDown(keyCode, event);
+			}
+		}	    
 }

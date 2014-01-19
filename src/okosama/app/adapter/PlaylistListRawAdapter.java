@@ -7,6 +7,7 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
 import okosama.app.service.MediaInfo;
+import okosama.app.storage.FilterData;
 import okosama.app.storage.PlaylistData;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
@@ -34,7 +35,8 @@ import android.widget.TextView;
  * @author 25689
  *
  */
-public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implements IAdapterUpdate {
+public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> 
+implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 	boolean deleted = false;
     private static final long RECENTLY_ADDED_PLAYLIST = -1;
     //private static final long ALL_SONGS_PLAYLIST = -2;
@@ -223,6 +225,11 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
     public void updateData(ArrayList<PlaylistData> items) {
     	clear();
     	for (PlaylistData data : items) {
+    		if( isFilterData(data) == false )
+    		{
+    			// 抽出対象でない場合格納しない
+    			continue;
+    		}
     	    add(data);
 //        	Log.i("updateData - add","id" + data.getPlaylistId() 
 //        			+ " name:" + data.getPlaylistName() );    	    
@@ -368,6 +375,8 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
     // 曲の変更時など、状態が変わったときに、外部から表示を更新させる
 	public int updateStatus()
     {
+    	// 2014/1/18 add filter用
+    	updateData( items );    	
     	// 表示を更新?
     	notifyDataSetChanged();
     	return 0;
@@ -399,6 +408,27 @@ public class PlaylistListRawAdapter extends ArrayAdapter<PlaylistData> implement
 		deleted = true;
 		items = null;
 		this.clear();		
+	}
+	FilterData filterData = null;
+	@Override
+	public void setFilterData(FilterData data) {
+		filterData = data;
+	}
+	/**
+	 *注:なんか変だけど、表示対象の場合、true
+	 */	
+	@Override
+	public boolean isFilterData(PlaylistData data) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public void clearFilterData() {
+		filterData = null;
+	}
+	@Override
+	public FilterData getFilterData() {
+		return filterData;
 	}
    
  }

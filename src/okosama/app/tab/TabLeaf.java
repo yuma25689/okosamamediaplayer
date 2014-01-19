@@ -40,7 +40,19 @@ public abstract class TabLeaf implements ITabComponent {
 	protected SparseArray< IViewAction > actionMap;
 	public void addAction( int id, IViewAction action )
 	{
-		actionMap.put( id, action );
+		if( actionMap == null )
+		{
+			actionMap = new SparseArray< IViewAction >();
+		}
+		
+		if( action == null && actionMap.get(id, null) != null)
+		{
+			actionMap.remove(id);
+		}
+		else
+		{
+			actionMap.put( id, action );
+		}
 	}
 	
 	@Override

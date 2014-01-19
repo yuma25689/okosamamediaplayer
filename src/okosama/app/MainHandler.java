@@ -77,7 +77,7 @@ public class MainHandler extends Handler {
 			}
     		case AppStatus.INIT_ALL_REFRESH:
 	           	mActivity.getGenreStocker().stockMediaDataFromDevice();
-	           	mActivity.getAdpStocker().initAllAdapter();    			
+	           	//mActivity.getAdpStocker().initAllAdapter();    			
     			break;
         	case DisplayInfo.MSG_INIT_END:
         	{
@@ -123,6 +123,7 @@ public class MainHandler extends Handler {
 	        				mActivity.getMainPageContainer(),
 	        				mActivity.getMainComponentContainer()
     					);
+	        			mActivity.getAdpStocker().initAllAdapter();	        			
 	        			bTabSelectReset = true;
 	        		}	        		
 	        	}

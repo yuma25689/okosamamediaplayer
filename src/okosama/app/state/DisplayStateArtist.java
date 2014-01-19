@@ -31,7 +31,7 @@ public class DisplayStateArtist extends absDisplayStateMediaTab {
 		switch( item.getItemId() )
 		{
 		case MENU_UPDATE:
-			// Albumを再度端末から読み直す
+			// Artistを再度端末から読み直す
 			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
 				ControlIDs.TAB_ID_MEDIA,
 				true

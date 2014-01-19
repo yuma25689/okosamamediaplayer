@@ -1,6 +1,7 @@
 package okosama.app.adapter;
 
 import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.storage.FilterData;
 import okosama.app.tab.TabPage;
 import android.util.SparseArray;
 
@@ -82,6 +83,21 @@ public class AdapterStocker {
 			}
 		}
 		return stockMediaDataFromDevice(key, page);
+	}
+	public void setFilterData(int key, FilterData data)
+	{
+		// 別にこんなチェックいらないと思うけど、とりあえず、SDカードが読めてない時はやめとく
+		if( false == OkosamaMediaPlayerActivity.getResourceAccessor().isReadSDCardSuccess() )
+		{
+			return;
+		}
+		
+		if( get(key) != null )
+		{
+			get(key).setFilterData(data);
+			get(key).updateStatus();
+		}
+		return;
 	}
 	
 	public void clear()

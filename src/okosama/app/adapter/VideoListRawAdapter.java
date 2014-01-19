@@ -6,6 +6,7 @@ import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
 import okosama.app.storage.Database;
+import okosama.app.storage.FilterData;
 import okosama.app.storage.VideoData;
 import okosama.app.tab.TabPage;
 import android.content.Context;
@@ -30,7 +31,8 @@ import android.widget.TextView;
  * @author 25689
  *
  */
-public class VideoListRawAdapter extends ArrayAdapter<VideoData> implements IAdapterUpdate { 
+public class VideoListRawAdapter extends ArrayAdapter<VideoData> 
+implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
 	boolean deleted = false;
 	private ArrayList<VideoData> allItems = new ArrayList<VideoData>();
 	// TODO:次へボタン等
@@ -69,7 +71,7 @@ public class VideoListRawAdapter extends ArrayAdapter<VideoData> implements IAda
     int mMineTypeIdx;
     
     private final StringBuilder mBuilder = new StringBuilder();
-    private final String mUnknownArtist;    
+    private final String mUnknownArtist;
     private OkosamaMediaPlayerActivity mActivity = null;
     
     // ビュー保持用クラス
@@ -379,13 +381,13 @@ public class VideoListRawAdapter extends ArrayAdapter<VideoData> implements IAda
 			// Log.d("id", "itemCount:" + allItems.size() + " albumID:" + albumId );
 			for (VideoData data : items) {
 	    		// ここでフィルタをかけてしまう？
-	    		if( false == isShowData( data ) )
+	    		if( false == isShowData( data ) 
+	    		|| false == isFilterData( data ))
 	    		{
 	    			continue;
 	    		}
 	    	    add(data);
 	    	    currentAllVideoIds.add(data.getDataId());
-	        	// Log.d("updateData - add","data" + data.getTrackId() + " name:" + data.getTrackTitle() + " albumId:" + data.getTrackAlbumId() );    	    
 	    		if( maxShowCount < this.getCount() )
 	    		{
 	    			// maxの表示件数以上は、表示しない
@@ -446,6 +448,30 @@ public class VideoListRawAdapter extends ArrayAdapter<VideoData> implements IAda
 	public void clearAdapterData() {
 		deleted = true;
 		this.clear();		
+	}
+
+	FilterData filterData = null;
+	@Override
+	public void setFilterData(FilterData data) {
+		filterData = data;
+	}
+
+	/**
+	 *注:なんか変だけど、表示対象の場合、true
+	 */	
+	@Override
+	public boolean isFilterData(VideoData data) {
+		return true;
+	}
+
+	@Override
+	public void clearFilterData() {
+		filterData = null;
+	}
+
+	@Override
+	public FilterData getFilterData() {
+		return filterData;
 	}
 	
 }

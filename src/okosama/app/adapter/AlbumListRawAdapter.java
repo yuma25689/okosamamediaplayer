@@ -8,6 +8,8 @@ import okosama.app.R;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.AlbumData;
 import okosama.app.storage.Database;
+import okosama.app.storage.FilterData;
+import okosama.app.storage.ISimpleData;
 // import okosama.app.storage.QueryHandler;
 import okosama.app.tab.TabPage;
 // import android.content.AsyncQueryHandler;
@@ -35,7 +37,7 @@ import android.widget.TextView;
  *
  */
 public class AlbumListRawAdapter extends ArrayAdapter<AlbumData> 
-implements IAdapterUpdate, SectionIndexer {
+implements IAdapterUpdate<AlbumData>, SectionIndexer { //, IFilterable<AlbumData> {
     
 	boolean deleted = false;
 	//SparseArray<String> mapIdAndArt = new SparseArray<String>();
@@ -227,6 +229,11 @@ implements IAdapterUpdate, SectionIndexer {
     	clear();
     	mapIdAndArt.clear();
     	for (AlbumData data : items) {
+    		if( isFilterData(data) == false )
+    		{
+    			// 抽出対象でない場合、格納しない
+    			continue;
+    		}    		
     	    add(data);
     	    mapIdAndArt.put(data.getDataId(), data.getAlbumArt());
         	// Log.i("updateData - add","data" + data.getAlbumId() + " name:" + data.getAlbumName() );    	    
@@ -384,6 +391,8 @@ implements IAdapterUpdate, SectionIndexer {
     // 曲の変更時など、状態が変わったときに、外部から表示を更新させる
 	public int updateStatus()
     {
+    	// 2014/1/18 add filter用
+    	updateData( items );
     	// 表示を更新?
     	notifyDataSetChanged();
     	return 0;
@@ -416,6 +425,30 @@ implements IAdapterUpdate, SectionIndexer {
 		deleted = true;
 		items = null;
 		this.clear();
+	}
+
+	FilterData filterData = null;		
+	@Override
+	public void setFilterData(FilterData data) {
+		filterData = data;
+	}
+
+	/**
+	 *注:なんか変だけど、表示対象の場合、true
+	 */	
+	@Override
+	public boolean isFilterData(AlbumData data) {
+		return true;
+	}
+
+	@Override
+	public void clearFilterData() {
+		filterData = null;
+	}
+
+	@Override
+	public FilterData getFilterData() {
+		return filterData;
 	}
 	
  }

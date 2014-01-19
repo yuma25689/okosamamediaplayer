@@ -85,5 +85,9 @@ public class Edit extends absWidget {
 	{
 		impl.setHint(resId);
 	}
+	public void setText(String strSong) {
+		impl.setText(strSong);
+		
+	}
 	
 }

@@ -8,14 +8,13 @@ import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.R.drawable;
+import okosama.app.action.FilterCurrentTabAction;
 import okosama.app.action.IViewAction;
+import okosama.app.action.SearchPanelCtrlSwitchAction;
 import okosama.app.adapter.AlbumSpinnerAdapter;
 import okosama.app.adapter.ArtistSpinnerAdapter;
-import okosama.app.adapter.GenreSpinnerAdapter;
-import okosama.app.adapter.PlaylistSpinnerAdapter;
 import okosama.app.adapter.SpinnerArrayAdapter;
 import okosama.app.adapter.TrackSpinnerAdapter;
-import okosama.app.adapter.VideoSpinnerAdapter;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.storage.AlbumData;
 import okosama.app.storage.ArtistGroupData;
@@ -123,7 +122,6 @@ public class SearchPanel extends ControlPanel {
 	{
 		if( instance != null && instance.getView() != null )
 		{
-			
 			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 	        mNoSelection = act.getString(R.string.no_selection);
 			switch( act.getCurrentTabPageId() )
@@ -147,20 +145,28 @@ public class SearchPanel extends ControlPanel {
 				// 種別がない場合は、表示させない
 				return;
 			}
-			if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+			if( null != act.getAdpStocker().get(act.getCurrentTabPageId()) )
 			{
-				instance.getView().setLayoutParams( 
-						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-					0, 150, PANEL_WIDTH_PORTRAIT, PANEL_WIDTH_PORTRAIT )
-				);
+				if( null != act.getAdpStocker().get(act.getCurrentTabPageId()).getFilterData() )
+				{
+					SearchPanel.getInstance().setFilterData( act.getAdpStocker().get(act.getCurrentTabPageId()).getFilterData() );
+				}
 			}
-			else
-			{
-				instance.getView().setLayoutParams( 
-						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
-					0, 150, PANEL_WIDTH_HORIZONTAL, PANEL_WIDTH_HORIZONTAL )
-				);				
-			}
+			
+//			if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+//			{
+//				instance.getView().setLayoutParams( 
+//						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+//					0, 150, PANEL_WIDTH_PORTRAIT, PANEL_WIDTH_PORTRAIT )
+//				);
+//			}
+//			else
+//			{
+//				instance.getView().setLayoutParams( 
+//						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+//					0, 150, PANEL_WIDTH_HORIZONTAL, PANEL_WIDTH_HORIZONTAL )
+//				);				
+//			}
 			OkosamaMediaPlayerActivity.removeFromParent(instance.getView());
 			//if( -1 == tabBaseLayout.indexOfChild(instance.getView()) )
 			//{
@@ -390,7 +396,7 @@ public class SearchPanel extends ControlPanel {
 		SparseArray< IViewAction > actMapSearch
 			= new SparseArray< IViewAction >();
 		// TODO: Search Actionの作成
-		actMapSearch.put( IViewAction.ACTION_ID_ONCLICK, null );//new ToggleShuffleAction() );
+		actMapSearch.put( IViewAction.ACTION_ID_ONCLICK, new FilterCurrentTabAction() );
 				
 		TabComponentActionSetter actionSetterCont[] = {
 				new TabComponentActionSetter( actMapSearch ),
@@ -434,11 +440,29 @@ public class SearchPanel extends ControlPanel {
 	 */
 	void switchPanelType(int panelTypeCode)
 	{
+		LayoutParams lpArtist=null;
+		LayoutParams lpAlbum=null;
+		
 		// 値を一旦クリア
 		clearAllControlValue();
 		switch( panelTypeCode )
 		{
 		case SEARCH_PANEL_TYPE_SONG:
+			if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+			{
+				instance.getView().setLayoutParams( 
+						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+					0, 150, PANEL_WIDTH_PORTRAIT, PANEL_WIDTH_PORTRAIT )
+				);
+			}
+			else
+			{
+				instance.getView().setLayoutParams( 
+						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+					0, 150, PANEL_WIDTH_HORIZONTAL, PANEL_WIDTH_HORIZONTAL )
+				);				
+			}
+			
 			imgSong.setVisible(View.VISIBLE);
 			imgSong.resetLayoutParams(lpLine1Icon);
 			imgArtist.setVisible(View.VISIBLE);
@@ -453,6 +477,8 @@ public class SearchPanel extends ControlPanel {
 			cmbArtist.resetLayoutParams(lpLine2Val);
 			cmbAlbum.setVisible(View.VISIBLE);
 			cmbAlbum.resetLayoutParams(lpLine3Val);
+			lpArtist = lpLine2Val;
+			lpAlbum = lpLine3Val;
 			cmbGenre.setVisible(View.VISIBLE);
 			cmbGenre.resetLayoutParams(lpLine4Val);
 			
@@ -462,13 +488,29 @@ public class SearchPanel extends ControlPanel {
 			edtAlbum.setVisible(View.GONE);
 			edtPlaylist.setVisible(View.GONE);
 			edtVideo.setVisible(View.GONE);
-			
 			break;
 		case SEARCH_PANEL_TYPE_ALBUM:
+			if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+			{
+				instance.getView().setLayoutParams( 
+						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+					0, 150 + 100, PANEL_WIDTH_PORTRAIT, PANEL_WIDTH_PORTRAIT - 100 )
+				);
+			}
+			else
+			{
+				instance.getView().setLayoutParams( 
+						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+					0, 150 + 100, PANEL_WIDTH_HORIZONTAL, PANEL_WIDTH_HORIZONTAL - 100)
+				);				
+			}
+			
 			imgAlbum.setVisible(View.VISIBLE);
 			imgAlbum.resetLayoutParams(lpLine1Icon);
 			imgArtist.setVisible(View.VISIBLE);
 			imgArtist.resetLayoutParams(lpLine2Icon);
+			lpArtist = lpLine2Val;
+			lpAlbum = lpLine1Val;			
 			imgGenre.setVisible(View.VISIBLE);
 			imgGenre.resetLayoutParams(lpLine3Icon);
 			edtAlbum.setVisible(View.VISIBLE);
@@ -489,6 +531,21 @@ public class SearchPanel extends ControlPanel {
 			
 			break;
 		case SEARCH_PANEL_TYPE_PLAYLIST:
+			if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+			{
+				instance.getView().setLayoutParams( 
+						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+					0, 150 + 200, PANEL_WIDTH_PORTRAIT, PANEL_WIDTH_PORTRAIT - 200 )
+				);
+			}
+			else
+			{
+				instance.getView().setLayoutParams( 
+						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+					0, 150 + 200, PANEL_WIDTH_HORIZONTAL, PANEL_WIDTH_HORIZONTAL - 200)
+				);				
+			}
+			
 			imgPlaylist.setVisible(View.VISIBLE);
 			imgPlaylist.resetLayoutParams(lpLine1Icon);
 //			imgAlbum.setVisible(View.VISIBLE);
@@ -501,6 +558,8 @@ public class SearchPanel extends ControlPanel {
 //			cmbAlbum.resetLayoutParams(lpLine2Val);
 //			cmbGenre.setVisible(View.VISIBLE);
 //			cmbGenre.resetLayoutParams(lpLine2Val);
+			lpArtist = null;
+			lpAlbum = null;			
 
 			imgAlbum.setVisible(View.GONE);
 			cmbAlbum.setVisible(View.GONE);
@@ -516,10 +575,27 @@ public class SearchPanel extends ControlPanel {
 			edtVideo.setVisible(View.GONE);
 			break;
 		case SEARCH_PANEL_TYPE_VIDEO:
+			if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+			{
+				instance.getView().setLayoutParams( 
+						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+					0, 150 + 300, PANEL_WIDTH_PORTRAIT, PANEL_WIDTH_PORTRAIT - 300 )
+				);
+			}
+			else
+			{
+				instance.getView().setLayoutParams( 
+						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+					0, 150 + 300, PANEL_WIDTH_HORIZONTAL, PANEL_WIDTH_HORIZONTAL - 300)
+				);				
+			}
+			
 			imgVideo.setVisible(View.VISIBLE);
 			imgVideo.resetLayoutParams(lpLine1Icon);
 			edtVideo.setVisible(View.VISIBLE);
 			edtVideo.resetLayoutParams(lpLine1Val);
+			lpArtist = null;
+			lpAlbum = null;			
 
 			imgAlbum.setVisible(View.GONE);
 			cmbAlbum.setVisible(View.GONE);
@@ -537,6 +613,21 @@ public class SearchPanel extends ControlPanel {
 			edtAlbum.setVisible(View.GONE);
 			break;
 		case SEARCH_PANEL_TYPE_ARTIST:
+			if( OkosamaMediaPlayerActivity.dispInfo.isPortrait() )
+			{
+				instance.getView().setLayoutParams( 
+						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+					0, 150 + 100, PANEL_WIDTH_PORTRAIT, PANEL_WIDTH_PORTRAIT - 100 )
+				);
+			}
+			else
+			{
+				instance.getView().setLayoutParams( 
+						OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
+					0, 150 + 100, PANEL_WIDTH_HORIZONTAL, PANEL_WIDTH_HORIZONTAL - 100)
+				);				
+			}
+			
 			imgAlbum.setVisible(View.VISIBLE);
 			imgAlbum.resetLayoutParams(lpLine1Icon);
 			imgArtist.setVisible(View.VISIBLE);
@@ -547,6 +638,8 @@ public class SearchPanel extends ControlPanel {
 			edtAlbum.resetLayoutParams(lpLine1Val);
 			cmbArtist.setVisible(View.VISIBLE);
 			cmbArtist.resetLayoutParams(lpLine2Val);
+			lpArtist = lpLine2Val;
+			lpAlbum = lpLine1Val;						
 			cmbGenre.setVisible(View.VISIBLE);
 			cmbGenre.resetLayoutParams(lpLine3Val);
 
@@ -560,6 +653,13 @@ public class SearchPanel extends ControlPanel {
 			cmbAlbum.setVisible(View.GONE);			
 			break;
 		}
+		SearchPanelCtrlSwitchAction actArtist = new SearchPanelCtrlSwitchAction(
+				cmbArtist.getView(),edtArtist.getView(),lpArtist);
+		SearchPanelCtrlSwitchAction actAlbum = new SearchPanelCtrlSwitchAction(
+				cmbAlbum.getView(),edtAlbum.getView(),lpAlbum);
+		imgArtist.addAction(IViewAction.ACTION_ID_ONCLICK, actArtist);
+		imgAlbum.addAction(IViewAction.ACTION_ID_ONCLICK, actAlbum);
+		
 		// Songのテキスト
 		TrackSpinnerAdapter adpSong = new TrackSpinnerAdapter(
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
@@ -670,11 +770,11 @@ public class SearchPanel extends ControlPanel {
 		ArtistGroupData artistData = (ArtistGroupData) cmbArtist.getSelectedItem();
 		AlbumData albumData = (AlbumData) cmbAlbum.getSelectedItem();
 		GenreData genreData = (GenreData) cmbGenre.getSelectedItem();
-		if( artistData != null )
+		if( artistData != null && artistData.getDataId() != -1)
 		{
 			data.setArtistId(String.valueOf(artistData.getDataId()));
 		}
-		if( albumData != null )
+		if( albumData != null && albumData.getDataId() != -1)
 		{
 			data.setAlbumId(String.valueOf(albumData.getDataId()));
 		}
@@ -684,4 +784,24 @@ public class SearchPanel extends ControlPanel {
 		}
 		return data;
 	}
+	private void setFilterData(FilterData data) {
+		edtSong.setText(data.getStrSong());
+		edtArtist.setText(data.getStrArtist());
+		edtAlbum.setText(data.getStrAlbum());
+		edtVideo.setText(data.getStrVideo());
+		edtPlaylist.setText(data.getStrPlaylist() );
+		if( data.getArtistId() != null && data.getArtistId() != "-1")
+		{
+			cmbArtist.setSelection(Long.valueOf(data.getArtistId()), new ArtistGroupData());
+		}
+		if( data.getAlbumId() != null && data.getAlbumId() != "-1")
+		{
+			cmbAlbum.setSelection(Long.valueOf(data.getAlbumId()), new AlbumData());
+		}
+		if( data.getGenreId() != null && data.getGenreId() != "-1")
+		{
+			cmbGenre.setSelection(Long.valueOf(data.getGenreId()), new GenreData());
+		}
+	}
+
 }

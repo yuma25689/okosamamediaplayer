@@ -10,6 +10,7 @@ public class AutoCompleteEditImpl extends AutoCompleteTextView {
 	public AutoCompleteEditImpl(Context context) {
 		super(context);
 		// このアプリケーション特有の設定
+		this.setSingleLine();
 		// setPadding(0,0,0,0);
 	}
 

@@ -91,5 +91,10 @@ public class AutoCompleteEdit extends absWidget {
 	{
 		impl.setHint(resId);
 	}
+
+	public void setText(String strSong) {
+		impl.setText(strSong);
+		
+	}
 	
 }

@@ -1,5 +1,6 @@
 package okosama.app.widget;
 
+import okosama.app.storage.ISimpleData;
 import android.app.Activity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -85,4 +86,15 @@ public class Combo extends absWidget {
 	{
 		return impl.getSelectedItem();
 	}
+	public <T extends ISimpleData> void setSelection(long id, T item) {
+        ArrayAdapter<T> adapter = (ArrayAdapter<T>) impl.getAdapter();
+        int index = 0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            if (adapter.getItem(i).getDataId() == id) {
+                index = i;
+                break;
+            }
+        }
+        impl.setSelection(index);
+    }	
 }

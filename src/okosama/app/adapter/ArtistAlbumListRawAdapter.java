@@ -1,6 +1,7 @@
 package okosama.app.adapter;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
@@ -32,7 +33,8 @@ import android.widget.TextView;
  * @author 25689
  *
  */
-public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter implements IAdapterUpdate {//<ArtistGroupData,ArtistChildData> {
+public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter 
+implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData,ArtistChildData> {
 	
 	boolean deleted = false;
 	TabPage page;
@@ -412,6 +414,9 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 		return v;
 	}
 
+	/**
+	 * 子のデータは、展開時にこの関数で読み込み
+	 */
 	@Override
 	public int getChildrenCount(int groupPosition) {
 		if( childData.containsKey(groupPosition) == true )
@@ -542,8 +547,27 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
     		HashMap<Integer,ArtistChildData[]> child
     		) {
     	// mapIdAndArt.clear();
-    	this.groupData = group;
-    	this.childData = child;
+    	// グループのマップをフィルタをかけながらコピー
+    	// コピーしたマップだけ、filterをかけて作り直す
+    	HashMap<Integer,ArtistGroupData> group2 = new HashMap<Integer,ArtistGroupData>();
+    	if( filterData != null )
+    	{
+    		for( Entry<Integer,ArtistGroupData> entryTmp : group2.entrySet() )
+    		{
+    			if( true == isFilterData( entryTmp.getValue() ) )
+    			{
+    				// 抽出対象の場合のみ、格納する
+    				group2.put(entryTmp.getKey(),entryTmp.getValue());
+    			}
+    		}
+    	}
+    	else
+    	{
+    		group2 = group;
+    	}
+    	
+    	this.groupData = group2;
+    	this.childData = null;//child; 2014/1/18 展開時に取得するのでいいと思われたのでここでクリア
     	Log.d("updateData","artist" + group.size());
     	notifyDataSetChanged();
     }
@@ -690,6 +714,8 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
     // 曲の変更時など、状態が変わったときに、外部から表示を更新させる
 	public int updateStatus()
     {
+    	// 2014/1/18 add filter用
+    	updateData( groupDataTmp, childDataTmp );    	
     	// 表示を更新?
     	notifyDataSetChanged();
     	return 0;
@@ -722,6 +748,31 @@ public class ArtistAlbumListRawAdapter extends BaseExpandableListAdapter impleme
 		deleted = true;
 		groupData.clear();
 		childData.clear();
+	}
+
+	FilterData filterData = null;	
+	@Override
+	public void setFilterData(FilterData data) {
+		filterData = data;
+	}
+
+	/**
+	 *注:なんか変だけど、表示対象の場合、true
+	 */	
+	@Override
+	public boolean isFilterData(ArtistGroupData data) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public void clearFilterData() {
+		filterData = null;
+	}
+
+	@Override
+	public FilterData getFilterData() {
+		return filterData;
 	}
 	
 }
