@@ -567,7 +567,7 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
     	}
     	
     	this.groupData = group2;
-    	this.childData = null;//child; 2014/1/18 展開時に取得するのでいいと思われたのでここでクリア
+    	this.childData = child;// 2014/1/18 展開時に取得するのでいいと思われたのでここでクリア
     	Log.d("updateData","artist" + group.size());
     	notifyDataSetChanged();
     }

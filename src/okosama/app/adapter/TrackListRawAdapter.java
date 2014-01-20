@@ -1,10 +1,10 @@
 package okosama.app.adapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+//import java.util.Collections;
+//import java.util.HashMap;
 
-import okosama.app.ControlIDs;
+//import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
@@ -27,7 +27,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.RemoteException;
-import android.provider.BaseColumns;
+//import android.provider.BaseColumns;
 import android.provider.MediaStore;
 //import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
@@ -36,7 +36,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AlphabetIndexer;
+//import android.widget.AlphabetIndexer;
 //import android.widget.AlphabetIndexer;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -119,7 +119,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     		mFilterType = mFilterTypeBefore;
     }
     boolean mDisableNowPlayingIndicator;
-    private String genre;
+    //private String genre;
     private String albumId;
     public void setAlbumId( String id )
     {
@@ -153,7 +153,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     
     public TrackListRawAdapter( OkosamaMediaPlayerActivity currentactivity, 
             int layout, ArrayList<TrackData> items,
-            boolean isnowplaying, boolean disablenowplayingindicator,String genre_,
+            boolean isnowplaying, boolean disablenowplayingindicator,//String genre_,
             String albumId_, String artistId_, 	TabPage page ) {
 
         super(currentactivity, layout, items );
@@ -173,7 +173,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
         mIsNowPlaying = isnowplaying;
         mDisableNowPlayingIndicator = disablenowplayingindicator;
         //mUnknownAlbum = context.getString(R.string.unknown_album_name);
-        genre = genre_;
+        //genre = genre_;
         albumId = albumId_;
         artistId = artistId_;
 
@@ -556,6 +556,19 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     		playlist = Database.getSongListForPlaylist(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()
     				, Long.parseLong(OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getPlaylistID()));
     	}
+    	//TODO:FIX
+		if( filterData != null )
+		{
+			if( filterData.getAlbumId() != null )
+			{
+				setAlbumId( filterData.getAlbumId() );
+			}
+			if( filterData.getArtistId() != null )
+			{
+				setArtistId( filterData.getArtistId() );
+			}
+		}
+    	
     	setAlbumId( OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getAlbumID() );
     	setArtistId( OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID() );
 				
@@ -575,8 +588,9 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     		int index = 0;
 			for (TrackData data : items) {
 	    		// ここでフィルタをかけてしまう？
-	    		if( false == isShowData( data ) 
-	    		|| false == isFilterData( data ))
+	    		if( false == isShowData( data )
+	    		|| false == isFilterData( data )
+	    		)
 	    		{
 	    			continue;
 	    		}
@@ -707,6 +721,8 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 			// TODO: アルバム名			
 			if( filterData.getAlbumId() != null )
 			{
+		    	//setAlbumId( filterData.getAlbumId() );//OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getAlbumID() );
+				
 				if( data.getTrackAlbumId() != null
 				&& filterData.getAlbumId().equals(data.getTrackAlbumId()) )
 				{
@@ -724,9 +740,13 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 			{
 				ArrayList<GenreData> genres = mActivity.getGenreStocker().getGenreOfAudio( 
 		        		data.getTrackAudioId() );
-				if( genres != null )
+				boolean bNoHit = true;
+				if( genres == null )
 				{
-					boolean bNoHit = true;
+					bNoHit = true;
+				}
+				else
+				{
 					for( GenreData genre : genres )
 					{
 						if( filterData.getGenreId().equals( String.valueOf(genre.getDataId() ) ) )
@@ -736,10 +756,10 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 							bNoHit = false;
 						}
 					}
-					if( bNoHit )
-					{
-						return false;
-					}
+				}
+				if( bNoHit )
+				{
+					return false;
 				}
 			}
 			// TODO:そんなものでフィルタをかける機能は不要とは思うが、念のためトラックIDも
@@ -759,7 +779,6 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 					return false;
 				}
 			}
-			
 		}
 		return bRet;
 	}

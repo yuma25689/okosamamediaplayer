@@ -38,9 +38,6 @@ public class Tab extends TabComponentParent {
 	// next force refresh
 	boolean nextForceRefresh = false;
 	boolean locking = false;
-	
-	
-	
 	/**
 	 * @return the locking
 	 */
@@ -203,10 +200,9 @@ public class Tab extends TabComponentParent {
 		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoView();
 		videoView.setVisibility(View.GONE);
 		OkosamaMediaPlayerActivity.removeFromParent( videoView );
-		
+
 		// タブのパネルを親から与えられたレイアウトに追加
-		componentContainer.addView(tabBaseLayout);
-		
+		componentContainer.addView(tabBaseLayout);		
 		return errCode;
 	}
 	

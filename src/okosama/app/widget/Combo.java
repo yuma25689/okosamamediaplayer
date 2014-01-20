@@ -77,9 +77,11 @@ public class Combo extends absWidget {
 	}
 	public void clearValue()
 	{
-		impl.setAdapter(null);
-		// TODO:これでうまくいくとは思えないが・・・
-		// impl.setSelection(-1);
+		//impl.setAdapter(null);
+		if( impl.getAdapter() != null && 0 < impl.getAdapter().getCount())
+		{
+			impl.setSelection(0);
+		}
 	}
 
 	public Object getSelectedItem()

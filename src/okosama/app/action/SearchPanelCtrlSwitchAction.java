@@ -1,5 +1,6 @@
 package okosama.app.action;
 
+import okosama.app.widget.absWidget;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
@@ -11,16 +12,16 @@ import android.widget.RelativeLayout;
  */
 public class SearchPanelCtrlSwitchAction implements IViewAction {
 
-	View vNowShow;
-	View vNowHide;
+	absWidget vNowShow;
+	absWidget vNowHide;
 	LayoutParams lpShow;
 	
-	public SearchPanelCtrlSwitchAction(View nowShow, View nowHide, LayoutParams lp )
+	public SearchPanelCtrlSwitchAction(absWidget nowShow, absWidget nowHide, LayoutParams lp )
 	{
 		setActiveView( nowShow, nowHide, lp );
 	}
 	
-	public void setActiveView(View nowShow, View nowHide, LayoutParams lp )
+	public void setActiveView(absWidget nowShow, absWidget nowHide, LayoutParams lp )
 	{
 		vNowShow = nowShow;
 		vNowHide = nowHide;
@@ -32,11 +33,12 @@ public class SearchPanelCtrlSwitchAction implements IViewAction {
 		
 		if( vNowShow != null && vNowHide != null )
 		{
-			vNowShow.setVisibility(View.GONE);
+			vNowShow.clearValue();
+			vNowShow.setVisible(View.GONE);
 			vNowHide.setLayoutParams(lpShow);
-			vNowHide.setVisibility(View.VISIBLE);
+			vNowHide.setVisible(View.VISIBLE);
 			// swap
-			View vTmp = vNowShow;
+			absWidget vTmp = vNowShow;
 			vNowShow = vNowHide;
 			vNowHide = vTmp;
 		}

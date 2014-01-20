@@ -1,9 +1,12 @@
 package okosama.app.state;
 
+import android.view.Menu;
 import android.view.MenuItem;
 import okosama.app.AppStatus;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.R;
+import okosama.app.action.SearchPanelShowHideAction;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
 
@@ -22,6 +25,17 @@ public class DisplayStateVideo extends absDisplayStateMediaTab {
 		return ret;
 	}
 	@Override
+	public int onPrepareOptionsMenu(Menu menu)
+	{
+		int iRet = super.onPrepareOptionsMenu(menu);
+		MenuItem item = null;
+		item = menu.add(Menu.NONE, MENU_SEARCH, Menu.NONE, R.string.search_title);
+		item.setIcon(android.R.drawable.ic_menu_search );
+		
+		return iRet;
+	}
+	
+	@Override
 	public int onOptionsItemSelected(MenuItem item)
 	{
 		switch( item.getItemId() )
@@ -32,6 +46,10 @@ public class DisplayStateVideo extends absDisplayStateMediaTab {
 				ControlIDs.TAB_ID_MEDIA,
 				true
 			);
+			return 0;
+		case MENU_SEARCH:
+			SearchPanelShowHideAction action = new SearchPanelShowHideAction();
+			action.doAction(null);
 			return 0;
 		}
 		return super.onOptionsItemSelected(item);

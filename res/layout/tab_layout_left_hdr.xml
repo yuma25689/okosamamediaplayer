@@ -4,13 +4,19 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal" >
-    
-    <RelativeLayout 
-        android:id="@+id/tab_header"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        >
-    </RelativeLayout>
+    <ScrollView 
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:layout_margin="0dp"
+    android:padding="2dp"            
+    >
+	    <RelativeLayout 
+	        android:id="@+id/tab_header"
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent"
+	        >
+	    </RelativeLayout>
+	</ScrollView>
     <RelativeLayout 
         android:layout_weight="1"
         android:id="@+id/tab_contents"

@@ -68,4 +68,10 @@ public class absWidget extends TabLeaf {
 	public void clearValue()
 	{
 	}
+	
+	public void setLayoutParams(LayoutParams lp)
+	{
+		if( this.getView() != null )
+			this.getView().setLayoutParams(lp);
+	}
 }

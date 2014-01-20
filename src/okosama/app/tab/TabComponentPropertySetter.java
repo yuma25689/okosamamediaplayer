@@ -325,7 +325,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 //             !(mPlaylist.equals("podcasts") || mPlaylist.equals("recentlyadded")
 			boolean isnowplaying = false;
 			boolean disablenowplayingindicator = false;
-			String genre = "";
+			//String genre = "";
 			String albumId = "";
 			String artistId = "";
 			
@@ -345,7 +345,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 						new ArrayList<TrackData>(),//data,
 						isnowplaying,
 						disablenowplayingindicator,
-						genre,
+						//genre,
 						albumId,
 			            artistId
 						,tabPageParent			            
@@ -439,7 +439,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 						data,
 						isnowplaying,
 						disablenowplayingindicator,
-						genre,
+						//genre,
 						albumId,
 			            artistId
 						,tabPageParent			            

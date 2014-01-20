@@ -540,6 +540,7 @@ implements ServiceConnection, Database.Defs {
         return lp;
 	}
     
+	
     /**
      * ベース画像上での絶対座標を指定した位置を表すLayoutParamを作成する
      * @param left
@@ -551,6 +552,13 @@ implements ServiceConnection, Database.Defs {
 	public static RelativeLayout.LayoutParams 
 	createLayoutParamForAbsolutePosOnBk(
 			int left, int top, int width, int height )
+	{
+		return createLayoutParamForAbsolutePosOnBk(left, top, width, height, true );
+	}
+	
+	public static RelativeLayout.LayoutParams 
+	createLayoutParamForAbsolutePosOnBk(
+			int left, int top, int width, int height, boolean bConvertPortraitAndHorz )
 	{
 		int widthCorrect = 0;
 		if( width == RelativeLayout.LayoutParams.FILL_PARENT
@@ -604,7 +612,7 @@ implements ServiceConnection, Database.Defs {
 
 		// ここで、縦横の変換をかます
 		// ソースコードに書いてある座標、大きさは縦用のものがだが、横向きの場合、横用に変換して座標を返す		
-		if( true == dispInfo.isPortrait() )
+		if( true == dispInfo.isPortrait() || bConvertPortraitAndHorz == false )
 		{
 			lp = new RelativeLayout.LayoutParams(
 					widthCorrect, heightCorrect);

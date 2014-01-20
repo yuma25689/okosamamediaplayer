@@ -23,6 +23,7 @@ public abstract class absDisplayState implements IDisplayState {
 	public static final int MENU_SETTING = 335;
 	public static final int MENU_EFFECTOR = 334;
 	public static final int MENU_UPDATE = 333;
+	public static final int MENU_SEARCH = 332;
 	
 	// TODO: 子クラスからのアクセサ
 	double prevAzimuth = 0;
