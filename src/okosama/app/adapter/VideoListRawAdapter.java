@@ -461,7 +461,26 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
 	 */	
 	@Override
 	public boolean isFilterData(VideoData data) {
-		return true;
+		boolean bRet = true;
+		if( filterData != null && data != null)
+		{
+			// “®‰æ–¼
+			if( filterData.getStrVideo() != null && 0 < filterData.getStrVideo().length() )
+			{
+				if( data.getName() != null
+				&& -1 != data.getName().indexOf(filterData.getStrVideo()) )
+				{
+					// “®‰æ–¼‚ªˆê•”ˆê’v
+					bRet = true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+		}
+		return bRet;
 	}
 
 	@Override

@@ -235,7 +235,7 @@ file
 
 
 
-
+delete
 2013-06-01T16:08:53.000000Z
 801f78304d136b927994461e70acc666
 2013-06-01T16:10:17.937500Z
@@ -269,7 +269,7 @@ file
 
 
 
-
+delete
 2013-06-01T16:08:53.000000Z
 fd064bd2b58f2217ca890e9c61938920
 2013-06-01T16:10:17.937500Z
@@ -303,7 +303,7 @@ file
 
 
 
-
+delete
 2013-06-01T16:08:53.000000Z
 26d5d7c6776b043c23e66cbaa30a5423
 2013-06-01T16:10:17.937500Z
@@ -949,7 +949,7 @@ file
 11
 
 
-
+delete
 2013-06-14T14:01:10.000000Z
 48e409e3616b3787dd27f342840baa29
 2013-06-15T12:49:07.156250Z
@@ -1051,7 +1051,7 @@ file
 11
 
 
-
+delete
 2013-06-14T16:21:07.000000Z
 6e37ae6bcc6ca1b2b0794e7a93632026
 2013-06-15T12:49:07.156250Z
@@ -1901,7 +1901,7 @@ file
 11
 
 
-
+delete
 2013-06-14T16:21:31.000000Z
 a554e413fa15465c31ecf62cb31dfc15
 2013-06-15T12:49:07.156250Z
@@ -2071,7 +2071,7 @@ file
 7
 
 
-
+delete
 2013-04-29T02:10:14.000000Z
 3d8538a55be291a25699d3dff849f653
 2013-06-13T16:08:39.656250Z
@@ -2105,7 +2105,7 @@ file
 
 
 
-
+delete
 2013-06-01T16:08:53.000000Z
 a69f0c1c91dc556a9bdc2da5b7048b12
 2013-06-01T16:10:17.937500Z
@@ -2275,7 +2275,7 @@ file
 
 
 
-
+delete
 2013-06-01T16:08:53.000000Z
 738731258a59affab27d551197acece6
 2013-06-01T16:10:17.937500Z
@@ -2309,7 +2309,7 @@ file
 
 
 
-
+delete
 2013-06-01T16:08:53.000000Z
 5df0d8acd9fa457cd1e338e640f92097
 2013-06-01T16:10:17.937500Z
@@ -2343,7 +2343,7 @@ file
 
 
 
-
+delete
 2013-06-01T16:08:53.000000Z
 d06120dd95d162ec17acd06d6ced5ee7
 2013-06-01T16:10:17.937500Z
@@ -2377,7 +2377,7 @@ file
 
 
 
-
+delete
 2013-06-01T16:08:53.000000Z
 6a17e55efb70a234a176557541ce0036
 2013-06-01T16:10:17.937500Z
@@ -2411,7 +2411,7 @@ file
 
 
 
-
+delete
 2013-06-01T16:08:53.000000Z
 b67397ee19c14e0dfd18112284561873
 2013-06-01T16:10:17.937500Z
@@ -2445,7 +2445,7 @@ file
 11
 
 
-
+delete
 2013-06-14T13:54:23.000000Z
 fef0078bb20f7ede718d012b899b6a92
 2013-06-15T12:49:07.156250Z
@@ -2853,7 +2853,7 @@ file
 
 
 
-
+delete
 2013-06-01T16:08:53.000000Z
 ff514e3520e1633570cdfb9faf268f60
 2013-06-01T16:10:17.937500Z
@@ -3222,6 +3222,374 @@ has-props
 
 6906
 
+selector_appwidget_button_center.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/appwidget_button_center.xml
+4
+
+selector_appwidget_button_left.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/appwidget_button_left.xml
+4
+
+selector_appwidget_button_right.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/appwidget_button_right.xml
+4
+
+selector_btn_play_image.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/btn_play_image.xml
+11
+
+selector_external_btn_image.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/external_btn_image.xml
+11
+
+selector_internal_btn_image.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/internal_btn_image.xml
+11
+
+selector_list_selector.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/list_selector.xml
+7
+
+selector_music_choice_button_image.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/music_choice_button_image.xml
+4
+
+selector_music_select_album_image.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/music_select_album_image.xml
+4
+
+selector_music_select_artist_image.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/music_select_artist_image.xml
+4
+
+selector_music_select_playlist_image.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/music_select_playlist_image.xml
+4
+
+selector_music_select_song_image.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/music_select_song_image.xml
+4
+
+selector_music_tab_button_image.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/music_tab_button_image.xml
+4
+
+selector_now_playlist_button_image.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/now_playlist_button_image.xml
+11
+
+selector_play_button_image.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/play_button_image.xml
+4
+
+selector_stop_button_image.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+
+
+
+
+
+copied
+http://yum@192.168.1.7:1106/svn/OkosamaMediaPlayer/OkosamaMediaPlayer/res/drawable/stop_button_image.xml
+4
+
 songtabbtn_normal.png
 file
 
@@ -3363,7 +3731,7 @@ file
 
 
 
-
+delete
 2013-06-01T16:08:53.000000Z
 81c40a9e5b4688e566f74eb1f5540e94
 2013-06-01T16:10:17.937500Z

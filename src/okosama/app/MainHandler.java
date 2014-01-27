@@ -14,7 +14,8 @@ import android.widget.Toast;
 
 public class MainHandler extends Handler {
 
-	static int INIT_ALL_REFRESH = 103;
+	static final int INIT_ALL_REFRESH = 103;
+	static final int MEDIA_SCAN_TARGET_CREATED = 107;
 	boolean bInitEnd = false;
 	OkosamaMediaPlayerActivity mActivity = null;
 	
@@ -32,6 +33,9 @@ public class MainHandler extends Handler {
     	}
     	switch( message.what )
 		{
+	    	case MEDIA_SCAN_TARGET_CREATED:
+	    		mActivity.updateAndroidMediaDatabase();
+	    		break;
 	    	case AppStatus.RESTART:
 				Log.e("app restart","come");
 				mActivity.finish();

@@ -98,13 +98,13 @@ public class SubControlPanel extends ControlPanel {
 					new TabComponentPropertySetter(
 						ControlIDs.STOP_BUTTON, null, ComponentType.BUTTON, 
 						150, 560, 100, 100
-						, null, R.drawable.stop_button_image, "", ScaleType.FIT_XY
+						, null, R.drawable.selector_stop_button_image, "", ScaleType.FIT_XY
 					),
 					// --------------------- TWITTER
 					new TabComponentPropertySetter(
 						ControlIDs.TWEET_BUTTON, null, ComponentType.BUTTON, 
 						370, 500, 80, 80
-						, null, R.drawable.internal_btn_image, "", ScaleType.FIT_XY
+						, null, R.drawable.selector_internal_btn_image, "", ScaleType.FIT_XY
 					),				
 			};
 			creationData = creationDataPort;
@@ -129,13 +129,13 @@ public class SubControlPanel extends ControlPanel {
 					new TabComponentPropertySetter(
 						ControlIDs.STOP_BUTTON, null, ComponentType.BUTTON, 
 						130, 360, 100, 100
-						, null, R.drawable.stop_button_image, "", ScaleType.FIT_XY
+						, null, R.drawable.selector_stop_button_image, "", ScaleType.FIT_XY
 					),
 					// --------------------- TWITTER
 					new TabComponentPropertySetter(
 						ControlIDs.TWEET_BUTTON, null, ComponentType.BUTTON, 
 						370, 500, 80, 80
-						, null, R.drawable.internal_btn_image, "", ScaleType.FIT_XY
+						, null, R.drawable.selector_internal_btn_image, "", ScaleType.FIT_XY
 					),				
 			};
 			creationData = creationDataHorz;			
@@ -208,13 +208,13 @@ public class SubControlPanel extends ControlPanel {
         try {
             switch (MediaPlayerUtil.sService.getRepeatMode()) {
                 case MediaPlaybackService.REPEAT_ALL:
-                	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.btn_no_repeat_image);
+                	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.selector_btn_no_repeat_image);
                     break;
                 case MediaPlaybackService.REPEAT_CURRENT:
-                	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.btn_one_repeat_image);
+                	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.selector_btn_one_repeat_image);
                     break;
                 default:
-                	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.btn_repeat_all_image);
+                	((ButtonImpl)btnRepeat.getView()).setImageResource(R.drawable.selector_btn_repeat_all_image);
                     break;
             }
         } catch (RemoteException ex) {
@@ -235,14 +235,14 @@ public class SubControlPanel extends ControlPanel {
         try {
             switch (MediaPlayerUtil.sService.getShuffleMode()) {
                 case MediaPlaybackService.SHUFFLE_AUTO:
-                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_shuffle_auto_image);
+                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.selector_btn_shuffle_auto_image);
                     break;
                 case MediaPlaybackService.SHUFFLE_NORMAL:
-                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_shuffle_all_image);
+                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.selector_btn_shuffle_all_image);
                     break;
                 //case MediaPlaybackService.SHUFFLE_NONE:
                 default:
-                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.btn_no_shuffle_image);
+                	((ButtonImpl)btnShuffle.getView()).setImageResource(R.drawable.selector_btn_no_shuffle_image);
                     break;
             }
         } catch (RemoteException ex) {

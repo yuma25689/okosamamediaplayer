@@ -5,10 +5,13 @@ import java.util.HashMap;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
+import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.AlbumData;
+import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.Database;
 import okosama.app.storage.FilterData;
+import okosama.app.storage.GenreData;
 import okosama.app.storage.ISimpleData;
 // import okosama.app.storage.QueryHandler;
 import okosama.app.tab.TabPage;
@@ -438,7 +441,128 @@ implements IAdapterUpdate<AlbumData>, SectionIndexer { //, IFilterable<AlbumData
 	 */	
 	@Override
 	public boolean isFilterData(AlbumData data) {
-		return true;
+		boolean bRet = true;
+		if( filterData != null && data != null)
+		{
+			// アーティストID
+			// アルバムからアーティストの一覧を検索
+			if( filterData.getArtistId() != null )
+			{
+				// Album側ではアーティスト名しか持っていないので、アーティストIDをアーティスト名に変換してから比較する
+				HashMap<Integer,ArtistGroupData> mapArtist 
+				= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getArtistAdp().getGroupData();
+				ArtistGroupData dataArtist = null;
+				for( ArtistGroupData dataTmp : mapArtist.values() )
+				{
+					if( dataTmp.getDataId() == Long.valueOf(filterData.getArtistId() ) )
+					{
+						dataArtist = dataTmp;
+						break;
+					}
+				}
+				if( dataArtist != null
+				&& data.getAlbumArtist() != null
+				&& dataArtist.getName() != null
+				&& dataArtist.getName().equals(data.getAlbumArtist()) )
+				{
+					// アーティストがフィルタ対象？
+					bRet = true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			// アーティスト名
+			if( filterData.getStrArtist() != null && 0 < filterData.getStrArtist().length() )
+			{
+				if( data.getAlbumArtist() != null
+				&& -1 != data.getAlbumArtist().indexOf(filterData.getStrArtist()) )
+				{
+					// アーティスト名が一部一致
+					bRet = true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			
+			// アルバムID
+			if( filterData.getAlbumId() != null )
+			{
+		    	//setAlbumId( filterData.getAlbumId() );//OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getAlbumID() );
+				
+				if( data.getDataId() != -1
+				&& filterData.getAlbumId().equals(String.valueOf(data.getDataId())) )
+				{
+					// アルバムがフィルタ対象？
+					bRet = true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			// アルバム名
+			if( filterData.getStrAlbum() != null && 0 < filterData.getStrAlbum().length() )
+			{
+				if( data.getName() != null
+				&& -1 != data.getName().indexOf(filterData.getStrAlbum()) )
+				{
+					// アルバム名が一部一致
+					bRet = true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			// ジャンルID
+			if( filterData.getGenreId() != null )
+			{
+				OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+				MediaInfo songlistOfAlbum[] = Database.getSongListForAlbum(activity, data.getDataId());
+				if( songlistOfAlbum != null )
+				{
+					for( MediaInfo mi : songlistOfAlbum )
+					{
+						ArrayList<GenreData> genres = mActivity.getGenreStocker().getGenreOfAudio( 
+								mi.getId() );
+						boolean bNoHit = true;
+						if( genres == null )
+						{
+							bNoHit = true;
+						}
+						else
+						{
+							for( GenreData genre : genres )
+							{
+								if( filterData.getGenreId().equals( String.valueOf(genre.getDataId() ) ) )
+								{
+									// ジャンルが一致
+									bRet = true;
+									bNoHit = false;
+									break;
+								}
+							}
+						}
+						// アルバムの中で１曲でもヒットすれば、そのアーティストは検索対象
+						if( false == bNoHit )
+						{
+							break;
+						}
+						else
+						{
+							bRet = false;
+						}
+					}
+				}
+			}
+			
+		}
+		return bRet;
 	}
 
 	@Override

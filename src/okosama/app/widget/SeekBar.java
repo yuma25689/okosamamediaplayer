@@ -61,7 +61,7 @@ public class SeekBar extends absWidget {
 	public int create() {
 		// TODO ‚à‚Á‚Æ”Ä—p«‚Ì‚ ‚é‚â‚è•û‚É‚Å‚«‚é‚Í‚¸
 		impl = new SeekBarImpl(activity);
-		impl.setProgressDrawable(activity.getResources().getDrawable(R.drawable.progress_image));
+		impl.setProgressDrawable(activity.getResources().getDrawable(R.drawable.selector_progress_image));
 		impl.setIndeterminate(false);
 		impl.setClickable(true);
 		return 0;

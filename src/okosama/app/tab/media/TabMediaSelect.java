@@ -81,7 +81,7 @@ public class TabMediaSelect extends Tab {
 				ComponentType.BUTTON, 
 				0, 0, // DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				R.drawable.music_select_album_image,
+				R.drawable.selector_music_select_album_image,
 				R.drawable.no_image, // R.drawable.tab3_btn_not_select_no_shadow2, 
 				"", ScaleType.FIT_XY 
 			);
@@ -99,7 +99,7 @@ public class TabMediaSelect extends Tab {
 				ControlIDs.ARTIST_TAB_BUTTON, null, ComponentType.BUTTON, 
 				BUTTON_WIDTH + 5, 0, //DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				R.drawable.music_select_artist_image,
+				R.drawable.selector_music_select_artist_image,
 				R.drawable.no_image,//R.drawable.tab4_btn_not_select_no_shadow2, 
 				"", ScaleType.FIT_XY 
 			);
@@ -116,7 +116,7 @@ public class TabMediaSelect extends Tab {
 				ControlIDs.SONG_TAB_BUTTON, null, ComponentType.BUTTON, 
 				( BUTTON_WIDTH + 5 ) * 2, 0, //DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				R.drawable.music_select_song_image,
+				R.drawable.selector_music_select_song_image,
 				R.drawable.no_image, // R.drawable.tab3_btn_not_select_no_shadow2, 
 				"", ScaleType.FIT_XY 
 			);
@@ -133,7 +133,7 @@ public class TabMediaSelect extends Tab {
 				ControlIDs.PLAYLIST_TAB_BUTTON, null, ComponentType.BUTTON, 
 				( BUTTON_WIDTH + 5 ) * 3, 0,//DroidDisplayInfo.CURRENT_BASE_DEVICE_HEIGHT - HOOTER_SIZE, 
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				R.drawable.music_select_playlist_image,
+				R.drawable.selector_music_select_playlist_image,
 				R.drawable.no_image,//R.drawable.tab4_btn_not_select_no_shadow2, 
 				"", ScaleType.FIT_XY 
 			);
@@ -150,7 +150,7 @@ public class TabMediaSelect extends Tab {
 				ControlIDs.VIDEO_TAB_BUTTON, null, ComponentType.BUTTON, 
 				( BUTTON_WIDTH + 5 ) * 4, 0, 
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				R.drawable.video_select_image,
+				R.drawable.selector_video_select_image,
 				R.drawable.no_image, // R.drawable.tab3_btn_not_select_no_shadow2, 
 				"", ScaleType.FIT_XY 
 			);

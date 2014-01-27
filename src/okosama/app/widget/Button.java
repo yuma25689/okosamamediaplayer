@@ -64,12 +64,6 @@ public class Button extends absWidget {
 		return 0;
 	}
 	
-	// フリック用
-	private final int CLICKABLE_OFFSET = 30;
-	private final int FLICK_RECOGNIZED_RANGE_LOW = 100;
-	private final int FLICK_RECOGNIZED_RANGE_HIGH = 400;
-	private int firstX;
-	private int firstY;
 //	private int currentX;
 //	private int currentY;
 //	private int offsetX;

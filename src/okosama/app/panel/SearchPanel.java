@@ -266,7 +266,7 @@ public class SearchPanel extends ControlPanel {
 				new TabComponentPropertySetter(
 					ControlIDs.SEARCH_BUTTON, null, ComponentType.BUTTON,
 					lpSrchBtn
-					, null, drawable.filter_btn_image, "", ScaleType.FIT_XY
+					, null, drawable.selector_filter_btn_image, "", ScaleType.FIT_XY
 				),
 				// --------------------- SongButtonImage
 				new TabComponentPropertySetter(
@@ -284,7 +284,7 @@ public class SearchPanel extends ControlPanel {
 				new TabComponentPropertySetter(
 					ControlIDs.SEARCH_ARTIST_ICON, null, ComponentType.BUTTON, 
 					lpLine1Icon
-					, null, drawable.music_select_artist_image, "", ScaleType.FIT_XY
+					, null, drawable.selector_music_select_artist_image, "", ScaleType.FIT_XY
 				),
 				// --------------------- ArtistEdit
 				new TabComponentPropertySetter(
@@ -296,7 +296,7 @@ public class SearchPanel extends ControlPanel {
 				new TabComponentPropertySetter(
 					ControlIDs.SEARCH_ALBUM_ICON, null, ComponentType.BUTTON, 
 					lpLine1Icon
-					, null, drawable.music_select_album_image, "", ScaleType.FIT_XY
+					, null, drawable.selector_music_select_album_image, "", ScaleType.FIT_XY
 				),
 				// --------------------- AlbumEdit
 				new TabComponentPropertySetter(
@@ -308,7 +308,7 @@ public class SearchPanel extends ControlPanel {
 				new TabComponentPropertySetter(
 					ControlIDs.SEARCH_VIDEO_ICON, null, ComponentType.BUTTON, 
 					lpLine1Icon
-					, null, drawable.video_select_image, "", ScaleType.FIT_XY
+					, null, drawable.selector_video_select_image, "", ScaleType.FIT_XY
 				),
 				// --------------------- VideoEdit
 				new TabComponentPropertySetter(
@@ -320,7 +320,7 @@ public class SearchPanel extends ControlPanel {
 				new TabComponentPropertySetter(
 					ControlIDs.SEARCH_PLAYLIST_ICON, null, ComponentType.BUTTON, 
 					lpLine1Icon
-					, null, drawable.now_playlist_button_image, "", ScaleType.FIT_XY
+					, null, drawable.selector_now_playlist_button_image, "", ScaleType.FIT_XY
 				),
 				// --------------------- PlaylistEdit
 				new TabComponentPropertySetter(
@@ -332,7 +332,7 @@ public class SearchPanel extends ControlPanel {
 				new TabComponentPropertySetter(
 					ControlIDs.SEARCH_GENRE_ICON, null, ComponentType.BUTTON, 
 					lpLine2Icon
-					, null, drawable.genre_btn_image, "", ScaleType.FIT_XY
+					, null, drawable.selector_genre_btn_image, "", ScaleType.FIT_XY
 				),
 				// --------------------- GenreEdit
 				new TabComponentPropertySetter(

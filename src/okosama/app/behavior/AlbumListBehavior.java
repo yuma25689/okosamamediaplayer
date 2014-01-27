@@ -8,6 +8,7 @@ import okosama.app.action.CreatePlaylist;
 import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.TrackListRawAdapter;
+import okosama.app.panel.SearchPanel;
 import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.AlbumData;
@@ -46,10 +47,13 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 		{
 			return;
 		}
+		// TODO: –{“–‚ÉAll‚Å‚¢‚¢‚Ì‚©‚Í”÷–­
+		SearchPanel.getInstance().clearAllControlValue();
 		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(String.valueOf(act.getAlbumAdp().getItem(position).getDataId() ) );
 		// act.getTrackAdp().setAlbumId(String.valueOf(act.getAlbumAdp().getItem(position).getAlbumId() ) );
 		act.getTrackAdp().setFilterType(TrackListRawAdapter.FILTER_NORMAL);
 		act.getTrackAdp().updateList();
+		
 		//Long.valueOf(id).toString());
 		// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(
 		IViewAction action = new TabSelectAction( ControlIDs.TAB_ID_MEDIA,

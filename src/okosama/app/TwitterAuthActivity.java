@@ -4,6 +4,7 @@ import okosama.app.service.TwitterUtils;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.auth.AccessToken;
+import twitter4j.auth.OAuthAuthorization;
 import twitter4j.auth.RequestToken;
 import android.app.Activity;
 import android.content.Intent;
@@ -16,7 +17,8 @@ import android.view.View;
 import android.widget.Toast;
 
 public class TwitterAuthActivity extends Activity {
-    private Twitter mTwitter;
+    //private Twitter mTwitter;
+	private OAuthAuthorization mOAuth;
 	public static String mCallbackURL;
     public static RequestToken mRequestToken;
 	
@@ -25,7 +27,7 @@ public class TwitterAuthActivity extends Activity {
         super.onCreate(savedInstanceState);
         setTitle(R.string.tweetAuthTitle);
         setContentView(R.layout.twitter_auth);
-	    mTwitter = TwitterUtils.getTwitterInstance(this);
+        mOAuth = TwitterUtils.getOAuthInstance(this);
         mCallbackURL = getString(R.string.twitter_callback_url);
 //    	StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 //    	StrictMode.setThreadPolicy(policy);                	
@@ -49,7 +51,8 @@ public class TwitterAuthActivity extends Activity {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    mRequestToken = mTwitter.getOAuthRequestToken(mCallbackURL);
+                	mOAuth.setOAuthAccessToken(null);
+                    mRequestToken = mOAuth.getOAuthRequestToken(mCallbackURL);
                     return mRequestToken.getAuthorizationURL();
                 } catch (TwitterException e) {
                 	Log.e("auth fail",e.getMessage() + " " + e.getErrorCode() + " " + e.getErrorMessage());
@@ -60,8 +63,14 @@ public class TwitterAuthActivity extends Activity {
 
             @Override
             protected void onPostExecute(String url) {
-            	Log.e("TweetAuth - onPostExe","url=" + url);
+            	Log.i("TweetAuth - onPostExe","url=" + url);
                 if (url != null) {
+                	// なぜかsslの設定なのにhttp:で取得できるので、https:に変換する・・・(TT)
+                	if( url.startsWith("http:") )
+                	{
+                		url = url.replaceFirst("http", "https");
+                    	Log.i("TweetAuth - onPostExe","url(converted)=" + url);
+                	}
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                 } else {
@@ -84,7 +93,7 @@ public class TwitterAuthActivity extends Activity {
             @Override
             protected AccessToken doInBackground(String... params) {
                 try {
-                    return mTwitter.getOAuthAccessToken(mRequestToken, params[0]);
+                    return mOAuth.getOAuthAccessToken(mRequestToken, params[0]);
                 } catch (TwitterException e) {
                     e.printStackTrace();
                 }

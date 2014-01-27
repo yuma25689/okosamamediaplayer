@@ -1,11 +1,13 @@
 package okosama.app.adapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
+import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.*;
 import okosama.app.tab.TabPage;
@@ -424,6 +426,10 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 			return childData.get(groupPosition).length;
 		}
 		ArtistGroupData data = (ArtistGroupData) getGroup(groupPosition);
+		if( data == null )
+		{
+			return 0;
+		}
 		Cursor childCursor = getChildrenCursor(data.getDataId());
 		if( childCursor == null )
 		{
@@ -522,7 +528,11 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 			v = newGroupView();
 		}
 		ArtistGroupData data = (ArtistGroupData) getGroup(groupPosition);
-		bindGroupView(v,mActivity,data,isExpanded);
+		if( data != null )
+		{
+			bindGroupView(v,mActivity,data,isExpanded);
+		}
+		// 現状、filterがかかっている場合、nullになってしまう？
 		return v;
 	}
 
@@ -552,12 +562,14 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
     	HashMap<Integer,ArtistGroupData> group2 = new HashMap<Integer,ArtistGroupData>();
     	if( filterData != null )
     	{
-    		for( Entry<Integer,ArtistGroupData> entryTmp : group2.entrySet() )
+    		int i=0;
+    		for( Entry<Integer,ArtistGroupData> entryTmp : group.entrySet() )
     		{
     			if( true == isFilterData( entryTmp.getValue() ) )
     			{
     				// 抽出対象の場合のみ、格納する
-    				group2.put(entryTmp.getKey(),entryTmp.getValue());
+    				group2.put(i,entryTmp.getValue());
+    				i++;
     			}
     		}
     	}
@@ -761,8 +773,82 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 	 */	
 	@Override
 	public boolean isFilterData(ArtistGroupData data) {
-		// TODO Auto-generated method stub
-		return true;
+		boolean bRet = true;
+		if( filterData != null && data != null)
+		{
+			// アーティストID
+			if( filterData.getArtistId() != null )
+			{
+				if( data.getDataId() != -1
+				&& filterData.getArtistId().equals(String.valueOf(data.getDataId())) )
+				{
+					// アーティストがフィルタ対象？
+					// data.getTrackArtistId()は本当に入っているのだろうか・・・。TODO:調査
+					bRet = true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			// アーティスト名
+			if( filterData.getStrArtist() != null && 0 < filterData.getStrArtist().length() )
+			{
+				if( data.getName() != null
+				&& -1 != data.getName().indexOf(filterData.getStrArtist()) )
+				{
+					// アーティスト名が一部一致
+					bRet = true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			
+			// ジャンルID
+			if( filterData.getGenreId() != null )
+			{
+				OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
+				MediaInfo songlistOfArtist[] = Database.getSongListForArtist(activity, data.getDataId());
+				if( songlistOfArtist != null )
+				{
+					for( MediaInfo mi : songlistOfArtist )
+					{
+						ArrayList<GenreData> genres = mActivity.getGenreStocker().getGenreOfAudio( 
+								mi.getId() );
+						boolean bNoHit = true;
+						if( genres == null )
+						{
+							bNoHit = true;
+						}
+						else
+						{
+							for( GenreData genre : genres )
+							{
+								if( filterData.getGenreId().equals( String.valueOf(genre.getDataId() ) ) )
+								{
+									// ジャンルが一致
+									bRet = true;
+									bNoHit = false;
+									break;
+								}
+							}
+						}
+						// アーティストの中で１曲でもヒットすれば、そのアーティストは検索対象
+						if( false == bNoHit )
+						{
+							break;
+						}
+						else
+						{
+							bRet = false;
+						}
+					}
+				}
+			}
+		}
+		return bRet;
 	}
 
 	@Override

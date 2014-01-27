@@ -1,5 +1,9 @@
 package okosama.app;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import okosama.app.action.MediaStopAction;
 import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.AdapterStocker;
@@ -20,8 +24,14 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+//import android.database.Cursor;
 import android.media.AudioManager;
+import android.media.MediaScannerConnection;
+//import android.media.MediaScannerConnection;
+//import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -37,11 +47,14 @@ import okosama.app.service.MediaPlayerUtil.ServiceToken;
 import okosama.app.state.DisplayStateFactory;
 import okosama.app.state.IDisplayState;
 import okosama.app.state.StateStocker;
+//import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.Database;
 import okosama.app.storage.GenreStocker;
 import okosama.app.tab.*;
 import okosama.app.widget.Button;
 import okosama.app.widget.ExpList;
+import okosama.app.widget.Image;
+import okosama.app.widget.ImageImpl;
 import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
 import android.util.Log;
@@ -61,7 +74,7 @@ import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import okosama.app.widget.ButtonImpl;
+//import okosama.app.widget.ButtonImpl;
 
 public class OkosamaMediaPlayerActivity extends Activity
 implements ServiceConnection, Database.Defs {
@@ -69,15 +82,15 @@ implements ServiceConnection, Database.Defs {
 
 	public void selectTab(int tabId, int tabPageId, boolean bForce)
 	{
-		// ƒ^ƒuID‚ğXV
+		// ã‚¿ãƒ–IDã‚’æ›´æ–°
 		updateTabId( tabId, tabPageId, bForce );
 	
-		// ƒŠƒXƒi‚ğXV
+		// ãƒªã‚¹ãƒŠã‚’æ›´æ–°
 		updateListeners(IDisplayState.STATUS_ON_CREATE);
 		updateListeners(IDisplayState.STATUS_ON_RESUME);
-		// ƒƒfƒBƒA‚ğXV
+		// ãƒ¡ãƒ‡ã‚£ã‚¢ã‚’æ›´æ–°
 		reScanMediaAndUpdateTabPage(tabId,false);
-		// ‹¤’Ê•”•ªÄ•`‰æ
+		// å…±é€šéƒ¨åˆ†å†æç”»
 		queueNextRefresh(100);
 		updatePlayStateButtonImage();
 	}
@@ -113,19 +126,19 @@ implements ServiceConnection, Database.Defs {
 	{
 		return getVideoView().getHolder();
 	}	
-	// ƒ^ƒuŠi”[—p
+	// ã‚¿ãƒ–æ ¼ç´ç”¨
 	TabStocker tabStocker = new TabStocker();
 	public TabStocker getTabStocker()
 	{
 		return tabStocker;
 	}
-	// ó‘ÔŠi”[—p
+	// çŠ¶æ…‹æ ¼ç´ç”¨
 	StateStocker stateStocker = new StateStocker();
 	public StateStocker getStateStocker()
 	{
 		return stateStocker;
 	}
-	// ƒWƒƒƒ“ƒ‹Ši”[—p
+	// ã‚¸ãƒ£ãƒ³ãƒ«æ ¼ç´ç”¨
 	GenreStocker genreStocker = new GenreStocker();
 	public GenreStocker getGenreStocker()
 	{
@@ -138,25 +151,25 @@ implements ServiceConnection, Database.Defs {
 		int mainTab = tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MAIN);
         if( mainTab == TabPage.TABPAGE_ID_MEDIA )
         {
-        	// ‘I‘ğ‚³‚ê‚½ƒ^ƒuƒy[ƒW‚ªƒƒfƒBƒAƒ^ƒu‚¾‚Á‚½ê‡
-        	// q‚Æ‚È‚éƒƒfƒBƒAƒ^ƒu‚àXV‚³‚¹‚é
+        	// é¸æŠã•ã‚ŒãŸã‚¿ãƒ–ãƒšãƒ¼ã‚¸ãŒãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ãƒ–ã ã£ãŸå ´åˆ
+        	// å­ã¨ãªã‚‹ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ãƒ–ã‚‚æ›´æ–°ã•ã›ã‚‹
         	tabPageId = tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA);
         }
         else if( mainTab == TabPage.TABPAGE_ID_PLAY )
         {
-        	// ‘I‘ğ‚³‚ê‚½ƒ^ƒuƒy[ƒW‚ªƒvƒŒƒCƒ^ƒu‚¾‚Á‚½ê‡
-        	// q‚Æ‚È‚éƒvƒŒƒCƒ^ƒu‚àXV‚³‚¹‚é
+        	// é¸æŠã•ã‚ŒãŸã‚¿ãƒ–ãƒšãƒ¼ã‚¸ãŒãƒ—ãƒ¬ã‚¤ã‚¿ãƒ–ã ã£ãŸå ´åˆ
+        	// å­ã¨ãªã‚‹ãƒ—ãƒ¬ã‚¤ã‚¿ãƒ–ã‚‚æ›´æ–°ã•ã›ã‚‹
         	tabPageId = tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_PLAY);
         }    
         else
         {
-        	// ‚»‚êˆÈŠO‚Ìê‡AMainƒ^ƒu‚ÌID
+        	// ãã‚Œä»¥å¤–ã®å ´åˆã€Mainã‚¿ãƒ–ã®ID
         	tabPageId = mainTab;
         }    
         return tabPageId;
 	}
 	
-    // ƒ|[ƒY’†H
+    // ãƒãƒ¼ã‚ºä¸­ï¼Ÿ
     private boolean paused = false;
     public boolean isPaused()
     {
@@ -173,7 +186,7 @@ implements ServiceConnection, Database.Defs {
 			{
 				getResourceAccessor().setReadSDCardSuccess(bRealEnabled);
 				bEnabled = bRealEnabled;
-				// ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ğÄ‹N“®
+				// ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†èµ·å‹•
                 Message msg = handler.obtainMessage(AppStatus.RESTART);
                 handler.removeMessages(AppStatus.RESTART);
                 handler.sendMessageDelayed(msg, 1);
@@ -224,11 +237,11 @@ implements ServiceConnection, Database.Defs {
 
 		}
 	}
-	// ƒT[ƒrƒX‚Ìƒg[ƒNƒ“
-	// TODO:Trying to unbind with null token‚Æ‚¢‚¤ƒGƒ‰[‚ª”­¶
+	// ã‚µãƒ¼ãƒ“ã‚¹ã®ãƒˆãƒ¼ã‚¯ãƒ³
+	// TODO:Trying to unbind with null tokenã¨ã„ã†ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿ
     private static ServiceToken mToken = null;
     
-    // Šy‹È‚ÌŒŸõ‚ÉAExternal‚ğ—˜—p
+    // æ¥½æ›²ã®æ¤œç´¢ã«ã€Externalã‚’åˆ©ç”¨
     private static boolean externalRef = true;// false;
     public static boolean isExternalRef() {
 		return externalRef;
@@ -266,7 +279,7 @@ implements ServiceConnection, Database.Defs {
 	private static boolean internalRef = true;
     
     
-    // AdapterŠi”[—pƒ}ƒbƒv
+    // Adapteræ ¼ç´ç”¨ãƒãƒƒãƒ—
 	private AdapterStocker adpStocker = new AdapterStocker();
 	public AdapterStocker getAdpStocker()
 	{
@@ -345,8 +358,8 @@ implements ServiceConnection, Database.Defs {
 		return null;
 	}
 
-	// ƒ^ƒu‚Ì‰Šú‰»‚ªI‚í‚Á‚½‚©‚Ç‚¤‚©
-	// onCreate‚ÆonResume‚Å‚Ìˆ—‚Ìƒ_ƒu‚è‚ğ‰ñ”ğ‚·‚é–Ú“I
+	// ã‚¿ãƒ–ã®åˆæœŸåŒ–ãŒçµ‚ã‚ã£ãŸã‹ã©ã†ã‹
+	// onCreateã¨onResumeã§ã®å‡¦ç†ã®ãƒ€ãƒ–ã‚Šã‚’å›é¿ã™ã‚‹ç›®çš„
 	// boolean bTabInitEnd = false;
 	
 //	public static int TIMECHAR_WIDTH = 80;
@@ -377,7 +390,7 @@ implements ServiceConnection, Database.Defs {
 		return res;
 	}
 	
-	// ‰Šú‰»‚ÉAƒXƒNƒŠ[ƒ“ƒTƒCƒYæ“¾‚ÉƒXƒŒƒbƒh‚ª•K—v‚É‚È‚é‚½‚ßAƒXƒŒƒbƒh‚Æ‚Ì“¯Šú‚ª•K—v‚ÉEEE
+	// åˆæœŸåŒ–æ™‚ã«ã€ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚µã‚¤ã‚ºå–å¾—ã«ã‚¹ãƒ¬ãƒƒãƒ‰ãŒå¿…è¦ã«ãªã‚‹ãŸã‚ã€ã‚¹ãƒ¬ãƒƒãƒ‰ã¨ã®åŒæœŸãŒå¿…è¦ã«ãƒ»ãƒ»ãƒ»
 	private static Handler handler = null;
 	public Handler getHandler()
 	{
@@ -411,10 +424,10 @@ implements ServiceConnection, Database.Defs {
 		
 	}
 	/**
-	 * Œ»İ‚Ì‰æ–ÊID‚ğİ’è‚·‚é
-	 * ¡‚Ì‚Æ‚±‚ëA‰æ–ÊID‚Æ‚¢‚¤‚Ì‚ÍAƒ^ƒuID‚É“™‚µ‚¢
-	 * ‚Ü‚½A‚±‚Ì’l‚ÍAƒAƒNƒeƒBƒrƒeƒB‚É‚ ‚é‚ªAƒAƒvƒŠƒP[ƒVƒ‡ƒ“‘S‘Ì‚Å—˜—p‚·‚éŠ´‚¶‚Ì‚à‚Ì‚Å‚ ‚éB
-	 * ‚Æ‚è‚ ‚¦‚¸static‚É‚µ‚Ä‚¨‚­‚ªAƒNƒ‰ƒX‚ğˆÚ“®‚µ‚Ä‚à‚¢‚¢‚©‚à‚µ‚ê‚È‚¢
+	 * ç¾åœ¨ã®ç”»é¢IDã‚’è¨­å®šã™ã‚‹
+	 * ä»Šã®ã¨ã“ã‚ã€ç”»é¢IDã¨ã„ã†ã®ã¯ã€ã‚¿ãƒ–IDã«ç­‰ã—ã„
+	 * ã¾ãŸã€ã“ã®å€¤ã¯ã€ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã«ã‚ã‚‹ãŒã€ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³å…¨ä½“ã§åˆ©ç”¨ã™ã‚‹æ„Ÿã˜ã®ã‚‚ã®ã§ã‚ã‚‹ã€‚
+	 * ã¨ã‚Šã‚ãˆãšstaticã«ã—ã¦ãŠããŒã€ã‚¯ãƒ©ã‚¹ã‚’ç§»å‹•ã—ã¦ã‚‚ã„ã„ã‹ã‚‚ã—ã‚Œãªã„
 	 * @param internalID
 	 * @param iDispId
 	 */
@@ -441,68 +454,234 @@ implements ServiceConnection, Database.Defs {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // ƒ^ƒCƒgƒ‹ƒo[‚ğ”ñ•\¦‚ÉH
+        // ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã‚’éè¡¨ç¤ºã«ï¼Ÿ
         requestWindowFeature(Window.FEATURE_NO_TITLE);
  
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
-        // ƒrƒ…[‚Ìİ’è
+        // ãƒ“ãƒ¥ãƒ¼ã®è¨­å®š
         setContentView(R.layout.main);
  
-        // DatabaseƒNƒ‰ƒX‚ÉƒAƒNƒeƒBƒrƒeƒBŠi”[
+        // Databaseã‚¯ãƒ©ã‚¹ã«ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£æ ¼ç´
         Database.setActivity( this );
-        // handlerƒNƒ‰ƒXì¬
+        // handlerã‚¯ãƒ©ã‚¹ä½œæˆ
         handler = new MainHandler( this );
         handler.sendEmptyMessage(AppStatus.INIT_ALL_REFRESH);
-        // ƒ{ƒŠƒ…[ƒ€‚ğ‰¹Šy—p‚Éİ’è‚·‚é
+        // ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’éŸ³æ¥½ç”¨ã«è¨­å®šã™ã‚‹
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         
-        // Debugo—Í
+        // Debugå‡ºåŠ›
 //        String log;
 //        log = String.valueOf(MediaPlayer.getServiceConnectionCount());
 //        Toast.makeText(this, log, Toast.LENGTH_LONG).show();
 //       
         
-        // ƒŠƒ\[ƒX‚Ìî•ñ‚ğİ’è‚·‚é(‚±‚±‚Åİ’èŒãA“ñ“x‚Æİ’è‚µ’¼‚³‚È‚¢‚Ì‚Íƒ„ƒo‚¢‹C‚à‚·‚é
+        // ãƒªã‚½ãƒ¼ã‚¹ã®æƒ…å ±ã‚’è¨­å®šã™ã‚‹(ã“ã“ã§è¨­å®šå¾Œã€äºŒåº¦ã¨è¨­å®šã—ç›´ã•ãªã„ã®ã¯ãƒ¤ãƒã„æ°—ã‚‚ã™ã‚‹
         ResourceAccessor.CreateInstance(this);
         res = ResourceAccessor.getInstance();
-        // DroidWidgetKit‚Ìİ’è
+        // DroidWidgetKitã®è¨­å®š
         DroidWidgetKit.getInstance().setActivity(this);
-        // ƒŒƒCƒAƒEƒg‚Ìæ“¾
+        // ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®å–å¾—
         pageContainer = (LinearLayout)findViewById(R.id.main_linearlayout);
         componentContainer = (RelativeLayout)findViewById(R.id.main_relativelayout);
-        // ƒ^ƒu‚Ì•\¦Ø‚è‘Ö‚¦—p‚Ìİ’è
+        // ã‚¿ãƒ–ã®è¡¨ç¤ºåˆ‡ã‚Šæ›¿ãˆç”¨ã®è¨­å®š
         //HideTabComponentAction.getInstance().setTabLayout(componentContainer);
         //ShowTabComponentAction.getInstance().setTabLayout(componentContainer);
 
 		OkosamaMediaPlayerActivity.getResourceAccessor().setReadSDCardSuccess(OkosamaMediaPlayerActivity.getResourceAccessor().isSdCanRead());
         
-        // ŠÔ•\‚Ì‰Šú‰»
+        // æ™‚é–“è¡¨æ™‚ã®åˆæœŸåŒ–
 		updateTimeDisplayVisible(0);
 		updateTimeDisplay(0);
         
-        // ƒT[ƒrƒX‚Ö‚ÌÚ‘±‚ğŠJn
+        // ã‚µãƒ¼ãƒ“ã‚¹ã¸ã®æ¥ç¶šã‚’é–‹å§‹
         if( 0 == MediaPlayerUtil.getServiceConnectionCount() 
-        || MediaPlayerUtil.sService == null )	// ‰¡‚Å‚Ì‹N“®‘Î‰
+        || MediaPlayerUtil.sService == null )	// æ¨ªã§ã®èµ·å‹•å¯¾å¿œ
         {
-        	// â‘Î‚É‚P‚Â‚µ‚©Ú‘±‚³‚ê‚È‚¢‚æ‚¤‚É‚·‚é
+        	// çµ¶å¯¾ã«ï¼‘ã¤ã—ã‹æ¥ç¶šã•ã‚Œãªã„ã‚ˆã†ã«ã™ã‚‹
         	mToken = MediaPlayerUtil.bindToService(this, this);
         	// Toast.makeText(this, "service registered : token=" + mToken, Toast.LENGTH_LONG).show();
         }
 //        else
 //        {
-//        	// Šù‚ÉƒRƒlƒNƒVƒ‡ƒ“‚ª‚ ‚éê‡
-//        	// ƒRƒlƒNƒVƒ‡ƒ“‚Ìid‚ğ’²‚×AŒ»İ‚Ìactivity‚Æˆá‚¤ê‡‚ÍAÚ‘±‚µ’¼‚·H
+//        	// æ—¢ã«ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚ã‚‹å ´åˆ
+//        	// ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®idã‚’èª¿ã¹ã€ç¾åœ¨ã®activityã¨é•ã†å ´åˆã¯ã€æ¥ç¶šã—ç›´ã™ï¼Ÿ
 //        	if( MediaPlayerUtil.hasServiceConnection(this) == false )
 //        	{
-//        		// ƒRƒlƒNƒVƒ‡ƒ“‚Í‚ ‚é‚ªA‚±‚ÌƒAƒNƒeƒBƒrƒeƒB‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Í‚È‚¢
+//        		// ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¯ã‚ã‚‹ãŒã€ã“ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¯ãªã„
 //        		
 //        	}
 //        }
+        // ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¹ã‚­ãƒ£ãƒ³ã®å®Ÿè¡Œ
+        doMediaScan();
+    }
+	// å¯¾è±¡ã®æ‹¡å¼µå­ã¨mineTypeã®é…åˆ—ä½œæˆ
+	class ExtWithInfo
+	{
+		ExtWithInfo(String ext, String mine)
+		{
+			extension = ext;
+			mineType= mine;
+		}
+		String extension;
+		String mineType;
+		/**
+		 * @return the extension
+		 */
+		public String getExtension() {
+			return extension;
+		}
+		/**
+		 * @param extension the extension to set
+		 */
+		public void setExtension(String extension) {
+			this.extension = extension;
+		}
+		/**
+		 * @return the mineType
+		 */
+		public String getMineType() {
+			return mineType;
+		}
+		/**
+		 * @param mineType the mineType to set
+		 */
+		public void setMineType(String mineType) {
+			this.mineType = mineType;
+		}	    
+		
+	};
+	ExtWithInfo mMediaScanTargetExtInfo[] = {
+		new ExtWithInfo(".3gp","video/3gpp")
+		,new ExtWithInfo(".mp4","video/mp4")
+		,new ExtWithInfo(".m4v","video/mp4")
+		,new ExtWithInfo(".aac","audio/aac")
+		//".m4a",
+		//".flac",
+		,new ExtWithInfo(".mp3","audio/mpeg")
+		,new ExtWithInfo(".ogg","audio/ogg")	// videoã‚‚ã‚ã‚Šãˆã‚‹ï¼Ÿ
+		,new ExtWithInfo(".wav","audio/wav")
+				//,
+		//".webm"
+	};
 
+	public int updateAndroidMediaDatabase()
+	{
+		// ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¹ã‚­ãƒ£ãƒ³ã®å®Ÿè¡Œ
+		MediaScannerConnection.scanFile(
+				getApplicationContext(),
+				mediaScanTarget.toArray(new String[mediaScanTarget.size()]),
+				mediaScanTargetMine.toArray(new String[mediaScanTarget.size()]),
+		        null);
+		return 0;
+	}
+    ArrayList<String> mediaScanTarget = new ArrayList<String>();
+    //HashSet<String> mediaScanExcludeTarget = new HashSet<String>();
+    ArrayList<String> mediaScanTargetMine = new ArrayList<String>();
+    public int doMediaScan()
+    {
+    	// æœãŸã—ã¦ã‚¹ãƒ¬ãƒƒãƒ‰ã«ã—ã¦ã„ã„ã®ã‹ã©ã†ã‹ãƒ»ãƒ»ãƒ»
+        AsyncTask<Activity, Void, Integer> task = new AsyncTask<Activity, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Activity... params) {
+            	Log.i("mediascan - doInBackground","start");
+            	mediaScanTarget.clear();
+            	mediaScanTargetMine.clear();
+            	String status = Environment.getExternalStorageState();
+            	if( false == Environment.MEDIA_MOUNTED.equals(status) )
+            	{
+            		Log.w("external storage status",status);
+            		return 0;
+            	}
+            	// SDã‚«ãƒ¼ãƒ‰ã®ãƒ«ãƒ¼ãƒˆã‹ã‚‰ã€å…¨ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¤œç´¢
+            	String sdroot_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
+            	//String sdCardAndroid = sdroot_path + "Android";	// ä¸å®‰ãŒæ®‹ã‚‹ãƒ»ãƒ»ãƒ»
+            	File sdroot = new File(sdroot_path);
+            	Log.i("sdroot_path",sdroot_path);
+            	//Log.i("sdandroid", sdCardAndroid );
+            	getMediaScanTarget(sdroot);
+            	//File sdmusicdir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+            	//File sdmoviedir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+            	//File sdOkosama = OkosamaMediaPlayerActivity.this.getExternalFilesDir(null);
+            	//Log.i("sdmusic_path",sdmusicdir.getPath());
+            	//getMediaScanTarget(sdmusicdir);
+            	//Log.i("sdmovies_path",sdmoviedir.getPath());
+            	//getMediaScanTarget(sdmoviedir);
+            	handler.sendEmptyMessage(MainHandler.MEDIA_SCAN_TARGET_CREATED);
+            	
+                return 0;
+            }
+
+            @Override
+            protected void onPostExecute(Integer ret) 
+            {
+            	//MediaScannerConnection.
+            	Log.i("onPostExecute(mediascan)","ret=" + ret );
+            }
+        };
+        task.execute();
+        return 0;
+		// ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¹ã‚­ãƒ£ãƒ³ã®å®Ÿè¡Œ
+//    	String[] filePath = {
+//    			Environment.getExternalStorageDirectory().toString()
+//    	};
+//    	String[] mimeType = {"*/*"};
+//    	MediaScannerConnection.scanFile(
+//    			this,
+//    	        filePath,
+//    	        mimeType,
+//    	        null);
+    	
+    	// ğŸ‘‡ã‚ˆãè¼‰ã£ã¦ã„ã‚‹ãŒã€æœ¬æ¥ã¯ä¸æ­£ãªã‚„ã‚Šæ–¹ãªã®ã§ã€
+    	// æ–°ã—ã„androidã ã¨è½ã¡ã‚‹
+//		String _url = "file://" + Environment.getExternalStorageDirectory();
+//		Uri _uri = Uri.parse(_url);
+//		sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, _uri));	
+    }
+
+    private void getMediaScanTarget(File dir)//String dirPath)
+    {
+    	// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ‘ã‚¹ã«.ãŒå«ã¾ã‚Œã¦ã„ãŸã‚‰ã€ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚©ãƒ«ãƒ€ã¨ã¿ãªã—ã¦é™¤å¤–ã™ã‚‹
+    	// å›°ã‚‹ã“ã¨ã‚‚ã‚ã‚‹ã‹ã‚‚ã—ã‚Œãªã„ãŒã€ã¨ã‚Šã‚ãˆãšã¾ã‚ã„ã„ã§ã—ã‚‡ã†ãƒ»ãƒ»ãƒ»ã€‚
+    	if( dir.getPath().indexOf('.') != -1 )
+    	{
+    		return;
+    	}
+    	
+    	// File dir = new File(dirPath);
+    	final File[] files = dir.listFiles();
+
+    	if( files == null )
+    	{
+    		return;
+    	}
+    	// å¯¾è±¡ã®æ‹¡å¼µå­ã«ä¸€è‡´ã™ã‚‹ã‚‚ã®ã ã‘ã‚’æŠœã
+    	for (int i = 0; i < files.length; i++) {
+    		if( files[i].isDirectory() )
+    		{
+    			// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ¤œç´¢
+    			getMediaScanTarget( files[i] );
+    		}
+    		else if( files[i].isFile() && files[i].isHidden() == false )
+    		{
+    			// ãƒ•ã‚¡ã‚¤ãƒ«ãªã‚‰ã°ã€æ‹¡å¼µå­ãŒå¯¾è±¡ã®ã‚‚ã®ã‹èª¿ã¹ã‚‹
+    			for( ExtWithInfo inf : mMediaScanTargetExtInfo )
+    			{
+	        		if( files[i].getPath().endsWith(inf.getExtension()) )
+	        		{
+	        			mediaScanTarget.add( files[i].getPath() );
+	        			mediaScanTargetMine.add( inf.getMineType() );
+	        			Log.i("get mediaScanTarget", "path=" + files[i].getPath() 
+	        					+ " mineType=" + inf.getMineType());
+	        		}
+    			}
+    		}
+    		
+    	}
+    	
     }
     /**
-     * ƒx[ƒX‰æ‘œã‚Å‚Ìâ‘ÎÀ•W‚ğw’è‚µ‚½ˆÊ’u‚ğ•\‚·LayoutParam‚ğì¬‚·‚é
-     * •A‚‚³‚ÍFILL_PARENT
+     * ãƒ™ãƒ¼ã‚¹ç”»åƒä¸Šã§ã®çµ¶å¯¾åº§æ¨™ã‚’æŒ‡å®šã—ãŸä½ç½®ã‚’è¡¨ã™LayoutParamã‚’ä½œæˆã™ã‚‹
+     * å¹…ã€é«˜ã•ã¯FILL_PARENT
      * @param left
      * @param top
      * @return LayoutParam
@@ -511,16 +690,16 @@ implements ServiceConnection, Database.Defs {
 	createLayoutParamForAbsolutePosOnBk(
 			int left, int top )
 	{
-		// w’è‚³‚ê‚½¶ˆÊ’u‚É‘Î‚µ‚ÄAƒfƒBƒXƒvƒŒƒCƒTƒCƒY‚ğl—¶‚µ‚½’²®‚ğs‚¤
+		// æŒ‡å®šã•ã‚ŒãŸå·¦ä½ç½®ã«å¯¾ã—ã¦ã€ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ã‚µã‚¤ã‚ºã‚’è€ƒæ…®ã—ãŸèª¿æ•´ã‚’è¡Œã†
 		int xCorrect = dispInfo.getCorrectionXConsiderDensity(left);
 		int yCorrect = dispInfo.getCorrectionYConsiderDensity(top);
 		
-		// •‚Æ‚‚³‚Ìw’è‚ª‚È‚¢‚Ì‚ÅAe‚ğ–„‚ß‚é‚æ‚¤‚Éİ’è‚·‚é
+		// å¹…ã¨é«˜ã•ã®æŒ‡å®šãŒãªã„ã®ã§ã€è¦ªã‚’åŸ‹ã‚ã‚‹ã‚ˆã†ã«è¨­å®šã™ã‚‹
 		RelativeLayout.LayoutParams lp = 
 				new RelativeLayout.LayoutParams(
 						LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		// ‚±‚±‚ÅAc‰¡‚Ì•ÏŠ·‚ğ‚©‚Ü‚·
-		// ƒ\[ƒXƒR[ƒh‚É‘‚¢‚Ä‚ ‚éÀ•WA‘å‚«‚³‚Íc—p‚Ì‚à‚Ì‚ª‚¾‚ªA‰¡Œü‚«‚Ìê‡A‰¡—p‚É•ÏŠ·‚µ‚ÄÀ•W‚ğ•Ô‚·		
+		// ã“ã“ã§ã€ç¸¦æ¨ªã®å¤‰æ›ã‚’ã‹ã¾ã™
+		// ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ã«æ›¸ã„ã¦ã‚ã‚‹åº§æ¨™ã€å¤§ãã•ã¯ç¸¦ç”¨ã®ã‚‚ã®ãŒã ãŒã€æ¨ªå‘ãã®å ´åˆã€æ¨ªç”¨ã«å¤‰æ›ã—ã¦åº§æ¨™ã‚’è¿”ã™		
 		if( true == dispInfo.isPortrait() )
 		{
 	        lp.topMargin = yCorrect;
@@ -531,7 +710,7 @@ implements ServiceConnection, Database.Defs {
 			lp.leftMargin = yCorrect;
 			lp.topMargin = xCorrect;
 		}
-        // ‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å‚ÍAbottom‚Æright‚Ìmargin‚Íƒ[ƒ‚¾‚ªEEEB
+        // ã“ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã§ã¯ã€bottomã¨rightã®marginã¯ã‚¼ãƒ­ã ãŒãƒ»ãƒ»ãƒ»ã€‚
         lp.bottomMargin = 0;
         lp.rightMargin = 0;
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -542,7 +721,7 @@ implements ServiceConnection, Database.Defs {
     
 	
     /**
-     * ƒx[ƒX‰æ‘œã‚Å‚Ìâ‘ÎÀ•W‚ğw’è‚µ‚½ˆÊ’u‚ğ•\‚·LayoutParam‚ğì¬‚·‚é
+     * ãƒ™ãƒ¼ã‚¹ç”»åƒä¸Šã§ã®çµ¶å¯¾åº§æ¨™ã‚’æŒ‡å®šã—ãŸä½ç½®ã‚’è¡¨ã™LayoutParamã‚’ä½œæˆã™ã‚‹
      * @param left
      * @param top
      * @param width
@@ -610,15 +789,15 @@ implements ServiceConnection, Database.Defs {
 		
 		RelativeLayout.LayoutParams lp = null;
 
-		// ‚±‚±‚ÅAc‰¡‚Ì•ÏŠ·‚ğ‚©‚Ü‚·
-		// ƒ\[ƒXƒR[ƒh‚É‘‚¢‚Ä‚ ‚éÀ•WA‘å‚«‚³‚Íc—p‚Ì‚à‚Ì‚ª‚¾‚ªA‰¡Œü‚«‚Ìê‡A‰¡—p‚É•ÏŠ·‚µ‚ÄÀ•W‚ğ•Ô‚·		
+		// ã“ã“ã§ã€ç¸¦æ¨ªã®å¤‰æ›ã‚’ã‹ã¾ã™
+		// ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ã«æ›¸ã„ã¦ã‚ã‚‹åº§æ¨™ã€å¤§ãã•ã¯ç¸¦ç”¨ã®ã‚‚ã®ãŒã ãŒã€æ¨ªå‘ãã®å ´åˆã€æ¨ªç”¨ã«å¤‰æ›ã—ã¦åº§æ¨™ã‚’è¿”ã™		
 		if( true == dispInfo.isPortrait() || bConvertPortraitAndHorz == false )
 		{
 			lp = new RelativeLayout.LayoutParams(
 					widthCorrect, heightCorrect);
 	        lp.topMargin = yCorrect;
 	        lp.leftMargin = xCorrect;
-	        // ‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å‚ÍAbottom‚Æright‚Ìmargin‚Íƒ[ƒ‚¾‚ªEEEB
+	        // ã“ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã§ã¯ã€bottomã¨rightã®marginã¯ã‚¼ãƒ­ã ãŒãƒ»ãƒ»ãƒ»ã€‚
 	        lp.bottomMargin = 0;
 	        lp.rightMargin = 0;
 		}
@@ -628,7 +807,7 @@ implements ServiceConnection, Database.Defs {
 					heightCorrect, widthCorrect);
 	        lp.topMargin = xCorrect;
 	        lp.leftMargin = yCorrect;
-	        // ‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å‚ÍAbottom‚Æright‚Ìmargin‚Íƒ[ƒ‚¾‚ªEEEB
+	        // ã“ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã§ã¯ã€bottomã¨rightã®marginã¯ã‚¼ãƒ­ã ãŒãƒ»ãƒ»ãƒ»ã€‚
 	        lp.bottomMargin = 0;
 	        lp.rightMargin = 0;
 		}
@@ -666,11 +845,11 @@ implements ServiceConnection, Database.Defs {
         return lp;
 	}
 	
-	// ‰æ–ÊŠJ“X‚Ì’l‚ÌƒoƒbƒNƒAƒbƒv‚Æ•œŒ³
-	// ¡‚Ì‚Æ‚±‚ëA•s—v
+	// ç”»é¢é–‹åº—æ™‚ã®å€¤ã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã¨å¾©å…ƒ
+	// ä»Šã®ã¨ã“ã‚ã€ä¸è¦
 //	@Override
 //    public void onSaveInstanceState(Bundle outcicle) {
-//		// TODO:ƒ}ƒbƒv‚ğƒ‹[ƒv‚µ‚ÄA‘S•”‚Ìİ’è‚ğ•Û‘¶
+//		// TODO:ãƒãƒƒãƒ—ã‚’ãƒ«ãƒ¼ãƒ—ã—ã¦ã€å…¨éƒ¨ã®è¨­å®šã‚’ä¿å­˜
 //        super.onSaveInstanceState(outcicle);
 //    }	
 //	@Override
@@ -681,7 +860,7 @@ implements ServiceConnection, Database.Defs {
 	BroadcastReceiver receiver;
 	
 	/**
-	 * ƒƒfƒBƒAƒT[ƒrƒX‚©‚ç‚Ìintent‚ÌƒŒƒV[ƒo
+	 * ãƒ¡ãƒ‡ã‚£ã‚¢ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰ã®intentã®ãƒ¬ã‚·ãƒ¼ãƒ
 	 * @author 25689
 	 *
 	 */
@@ -690,22 +869,22 @@ implements ServiceConnection, Database.Defs {
 		@Override
 		public void onReceive(Context context, Intent intent) 
 		{
-			// ƒƒfƒBƒAƒT[ƒrƒX‚©‚çintent‚ğó‚¯æ‚Á‚½‚ç
-			// Ä¶ƒ{ƒ^ƒ“‚Ì•\¦XV
+			// ãƒ¡ãƒ‡ã‚£ã‚¢ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰intentã‚’å—ã‘å–ã£ãŸã‚‰
+			// å†ç”Ÿãƒœã‚¿ãƒ³ã®è¡¨ç¤ºæ›´æ–°
 			updatePlayStateButtonImage();
 		}
 	}
 	@Override
 	protected void onResume() {
 		Log.w("onResume","resume!");
-    	// ‰æ–Ê‚ÌƒTƒCƒY“™‚Ìî•ñ‚ğXV‚·‚é
-		// I‚í‚Á‚½‚çhandlerƒbƒZ[ƒW‚ª‘—‚ç‚ê‚é
-		// Œ»İA‚»‚±‚Å‰‚ß‚Ä‰æ–ÊˆÊ’u‚Ì‰Šú‰»‚ğs‚Á‚Ä‚¢‚é
+    	// ç”»é¢ã®ã‚µã‚¤ã‚ºç­‰ã®æƒ…å ±ã‚’æ›´æ–°ã™ã‚‹
+		// çµ‚ã‚ã£ãŸã‚‰handlerãƒƒã‚»ãƒ¼ã‚¸ãŒé€ã‚‰ã‚Œã‚‹
+		// ç¾åœ¨ã€ãã“ã§åˆã‚ã¦ç”»é¢ä½ç½®ã®åˆæœŸåŒ–ã‚’è¡Œã£ã¦ã„ã‚‹
         dispInfo.init(this, componentContainer, handler,false);
         
         //bForceRefresh = true;
         paused = false;
-        // ƒŒƒV[ƒo‚Ìì¬A“o˜^
+        // ãƒ¬ã‚·ãƒ¼ãƒã®ä½œæˆã€ç™»éŒ²
         receiver = new MediaServiceNotifyReceiver();
         intentFilter = new IntentFilter();
         intentFilter.addAction(MEDIA_SERVICE_NOTIFY);
@@ -718,9 +897,9 @@ implements ServiceConnection, Database.Defs {
 	protected void onPause() {
 		handler.removeMessages(AppStatus.INIT_ALL_REFRESH);
 		
-		// ƒ}ƒbƒv‚ğƒ‹[ƒv‚µ‚ÄA‘S•”‚Ìİ’è‚ğ•Û‘¶
+		// ãƒãƒƒãƒ—ã‚’ãƒ«ãƒ¼ãƒ—ã—ã¦ã€å…¨éƒ¨ã®è¨­å®šã‚’ä¿å­˜
 		Editor editor = getPreferences(MODE_PRIVATE).edit();
-		// Œ»İ‘I‘ğ‚³‚ê‚Ä‚¢‚éƒ^ƒuID
+		// ç¾åœ¨é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚¿ãƒ–ID
 		for(int i=0; i < tabStocker.getTabPageIdMap().size(); ++i ) {
 			editor.putInt( String.valueOf( tabStocker.getTabPageIdMap().keyAt(i) ),
 					tabStocker.getTabPageIdMap().valueAt(i) );
@@ -729,9 +908,9 @@ implements ServiceConnection, Database.Defs {
 		
 		paused = true;
 
-		// Œø‰Ê‰¹ƒNƒ‰ƒX‚Ì‰ğ•ú
+		// åŠ¹æœéŸ³ã‚¯ãƒ©ã‚¹ã®è§£æ”¾
         getResourceAccessor().releaseSound();
-        // ‘S‚Ä‚ÌƒŒƒV[ƒo‚Ì“o˜^‰ğœ
+        // å…¨ã¦ã®ãƒ¬ã‚·ãƒ¼ãƒã®ç™»éŒ²è§£é™¤
         stateStocker.unResisterReceiverAll();
         if( null != receiver )
         {
@@ -739,10 +918,10 @@ implements ServiceConnection, Database.Defs {
         	receiver = null;
         }
         
-        // ƒ‚[ƒVƒ‡ƒ“ƒZƒ“ƒT‚Ì“o˜^‰ğœ
+        // ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚»ãƒ³ã‚µã®ç™»éŒ²è§£é™¤
         getResourceAccessor().rereaseMotionSenser();
         
-        // ƒT[ƒrƒX‚Æ‚Ì˜AŒg‚ª‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚ÉAActivityI—¹‚ª‹N‚±‚éê‡
+        // ã‚µãƒ¼ãƒ“ã‚¹ã¨ã®é€£æºãŒã•ã‚Œã¦ã„ãªã„ã®ã«ã€Activityçµ‚äº†ãŒèµ·ã“ã‚‹å ´åˆ
 //        if( MediaPlayerUtil.sService == null && mToken != null )
 //        {
 //        	
@@ -751,14 +930,14 @@ implements ServiceConnection, Database.Defs {
 	}
 	
 	/**
-	 * ƒƒCƒ“ƒ^ƒu‚Ì‘I‘ğ‚Ì•ÏX
-	 * @param V‚µ‚­‘I‘ğ‚³‚ê‚éAmainTab‚Ìƒ^ƒuƒy[ƒWID 
-	 * @param bForceRefresh ‹­§“I‚ÉƒŠƒtƒŒƒbƒVƒ…‚·‚é‚©
-	 * @return 0:•Ï‰»‚È‚µ 1:•Ï‰»—L‚è -1:ƒGƒ‰[
+	 * ãƒ¡ã‚¤ãƒ³ã‚¿ãƒ–ã®é¸æŠã®å¤‰æ›´
+	 * @param æ–°ã—ãé¸æŠã•ã‚Œã‚‹ã€mainTabã®ã‚¿ãƒ–ãƒšãƒ¼ã‚¸ID 
+	 * @param bForceRefresh å¼·åˆ¶çš„ã«ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ã™ã‚‹ã‹
+	 * @return 0:å¤‰åŒ–ãªã— 1:å¤‰åŒ–æœ‰ã‚Š -1:ã‚¨ãƒ©ãƒ¼
 	 */
 	public int setMainTabSelection( int mainTab, boolean bForceRefresh )
 	{	
-		// V‚µ‚­‘I‘ğ‚³‚ê‚éƒ^ƒu‚ÌƒXƒe[ƒ^ƒXƒNƒ‰ƒX‚ğì¬
+		// æ–°ã—ãé¸æŠã•ã‚Œã‚‹ã‚¿ãƒ–ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚¯ãƒ©ã‚¹ã‚’ä½œæˆ
 		IDisplayState stateMainTmp = DisplayStateFactory.createDisplayState(mainTab);
 		if( stateMainTmp == null )
 		{
@@ -769,41 +948,41 @@ implements ServiceConnection, Database.Defs {
 		if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MAIN) != mainTab
 				|| bForceRefresh == true )
         {
-			// ƒ^ƒu‚ª•Ï‚í‚Á‚Ä‚¢‚é‚©A‹­§ƒŠƒtƒŒƒbƒVƒ…‚Ìê‡
+			// ã‚¿ãƒ–ãŒå¤‰ã‚ã£ã¦ã„ã‚‹ã‹ã€å¼·åˆ¶ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ã®å ´åˆ
 			// Log.w("setMainTabSelection", "come");
 			if( stateStocker.getState(ControlIDs.TAB_ID_MAIN) != null )
 			{
-				// ‘O‚Ìƒ^ƒu‚ÌƒŒƒV[ƒo‚ğ“o˜^‰ğœ
+				// å‰ã®ã‚¿ãƒ–ã®ãƒ¬ã‚·ãƒ¼ãƒã‚’ç™»éŒ²è§£é™¤
 				stateStocker.getState(ControlIDs.TAB_ID_MAIN).unregisterReceivers(IDisplayState.STATUS_ON_DESTROY);
 			}
-			// ‘I‘ğ‚³‚ê‚Ä‚¢‚éƒ^ƒu‚Ì•ÏX
+			// é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚¿ãƒ–ã®å¤‰æ›´
 			tabStocker.setCurrentTabPageId(ControlIDs.TAB_ID_MAIN, mainTab );
-			// ƒXƒe[ƒ^ƒXƒNƒ‰ƒX‚Ì•ÏX
+			// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚¯ãƒ©ã‚¹ã®å¤‰æ›´
 			stateStocker.putState(ControlIDs.TAB_ID_MAIN, stateMainTmp);
 			iRet = 1;
         }
         if( stateStocker.getState(ControlIDs.TAB_ID_MAIN) != null )
         {
-        	// ‰æ–ÊID‚©‚çó‘Ô‚ªæ“¾‚Å‚«‚½
+        	// ç”»é¢IDã‹ã‚‰çŠ¶æ…‹ãŒå–å¾—ã§ããŸ
         	if( iRet == 1 )
         	{
-        		// Œ»İ‚Ìƒ^ƒu‚É‰‚¶‚ÄAƒfƒBƒXƒvƒŒƒC‚ğØ‚è‘Ö‚¦‚é
+        		// ç¾åœ¨ã®ã‚¿ãƒ–ã«å¿œã˜ã¦ã€ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
         		stateStocker.getState(ControlIDs.TAB_ID_MAIN).ChangeDisplayBasedOnThisState(
         				tabStocker.getTab(ControlIDs.TAB_ID_MAIN));
         	}
         }
         if( mainTab == TabPage.TABPAGE_ID_MEDIA )
         {
-        	// ‘I‘ğ‚³‚ê‚½ƒ^ƒuƒy[ƒW‚ªƒƒfƒBƒAƒ^ƒu‚¾‚Á‚½ê‡
-        	// q‚Æ‚È‚éƒƒfƒBƒAƒ^ƒu‚àXV‚³‚¹‚é
+        	// é¸æŠã•ã‚ŒãŸã‚¿ãƒ–ãƒšãƒ¼ã‚¸ãŒãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ãƒ–ã ã£ãŸå ´åˆ
+        	// å­ã¨ãªã‚‹ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ãƒ–ã‚‚æ›´æ–°ã•ã›ã‚‹
            	sendUpdateMessage(ControlIDs.TAB_ID_MEDIA, 
            			tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA)
            			,bForceRefresh);
         }
         else if( mainTab == TabPage.TABPAGE_ID_PLAY )
         {
-        	// ‘I‘ğ‚³‚ê‚½ƒ^ƒuƒy[ƒW‚ªƒvƒŒƒCƒ^ƒu‚¾‚Á‚½ê‡
-        	// q‚Æ‚È‚éƒvƒŒƒCƒ^ƒu‚àXV‚³‚¹‚é
+        	// é¸æŠã•ã‚ŒãŸã‚¿ãƒ–ãƒšãƒ¼ã‚¸ãŒãƒ—ãƒ¬ã‚¤ã‚¿ãƒ–ã ã£ãŸå ´åˆ
+        	// å­ã¨ãªã‚‹ãƒ—ãƒ¬ã‚¤ã‚¿ãƒ–ã‚‚æ›´æ–°ã•ã›ã‚‹
            	sendUpdateMessage(ControlIDs.TAB_ID_PLAY, 
            			tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_PLAY)
            			,bForceRefresh);
@@ -811,7 +990,7 @@ implements ServiceConnection, Database.Defs {
         return iRet;
 	}
 	/**
-	 * Œ»İ‘I‘ğ‚³‚ê‚Ä‚¢‚éƒ^ƒuƒy[ƒW‚ğæ“¾‚·‚é
+	 * ç¾åœ¨é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚¿ãƒ–ãƒšãƒ¼ã‚¸ã‚’å–å¾—ã™ã‚‹
 	 * @return
 	 */
 	public ITabComponent getCurrentTabPage()
@@ -826,10 +1005,10 @@ implements ServiceConnection, Database.Defs {
 		return page;
 	}
 	/**
-	 * ƒƒfƒBƒAƒ^ƒu“à‚Ìƒ^ƒuƒy[ƒW‚ğ‘I‘ğ‚·‚é
-	 * @param subTab V‚µ‚­‘I‘ğ‚µ‚½‚¢ƒ^ƒuƒy[ƒW‚ÌID
-	 * @param bForceRefresh ‹­§ƒŠƒtƒŒƒbƒVƒ…ƒtƒ‰ƒO
-	 * @return 0:•Ï‰»‚È‚µ 1:•Ï‰»—L‚è -1:ƒGƒ‰[
+	 * ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ãƒ–å†…ã®ã‚¿ãƒ–ãƒšãƒ¼ã‚¸ã‚’é¸æŠã™ã‚‹
+	 * @param subTab æ–°ã—ãé¸æŠã—ãŸã„ã‚¿ãƒ–ãƒšãƒ¼ã‚¸ã®ID
+	 * @param bForceRefresh å¼·åˆ¶ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ãƒ•ãƒ©ã‚°
+	 * @return 0:å¤‰åŒ–ãªã— 1:å¤‰åŒ–æœ‰ã‚Š -1:ã‚¨ãƒ©ãƒ¼
 	 */
 	public int setMediaTabSelection( int subTab, boolean bForceRefresh )
 	{
@@ -843,9 +1022,9 @@ implements ServiceConnection, Database.Defs {
     			|| true == tabStocker.getTab(ControlIDs.TAB_ID_MEDIA).isNextForceRefresh()
     			|| bForceRefresh == true )
     	{
-    		// ƒ^ƒuƒy[ƒW‚ª•ÏX‚³‚ê‚Ä‚¢‚é‚©A‚±‚Ìƒ^ƒu‚ªŸ‚ÌƒŠƒtƒŒƒbƒVƒ…‚¾‚¯‹­§ƒŠƒtƒŒƒbƒVƒ…‚É‚È‚éƒtƒ‰ƒO‚ª‚½‚Á‚Ä‚¢‚é‚©A
-    		// ‹­§ƒŠƒtƒŒƒbƒVƒ…ƒtƒ‰ƒO‚ª‚½‚Á‚Ä‚¢‚éê‡
-    		// Ÿ‚ÌƒŠƒtƒŒƒbƒVƒ…‚¾‚¯‹­§ƒŠƒtƒŒƒbƒVƒ…‚É‚È‚éƒtƒ‰ƒO‚ğ—‚Æ‚·
+    		// ã‚¿ãƒ–ãƒšãƒ¼ã‚¸ãŒå¤‰æ›´ã•ã‚Œã¦ã„ã‚‹ã‹ã€ã“ã®ã‚¿ãƒ–ãŒæ¬¡ã®ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ã ã‘å¼·åˆ¶ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ã«ãªã‚‹ãƒ•ãƒ©ã‚°ãŒãŸã£ã¦ã„ã‚‹ã‹ã€
+    		// å¼·åˆ¶ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ãƒ•ãƒ©ã‚°ãŒãŸã£ã¦ã„ã‚‹å ´åˆ
+    		// æ¬¡ã®ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ã ã‘å¼·åˆ¶ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ã«ãªã‚‹ãƒ•ãƒ©ã‚°ã‚’è½ã¨ã™
     		tabStocker.getTab(ControlIDs.TAB_ID_MEDIA).setNextForceRefresh(false);
     		IDisplayState stateSubTmp = DisplayStateFactory.createDisplayState(subTab);        		
             if( stateSubTmp == null )
@@ -865,16 +1044,16 @@ implements ServiceConnection, Database.Defs {
     		stateMedia = stateSubTmp;
 			stateStocker.putState(ControlIDs.TAB_ID_MEDIA, stateMedia);
     		iRet = 1;
-    		// ƒƒCƒ“ƒ^ƒu‚Ì‘I‘ğ‚ªƒƒfƒBƒAƒ^ƒu‚Å‚ ‚ê‚Î
+    		// ãƒ¡ã‚¤ãƒ³ã‚¿ãƒ–ã®é¸æŠãŒãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ãƒ–ã§ã‚ã‚Œã°
     		if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MAIN) 
         			== TabPage.TABPAGE_ID_MEDIA )
         	{
-    			// ƒTƒu‰æ–Ê‚ğƒ[ƒh‚·‚é
+    			// ã‚µãƒ–ç”»é¢ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
         		if( stateMedia != null && tabStocker.getTab(ControlIDs.TAB_ID_MEDIA) != null)
                 {
                 	stateMedia.ChangeDisplayBasedOnThisState(
                 			tabStocker.getTab(ControlIDs.TAB_ID_MEDIA));
-                	// •Ê‚ÌƒƒCƒ“ƒ^ƒu‚Ìqƒ^ƒu‚Ì‘I‘ğ‚ğƒNƒŠƒA
+                	// åˆ¥ã®ãƒ¡ã‚¤ãƒ³ã‚¿ãƒ–ã®å­ã‚¿ãƒ–ã®é¸æŠã‚’ã‚¯ãƒªã‚¢
                 	// tabStocker.getTab(ControlIDs.TAB_ID_PLAY).setCurrentTab( TabPage.TABPAGE_ID_NONE, true );
                 }
         	}
@@ -882,11 +1061,11 @@ implements ServiceConnection, Database.Defs {
         return iRet;
 	}
 	/**
-	 * ƒTƒuƒ^ƒu‚ÍAó‹µ‚É‚æ‚Á‚Ä•Ï‰»‚·‚é‚Ì‚Å’ˆÓ
-	 * ‚Ü‚¾‚±‚ÌŠÖ”‚Í–¢Š®¬i‚»‚ÌAƒTƒuƒ^ƒu‚Ì‘I‘ğ•”•ª)
+	 * ã‚µãƒ–ã‚¿ãƒ–ã¯ã€çŠ¶æ³ã«ã‚ˆã£ã¦å¤‰åŒ–ã™ã‚‹ã®ã§æ³¨æ„
+	 * ã¾ã ã“ã®é–¢æ•°ã¯æœªå®Œæˆï¼ˆãã®ã€ã‚µãƒ–ã‚¿ãƒ–ã®é¸æŠéƒ¨åˆ†)
 	 * @param subTab
-	 * @param bSndChgMsg •Ï‰»‚ª‚ ‚Á‚½‚Æ‚«AƒƒbƒZ[ƒW‚ğ‘—M‚·‚é‚©
-	 * @return 0:•Ï‰»‚È‚µ 1:•Ï‰»—L‚è -1:ƒGƒ‰[
+	 * @param bSndChgMsg å¤‰åŒ–ãŒã‚ã£ãŸã¨ãã€ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ä¿¡ã™ã‚‹ã‹
+	 * @return 0:å¤‰åŒ–ãªã— 1:å¤‰åŒ–æœ‰ã‚Š -1:ã‚¨ãƒ©ãƒ¼
 	 */
 	public int setPlayTabSelection( int subTab, boolean bForceRefresh )
 	{
@@ -920,11 +1099,11 @@ implements ServiceConnection, Database.Defs {
 			stateStocker.putState(ControlIDs.TAB_ID_PLAY, statePlayTab);
     		
     		iRet = 1;
-    		// ƒvƒŒƒCƒ^ƒu‚Å‚ ‚ê‚Î
+    		// ãƒ—ãƒ¬ã‚¤ã‚¿ãƒ–ã§ã‚ã‚Œã°
         	if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MAIN) == TabPage.TABPAGE_ID_PLAY )
         	{
-        		// ƒTƒu‰æ–Ê‚ğƒ[ƒh‚·‚é
-        		// “ñ’iŠK‚É•ª‚¯‚é‚Æ“ñ“x‰æ–ÊXV‚ª‘–‚é‚Ì‚Å–³‘Ê‚ª‘½‚¢‚Æv‚í‚ê‚é‚ªA‚Æ‚è‚ ‚¦‚¸‚»‚ê‚µ‚©v‚¢‚Â‚©‚È‚¢
+        		// ã‚µãƒ–ç”»é¢ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
+        		// äºŒæ®µéšã«åˆ†ã‘ã‚‹ã¨äºŒåº¦ç”»é¢æ›´æ–°ãŒèµ°ã‚‹ã®ã§ç„¡é§„ãŒå¤šã„ã¨æ€ã‚ã‚Œã‚‹ãŒã€ã¨ã‚Šã‚ãˆãšãã‚Œã—ã‹æ€ã„ã¤ã‹ãªã„
         		// statePlayTab = DisplayStateFactory.createDisplayState(subTab);
         		
                 if( statePlayTab != null 
@@ -933,7 +1112,7 @@ implements ServiceConnection, Database.Defs {
             		Log.w("statePlayTab.ChangeDisplayBasedOnThisState", "come");
             		statePlayTab.ChangeDisplayBasedOnThisState(
             				tabStocker.getTab(ControlIDs.TAB_ID_PLAY));
-                	// •Ê‚ÌƒvƒŒƒCƒ^ƒu‚ğ‘I‘ğ
+                	// åˆ¥ã®ãƒ—ãƒ¬ã‚¤ã‚¿ãƒ–ã‚’é¸æŠ
                 	// tabStocker.getTab(ControlIDs.TAB_ID_PLAY).setCurrentTab( TabPage.TABPAGE_ID_PLAY_SUB, true );
             		
                 }
@@ -942,14 +1121,14 @@ implements ServiceConnection, Database.Defs {
         return iRet;
 	}
 	/**
-	 * ƒ^ƒuID‚ğXV‚·‚é
-	 * @param tabId ƒ^ƒu‚ÌID
-	 * @param tabPageId ƒ^ƒuƒy[ƒW‚ÌID
-	 * @param bForce ‹­§ƒŠƒtƒŒƒbƒVƒ…ƒtƒ‰ƒO
+	 * ã‚¿ãƒ–IDã‚’æ›´æ–°ã™ã‚‹
+	 * @param tabId ã‚¿ãƒ–ã®ID
+	 * @param tabPageId ã‚¿ãƒ–ãƒšãƒ¼ã‚¸ã®ID
+	 * @param bForce å¼·åˆ¶ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ãƒ•ãƒ©ã‚°
 	 */
 	public void updateTabId( int tabId, int tabPageId, boolean bForce )
 	{
-		// Œ»İ‚Ìƒ^ƒu‚ğİ’è‚·‚é
+		// ç¾åœ¨ã®ã‚¿ãƒ–ã‚’è¨­å®šã™ã‚‹
 		this.tabStocker.setCurrentTabId( tabId );
 		if( ControlIDs.TAB_ID_MAIN == tabId )
 		{
@@ -1000,7 +1179,7 @@ implements ServiceConnection, Database.Defs {
 	        }
 			
 			int id = tabPageId;//mActivity.getCurrentDisplayId( ControlIDs.TAB_ID_PLAY );
-			// PlaySub‚ª‹­§“I‚É‘I‘ğ
+			// PlaySubãŒå¼·åˆ¶çš„ã«é¸æŠ
 //			if( TabPage.TABPAGE_ID_NONE == id 
 //			|| TabPage.TABPAGE_ID_UNKNOWN == id )
 //			{
@@ -1012,8 +1191,8 @@ implements ServiceConnection, Database.Defs {
 	}
 
 	/**
-	 * ƒ^ƒu‚ÌXV‚ğ‚³‚¹‚éƒƒbƒZ[ƒW‚ğ“Š‚°‚é.
-	 * ‚½‚¾Aƒ^ƒu‘I‘ğƒAƒNƒVƒ‡ƒ“‚ğÀs‚·‚é‚¾‚¯
+	 * ã‚¿ãƒ–ã®æ›´æ–°ã‚’ã•ã›ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æŠ•ã’ã‚‹.
+	 * ãŸã ã€ã‚¿ãƒ–é¸æŠã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’å®Ÿè¡Œã™ã‚‹ã ã‘
 	 * @param tabID
 	 * @param tabPageID
 	 * @param bForce
@@ -1030,7 +1209,7 @@ implements ServiceConnection, Database.Defs {
 	}
 	
 	/**
-	 * Œ»İ‚Ìó‹µ‚É‡‚í‚¹‚ÄAƒŠƒXƒi‚ğ“o˜^‚µ’¼‚·
+	 * ç¾åœ¨ã®çŠ¶æ³ã«åˆã‚ã›ã¦ã€ãƒªã‚¹ãƒŠã‚’ç™»éŒ²ã—ç›´ã™
 	 */
 	void updateListeners(int status)
 	{
@@ -1080,8 +1259,8 @@ implements ServiceConnection, Database.Defs {
 	}
 	
 	/**
-	 * ƒƒfƒBƒAƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒŠƒXƒLƒƒƒ“
-	 * @param tabPageID ƒ^ƒuƒy[ƒW‚ÌID
+	 * ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒªã‚¹ã‚­ãƒ£ãƒ³
+	 * @param tabPageID ã‚¿ãƒ–ãƒšãƒ¼ã‚¸ã®ID
 	 */
 	public void reScanMediaOfMediaTab(int tabPageID)
 	{
@@ -1094,8 +1273,8 @@ implements ServiceConnection, Database.Defs {
     	adpStocker.stockMediaDataFromDevice(tabPageID, page);
 	}
 	/**
-	 * ƒƒfƒBƒA‚ÌÄƒXƒLƒƒƒ“HTODO:ƒXƒLƒƒƒ“‚ÌƒƒWƒbƒN©‘Ì‚ÉAŒ©’¼‚µ•K—v
-	 * @param tabID ƒ^ƒu‚ÌID(ƒ^ƒuƒy[ƒW‚Å‚Í‚È‚¢‚Ì‚Å’ˆÓ
+	 * ãƒ¡ãƒ‡ã‚£ã‚¢ã®å†ã‚¹ã‚­ãƒ£ãƒ³ï¼ŸTODO:ã‚¹ã‚­ãƒ£ãƒ³ã®ãƒ­ã‚¸ãƒƒã‚¯è‡ªä½“ã«ã€è¦‹ç›´ã—å¿…è¦
+	 * @param tabID ã‚¿ãƒ–ã®ID(ã‚¿ãƒ–ãƒšãƒ¼ã‚¸ã§ã¯ãªã„ã®ã§æ³¨æ„
 	 * @param bForce
 	 */
 	public void reScanMediaAndUpdateTabPage(int tabID, boolean bForce)
@@ -1105,7 +1284,7 @@ implements ServiceConnection, Database.Defs {
 			return;
 		}
 		boolean bNotUpdateIfNotEmpty = !bForce;
-		// Œ»İ‘I‘ğ’†‚Ìƒ^ƒu‚É‚æ‚Á‚Ä‘€ì‚ğ•ÏX
+		// ç¾åœ¨é¸æŠä¸­ã®ã‚¿ãƒ–ã«ã‚ˆã£ã¦æ“ä½œã‚’å¤‰æ›´
 		boolean bUpdateOccur = false;
 		Tab tabUpd = tabStocker.getTab(tabID);
     	TabPage page = (TabPage)tabUpd.getChild(
@@ -1113,8 +1292,8 @@ implements ServiceConnection, Database.Defs {
 		
 		if( ControlIDs.TAB_ID_MEDIA == tabID )
 		{
-			// ƒƒfƒBƒAƒ^ƒu‚È‚ç‚Î
-			// ƒƒfƒBƒA‚ğÄ“xƒNƒGƒŠ”­s‚µ‚ÄXV‚·‚é
+			// ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ãƒ–ãªã‚‰ã°
+			// ãƒ¡ãƒ‡ã‚£ã‚¢ã‚’å†åº¦ã‚¯ã‚¨ãƒªç™ºè¡Œã—ã¦æ›´æ–°ã™ã‚‹
 	    	
 			((TrackListRawAdapter)adpStocker.get(TabPage.TABPAGE_ID_SONG)).clearFilterType();
 	    	bUpdateOccur = 
@@ -1127,7 +1306,7 @@ implements ServiceConnection, Database.Defs {
 		{
 			if( tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MAIN) == TabPage.TABPAGE_ID_NOW_PLAYLIST )
 			{
-				// TODO: Œ»İAƒgƒ‰ƒbƒN‚Æ“¯‚¶ƒJ[ƒ\ƒ‹‚É‚È‚Á‚Ä‚¢‚é‚ªAl‚¦‚½•û‚ª‚¢‚¢‚©‚à‚µ‚ê‚È‚¢
+				// TODO: ç¾åœ¨ã€ãƒˆãƒ©ãƒƒã‚¯ã¨åŒã˜ã‚«ãƒ¼ã‚½ãƒ«ã«ãªã£ã¦ã„ã‚‹ãŒã€è€ƒãˆãŸæ–¹ãŒã„ã„ã‹ã‚‚ã—ã‚Œãªã„
 				// NOWPLAYLIST
 				// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistName( Database.PlaylistName_NowPlaying );
 				if( MediaPlayerUtil.isNowPlayingVideos() )
@@ -1179,9 +1358,9 @@ implements ServiceConnection, Database.Defs {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-		// ƒ}ƒbƒv‚ğƒ‹[ƒv‚µ‚ÄA‘S•”‚Ìİ’è‚ğ•Û‘¶
+		// ãƒãƒƒãƒ—ã‚’ãƒ«ãƒ¼ãƒ—ã—ã¦ã€å…¨éƒ¨ã®è¨­å®šã‚’ä¿å­˜
 		Editor editor = getPreferences(MODE_PRIVATE).edit();
-		// Œ»İ‘I‘ğ‚³‚ê‚Ä‚¢‚éƒ^ƒuID
+		// ç¾åœ¨é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚¿ãƒ–ID
 		for(int i=0; i < tabStocker.getTabPageIdMap().size(); ++i ) {
 			editor.putInt( String.valueOf( tabStocker.getTabPageIdMap().keyAt(i) ),
 					tabStocker.getTabPageIdMap().valueAt(i) );
@@ -1190,17 +1369,17 @@ implements ServiceConnection, Database.Defs {
 
 		//if( newConfig.orientation // == ActivityInfo.CONFIG_ORIENTATION )
 		//{
-			// Œü‚«‚Ì•ÏX‚É‚æ‚Á‚ÄActivityI—¹‚Ìê‡
-	        // TODO: ƒRƒ“ƒgƒ[ƒ‹ƒpƒlƒ‹‚ÍAc‰¡•ÏX‚ÉƒŒƒCƒAƒEƒg‚ÌÄ’²®‚ª•K—v‚È‚Ì‚ÅA‚±‚±‚ÅÁ‚µ‚Ä‚µ‚Ü‚¤H
+			// å‘ãã®å¤‰æ›´ã«ã‚ˆã£ã¦Activityçµ‚äº†ã®å ´åˆ
+	        // TODO: ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒ‘ãƒãƒ«ã¯ã€ç¸¦æ¨ªå¤‰æ›´æ™‚ã«ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®å†èª¿æ•´ãŒå¿…è¦ãªã®ã§ã€ã“ã“ã§æ¶ˆã—ã¦ã—ã¾ã†ï¼Ÿ
 	        NowPlayingControlPanel.deleteInstance();
 	        SubControlPanel.deleteInstance();
 	        PlayControlPanel.deleteInstance();
 	        TimeControlPanel.deleteInstance();
 	        
-	        // ŠëŒ¯‚©‚à‚µ‚ê‚È‚¢‚ªAƒrƒbƒgƒ}ƒbƒv‚ğƒNƒŠƒA‚µ‚Ä‚µ‚Ü‚¤H
+	        // å±é™ºã‹ã‚‚ã—ã‚Œãªã„ãŒã€ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’ã‚¯ãƒªã‚¢ã—ã¦ã—ã¾ã†ï¼Ÿ
 	        // getResourceAccessor().clearAllBitmap();
 	        
-	        // ƒ^ƒu‚ğ”jŠü
+	        // ã‚¿ãƒ–ã‚’ç ´æ£„
 	        Tab tab = tabStocker.getTab(ControlIDs.TAB_ID_MAIN);
 	        if( tab != null )
 	        {
@@ -1209,7 +1388,7 @@ implements ServiceConnection, Database.Defs {
 	        
 	        getTabStocker().clear();
 	        
-	        // ƒAƒ_ƒvƒ^‚ğ”jŠüH
+	        // ã‚¢ãƒ€ãƒ—ã‚¿ã‚’ç ´æ£„ï¼Ÿ
 	        // getAdpStocker().clear();
 	        //System.gc();
 	        
@@ -1220,13 +1399,13 @@ implements ServiceConnection, Database.Defs {
 	}
 	@Override
 	protected void onDestroy() {
-        // ‘S‚Ä‚ÌƒŒƒV[ƒo‚Ì“o˜^‰ğœ
+        // å…¨ã¦ã®ãƒ¬ã‚·ãƒ¼ãƒã®ç™»éŒ²è§£é™¤
         stateStocker.unResisterReceiverAll();
 		
 		//try {
 			if(mToken != null)// MediaPlayerUtil.sService != null ) //&& false == MediaPlayerUtil.sService.isPlaying() )
 			{
-				// ƒT[ƒrƒX‚Ì“o˜^‰ğœ
+				// ã‚µãƒ¼ãƒ“ã‚¹ã®ç™»éŒ²è§£é™¤
 			    MediaPlayerUtil.unbindFromService(mToken);
 	        	// Toast.makeText(this, "service unregistered : token=" + mToken, Toast.LENGTH_LONG).show();			    
 			}
@@ -1239,14 +1418,14 @@ implements ServiceConnection, Database.Defs {
 		
 //		if( change == ActivityInfo.CONFIG_ORIENTATION )
 //		{
-//			// Œü‚«‚Ì•ÏX‚É‚æ‚Á‚ÄActivityI—¹‚Ìê‡
-//	        // TODO: ƒRƒ“ƒgƒ[ƒ‹ƒpƒlƒ‹‚ÍAc‰¡•ÏX‚ÉƒŒƒCƒAƒEƒg‚ÌÄ’²®‚ª•K—v‚È‚Ì‚ÅA‚±‚±‚ÅÁ‚µ‚Ä‚µ‚Ü‚¤H
+//			// å‘ãã®å¤‰æ›´ã«ã‚ˆã£ã¦Activityçµ‚äº†ã®å ´åˆ
+//	        // TODO: ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒ‘ãƒãƒ«ã¯ã€ç¸¦æ¨ªå¤‰æ›´æ™‚ã«ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®å†èª¿æ•´ãŒå¿…è¦ãªã®ã§ã€ã“ã“ã§æ¶ˆã—ã¦ã—ã¾ã†ï¼Ÿ
 //	        NowPlayingControlPanel.deleteInstance();
 //	        SubControlPanel.deleteInstance();
 //	        PlayControlPanel.deleteInstance();
 //	        TimeControlPanel.deleteInstance();
 //	        
-//	        // ŠëŒ¯‚©‚à‚µ‚ê‚È‚¢‚ªAƒrƒbƒgƒ}ƒbƒv‚ğƒNƒŠƒA‚µ‚Ä‚µ‚Ü‚¤H
+//	        // å±é™ºã‹ã‚‚ã—ã‚Œãªã„ãŒã€ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’ã‚¯ãƒªã‚¢ã—ã¦ã—ã¾ã†ï¼Ÿ
 //	        // getResourceAccessor().clearAllBitmap();
 //	        
 //	        getTabStocker().clear();
@@ -1254,22 +1433,22 @@ implements ServiceConnection, Database.Defs {
 //	        System.gc();
 //		}
 			  
-		// ”jŠü‚ÍA‹È‚àƒNƒŠƒA 
+		// ç ´æ£„æ™‚ã¯ã€æ›²ã‚‚ã‚¯ãƒªã‚¢ 
 		MediaStopAction stopAction = new MediaStopAction();
 		stopAction.doAction(null);
 		super.onDestroy();
 	}
 
-	// ‚Æ‚è‚ ‚¦‚¸A•K—v‚Å‚Í‚È‚¢H
+	// ã¨ã‚Šã‚ãˆãšã€å¿…è¦ã§ã¯ãªã„ï¼Ÿ
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
 	}
 	
-	///////////////////////// ƒT[ƒrƒX—p‚Ìƒƒ\ƒbƒh //////////////////////////////
+	///////////////////////// ã‚µãƒ¼ãƒ“ã‚¹ç”¨ã®ãƒ¡ã‚½ãƒƒãƒ‰ //////////////////////////////
 	/**
-	 * ƒT[ƒrƒXÚ‘±
+	 * ã‚µãƒ¼ãƒ“ã‚¹æ¥ç¶šæ™‚
 	 */
 	@Override
 	public void onServiceConnected(ComponentName name, IBinder service) {
@@ -1285,13 +1464,13 @@ implements ServiceConnection, Database.Defs {
 	}
 
 	/**
-	 * ƒT[ƒrƒXØ’f
+	 * ã‚µãƒ¼ãƒ“ã‚¹åˆ‡æ–­æ™‚
 	 */
 	@Override
 	public void onServiceDisconnected(ComponentName name) {
        // Toast.makeText(this, "onServiceDisconnected:" + name, Toast.LENGTH_LONG).show();
 		
-		// ‚æ‚­‚í‚©‚ç‚È‚¢‚¯‚ÇAƒT[ƒrƒXØ’f‚³‚ê‚½‚çI—¹‚·‚éH
+		// ã‚ˆãã‚ã‹ã‚‰ãªã„ã‘ã©ã€ã‚µãƒ¼ãƒ“ã‚¹åˆ‡æ–­ã•ã‚ŒãŸã‚‰çµ‚äº†ã™ã‚‹ï¼Ÿ
 		Log.e("service disconnect","finish because service disconnect.");
 		finish();
 	}
@@ -1301,7 +1480,7 @@ implements ServiceConnection, Database.Defs {
 	View lastEventView = null;
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfoIn) {
-		// ˆê‰A¡‚Ì‚Æ‚±‚ëƒ^ƒO‚ÉƒŠƒXƒg‚ª“ü‚Á‚Ä‚¢‚é‚Í‚¸‚È‚Ì‚ÅA‚»‚ê‚Å•ªŠò‚·‚éH
+		// ä¸€å¿œã€ä»Šã®ã¨ã“ã‚ã‚¿ã‚°ã«ãƒªã‚¹ãƒˆãŒå…¥ã£ã¦ã„ã‚‹ã¯ãšãªã®ã§ã€ãã‚Œã§åˆ†å²ã™ã‚‹ï¼Ÿ
 		lastEventView = view;
 		ITabComponent lstCompo = (ITabComponent)lastEventView.getTag();//TabLeaf.TAGKEY_LISTNAME);
 		if( lstCompo != null
@@ -1317,7 +1496,7 @@ implements ServiceConnection, Database.Defs {
 	    	{
 	    		return true;
 	    	}
-			// ˆê‰A¡‚Ì‚Æ‚±‚ëƒ^ƒO‚ÉƒŠƒXƒg‚ª“ü‚Á‚Ä‚¢‚é‚Í‚¸‚È‚Ì‚ÅA‚»‚ê‚Å•ªŠò‚·‚éH
+			// ä¸€å¿œã€ä»Šã®ã¨ã“ã‚ã‚¿ã‚°ã«ãƒªã‚¹ãƒˆãŒå…¥ã£ã¦ã„ã‚‹ã¯ãšãªã®ã§ã€ãã‚Œã§åˆ†å²ã™ã‚‹ï¼Ÿ
 			ITabComponent lstCompo = (ITabComponent)lastEventView.getTag();//TabLeaf.TAGKEY_LISTNAME);
 			if( lstCompo.getBehavior() != null )
 			{
@@ -1507,12 +1686,12 @@ implements ServiceConnection, Database.Defs {
 	    	};
 	    	if( TimeControlPanel.getInstance() != null && TimeControlPanel.getInstance().getTimesButton() != null )
 	    	{
-	    		Button timeBtns[] = TimeControlPanel.getInstance().getTimesButton();
+	    		Image timeBtns[] = TimeControlPanel.getInstance().getTimesButton();
 		        for( int i=0; i<timeBtns.length; i++ )
 		        {
 		        	if( null != timeBtns[i].getView() )
 		        	{
-		        		((ButtonImpl)timeBtns[i].getView()).setVisibility(bShowImgFlg[i] ? View.VISIBLE : View.INVISIBLE );
+		        		((ImageImpl)timeBtns[i].getView()).setVisibility(bShowImgFlg[i] ? View.VISIBLE : View.INVISIBLE );
 		        	}
 		        }
 	        }
@@ -1536,12 +1715,12 @@ implements ServiceConnection, Database.Defs {
 	        
 	    	if( TimeControlPanel.getInstance() != null && TimeControlPanel.getInstance().getTimesButton() != null )
 	    	{
-	    		Button timeBtns[] = TimeControlPanel.getInstance().getTimesButton();
+	    		Image timeBtns[] = TimeControlPanel.getInstance().getTimesButton();
 		        for( int i=0; i<timeBtns.length; i++ )
 		        {
 		        	if( null != timeBtns[i].getView() )
 		        	{
-		        		((ButtonImpl)timeBtns[i].getView()).setImageBitmap( getResourceAccessor().createBitmapFromDrawableId(
+		        		((ImageImpl)timeBtns[i].getView()).setImageBitmap( getResourceAccessor().createBitmapFromDrawableId(
 		        				timeImgResIds[ timeArgs[i] ]) );
 		        	}
 		        }
@@ -1571,7 +1750,7 @@ implements ServiceConnection, Database.Defs {
 			if(keyCode != KeyEvent.KEYCODE_BACK){
 				return super.onKeyDown(keyCode, event);
 			}else{
-				// ŒŸõƒpƒlƒ‹‚ªo‚Ä‚¢‚é‚ÍABackƒL[‚ÅŒŸõƒpƒlƒ‹‚ÌClose
+				// æ¤œç´¢ãƒ‘ãƒãƒ«ãŒå‡ºã¦ã„ã‚‹æ™‚ã¯ã€Backã‚­ãƒ¼ã§æ¤œç´¢ãƒ‘ãƒãƒ«ã®Close
 				TabPage page = (TabPage)getCurrentTabPage();
 				if( null != page )//act.getTabStocker().getTab(iTabId) )
 				{
@@ -1588,5 +1767,5 @@ implements ServiceConnection, Database.Defs {
 				}
 				return super.onKeyDown(keyCode, event);
 			}
-		}	    
+		}
 }

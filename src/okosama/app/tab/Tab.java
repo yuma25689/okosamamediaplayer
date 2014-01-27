@@ -103,7 +103,7 @@ public class Tab extends TabComponentParent {
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
 			ControlIDs.PLAY_TAB_BUTTON, null, ComponentType.BUTTON, 
 			10, 5, 100, 100, 
-			null, R.drawable.music_tab_button_image,
+			null, R.drawable.selector_music_tab_button_image,
 			"", ScaleType.FIT_XY
 		);
 		mapBtn.get(TabPage.TABPAGE_ID_PLAY).acceptConfigurator(tabBtnCreationData);		
@@ -120,7 +120,7 @@ public class Tab extends TabComponentParent {
 		= new TabComponentPropertySetter(
 			ControlIDs.NOW_PLAYLIST_TAB_BUTTON, null, ComponentType.BUTTON,
 			120, 5, 100, 100,
-			null, R.drawable.now_playlist_button_image,
+			null, R.drawable.selector_now_playlist_button_image,
 			"", ScaleType.FIT_XY
 		);
 		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(tabBtnCreationData);		
@@ -137,7 +137,7 @@ public class Tab extends TabComponentParent {
 		= new TabComponentPropertySetter(
 			ControlIDs.MEDIA_TAB_BUTTON, null, ComponentType.BUTTON,
 			230, 5, 100, 100,
-			null, R.drawable.sdcard_choice_button_image,
+			null, R.drawable.selector_sdcard_choice_button_image,
 			"", ScaleType.FIT_XY
 		);
 		mapBtn.get(TabPage.TABPAGE_ID_MEDIA).acceptConfigurator(tabBtnCreationData);		
@@ -153,7 +153,7 @@ public class Tab extends TabComponentParent {
 		= new TabComponentPropertySetter(
 			ControlIDs.CONTROLLER_TAB_BUTTON, null, ComponentType.BUTTON,
 			360, 5, 100, 100,
-			null, R.drawable.controller_button_image,
+			null, R.drawable.selector_controller_button_image,
 			"", ScaleType.FIT_XY
 		);
 		mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).acceptConfigurator(tabBtnCreationData);		
@@ -169,7 +169,7 @@ public class Tab extends TabComponentParent {
 		= new TabComponentPropertySetter(
 			ControlIDs.SRCH_TAB_BUTTON, null, ComponentType.BUTTON,
 			470, 5, 100, 100,
-			null, R.drawable.filter_btn_image,
+			null, R.drawable.selector_filter_btn_image,
 			"", ScaleType.FIT_XY
 		);
 		mapBtn.get(TabPage.TABPAGE_ID_SEARCH).acceptConfigurator(tabBtnCreationData);		

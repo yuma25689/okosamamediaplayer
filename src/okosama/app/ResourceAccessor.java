@@ -45,6 +45,7 @@ import android.view.SurfaceView;
  */
 public final class ResourceAccessor {
 	
+	public static String SELECTOR_PREFIX ="selector_";
 	public TabChangeAnimation tabAnim = new TabChangeAnimation();
 	// ここに、アプリケーションの状態を格納する
 	public AppStatus appStatus = new AppStatus();
@@ -174,22 +175,39 @@ public final class ResourceAccessor {
 		
 		Bitmap ret = null;
 		
+		// selectorの場合、ロードできない
+		// ネーミング規約によって頭のプレフィックスは固定とする
+		String idString = activity.getResources().getResourceEntryName(id);
+		if(idString.startsWith(SELECTOR_PREFIX))
+		{
+			return ret;
+		}
+		
 		if( 0 < bmpArray.indexOfKey( id ) && bmpArray.get(id) != null )
 		{
 			ret = bmpArray.get(id);
 		}
 		else
 		{
+			boolean bMemErr = false;
 			try {
 				ret = BitmapFactory.decodeResource(activity.getResources(), id, options);
+//				Log.i("test", activity.getResources().getResourcePackageName(id));
+//				Log.i("test", activity.getResources().getResourceName(id));
+//				Log.i("test", activity.getResources().getResourceEntryName(id));
 			} catch( OutOfMemoryError ex ) {
 				System.gc();
 				Log.e("Out of memory occur","bitmap create");
+				bMemErr = true;
 				ret = null;
 			}
 			if( ret == null )
 			{
-				ret = BitmapFactory.decodeResource(activity.getResources(), id, options);
+				
+				String log = String.format("%X", id);
+				Log.e("decodeError",log);
+				if( bMemErr == true )
+					ret = BitmapFactory.decodeResource(activity.getResources(), id, options);
 			}
 			if( ret != null )
 			{

@@ -29,7 +29,7 @@
         android:gravity="center_vertical"
         android:clickable="true"
         android:focusable="true"
-	    android:background="@drawable/appwidget_button_left"
+	    android:background="@drawable/selector_appwidget_button_left"
         android:paddingLeft="18dip"
         android:paddingRight="8dip"
         >
@@ -64,8 +64,8 @@
         android:layout_width="0dip"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/back_button_image"
-        android:background="@drawable/appwidget_button_center"
+        android:src="@drawable/selector_back_button_image"
+        android:background="@drawable/selector_appwidget_button_center"
         android:scaleType="centerInside"
         android:padding="3dip"
         />        
@@ -74,8 +74,8 @@
         android:layout_width="0dip"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/play_button_image"
-        android:background="@drawable/appwidget_button_center"
+        android:src="@drawable/selector_play_button_image"
+        android:background="@drawable/selector_appwidget_button_center"
         android:scaleType="centerInside"
         android:padding="3dip"
         />        
@@ -84,8 +84,8 @@
         android:layout_width="0dip"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/next_button_image"
-        android:background="@drawable/appwidget_button_right"
+        android:src="@drawable/selector_next_button_image"
+        android:background="@drawable/selector_appwidget_button_right"
         android:scaleType="centerInside"
         android:padding="3dip"
         />

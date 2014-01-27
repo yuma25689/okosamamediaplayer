@@ -15,7 +15,7 @@ import android.widget.ArrayAdapter;
  */
 public class AlbumSpinnerAdapter extends ArrayAdapter<AlbumData> { 
 	private static ArrayList<Long> unknownAlbumIds = new ArrayList<Long>();
-	private static String mNoSelection;
+	// private static String mNoSelection;
 
     /**
      * アダプタのコンストラクタ
@@ -29,7 +29,7 @@ public class AlbumSpinnerAdapter extends ArrayAdapter<AlbumData> {
     		int layout, ArrayList<AlbumData> items) {
         super(currentactivity, layout, items );
 
-        mNoSelection = currentactivity.getString(R.string.no_selection);
+        // mNoSelection = currentactivity.getString(R.string.no_selection);
     }
 
 	/**

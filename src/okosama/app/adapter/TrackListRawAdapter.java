@@ -717,6 +717,21 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 					return false;
 				}
 			}
+			// アーティスト名
+			if( filterData.getStrArtist() != null && 0 < filterData.getStrArtist().length() )
+			{
+				if( data.getTrackArtist() != null
+				&& -1 != data.getTrackArtist().indexOf(filterData.getStrArtist()) )
+				{
+					// アーティスト名が一部一致
+					bRet = true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			
 			// アルバムID
 			// TODO: アルバム名			
 			if( filterData.getAlbumId() != null )
@@ -735,7 +750,22 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 					return false;
 				}
 			}
-			// ジャンルID			
+			// アルバム名
+			if( filterData.getStrAlbum() != null && 0 < filterData.getStrAlbum().length() )
+			{
+				if( data.getTrackAlbum() != null
+				&& -1 != data.getTrackAlbum().indexOf(filterData.getStrAlbum()) )
+				{
+					// アーティスト名が一部一致
+					bRet = true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			
+			// ジャンルID
 			if( filterData.getGenreId() != null )
 			{
 				ArrayList<GenreData> genres = mActivity.getGenreStocker().getGenreOfAudio( 
@@ -754,6 +784,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 							// ジャンルが一致
 							bRet = true;
 							bNoHit = false;
+							break;
 						}
 					}
 				}

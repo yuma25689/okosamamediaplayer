@@ -15,6 +15,7 @@ import okosama.app.tab.TabComponentActionSetter;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.Button;
+import okosama.app.widget.Image;
 import okosama.app.widget.Label;
 import okosama.app.widget.LabelImpl;
 import okosama.app.widget.SeekBar;
@@ -99,14 +100,14 @@ public class TimeControlPanel extends ControlPanel {
 			TabComponentPropertySetter creationDataPort[] = {
 				// ------------- HOUR
 				new TabComponentPropertySetter(
-					ControlIDs.TIME_HOUR10_BUTTON, null, ComponentType.BUTTON, 
+					ControlIDs.TIME_HOUR10_BUTTON, null, ComponentType.IMAGE,//ComponentType.BUTTON, 
 					22, 240, 
 					ControlDefs.TIMECHAR_WIDTH, 
 					ControlDefs.TIMECHAR_HEIGHT
 					, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 				),
 				new TabComponentPropertySetter(
-					ControlIDs.TIME_HOUR1_BUTTON, null, ComponentType.BUTTON, 
+					ControlIDs.TIME_HOUR1_BUTTON, null, ComponentType.IMAGE, 
 					92, 240, 
 					ControlDefs.TIMECHAR_WIDTH, 
 					ControlDefs.TIMECHAR_HEIGHT
@@ -115,14 +116,14 @@ public class TimeControlPanel extends ControlPanel {
 	
 				// ------------- MINUTE
 				new TabComponentPropertySetter(
-					ControlIDs.TIME_MINUTE10_BUTTON, null, ComponentType.BUTTON, 
+					ControlIDs.TIME_MINUTE10_BUTTON, null, ComponentType.IMAGE, 
 					167, 230, 
 					ControlDefs.TIMECHAR_WIDTH, 
 					ControlDefs.TIMECHAR_HEIGHT
 					, R.drawable.num4_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 				),
 				new TabComponentPropertySetter(
-					ControlIDs.TIME_MINUTE1_BUTTON, null, ComponentType.BUTTON, 
+					ControlIDs.TIME_MINUTE1_BUTTON, null, ComponentType.IMAGE, 
 					237, 215, 
 					ControlDefs.TIMECHAR_WIDTH, 
 					ControlDefs.TIMECHAR_HEIGHT
@@ -130,14 +131,14 @@ public class TimeControlPanel extends ControlPanel {
 				),
 				// --------------------- SECOND
 				new TabComponentPropertySetter(
-					ControlIDs.TIME_SECOND10_BUTTON, null, ComponentType.BUTTON, 
+					ControlIDs.TIME_SECOND10_BUTTON, null, ComponentType.IMAGE, 
 					303, 230, 
 					ControlDefs.TIMECHAR_WIDTH, 
 					ControlDefs.TIMECHAR_HEIGHT
 					, R.drawable.num8_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY 
 				),
 				new TabComponentPropertySetter(
-					ControlIDs.TIME_SECOND1_BUTTON, null, ComponentType.BUTTON, 
+					ControlIDs.TIME_SECOND1_BUTTON, null, ComponentType.IMAGE, 
 					373, 215, 
 					ControlDefs.TIMECHAR_WIDTH, 
 					ControlDefs.TIMECHAR_HEIGHT
@@ -159,14 +160,14 @@ public class TimeControlPanel extends ControlPanel {
 			TabComponentPropertySetter creationDataHorz[] = {
 				// ------------- HOUR
 				new TabComponentPropertySetter(
-					ControlIDs.TIME_HOUR10_BUTTON, null, ComponentType.BUTTON, 
+					ControlIDs.TIME_HOUR10_BUTTON, null, ComponentType.IMAGE, 
 					170, 92, 
 					ControlDefs.TIMECHAR_WIDTH, 
 					ControlDefs.TIMECHAR_HEIGHT
 					, R.drawable.num1_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 				),
 				new TabComponentPropertySetter(
-					ControlIDs.TIME_HOUR1_BUTTON, null, ComponentType.BUTTON, 
+					ControlIDs.TIME_HOUR1_BUTTON, null, ComponentType.IMAGE, 
 					180, 177, 
 					ControlDefs.TIMECHAR_WIDTH, 
 					ControlDefs.TIMECHAR_HEIGHT
@@ -175,14 +176,14 @@ public class TimeControlPanel extends ControlPanel {
 	
 				// ------------- MINUTE
 				new TabComponentPropertySetter(
-					ControlIDs.TIME_MINUTE10_BUTTON, null, ComponentType.BUTTON, 
+					ControlIDs.TIME_MINUTE10_BUTTON, null, ComponentType.IMAGE, 
 					200, 262, 
 					ControlDefs.TIMECHAR_WIDTH, 
 					ControlDefs.TIMECHAR_HEIGHT
 					, R.drawable.num4_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY
 				),
 				new TabComponentPropertySetter(
-					ControlIDs.TIME_MINUTE1_BUTTON, null, ComponentType.BUTTON, 
+					ControlIDs.TIME_MINUTE1_BUTTON, null, ComponentType.IMAGE, 
 					215, 347, 
 					ControlDefs.TIMECHAR_WIDTH, 
 					ControlDefs.TIMECHAR_HEIGHT
@@ -190,14 +191,14 @@ public class TimeControlPanel extends ControlPanel {
 				),
 				// --------------------- SECOND
 				new TabComponentPropertySetter(
-					ControlIDs.TIME_SECOND10_BUTTON, null, ComponentType.BUTTON, 
+					ControlIDs.TIME_SECOND10_BUTTON, null, ComponentType.IMAGE, 
 					230, 432, 
 					ControlDefs.TIMECHAR_WIDTH, 
 					ControlDefs.TIMECHAR_HEIGHT
 					, R.drawable.num8_1, R.drawable.time_bk_shelf, "", ScaleType.FIT_XY 
 				),
 				new TabComponentPropertySetter(
-					ControlIDs.TIME_SECOND1_BUTTON, null, ComponentType.BUTTON, 
+					ControlIDs.TIME_SECOND1_BUTTON, null, ComponentType.IMAGE, 
 					215, 518, 
 					ControlDefs.TIMECHAR_WIDTH, 
 					ControlDefs.TIMECHAR_HEIGHT
@@ -359,21 +360,22 @@ public class TimeControlPanel extends ControlPanel {
 	{
 		if( btnTimes == null )
 		{
-			btnTimes = new Button[6];
-			btnTimes[0] = DroidWidgetKit.getInstance().MakeButton();
-			btnTimes[1] = DroidWidgetKit.getInstance().MakeButton();
-			btnTimes[2] = DroidWidgetKit.getInstance().MakeButton();
-			btnTimes[3] = DroidWidgetKit.getInstance().MakeButton();
-			btnTimes[4] = DroidWidgetKit.getInstance().MakeButton();
-			btnTimes[5] = DroidWidgetKit.getInstance().MakeButton();		
+			btnTimes = new Image[6];
+			btnTimes[0] = DroidWidgetKit.getInstance().MakeImage();//MakeButton();
+			btnTimes[1] = DroidWidgetKit.getInstance().MakeImage();
+			btnTimes[2] = DroidWidgetKit.getInstance().MakeImage();
+			btnTimes[3] = DroidWidgetKit.getInstance().MakeImage();
+			btnTimes[4] = DroidWidgetKit.getInstance().MakeImage();
+			btnTimes[5] = DroidWidgetKit.getInstance().MakeImage();		
 		}
 	}
-	public Button[] getTimesButton()
+	public Image[] getTimesButton()
 	{
 		return btnTimes;
 	}
 	
-	Button btnTimes[] = null;
+	Image btnTimes[] = null;
+	//Button btnTimes[] = null;
 
 	public static void clearTimeDisplays() {
 		if( TimeControlPanel.getInstance() != null )

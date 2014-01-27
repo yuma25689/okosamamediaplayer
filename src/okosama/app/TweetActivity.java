@@ -2,6 +2,7 @@ package okosama.app;
 
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.service.TwitterUtils;
+import twitter4j.RateLimitStatus;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.auth.AccessToken;
@@ -70,8 +71,11 @@ public class TweetActivity extends Activity {
                     mTwitter.updateStatus(params[0]);
                     return true;
                 } catch (TwitterException e) {
-                	Log.e("tweeté∏îs",e.getErrorMessage() + " " + e.getErrorCode() + " " + e.getMessage() );
-                    e.printStackTrace();
+                	//RateLimitStatus sts = e.getRateLimitStatus();
+                	//sts.get
+                    //e.printStackTrace();
+                	Log.e("tweeté∏îs", e.getErrorCode() + " " + e.getMessage() + " " 
+                    + e.getExceptionCode() + " " + e.getStatusCode() + e.getLocalizedMessage() + e.toString() );
                     return false;
                 }
             }

@@ -22,6 +22,7 @@ import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
+import okosama.app.panel.SearchPanel;
 import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.ArtistChildData;
@@ -47,6 +48,8 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 			// Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()).getCursor(Database.ArtistCursorName);
 			// cursor.moveToPosition(grouppos);
 			mCurrentArtistId = data.getArtistId(); // cursor.getString(cursor.getColumnIndex(BaseColumns._ID));
+			// TODO: –{“–‚ÉAll‚Å‚¢‚¢‚Ì‚©‚Í”÷–­
+			SearchPanel.getInstance().clearAllControlValue();
 			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(mCurrentArtistId);
 		}
 		// OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();

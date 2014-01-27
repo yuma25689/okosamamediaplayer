@@ -86,19 +86,19 @@ public class PlayControlPanel extends ControlPanel {
 					new TabComponentPropertySetter(
 						ControlIDs.PLAY_BUTTON, null, ComponentType.BUTTON, 
 						180, 10, 80, 100
-						, null, R.drawable.play_button_image, "", ScaleType.FIT_XY
+						, null, R.drawable.selector_play_button_image, "", ScaleType.FIT_XY
 					),
 					// --------------------- NEXT
 					new TabComponentPropertySetter(
 						ControlIDs.NEXT_BUTTON, null, ComponentType.BUTTON, 
 						360, 6, 100, 100
-						, null, R.drawable.next_button_image, "", ScaleType.FIT_XY
+						, null, R.drawable.selector_next_button_image, "", ScaleType.FIT_XY
 					),
 					// --------------------- PREV
 					new TabComponentPropertySetter(
 						ControlIDs.PREV_BUTTON, null, ComponentType.BUTTON, 
 						30, 18, 100, 100
-						, null, R.drawable.back_button_image, "", ScaleType.FIT_XY
+						, null, R.drawable.selector_back_button_image, "", ScaleType.FIT_XY
 					),
 					// --------------------- SONG
 					new TabComponentPropertySetter(
@@ -124,19 +124,19 @@ public class PlayControlPanel extends ControlPanel {
 					new TabComponentPropertySetter(
 						ControlIDs.PLAY_BUTTON, null, ComponentType.BUTTON, 
 						180, 10, 80, 100
-						, null, R.drawable.play_button_image, "", ScaleType.FIT_XY
+						, null, R.drawable.selector_play_button_image, "", ScaleType.FIT_XY
 					),
 					// --------------------- NEXT
 					new TabComponentPropertySetter(
 						ControlIDs.NEXT_BUTTON, null, ComponentType.BUTTON, 
 						30, 6, 100, 100
-						, null, R.drawable.next_button_image, "", ScaleType.FIT_XY
+						, null, R.drawable.selector_next_button_image, "", ScaleType.FIT_XY
 					),
 					// --------------------- PREV
 					new TabComponentPropertySetter(
 						ControlIDs.PREV_BUTTON, null, ComponentType.BUTTON, 
 						360, 18, 100, 100
-						, null, R.drawable.back_button_image, "", ScaleType.FIT_XY
+						, null, R.drawable.selector_back_button_image, "", ScaleType.FIT_XY
 					),
 					// --------------------- SONG
 					new TabComponentPropertySetter(
@@ -217,11 +217,11 @@ public class PlayControlPanel extends ControlPanel {
         try {
             if(MediaPlayerUtil.sService.isPlaying()== true) 
             {
-               	((ButtonImpl)btnPlayPause.getView()).setImageResource(R.drawable.pause_button_image);
+               	((ButtonImpl)btnPlayPause.getView()).setImageResource(R.drawable.selector_pause_button_image);
             }
             else
             {
-            	((ButtonImpl)btnPlayPause.getView()).setImageResource(R.drawable.play_button_image);
+            	((ButtonImpl)btnPlayPause.getView()).setImageResource(R.drawable.selector_play_button_image);
             }
         } catch (RemoteException ex) {
         }	
