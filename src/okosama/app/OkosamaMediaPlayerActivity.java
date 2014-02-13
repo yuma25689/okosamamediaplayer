@@ -511,8 +511,8 @@ implements ServiceConnection, Database.Defs {
 //        		
 //        	}
 //        }
-        // メディアスキャンの実行
-        doMediaScan();
+        // TODO:メディアスキャンの実行
+        // doMediaScan();
     }
 	// 対象の拡張子とmineTypeの配列作成
 	class ExtWithInfo
@@ -817,33 +817,33 @@ implements ServiceConnection, Database.Defs {
         
         return lp;
 	}
-	RelativeLayout.LayoutParams createLayoutParamForAbsolutePos(
-			int width, int height, int left, int top )
-	{
-		RelativeLayout.LayoutParams lp = null;
-		if( true == dispInfo.isPortrait() )
-		{
-			lp = new RelativeLayout.LayoutParams(
-	        		(height), (width));			
-	        lp.topMargin = ( top );
-	        lp.leftMargin = ( left );
-	        lp.bottomMargin = 0;
-	        lp.rightMargin = 0;
-		}
-		else
-		{
-			lp = new RelativeLayout.LayoutParams(
-	        		(width), (height));			
-	        lp.topMargin = left;
-	        lp.leftMargin = top;
-	        lp.bottomMargin = 0;
-	        lp.rightMargin = 0;
-		}
-        lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        
-        return lp;
-	}
+//	RelativeLayout.LayoutParams createLayoutParamForAbsolutePos(
+//			int width, int height, int left, int top )
+//	{
+//		RelativeLayout.LayoutParams lp = null;
+//		if( true == dispInfo.isPortrait() )
+//		{
+//			lp = new RelativeLayout.LayoutParams(
+//	        		(height), (width));			
+//	        lp.topMargin = ( top );
+//	        lp.leftMargin = ( left );
+//	        lp.bottomMargin = 0;
+//	        lp.rightMargin = 0;
+//		}
+//		else
+//		{
+//			lp = new RelativeLayout.LayoutParams(
+//	        		(width), (height));			
+//	        lp.topMargin = left;
+//	        lp.leftMargin = top;
+//	        lp.bottomMargin = 0;
+//	        lp.rightMargin = 0;
+//		}
+//        lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+//        lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+//        
+//        return lp;
+//	}
 	
 	// 画面開店時の値のバックアップと復元
 	// 今のところ、不要

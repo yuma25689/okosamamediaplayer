@@ -450,5 +450,6 @@
     <string name="srch_album_hint">Input album name</string>
     <string name="srch_playlist_hint">Input playlist name</string>
     <string name="srch_video_hint">Input video name</string>
+    
 </resources>
 

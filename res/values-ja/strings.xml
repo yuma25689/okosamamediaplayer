@@ -448,5 +448,6 @@
     <string name="srch_album_hint">アルバム名を入力</string>
     <string name="srch_playlist_hint">プレイリスト名を入力</string>
     <string name="srch_video_hint">動画名を入力</string>
+    
 </resources>
 
