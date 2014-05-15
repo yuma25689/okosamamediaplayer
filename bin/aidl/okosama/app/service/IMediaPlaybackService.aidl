@@ -17,8 +17,6 @@
 
 package okosama.app.service;
 
-import android.graphics.Bitmap;
-
 interface IMediaPlaybackService
 {
 	int getCurrentType();
