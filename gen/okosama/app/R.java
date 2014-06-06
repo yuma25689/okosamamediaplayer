@@ -19,12 +19,10 @@ public final class R {
         public static final int animation_level_entryvalues=0x7f0a0005;
         public static final int animation_speed_entries=0x7f0a0006;
         /**  Do not translate. Entry values for 'enable gestures' preference list 
- Do not translate. Entry values for 'enable gestures' preference list 
          */
         public static final int animation_speed_entryvalues=0x7f0a0007;
         public static final int vibrate_intensity_entries=0x7f0a0000;
         /**  Do not translate. Entry values for 'enable gestures' preference list 
- Do not translate. Entry values for 'enable gestures' preference list 
          */
         public static final int vibrate_intensity_entryvalues=0x7f0a0001;
         public static final int widget_transparency_entries=0x7f0a0002;
@@ -678,6 +676,8 @@ The fast scroll thumb will show one character from this string depending on the 
  label underneath icon used to indicate that the sd card is present, but currently unavailable 
          */
         public static final int sdcard_busy_title=0x7f080027;
+        /**  Do not translate. Entry values for 'enable gestures' preference list 
+         */
         public static final int sdcard_cant_read=0x7f080089;
         /**  label underneath icon used to indicate there was an error accessing the sd card 
  label underneath icon used to indicate there was an error accessing the sd card 

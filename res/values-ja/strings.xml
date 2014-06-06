@@ -50,9 +50,9 @@
     -->
     <skip/>
     <!-- Do not translate. Duration format for duration < 1 hour -->
-    <string translatable="false" name="durationformatshort"><xliff:g id="format">%2$d:%5$02d</xliff:g></string>
+    <string name="durationformatshort"><xliff:g id="format">%2$d:%5$02d</xliff:g></string>
     <!-- Do not translate. Duration format for duration >= 1 hour -->
-    <string translatable="false" name="durationformatlong"><xliff:g id="format">%1$d:%3$02d:%5$02d</xliff:g></string>
+    <string name="durationformatlong"><xliff:g id="format">%1$d:%3$02d:%5$02d</xliff:g></string>
 
     <!-- Menu item that deletes the currently selected item, which might be a single song, or a collection of songs.
          The user will be prompted to confirm before deletion actually takes place -->
@@ -301,23 +301,6 @@
         <item>0.9 second</item>
         <item>1.1 second</item>
     </string-array>
-    <!-- Do not translate. Entry values for 'enable gestures' preference list -->
-    <string-array name="vibrate_intensity_entryvalues" translatable="false">
-        <item>10</item>
-        <item>20</item>
-        <item>30</item>
-        <item>50</item>
-        <item>70</item>
-        <item>100</item>
-        <item>150</item>
-        <item>200</item>
-        <item>300</item>
-        <item>500</item>
-        <item>700</item>
-        <item>900</item>
-        <item>1100</item>
-   	</string-array>
-
 
     <string name="widget_category_title">Widget</string>
 
@@ -338,19 +321,6 @@
         <item>100%</item>
     </string-array>
 
-    <string-array name="widget_transparency_entryvalues" translatable="false">
-        <item>0</item>
-        <item>10</item>
-        <item>20</item>
-        <item>30</item>
-        <item>40</item>
-        <item>50</item>
-        <item>60</item>
-        <item>70</item>
-        <item>80</item>
-        <item>90</item>
-        <item>100</item>
-    </string-array>
     <string name="create_playlist_create_text_prompt" msgid="2379436619128383935">"Open the keyboard to give your new Playlist a name or select Save to name it \"<xliff:g id="PLAYLIST">%s</xliff:g>\"."</string>
     <string name="rename_playlist_same_prompt" msgid="7777541452078260899">"Open the keyboard to give playlist \"<xliff:g id="PLAYLIST">%s</xliff:g>\" a new name."</string>
     <string name="rename_playlist_diff_prompt" msgid="900422624897120958">"Open the keyboard to give playlist \"<xliff:g id="PLAYLIST">%1$s</xliff:g>\" a new name or select Save to name it \"<xliff:g id="NAME">%2$s</xliff:g>\"."</string>
@@ -392,11 +362,6 @@
         <item>2</item>
         <item>3</item>
     </string-array>
-    <string-array name="animation_level_entryvalues" translatable="false">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-   	</string-array>
    	<string name="audio_animation_category_title">アニメーションの設定</string>
     <string name="animation_level_title">無価値なアニメーションの強さ</string>
     <string name="animation_level_summary">何の意味もない、無価値なアニメーションの強度を設定(大きいほど強い)</string>
@@ -413,16 +378,6 @@
         <item>2 second</item>
     </string-array>
     <!-- Do not translate. Entry values for 'enable gestures' preference list -->
-    <string-array name="animation_speed_entryvalues" translatable="false">
-        <item>300</item>
-        <item>400</item>
-        <item>500</item>
-        <item>600</item>
-        <item>800</item>
-        <item>1000</item>
-        <item>1500</item>
-        <item>2000</item>
-   	</string-array>
     <string name="sdcard_cant_read">このアプリはSDカード上のメディアを再生するアプリですが、現在、SDカードを読み取れない状態のようです。アプリを終了し、SDカードを読める状態にしてから、アプリを再起動して下さい。</string>
     <string name="left_move_text">今、指を離すと上のアイコンのタブに移動します。</string>
     <string name="right_move_text">今、指を離すと上のアイコンのタブに移動します。</string>

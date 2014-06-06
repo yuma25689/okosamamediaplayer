@@ -11,7 +11,6 @@ import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.*;
 import okosama.app.tab.TabPage;
-import android.annotation.SuppressLint;
 // import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.database.Cursor;
@@ -87,9 +86,9 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
     // private int[] rowId = null;
 //    private SparseArray<ArtistGroupData> groupData = new SparseArray<ArtistGroupData>(); 
 //    private SparseArray<ArtistChildData[]> childData = new SparseArray<ArtistChildData[]>(); 
-    @SuppressLint("UseSparseArrays")
+    //@SuppressLint("UseSparseArrays")
     private HashMap<Integer,ArtistGroupData> groupData = new HashMap<Integer,ArtistGroupData>(); 
-    @SuppressLint("UseSparseArrays")
+    //@SuppressLint("UseSparseArrays")
 	private HashMap<Integer,ArtistChildData[]> childData = new HashMap<Integer,ArtistChildData[]>(); 
     // private SparseArray<ArtistGroupData> groupDataTmp = new SparseArray<ArtistGroupData>();
 	private HashMap<Integer,ArtistGroupData> groupDataTmp = new HashMap<Integer,ArtistGroupData>();

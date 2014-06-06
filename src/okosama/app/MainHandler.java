@@ -59,8 +59,10 @@ public class MainHandler extends Handler {
         			}
                 	next = stateMedia.updateDisplay();
                 }
-                else if( mActivity.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_MAIN)
-                		== TabPage.TABPAGE_ID_PLAY )
+                else if(PlayControlPanel.getInstance().getView() != null 
+                && PlayControlPanel.getInstance().getView().getParent() != null )                		
+                		//mActivity.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_MAIN)
+                		//== TabPage.TABPAGE_ID_PLAY )
                 //|| mActivity.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_PLAY)
         		//== TabPage.TABPAGE_ID_VIDEO_VIEW )
                 {
