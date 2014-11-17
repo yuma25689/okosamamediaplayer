@@ -3,28 +3,27 @@ package okosama.app.behavior;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import android.content.ContentUris;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.Toast;
 import okosama.app.action.IViewAction;
 import okosama.app.action.RenamePlaylist;
 import okosama.app.action.TabSelectAction;
 import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
-import okosama.app.storage.AlbumData;
 import okosama.app.storage.Database;
 import okosama.app.storage.PlaylistData;
 import okosama.app.tab.TabPage;
+import android.content.ContentUris;
+import android.content.Intent;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.Toast;
 
 public class PlaylistListBehavior extends IListBehavior implements Database.Defs {
     private static final int DELETE_PLAYLIST = CHILD_MENU_BASE + 1;
@@ -34,7 +33,7 @@ public class PlaylistListBehavior extends IListBehavior implements Database.Defs
 
 	@Override
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-		// TODO: ŒŸõğŒ‚ğİ’èŒãAƒgƒ‰ƒbƒNƒ^ƒu‚ÖˆÚ“®
+		// TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½ï¿½Aï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½^ï¿½uï¿½ÖˆÚ“ï¿½
 		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		if( act.getPlaylistAdp() == null
 		|| act.getPlaylistAdp().getItem(position) == null )

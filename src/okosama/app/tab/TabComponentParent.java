@@ -10,7 +10,6 @@ import okosama.app.behavior.IBehavior;
 import okosama.app.panel.MoveTabInfo;
 import okosama.app.panel.TouchHookRelativeLayout;
 import okosama.app.widget.absWidget;
-
 import android.app.Activity;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -20,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 /**
- * ƒ^ƒuã‚Ì€–Ú‚Ìe‚Æ‚È‚é‚±‚Æ‚ª‚Å‚«‚éƒNƒ‰ƒX‚Ì’ŠÛƒNƒ‰ƒX
+ * ï¿½^ï¿½uï¿½ï¿½Ìï¿½ï¿½Ú‚Ìeï¿½Æ‚È‚é‚±ï¿½Æ‚ï¿½ï¿½Å‚ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½Ì’ï¿½ï¿½ÛƒNï¿½ï¿½ï¿½X
  * @author 25689
  *
  */
@@ -102,7 +101,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	}
 	
 	/**
-	 * w’è‚³‚ê‚½ID‚ÌƒŒƒCƒAƒEƒg‚ğì¬‚µA“à•”‚Ìwidget‚ğƒNƒŠƒA‚·‚é
+	 * ï¿½wï¿½è‚³ï¿½ê‚½IDï¿½Ìƒï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½widgetï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½
 	 * @param iPanelLayoutId
 	 */
 	protected void resetPanelViews(int iPanelLayoutId)
@@ -129,15 +128,15 @@ public abstract class TabComponentParent implements ITabComponent {
 		widgets.clear();
 	}
 
-	// q€–Ú‚ÌƒŠƒXƒg
-	// –{“–‚ÍÅ‰‚Éadd‚·‚é‚Éì‚Á‚½•û‚ª–³‘Ê‚ª‚È‚¢‚Í‚¸‚¾‚ªA‚±‚¿‚ç‚Ì•û‚ªˆÀ‘S‚Å‚Í‚ ‚é
+	// ï¿½qï¿½ï¿½ï¿½Ú‚Ìƒï¿½ï¿½Xï¿½g
+	// ï¿½{ï¿½ï¿½ï¿½ÍÅï¿½ï¿½ï¿½addï¿½ï¿½ï¿½éï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê‚ï¿½ï¿½È‚ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½Å‚Í‚ï¿½ï¿½ï¿½
 	protected SparseArray<ITabComponent> children 
 		= new SparseArray<ITabComponent>();
 	
-	// ‚±‚±‚ÉƒRƒ“ƒeƒi‚ğ‚Â‚Ì‚ÍAì‚è‚ªG‚©‚à‚µ‚ê‚È‚¢B
-	// Œ‹‰Ê“I‚É‚±‚ÌƒNƒ‰ƒX‚Íƒ^ƒu‚Æƒ^ƒuƒy[ƒW‚É‚µ‚©Œp³‚³‚ê‚Ä‚¢‚È‚¢‚ªA
-	// q‚Å‚±‚ê‚ğg‚í‚È‚¢ƒNƒ‰ƒX‚à‚¢‚Â‚©‚Å‚«‚é‚Ì‚©‚à
-	// İŒv‚Æ‚µ‚Ä‚Í‚æ‚­‚È‚¢
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ÉƒRï¿½ï¿½ï¿½eï¿½iï¿½ï¿½ï¿½ï¿½ï¿½Â‚Ì‚ÍAï¿½ï¿½è‚ªï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½B
+	// ï¿½ï¿½ï¿½Ê“Iï¿½É‚ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½Íƒ^ï¿½uï¿½Æƒ^ï¿½uï¿½yï¿½[ï¿½Wï¿½É‚ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½A
+	// ï¿½qï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½È‚ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½Å‚ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½
+	// ï¿½İŒvï¿½Æ‚ï¿½ï¿½Ä‚Í‚æ‚­ï¿½È‚ï¿½
 	protected LinearLayout pageContainer;
 	protected ViewGroup componentContainer;
 
@@ -149,7 +148,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	}
 	
 	/**
-	 * View‚Ìæ“¾
+	 * Viewï¿½Ìæ“¾
 	 * @return view
 	 */
 	@Override
@@ -157,7 +156,7 @@ public abstract class TabComponentParent implements ITabComponent {
 		return null;
 	}
 	/**
-	 * Active‚©‚Ç‚¤‚©‚ğİ’èBq‚Ì“¯ŠÖ”‚àƒR[ƒ‹‚·‚é
+	 * Activeï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½Bï¿½qï¿½Ì“ï¿½ï¿½Öï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param b
 	 */	
 	@Override
@@ -169,7 +168,7 @@ public abstract class TabComponentParent implements ITabComponent {
         }
 	}
 	/**
-	 * g—p‰Â”\‚©‚Ç‚¤‚©‚ğİ’èBq‚Ì“¯ŠÖ”‚àƒR[ƒ‹‚·‚é
+	 * ï¿½gï¿½pï¿½Â”\ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½Bï¿½qï¿½Ì“ï¿½ï¿½Öï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param b
 	 */	
 	@Override
@@ -181,7 +180,7 @@ public abstract class TabComponentParent implements ITabComponent {
         }
 	}	
 	/**
-	 * Visible‚©‚Ç‚¤‚©‚ğİ’èBq‚Ì“¯ŠÖ”‚àƒR[ƒ‹‚·‚é
+	 * Visibleï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½Bï¿½qï¿½Ì“ï¿½ï¿½Öï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param b
 	 */	
 	@Override
@@ -192,7 +191,7 @@ public abstract class TabComponentParent implements ITabComponent {
         }	
 	}
 	/**
-	 * •\¦‚ÌXVBq‚Ì“¯ŠÖ”‚àƒR[ƒ‹‚·‚é
+	 * ï¿½\ï¿½ï¿½ï¿½ÌXï¿½Vï¿½Bï¿½qï¿½Ì“ï¿½ï¿½Öï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	@Override
 	public void updateDisplay() {
@@ -202,7 +201,7 @@ public abstract class TabComponentParent implements ITabComponent {
 	}
 
 	/**
-	 * q€–Ú‚Ì’Ç‰Á
+	 * ï¿½qï¿½ï¿½ï¿½Ú‚Ì’Ç‰ï¿½
 	 * @param child
 	 */
 	@Override
@@ -221,8 +220,8 @@ public abstract class TabComponentParent implements ITabComponent {
 	
 	
 	/**
-	 * ŠO•”ƒIƒuƒWƒFƒNƒg‚Éİ’è‚ğˆÏ÷‚·‚é
-	 * q‚ÌƒIƒuƒWƒFƒNƒg‚É‚Í“K—p‚µ‚È‚¢
+	 * ï¿½Oï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Éİ’ï¿½ï¿½ï¿½Ïï¿½ï¿½ï¿½ï¿½ï¿½
+	 * ï¿½qï¿½ÌƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½É‚Í“Kï¿½pï¿½ï¿½ï¿½È‚ï¿½
 	 * @param conf
 	 */
 	@Override
@@ -240,7 +239,7 @@ public abstract class TabComponentParent implements ITabComponent {
 		this.componentContainer = componentContainer;
 	}
 	/**
-	 * İ’è‚³‚ê‚½ƒAƒNƒVƒ‡ƒ“‚Ì“à—e‚ğAƒRƒ“ƒ|[ƒlƒ“ƒg‚Éİ’è‚·‚é
+	 * ï¿½İ’è‚³ï¿½ê‚½ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½eï¿½ï¿½ï¿½Aï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½Éİ’è‚·ï¿½ï¿½
 	 */
 	@Override
 	public void configureAction()
@@ -253,7 +252,7 @@ public abstract class TabComponentParent implements ITabComponent {
 		return null;
 	}
 	/**
-	 * q€–Ú‚ÌƒNƒŠƒA
+	 * ï¿½qï¿½ï¿½ï¿½Ú‚ÌƒNï¿½ï¿½ï¿½A
 	 */
 	public void clearChild() {
 		for( int i=0; i < children.size(); i++ ) {

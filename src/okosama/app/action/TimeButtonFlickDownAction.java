@@ -1,12 +1,12 @@
 package okosama.app.action;
 
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.service.MediaPlayerUtil;
 import android.os.RemoteException;
-import android.util.Log;
 
 /**
- * ŠÔ‚ğƒtƒŠƒbƒNƒ_ƒEƒ“‚µ‚½‚ÉÀs‚·‚éƒAƒNƒVƒ‡ƒ“
+ * ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½_ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éï¿½ï¿½sï¿½ï¿½ï¿½ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½
  * @author 25689
  *
  */
@@ -36,13 +36,13 @@ public final class TimeButtonFlickDownAction implements IViewAction {
         {
 			OkosamaMediaPlayerActivity.getResourceAccessor().playSound(9);
         	
-			// Œ»óAAudioId‚Å”»•Ê‚µ‚Ä‚¢‚é‚¯‚ÇA–{“–‚ÉVideo‚Ì•û‚Í‘åä•v‚È‚ñ‚Å‚µ‚å‚¤‚©H
+			// ï¿½ï¿½ï¿½ï¿½AAudioIdï¿½Å”ï¿½ï¿½Ê‚ï¿½ï¿½Ä‚ï¿½ï¿½é‚¯ï¿½ÇAï¿½{ï¿½ï¿½ï¿½ï¿½Videoï¿½Ì•ï¿½ï¿½Í‘ï¿½ï¿½vï¿½È‚ï¿½Å‚ï¿½ï¿½å‚¤ï¿½ï¿½ï¿½H
 	        boolean bPlayingOrCueing = MediaPlayerUtil.sService.isPlaying() 
 	        		|| MediaPlayerUtil.sService.getAudioId() != -1;
 			// OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 	        if( bPlayingOrCueing && this.timeID != TIME_ID_UNKNOWN)
 	        {
-				// Ä¶’†‚©‚Ç‚¤‚©‚ÅAˆ—‚ğU‚è•ª‚¯‚é
+				// ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ÅAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½è•ªï¿½ï¿½ï¿½ï¿½
 	        	long pos = MediaPlayerUtil.sService.position();
 	        	long posSec = pos / 1000;
 	        	
@@ -61,7 +61,7 @@ public final class TimeButtonFlickDownAction implements IViewAction {
         }
         catch( RemoteException ex )
         {
-        	Log.e("error - timebuttonflickdown", ex.getMessage() );
+        	LogWrapper.e("error - timebuttonflickdown", ex.getMessage() );
         }
 		return 0;
 	}

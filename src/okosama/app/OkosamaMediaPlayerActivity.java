@@ -2,40 +2,16 @@ package okosama.app;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import okosama.app.action.MediaStopAction;
-import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.AdapterStocker;
+import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
 import okosama.app.adapter.IAdapterUpdate;
 import okosama.app.adapter.PlaylistListRawAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
 import okosama.app.adapter.VideoListRawAdapter;
 import okosama.app.factory.DroidWidgetKit;
-import android.app.Activity;
-import android.content.ComponentName;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences.Editor;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-//import android.database.Cursor;
-import android.media.AudioManager;
-import android.media.MediaScannerConnection;
-//import android.media.MediaScannerConnection;
-//import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.RemoteException;
 import okosama.app.panel.NowPlayingControlPanel;
 import okosama.app.panel.PlayControlPanel;
 import okosama.app.panel.SearchPanel;
@@ -47,19 +23,42 @@ import okosama.app.service.MediaPlayerUtil.ServiceToken;
 import okosama.app.state.DisplayStateFactory;
 import okosama.app.state.IDisplayState;
 import okosama.app.state.StateStocker;
-//import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.Database;
 import okosama.app.storage.GenreStocker;
-import okosama.app.tab.*;
+import okosama.app.tab.ITabComponent;
+import okosama.app.tab.Tab;
+import okosama.app.tab.TabPage;
+import okosama.app.tab.TabStocker;
 import okosama.app.widget.Button;
 import okosama.app.widget.ExpList;
 import okosama.app.widget.Image;
 import okosama.app.widget.ImageImpl;
 import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.media.AudioManager;
+import android.media.MediaScannerConnection;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.RemoteException;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,13 +66,16 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewParent;
 import android.view.Window;
-import android.widget.RelativeLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+//import android.database.Cursor;
+//import android.media.MediaScannerConnection;
+//import android.net.Uri;
+//import okosama.app.storage.ArtistGroupData;
 //import okosama.app.widget.ButtonImpl;
 
 public class OkosamaMediaPlayerActivity extends Activity
@@ -177,7 +179,7 @@ implements ServiceConnection, Database.Defs {
     }
 	public void updatePlayStateButtonImage()
 	{
-		//Log.e("update playstatebutton","come");
+		//LogWrapper.e("update playstatebutton","come");
 		if( PlayControlPanel.getInstance() != null ) 
 		{
 			boolean bRealEnabled = OkosamaMediaPlayerActivity.getResourceAccessor().isSdCanRead();
@@ -583,28 +585,28 @@ implements ServiceConnection, Database.Defs {
         AsyncTask<Activity, Void, Integer> task = new AsyncTask<Activity, Void, Integer>() {
             @Override
             protected Integer doInBackground(Activity... params) {
-            	Log.i("mediascan - doInBackground","start");
+            	LogWrapper.i("mediascan - doInBackground","start");
             	mediaScanTarget.clear();
             	mediaScanTargetMine.clear();
             	String status = Environment.getExternalStorageState();
             	if( false == Environment.MEDIA_MOUNTED.equals(status) )
             	{
-            		Log.w("external storage status",status);
+            		LogWrapper.w("external storage status",status);
             		return 0;
             	}
             	// SDカードのルートから、全てのファイルを検索
             	String sdroot_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
             	//String sdCardAndroid = sdroot_path + "Android";	// 不安が残る・・・
             	File sdroot = new File(sdroot_path);
-            	Log.i("sdroot_path",sdroot_path);
-            	//Log.i("sdandroid", sdCardAndroid );
+            	LogWrapper.i("sdroot_path",sdroot_path);
+            	//LogWrapper.i("sdandroid", sdCardAndroid );
             	getMediaScanTarget(sdroot);
             	//File sdmusicdir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
             	//File sdmoviedir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
             	//File sdOkosama = OkosamaMediaPlayerActivity.this.getExternalFilesDir(null);
-            	//Log.i("sdmusic_path",sdmusicdir.getPath());
+            	//LogWrapper.i("sdmusic_path",sdmusicdir.getPath());
             	//getMediaScanTarget(sdmusicdir);
-            	//Log.i("sdmovies_path",sdmoviedir.getPath());
+            	//LogWrapper.i("sdmovies_path",sdmoviedir.getPath());
             	//getMediaScanTarget(sdmoviedir);
             	handler.sendEmptyMessage(MainHandler.MEDIA_SCAN_TARGET_CREATED);
             	
@@ -615,7 +617,7 @@ implements ServiceConnection, Database.Defs {
             protected void onPostExecute(Integer ret) 
             {
             	//MediaScannerConnection.
-            	Log.i("onPostExecute(mediascan)","ret=" + ret );
+            	LogWrapper.i("onPostExecute(mediascan)","ret=" + ret );
             }
         };
         task.execute();
@@ -670,7 +672,7 @@ implements ServiceConnection, Database.Defs {
 	        		{
 	        			mediaScanTarget.add( files[i].getPath() );
 	        			mediaScanTargetMine.add( inf.getMineType() );
-	        			Log.i("get mediaScanTarget", "path=" + files[i].getPath() 
+	        			LogWrapper.i("get mediaScanTarget", "path=" + files[i].getPath() 
 	        					+ " mineType=" + inf.getMineType());
 	        		}
     			}
@@ -876,7 +878,7 @@ implements ServiceConnection, Database.Defs {
 	}
 	@Override
 	protected void onResume() {
-		Log.w("onResume","resume!");
+		LogWrapper.w("onResume","resume!");
     	// 画面のサイズ等の情報を更新する
 		// 終わったらhandlerッセージが送られる
 		// 現在、そこで初めて画面位置の初期化を行っている
@@ -949,7 +951,7 @@ implements ServiceConnection, Database.Defs {
 				|| bForceRefresh == true )
         {
 			// タブが変わっているか、強制リフレッシュの場合
-			// Log.w("setMainTabSelection", "come");
+			// LogWrapper.w("setMainTabSelection", "come");
 			if( stateStocker.getState(ControlIDs.TAB_ID_MAIN) != null )
 			{
 				// 前のタブのレシーバを登録解除
@@ -1031,7 +1033,7 @@ implements ServiceConnection, Database.Defs {
             {
             	return -1;
             }
-    		Log.w("setMediaTabSelection", 
+    		LogWrapper.w("setMediaTabSelection", 
     				"currentmediatab=" + tabStocker.getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA)
     				+ "next=" + subTab );		
     		IDisplayState stateMedia = stateStocker.getState(
@@ -1069,7 +1071,7 @@ implements ServiceConnection, Database.Defs {
 	 */
 	public int setPlayTabSelection( int subTab, boolean bForceRefresh )
 	{
-		// Log.w("setMediaTabSelection", "come tabid=" + subTab);
+		// LogWrapper.w("setMediaTabSelection", "come tabid=" + subTab);
 		if( tabStocker.getTab(ControlIDs.TAB_ID_PLAY) == null )
 		{
 			return -1;
@@ -1087,7 +1089,7 @@ implements ServiceConnection, Database.Defs {
     			|| bForceRefresh == true )
     	{
     		tabStocker.getTab(ControlIDs.TAB_ID_PLAY).setNextForceRefresh(false);
-			Log.w("setPlayTabSelection", "come");
+			LogWrapper.w("setPlayTabSelection", "come");
     		IDisplayState statePlayTab = stateStocker.getState(ControlIDs.TAB_ID_PLAY);
     		
     		if( statePlayTab != null )
@@ -1109,7 +1111,7 @@ implements ServiceConnection, Database.Defs {
                 if( statePlayTab != null 
                 && tabStocker.getTab(ControlIDs.TAB_ID_PLAY) != null)
                 {
-            		Log.w("statePlayTab.ChangeDisplayBasedOnThisState", "come");
+            		LogWrapper.w("statePlayTab.ChangeDisplayBasedOnThisState", "come");
             		statePlayTab.ChangeDisplayBasedOnThisState(
             				tabStocker.getTab(ControlIDs.TAB_ID_PLAY));
                 	// 別のプレイタブを選択
@@ -1142,7 +1144,7 @@ implements ServiceConnection, Database.Defs {
 				id,
 				bForce
     		);
-    		Log.e("maintab select","MSG_ID_TAB_SELECT");			        		
+    		LogWrapper.e("maintab select","MSG_ID_TAB_SELECT");			        		
 		}
 		else if( ControlIDs.TAB_ID_MEDIA == tabId )
 		{
@@ -1164,7 +1166,7 @@ implements ServiceConnection, Database.Defs {
 			{
 				id = TabPage.TABPAGE_ID_ARTIST;
 			}
-			Log.e("mediatab select","MSG_ID_TAB_SELECT");
+			LogWrapper.e("mediatab select","MSG_ID_TAB_SELECT");
 			setMediaTabSelection( id, bForce );
 		}
 		else if( ControlIDs.TAB_ID_PLAY == tabId )
@@ -1250,11 +1252,11 @@ implements ServiceConnection, Database.Defs {
 		}			
 		if( iRet == 1 )
 		{
-			// Log.w("registerReceivers=1","maybe listener not registered.");
+			// LogWrapper.w("registerReceivers=1","maybe listener not registered.");
 		}
 		else if( iRet < 0 )
 		{
-			// Log.e("registerReceivers<0","Failed to register the listeners.");
+			// LogWrapper.e("registerReceivers<0","Failed to register the listeners.");
 		}		
 	}
 	
@@ -1457,7 +1459,7 @@ implements ServiceConnection, Database.Defs {
 		
 		if( stateMain == null )
 		{
-			Log.i("tabstate=null","tab state is null on the service connected.");
+			LogWrapper.i("tabstate=null","tab state is null on the service connected.");
 			return;
 		}
 		updateListeners(IDisplayState.STATUS_ON_CREATE);
@@ -1471,7 +1473,7 @@ implements ServiceConnection, Database.Defs {
        // Toast.makeText(this, "onServiceDisconnected:" + name, Toast.LENGTH_LONG).show();
 		
 		// よくわからないけど、サービス切断されたら終了する？
-		Log.e("service disconnect","finish because service disconnect.");
+		LogWrapper.e("service disconnect","finish because service disconnect.");
 		finish();
 	}
 
@@ -1570,7 +1572,7 @@ implements ServiceConnection, Database.Defs {
 				try {				
 					iRet = stateMedia.onCreateOptionsMenu(menu);
 				} catch( OutOfMemoryError ex ) {
-					Log.e("OutOfMemory","Menu Create");
+					LogWrapper.e("OutOfMemory","Menu Create");
 					System.gc();
 					iRet = stateMedia.onCreateOptionsMenu(menu);
 				}
@@ -1585,7 +1587,7 @@ implements ServiceConnection, Database.Defs {
 				try {
 					iRet = statePlay.onCreateOptionsMenu(menu);
 				} catch( OutOfMemoryError ex ) {
-					Log.e("OutOfMemory","Menu Create");
+					LogWrapper.e("OutOfMemory","Menu Create");
 					System.gc();
 					iRet = statePlay.onCreateOptionsMenu(menu);
 				}

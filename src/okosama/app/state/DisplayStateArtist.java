@@ -1,22 +1,22 @@
 package okosama.app.state;
 
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import okosama.app.AppStatus;
 import okosama.app.ControlIDs;
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.SearchPanelShowHideAction;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class DisplayStateArtist extends absDisplayStateMediaTab {
 
 	@Override
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
-		Log.w("ChangeDisplayBasedOnThisState", "come");
-		// ƒA[ƒeƒBƒXƒg•Ê‘I‘ğ‰æ–Ê‚Ö‚ÌØ‚è‘Ö‚¦
+		LogWrapper.w("ChangeDisplayBasedOnThisState", "come");
+		// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½Ê‘Iï¿½ï¿½ï¿½ï¿½Ê‚Ö‚ÌØ‚ï¿½Ö‚ï¿½
 		tab.setCurrentTab(TabPage.TABPAGE_ID_ARTIST, true);
 //		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_ARTIST );
 //		action.doAction(null);
@@ -45,7 +45,7 @@ public class DisplayStateArtist extends absDisplayStateMediaTab {
 		switch( item.getItemId() )
 		{
 		case MENU_UPDATE:
-			// Artist‚ğÄ“x’[––‚©‚ç“Ç‚İ’¼‚·
+			// Artistï¿½ï¿½ï¿½Ä“xï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚İ’ï¿½ï¿½ï¿½
 			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
 				ControlIDs.TAB_ID_MEDIA,
 				true

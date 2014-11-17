@@ -1,11 +1,11 @@
 package okosama.app.action;
 
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.service.MediaPlaybackService;
 import okosama.app.service.MediaPlayerUtil;
 import android.os.RemoteException;
-import android.util.Log;
 
 public class ToggleShuffleAction implements IViewAction {
 
@@ -28,7 +28,7 @@ public class ToggleShuffleAction implements IViewAction {
                 MediaPlayerUtil.sService.setShuffleMode(MediaPlaybackService.SHUFFLE_NONE);
                 act.showToast(R.string.shuffle_off_notif);
             } else {
-                Log.e("MediaPlaybackActivity", "Invalid shuffle mode: " + shuffle);
+                LogWrapper.e("MediaPlaybackActivity", "Invalid shuffle mode: " + shuffle);
             }
             act.updatePlayStateButtonImage();
         } catch (RemoteException ex) {

@@ -1,13 +1,12 @@
 package okosama.app.widget;
 
 import android.app.Activity;
-import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 
 /**
- * ‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å—˜—p‚·‚éƒ{ƒ^ƒ“‚Ìƒnƒ“ƒhƒ‹
- * Bridgeƒpƒ^[ƒ“‚ğ“K—p
+ * ï¿½ï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Å—ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½ï¿½Ìƒnï¿½ï¿½ï¿½hï¿½ï¿½
+ * Bridgeï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½Kï¿½p
  * @author 25689
  *
  */
@@ -20,12 +19,12 @@ public class Edit extends absWidget {
 	}
 	
 	/**
-	 * À‘•ƒNƒ‰ƒX
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 	 */
 	private EditImpl impl;
 
 	/**
-	 * À‘•ƒNƒ‰ƒX‚Ìİ’è
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½Ìİ’ï¿½
 	 * @param impl
 	 */
 	public void setImpl(EditImpl impl) {
@@ -33,7 +32,7 @@ public class Edit extends absWidget {
 	}
 	
 	/**
-	 * —LŒø–³Œø§Œä
+	 * ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param b
 	 */
 	@Override
@@ -42,7 +41,7 @@ public class Edit extends absWidget {
 		impl.setEnabled(b);
 	}
 	/**
-	 * •\¦§Œä
+	 * ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param b
 	 */
 	@Override
@@ -59,7 +58,7 @@ public class Edit extends absWidget {
 	}
 	@Override
 	public int create() {
-		// TODO ‚à‚Á‚Æ”Ä—p«‚Ì‚ ‚é‚â‚è•û‚É‚Å‚«‚é‚Í‚¸
+		// TODO ï¿½ï¿½ï¿½ï¿½ï¿½Æ”Ä—pï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚Å‚ï¿½ï¿½ï¿½Í‚ï¿½
 		impl = new EditImpl(activity);
 		return 0;
 	}

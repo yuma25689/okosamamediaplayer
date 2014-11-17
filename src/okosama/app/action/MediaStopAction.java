@@ -2,13 +2,13 @@ package okosama.app.action;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.panel.TimeControlPanel;
 import okosama.app.panel.NowPlayingControlPanel;
+import okosama.app.panel.TimeControlPanel;
 import okosama.app.service.IMediaPlaybackService;
 import okosama.app.service.MediaPlayerUtil;
 import android.os.RemoteException;
-// import android.view.View;
 import android.widget.Toast;
+// import android.view.View;
 
 public class MediaStopAction implements IViewAction {
 

@@ -2,7 +2,6 @@ package okosama.app.tab.media;
 
 import java.util.ArrayList;
 
-import okosama.app.ControlDefs;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
@@ -24,34 +23,34 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 /**
- * ƒAƒ‹ƒoƒ€ƒ‰ƒCƒuƒ‰ƒŠƒ^ƒu
+ * ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½u
  * @author 25689
  *
  */
 public class TabPageAlbum extends TabPage {
 
 	/**
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent e
-	 * @param ll e‚Ì‘åŒ³‚ÌƒŒƒCƒAƒEƒg
-	 * @param rl e‚ÌƒŒƒCƒAƒEƒg
+	 * ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
+	 * @param parent ï¿½e
+	 * @param ll ï¿½eï¿½Ì‘åŒ³ï¿½Ìƒï¿½ï¿½Cï¿½Aï¿½Eï¿½g
+	 * @param rl ï¿½eï¿½Ìƒï¿½ï¿½Cï¿½Aï¿½Eï¿½g
 	 */
 	public TabPageAlbum( Tab parent, LinearLayout ll, ViewGroup rl ) {
 		super();
 		this.parent = parent;
 		this.pageContainer = ll;
 		this.componentContainer = rl;
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å‚±‚Ìƒ^ƒu‚Ìƒ^ƒuID‚ğİ’è
+		// ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½Å‚ï¿½ï¿½Ìƒ^ï¿½uï¿½Ìƒ^ï¿½uIDï¿½ï¿½İ’ï¿½
 		this.tabId = TABPAGE_ID_ALBUM;
-		// ƒvƒƒOƒŒƒX•t‚«‚ÌƒŒƒCƒAƒEƒg
+		// ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Xï¿½tï¿½ï¿½ï¿½Ìƒï¿½ï¿½Cï¿½Aï¿½Eï¿½g
 		create(R.layout.tab_layout_content_generic_progress);
 	}
 	@Override
 	public int create(int panelLayoutID) {
-		// ƒtƒŠƒbƒN“ü—Í‘Î‰
+		// ï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Í‘Î‰ï¿½
 		
 		ArrayList<MoveTabInfo> arrMti = new ArrayList<MoveTabInfo>();
-		// ¶ƒtƒŠƒbƒN‚Ìİ’è
+		// ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ìİ’ï¿½
 		MoveTabInfo mti = new MoveTabInfo();
 		mti.setImageVertialAlign( MoveTabInfo.VERTIAL_TOP );
 		mti.setTabInfoIndex( MoveTabInfo.LEFT_1 );
@@ -61,7 +60,7 @@ public class TabPageAlbum extends TabPage {
 		mti.setImageViewId(R.id.left_move_image);
 		mti.setTabImageResId(R.drawable.brat_main_normal);
 		arrMti.add(mti);
-		// ‰EƒtƒŠƒbƒN‚Ìİ’è
+		// ï¿½Eï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ìİ’ï¿½
 		MoveTabInfo mtiR = new MoveTabInfo();
 		mtiR.setTabInfoIndex( MoveTabInfo.RIGHT_1 );
 		mtiR.setTabId(ControlIDs.TAB_ID_MEDIA);
@@ -71,9 +70,9 @@ public class TabPageAlbum extends TabPage {
 		mtiR.setTabImageResId(R.drawable.artisttabbtn_normal);
 		arrMti.add(mtiR);
 
-		// ƒŒƒCƒAƒEƒg‚ğƒNƒŠƒA
+		// ï¿½ï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
 		resetPanelViews(panelLayoutID,arrMti);
-		// ƒpƒlƒ‹‚ÌˆÊ’u‚ğİ’è
+		// ï¿½pï¿½lï¿½ï¿½ï¿½ÌˆÊ’uï¿½ï¿½İ’ï¿½
 		RelativeLayout.LayoutParams lp 
 		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
         	0, 0// , ControlDefs.APP_BASE_WIDTH, ControlDefs.APP_BASE_HEIGHT
@@ -81,7 +80,7 @@ public class TabPageAlbum extends TabPage {
 		tabBaseLayout.setLayoutParams(lp);
 		updateProgressPanel = (ViewGroup)tabBaseLayout.findViewById(R.id.TabCommonProgressPanel ); 
 		
-		// TODO:‰½‚â‚Á‚Ä‚é‚©’²¸ ???
+		// TODO:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚é‚©ï¿½ï¿½ï¿½ï¿½ ???
 //		View v = tabBaseLayout.findViewById(R.id.top_info_bar);
 //	    ImageView icon = (ImageView) v.findViewById(R.id.icon);
 //	    BitmapDrawable albumIcon 
@@ -91,17 +90,17 @@ public class TabPageAlbum extends TabPage {
 //	    albumIcon.setDither(false);
 //	    icon.setBackgroundDrawable(albumIcon);
 		
-		// ƒvƒƒOƒŒƒXƒo[‚Ìİ’è
+		// ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Xï¿½oï¿½[ï¿½Ìİ’ï¿½
 //		updateProgressPanel = (ViewGroup)tabBaseLayout.findViewById(R.id.TabCommonProgressPanel );
 //		ProgressBar prog = (ProgressBar) updateProgressPanel.findViewById(R.id.progress_common);
 //		prog.setBackgroundResource(R.drawable.empty);
 		
-		// ƒpƒlƒ‹‚É‚Ì‚¹‚éƒŠƒXƒg‚ÌˆÊ’u‚Ìİ’è
+		// ï¿½pï¿½lï¿½ï¿½ï¿½É‚Ì‚ï¿½ï¿½éƒŠï¿½Xï¿½gï¿½ÌˆÊ’uï¿½Ìİ’ï¿½
 		RelativeLayout.LayoutParams lpList = OkosamaMediaPlayerActivity.dispInfo.createLayoutParamsForTabContent();
 		
-		// ƒŠƒXƒg‚Ìì¬
+		// ï¿½ï¿½ï¿½Xï¿½gï¿½Ìì¬
 		TabComponentPropertySetter creationData[] = {
-			// ƒŠƒXƒg‚Ì«¿î•ñ‚ğİ’è
+			// ï¿½ï¿½ï¿½Xï¿½gï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 			new TabComponentPropertySetter(
 				List.LISTID_ALBUM, this, ComponentType.LIST_ALBUM, 
 				lpList
@@ -109,11 +108,11 @@ public class TabPageAlbum extends TabPage {
 				"", ScaleType.FIT_XY
 			),
 		};
-		// ì¬Ï‚İ‚Ìê‡AƒƒCƒ“‰æ–Ê‚ÉŠù‚ÉŠi”[‚µ‚Ä‚ ‚éƒŠƒXƒg‚ğæ“¾
+		// ï¿½ì¬ï¿½Ï‚İ‚Ìê‡ï¿½Aï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½Ê‚ÉŠï¿½ï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½éƒŠï¿½Xï¿½gï¿½ï¿½ï¿½æ“¾
 		List lst = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getList(List.LISTID_ALBUM);
 		if( lst == null )
 		{
-			// ‚Ü‚¾ì¬‚³‚ê‚Ä‚¢‚È‚¢ê‡AƒŠƒXƒg‚ğì¬‚µAƒƒCƒ“‰æ–Ê‚ÉŠi”[‚·‚é
+			// ï¿½Ü‚ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½Aï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½Ê‚ÉŠiï¿½[ï¿½ï¿½ï¿½ï¿½
 			lst = DroidWidgetKit.getInstance().MakeList( new AlbumListBehavior() );
 			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().setList(
 					List.LISTID_ALBUM,lst);
@@ -128,14 +127,14 @@ public class TabPageAlbum extends TabPage {
 			}			
 		}
 		
-		// ‚±‚Ìƒpƒlƒ‹‚É‚Ì‚¹‚½‘S‚Ä‚Ìwidget‚Ì«¿‚ğİ’è
+		// ï¿½ï¿½ï¿½Ìƒpï¿½lï¿½ï¿½ï¿½É‚Ì‚ï¿½ï¿½ï¿½ï¿½Sï¿½Ä‚ï¿½widgetï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 		creationData[0].setColorBack(Color.WHITE);
 		int i=0;
 		for( absWidget widget : widgets )
 		{
 			widget.acceptConfigurator(creationData[i]);
 			
-			// ‚±‚Ìƒ^ƒu‚Ìq€–Ú‚Æ‚µ‚Ä’Ç‰Á
+			// ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½Ìqï¿½ï¿½ï¿½Ú‚Æ‚ï¿½ï¿½Ä’Ç‰ï¿½
 			tabBaseLayout.addView( widget.getView() );
 			i++;
 		}
@@ -146,7 +145,7 @@ public class TabPageAlbum extends TabPage {
 		leftPanel.createInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity());
 		rightPanel.insertToLayout(tabBaseLayout);
 		leftPanel.insertToLayout(tabBaseLayout);
-		// Log.e("album flick setting","ok");
+		// LogWrapper.e("album flick setting","ok");
 		
 		return 0;
 	}

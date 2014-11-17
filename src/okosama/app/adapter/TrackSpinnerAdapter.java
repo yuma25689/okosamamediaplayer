@@ -1,24 +1,19 @@
 package okosama.app.adapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.storage.PlaylistData;
 import okosama.app.storage.TrackData;
-// import okosama.app.storage.QueryHandler;
-// import android.content.AsyncQueryHandler;
 import android.content.Context;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+// import okosama.app.storage.QueryHandler;
+// import android.content.AsyncQueryHandler;
 
 /**
- * AlbumList‚ÌƒAƒ_ƒvƒ^
+ * AlbumListï¿½ÌƒAï¿½_ï¿½vï¿½^
  * @author 25689
  *
  */
@@ -34,13 +29,13 @@ public class TrackSpinnerAdapter extends ArrayAdapter<TrackData> {
 	private final String mUnknownAlbum;
 	private final String mNoSelection;
 
-    // View‚Ìƒzƒ‹ƒ_H
+    // Viewï¿½Ìƒzï¿½ï¿½ï¿½_ï¿½H
     static class ViewHolder {
         TextView line1;
     }
 
     /**
-     * ƒAƒ_ƒvƒ^‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * ï¿½Aï¿½_ï¿½vï¿½^ï¿½ÌƒRï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
      * @param currentactivity
      * @param layout
      * @param cursor
@@ -56,15 +51,15 @@ public class TrackSpinnerAdapter extends ArrayAdapter<TrackData> {
         = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mUnknownAlbum = currentactivity.getString(R.string.unknown_album_name);
         mNoSelection = currentactivity.getString(R.string.no_selection);
-        // ƒAƒNƒeƒBƒrƒeƒB‚Ìİ’è
-        // ƒNƒGƒŠƒnƒ“ƒhƒ‰‚Ìì¬
+        // ï¿½Aï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½Ìİ’ï¿½
+        // ï¿½Nï¿½Gï¿½ï¿½ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Ìì¬
         // mActivity = currentactivity;
         // mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
         setItems(items);
     }
 
     /**
-     * V‚µ‚¢ƒrƒ…[‚Ìì¬H
+     * ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½Ìì¬ï¿½H
      */
 //    @Override
 //    public View getView(int pos, View convertView, ViewGroup parent) {
@@ -80,24 +75,24 @@ public class TrackSpinnerAdapter extends ArrayAdapter<TrackData> {
 //    }
 //
 //    /**
-//     * ƒrƒ…[‚Æƒf[ƒ^‚ğ•R‚Â‚¯‚é
+//     * ï¿½rï¿½ï¿½ï¿½[ï¿½Æƒfï¿½[ï¿½^ï¿½ï¿½Rï¿½Â‚ï¿½ï¿½ï¿½
 //     */
 //    //@Override
 //    public void bindView(View view, int pos) {
 //        
-//       	// ƒ^ƒO‚©‚çƒrƒ…[ƒzƒ‹ƒ_[‚ğæ“¾
+//       	// ï¿½^ï¿½Oï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½ï¿½ï¿½æ“¾
 //        ViewHolder vh = (ViewHolder) view.getTag();
-//        // position‚©‚çƒf[ƒ^‚ğæ“¾
+//        // positionï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½æ“¾
 //        TrackData data = getItem(pos);
 //    	
 //    	if( data == null )
 //    	{
-//    		// ƒf[ƒ^‚ª‚È‚¢‚Æ‚¢‚¤‚Ì‚ÍAŠ®‘S‚É‚¨‚©‚µ‚¢ó‘Ô‚¾‚ªEE
+//    		// ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½È‚ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½Ì‚ÍAï¿½ï¿½ï¿½Sï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½ï¿½ï¿½Eï¿½E
 //    		 vh.line1.setText("");
 //    		 return;
 //    	}
 // 
-//        // ƒAƒ‹ƒoƒ€–¼‚ğæ“¾Aƒrƒ…[‚Éİ’è
+//        // ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½Aï¿½rï¿½ï¿½ï¿½[ï¿½Éİ’ï¿½
 //        String name = data.getTrackTitle();
 //        String displayname = name;
 //        boolean unknown = name == null || name.equals(MediaStore.UNKNOWN_STRING); 
@@ -109,7 +104,7 @@ public class TrackSpinnerAdapter extends ArrayAdapter<TrackData> {
 //    }
     
     /**
-     * ƒf[ƒ^‚Ì•ÏXH
+     * ï¿½fï¿½[ï¿½^ï¿½Ì•ÏXï¿½H
      */
     
 

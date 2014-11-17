@@ -3,13 +3,13 @@ package okosama.app;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 
 public class MotionObserver implements SensorEventListener {
 
-	// 15“xˆÈã•Ï‚í‚é‚²‚Æ‚ÉA’Ê’m‚·‚é‚à‚Ì‚Æ‚·‚é
+	// 15ï¿½xï¿½Èï¿½Ï‚ï¿½é‚²ï¿½Æ‚ÉAï¿½Ê’mï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ï¿½
 	final int SENSOR_CHANGE_NOTIFY_VALUE = 15;
 	
 	public class MagneticFieldValue
@@ -57,8 +57,8 @@ public class MotionObserver implements SensorEventListener {
 		}
 
 		double azimuth = 0;
-		double pitch = 0;	// c‰ñ“]
-		double roll = 0;	// ‰¡‰ñ“]
+		double pitch = 0;	// ï¿½cï¿½ï¿½]
+		double roll = 0;	// ï¿½ï¿½ï¿½ï¿½]
 		
 		MagneticFieldValue()
 		{
@@ -77,9 +77,9 @@ public class MotionObserver implements SensorEventListener {
 		}
 	}
 	
-	// ÅŒã‚É’Ê’m‚µ‚½Šp“xB
+	// ï¿½ÅŒï¿½É’Ê’mï¿½ï¿½ï¿½ï¿½ï¿½pï¿½xï¿½B
 	MagneticFieldValue lastNotifyMagnetic = null;//new MagneticFieldValue();
-	// Œ»İ‚ÌŠp“x
+	// ï¿½ï¿½ï¿½İ‚ÌŠpï¿½x
 	MagneticFieldValue nowMagnetic = new MagneticFieldValue();
 	
 	/**
@@ -100,7 +100,7 @@ public class MotionObserver implements SensorEventListener {
 	float[] attitude = new float[3];
 
 	/**
-	 * ƒ‚[ƒVƒ‡ƒ“ƒZƒ“ƒT[‚Ì‰Šú‰»
+	 * ï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½Tï¿½[ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public void init(Activity act)
 	{
@@ -118,7 +118,7 @@ public class MotionObserver implements SensorEventListener {
 	}
 	
 	/**
-	 * ƒ‚[ƒVƒ‡ƒ“ƒZƒ“ƒT[‚Ì‰ğ•ú
+	 * ï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½Tï¿½[ï¿½Ì‰ï¿½ï¿½
 	 */
 	public void release()
 	{
@@ -129,7 +129,7 @@ public class MotionObserver implements SensorEventListener {
 	}
 
 	/**
-	 * ƒZƒ“ƒT[‚Ì¸“x‚ª•ÏX‚³‚ê‚½‚Æ‚«
+	 * ï¿½Zï¿½ï¿½ï¿½Tï¿½[ï¿½Ìï¿½ï¿½xï¿½ï¿½ï¿½ÏXï¿½ï¿½ï¿½ê‚½ï¿½Æ‚ï¿½
 	 */
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {		

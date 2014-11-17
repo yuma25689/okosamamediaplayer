@@ -3,13 +3,13 @@ package okosama.app.tab;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+//import android.view.View;
 
 /**
- * ƒƒfƒBƒA‘I‘ğƒ^ƒu
- * ‚±‚Ìƒ^ƒu‚Ì‰º‚ÉA‚³‚ç‚Éƒ^ƒu‚ğ‚Ì‚¹‚é
+ * ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½Iï¿½ï¿½ï¿½^ï¿½u
+ * ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½Ì‰ï¿½ï¿½ÉAï¿½ï¿½ï¿½ï¿½Éƒ^ï¿½uï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½
  * @author 25689
  *
  */
@@ -28,7 +28,7 @@ public class TabPagePlay2 extends TabPage {
 		this.pageContainer = ll;
 		this.componentContainer = rl;
 		this.internalID = ControlIDs.TAB_ID_PLAY;
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å‚±‚Ìƒ^ƒu‚Ìƒ^ƒuID‚ğİ’è
+		// ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½Å‚ï¿½ï¿½Ìƒ^ï¿½uï¿½Ìƒ^ï¿½uIDï¿½ï¿½İ’ï¿½
 		this.tabId = TABPAGE_ID_PLAY_SUB;
 		create(R.layout.tab_layout_content_generic);
 	}

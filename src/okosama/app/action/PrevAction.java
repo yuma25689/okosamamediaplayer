@@ -27,7 +27,6 @@ public final class PrevAction implements IViewAction {
         Message msg = handler.obtainMessage(AppStatus.REFRESH);
         handler.removeMessages(AppStatus.REFRESH);
         handler.sendMessageDelayed(msg, 1);
-		
         OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().updatePlayStateButtonImage();
 
         return 0;

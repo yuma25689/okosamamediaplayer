@@ -9,7 +9,6 @@ import okosama.app.state.IDisplayState;
 import okosama.app.tab.TabPage;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.widget.Toast;
 
 public class MainHandler extends Handler {
@@ -24,7 +23,7 @@ public class MainHandler extends Handler {
 		mActivity = act;
 	}
 	
-    //ƒƒbƒZ[ƒWóM
+    //ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½M
     @Override
 	public void handleMessage(Message message) {
     	if( mActivity == null )
@@ -37,7 +36,7 @@ public class MainHandler extends Handler {
 	    		mActivity.updateAndroidMediaDatabase();
 	    		break;
 	    	case AppStatus.RESTART:
-				Log.e("app restart","come");
+				LogWrapper.e("app restart","come");
 				mActivity.finish();
 				Toast.makeText(mActivity, R.string.need_restart_because_sdcard_status_change, Toast.LENGTH_LONG).show();
 				System.gc();
@@ -75,7 +74,7 @@ public class MainHandler extends Handler {
         			{
         				break;
         			}
-        			// Log.e("refresh","playtab");
+        			// LogWrapper.e("refresh","playtab");
         			next = statePlayTab.updateDisplay();
                 }
                 mActivity.queueNextRefresh(next);
@@ -93,10 +92,10 @@ public class MainHandler extends Handler {
         			bTabForceReset = (Boolean) message.obj;
         		}
         		boolean bTabSelectReset = false;
-        		// Œ»óA‚±‚ê‚ªOnResume‚ÌƒfƒBƒXƒvƒŒƒC‰Šú‰»Œã‚É”ò‚ñ‚Å‚­‚é
-                // * ì¬‡”ÔˆË‘¶«—L‚è
-        		// ƒpƒlƒ‹‚Ìì¬
-        		// ‰ñ“]‚É‚àì¬‚µ’¼‚·‚à‚Ì‚Æ‚·‚é
+        		// ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ê‚ªOnResumeï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É”ï¿½ï¿½Å‚ï¿½ï¿½ï¿½
+                // * ï¿½ì¬ï¿½ï¿½ï¿½ÔˆË‘ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½
+        		// ï¿½pï¿½lï¿½ï¿½ï¿½Ìì¬
+        		// ï¿½ï¿½]ï¿½ï¿½ï¿½É‚ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ï¿½
         		TimeControlPanel.createInstance(mActivity);
         		NowPlayingControlPanel.createInstance(mActivity);
         		SubControlPanel.createInstance(mActivity);
@@ -104,15 +103,15 @@ public class MainHandler extends Handler {
         		SearchPanel.createInstance(mActivity);
 	        	if( bInitEnd == true )
 	        	{
-	        		// ‚à‚¤Šù‚É‰Šú‰»Ï‚È‚ç‚ÎA‰½‚à‚µ‚È‚¢H
+	        		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï‚È‚ï¿½ÎAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½H
 	        	}
 	        	else
 	        	{	                
 	                OkosamaMediaPlayerActivity.getResourceAccessor().initMotionSenser(mActivity);
 	                OkosamaMediaPlayerActivity.getResourceAccessor().initSound();
 	
-	                // * ì¬‡”ÔˆË‘¶«—L‚è
-	                // PlayControlPanel‚©‚çATimeControlPanel‚ÆNowPlayingControlPanel‚Ö‚ÌQÆ
+	                // * ï¿½ì¬ï¿½ï¿½ï¿½ÔˆË‘ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½
+	                // PlayControlPanelï¿½ï¿½ï¿½ï¿½ATimeControlPanelï¿½ï¿½NowPlayingControlPanelï¿½Ö‚ÌQï¿½ï¿½
 //	        		TimeControlPanel.createInstance(mActivity);
 //	        		NowPlayingControlPanel.createInstance(mActivity);
 //	        		SubControlPanel.createInstance(mActivity);
@@ -121,8 +120,8 @@ public class MainHandler extends Handler {
 	        	}
 	        	if( bInitEnd == false || bTabForceReset == true )
 	        	{
-	        		// ‰Šú‰»‚³‚ê‚Ä‚¢‚È‚¢‚©A‹­§ì¬‚Ìê‡i¡‚Ì‚Æ‚±‚ëA‚»‚ê‚ª‚­‚é‚Ì‚ÍŒü‚«•ÏXjAƒ^ƒu‚ğì¬
-	        		// ‚±‚ÌƒAƒNƒeƒBƒrƒeƒB‚ÌƒŒƒCƒAƒEƒgƒNƒ‰ƒX‚ğ“n‚·
+	        		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½Ìê‡ï¿½iï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ê‚ªï¿½ï¿½ï¿½ï¿½Ì‚ÍŒï¿½ï¿½ï¿½ï¿½ÏXï¿½jï¿½Aï¿½^ï¿½uï¿½ï¿½ï¿½ì¬
+	        		// ï¿½ï¿½ï¿½ÌƒAï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½Ìƒï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½nï¿½ï¿½
 	        		if( mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MAIN) == null )
 	        		{
 	        			mActivity.getTabStocker().createTabMain(
@@ -135,17 +134,17 @@ public class MainHandler extends Handler {
 	        	}
 	    		bInitEnd = true;
 	        	
-	            // ŠÔ•\¦“™‚Ì‰Šú‰»
+	            // ï¿½ï¿½ï¿½Ô•\ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½
 	    		mActivity.updatePlayStateButtonImage();
 
-	    		// Œ»İ‘I‘ğ’†‚Ìƒ^ƒu‚Ìî•ñ‚ğƒNƒŠƒA‚·‚é
-	            // TODO:êŠ”÷–­
+	    		// ï¿½ï¿½ï¿½İ‘Iï¿½ğ’†‚Ìƒ^ï¿½uï¿½Ìï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½
+	            // TODO:ï¿½êŠï¿½ï¿½ï¿½ï¿½
 	    		mActivity.clearDisplayIdMap();
 	           	// tabCurrentDisplayIdMap.clear();
-	            // •K—v‚Å‚ ‚ê‚ÎAİ’è‚ğ•œŒ³‚·‚é
-	            // TODO:‚±‚ê‚ªŒ»İOnCreate‚Ìƒ^ƒCƒ~ƒ“ƒO‚È‚Ì‚Í—vŒŸ“¢
-	            // OnResume‚Ì•û‚ª‚¢‚¢‚©‚à‚µ‚ê‚È‚¢
-	            // ‰æ–ÊˆÚ“®&‰Šú‰»ˆ—
+	            // ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½ï¿½ÎAï¿½İ’ï¿½ğ•œŒï¿½ï¿½ï¿½ï¿½ï¿½
+	            // TODO:ï¿½ï¿½ï¿½ê‚ªï¿½ï¿½ï¿½ï¿½OnCreateï¿½Ìƒ^ï¿½Cï¿½~ï¿½ï¿½ï¿½Oï¿½È‚Ì‚Í—vï¿½ï¿½ï¿½ï¿½
+	            // OnResumeï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
+	            // ï¿½ï¿½ÊˆÚ“ï¿½&ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //	           	if( bTabInitEnd == false )
 //	           	{
 	    		mActivity.reloadDisplayIdMap();
@@ -172,7 +171,7 @@ public class MainHandler extends Handler {
 	           		TimeControlPanel.getInstance().setDurationLabel(0);
 	           	}
 	           	
-	           	// ‰Šú‰»‚ÉA‘S‚Ä‚ÌƒƒfƒBƒA‚ğæ“¾‚·‚é
+	           	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉAï¿½Sï¿½Ä‚Ìƒï¿½ï¿½fï¿½Bï¿½Aï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
 	           	// if( bDataRestored == false )
            		//Log.d("msg_init_end","force rescan");
 //	           	mActivity.getGenreStocker().stockMediaDataFromDevice();
@@ -186,18 +185,18 @@ public class MainHandler extends Handler {
         	}
 //        	case TabSelectAction.MSG_ID_TAB_SELECT:
 //        	{
-//        		Log.w("tab select msg","id=" + message.arg1);
-//        		// ƒ^ƒu‚ª‘I‘ğ‚³‚ê‚½’Ê’m
+//        		LogWrapper.w("tab select msg","id=" + message.arg1);
+//        		// ï¿½^ï¿½uï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½Ê’m
 //
-//        		// ƒ^ƒuID‚ğXV
+//        		// ï¿½^ï¿½uIDï¿½ï¿½ï¿½Xï¿½V
 //        		mActivity.updateTabId( message.arg1, message.arg2, (Boolean)message.obj );
 //
-//        		// ƒŠƒXƒi‚ğXV
+//        		// ï¿½ï¿½ï¿½Xï¿½iï¿½ï¿½ï¿½Xï¿½V
 //        		mActivity.updateListeners(IDisplayState.STATUS_ON_CREATE);
 //        		mActivity.updateListeners(IDisplayState.STATUS_ON_RESUME);
-//            	// ƒƒfƒBƒA‚ğXV
+//            	// ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½ï¿½ï¿½Xï¿½V
 //            	mActivity.reScanMediaAndUpdateTabPage(message.arg1,false);
-//            	// ‹¤’Ê•”•ªÄ•`‰æ
+//            	// ï¿½ï¿½ï¿½Ê•ï¿½ï¿½ï¿½ï¿½Ä•`ï¿½ï¿½
 //        		mActivity.queueNextRefresh(100);
 //        		mActivity.updatePlayStateButtonImage();
 //        		break;

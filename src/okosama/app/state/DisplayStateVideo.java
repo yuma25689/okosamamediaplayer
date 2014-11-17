@@ -1,7 +1,5 @@
 package okosama.app.state;
 
-import android.view.Menu;
-import android.view.MenuItem;
 import okosama.app.AppStatus;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
@@ -9,6 +7,8 @@ import okosama.app.R;
 import okosama.app.action.SearchPanelShowHideAction;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class DisplayStateVideo extends absDisplayStateMediaTab {
 
@@ -41,7 +41,7 @@ public class DisplayStateVideo extends absDisplayStateMediaTab {
 		switch( item.getItemId() )
 		{
 		case MENU_UPDATE:
-			// Ä“x’[––‚©‚ç“Ç‚İ’¼‚·
+			// ï¿½Ä“xï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚İ’ï¿½ï¿½ï¿½
 			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
 				ControlIDs.TAB_ID_MEDIA,
 				true

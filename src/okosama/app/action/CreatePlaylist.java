@@ -1,6 +1,14 @@
 package okosama.app.action;
 
 
+import okosama.app.ControlIDs;
+import okosama.app.LogWrapper;
+import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.R;
+import okosama.app.behavior.IBehavior;
+import okosama.app.service.MediaInfo;
+import okosama.app.storage.Database;
+import okosama.app.widget.absWidget;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -21,15 +29,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import okosama.app.ControlIDs;
-import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.R;
-import okosama.app.behavior.IBehavior;
-import okosama.app.service.MediaInfo;
-import okosama.app.storage.Database;
-import okosama.app.widget.List;
-import okosama.app.widget.absWidget;
-
 public class CreatePlaylist extends Activity
 {
     private EditText mPlaylist;
@@ -46,9 +45,9 @@ public class CreatePlaylist extends Activity
         setContentView(R.layout.create_playlist);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
                                     WindowManager.LayoutParams.WRAP_CONTENT);
-        // ƒCƒ“ƒeƒ“ƒg‚ğæ“¾
+        // ï¿½Cï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½æ“¾
         Intent intent = getIntent();
-        // ƒCƒ“ƒeƒ“ƒg‚É•Û‘¶‚³‚ê‚½ƒf[ƒ^‚ğæ“¾
+        // ï¿½Cï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½É•Û‘ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½æ“¾
         defaultname = intent.getStringExtra("defaultname");
         
         mPrompt = (TextView)findViewById(R.id.prompt);
@@ -192,7 +191,7 @@ public class CreatePlaylist extends Activity
 	            OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 
         		if (uri != null) {
-                	Log.d("¡new playlist","tabid=" + act.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA));
+                	Log.d("ï¿½ï¿½new playlist","tabid=" + act.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA));
                 	absWidget lst = act.getListFromTabID(act.getTabStocker().getCurrentTabPageId(ControlIDs.TAB_ID_MEDIA));
                 	if( lst != null )
                 	{
@@ -204,12 +203,12 @@ public class CreatePlaylist extends Activity
                 		}
                     	else
                     	{
-                    		Log.e("new playlist","behavior null");
+                    		LogWrapper.e("new playlist","behavior null");
                     	}
                 	}
                 	else
                 	{
-                		Log.e("new playlist","list null");
+                		LogWrapper.e("new playlist","list null");
                 	}
                 }
                 

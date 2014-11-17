@@ -16,6 +16,9 @@
 
 package okosama.app.action;
 
+import okosama.app.LogWrapper;
+import okosama.app.R;
+import okosama.app.storage.Database;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -25,7 +28,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -33,8 +35,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import okosama.app.R;
-import okosama.app.storage.Database;
 
 public class RenamePlaylist extends Activity
 {
@@ -72,7 +72,7 @@ public class RenamePlaylist extends Activity
         String defaultname = icicle != null ? icicle.getString("defaultname") : mOriginalName;
         
         if (mRenameId < 0 || mOriginalName == null || defaultname == null) {
-            Log.i("@@@@", "Rename failed: " + mRenameId + "/" + defaultname);
+            LogWrapper.i("@@@@", "Rename failed: " + mRenameId + "/" + defaultname);
             finish();
             return;
         }

@@ -1,14 +1,12 @@
 package okosama.app.widget;
 
-import android.app.Activity;
-import android.graphics.Rect;
-import android.view.MotionEvent;
-import android.view.View;
 import okosama.app.action.IViewAction;
+import android.app.Activity;
+import android.view.View;
 
 /**
- * ‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å—˜—p‚·‚éƒ{ƒ^ƒ“‚Ìƒnƒ“ƒhƒ‹
- * Bridgeƒpƒ^[ƒ“‚ğ“K—p
+ * ï¿½ï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Å—ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½ï¿½Ìƒnï¿½ï¿½ï¿½hï¿½ï¿½
+ * Bridgeï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½Kï¿½p
  * @author 25689
  *
  */
@@ -20,12 +18,12 @@ public class Button extends absWidget {
 	}
 	
 	/**
-	 * À‘•ƒNƒ‰ƒX
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 	 */
 	private ButtonImpl impl;
 
 	/**
-	 * À‘•ƒNƒ‰ƒX‚Ìİ’è
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½Ìİ’ï¿½
 	 * @param impl
 	 */
 	public void setImpl(ButtonImpl impl) {
@@ -33,7 +31,7 @@ public class Button extends absWidget {
 	}
 	
 	/**
-	 * —LŒø–³Œø§Œä
+	 * ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param b
 	 */
 	@Override
@@ -42,7 +40,7 @@ public class Button extends absWidget {
 		impl.setEnabled(b);
 	}
 	/**
-	 * •\¦§Œä
+	 * ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param b
 	 */
 	@Override
@@ -59,7 +57,7 @@ public class Button extends absWidget {
 	}
 	@Override
 	public int create() {
-		// TODO ‚à‚Á‚Æ”Ä—p«‚Ì‚ ‚é‚â‚è•û‚É‚Å‚«‚é‚Í‚¸
+		// TODO ï¿½ï¿½ï¿½ï¿½ï¿½Æ”Ä—pï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚Å‚ï¿½ï¿½ï¿½Í‚ï¿½
 		impl = new ButtonImpl(activity);
 		return 0;
 	}
@@ -82,7 +80,7 @@ public class Button extends absWidget {
 			impl.setOnClickListener(new View.OnClickListener() {
 	            @Override
 				public void onClick(View v) {
-	                // ƒNƒŠƒbƒN‚Ìˆ—
+	                // ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
 	            	actionMap.get( IViewAction.ACTION_ID_ONCLICK )
 	            		.doAction(v);
 	            }
@@ -123,8 +121,8 @@ public class Button extends absWidget {
 							&& Math.abs(diffX) <= FLICK_RECOGNIZED_RANGE_HIGH )
 							)
 						{
-							// X‚ªƒtƒŠƒbƒN’†
-							// ‚½‚¾‚µAY‚É‚àƒtƒŠƒbƒN’†‚È‚ç‚ÎA•ª‚©‚ç‚È‚¢‚Ì‚ÅA“ü—Í‰ğœ
+							// Xï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½
+							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½AYï¿½É‚ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½È‚ï¿½ÎAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì‚ÅAï¿½ï¿½ï¿½Í‰ï¿½ï¿½ï¿½
 							if(
 								( FLICK_RECOGNIZED_RANGE_LOW <= Math.abs(diffY) 
 								&& Math.abs(diffY) <= FLICK_RECOGNIZED_RANGE_HIGH )
@@ -136,12 +134,12 @@ public class Button extends absWidget {
 								
 								if( diffX < 0 )
 								{
-									// ¶
+									// ï¿½ï¿½
 									iActionType = IViewAction.ACTION_ID_ONFLICKRIGHT;
 								}
 								else
 								{
-									// ‰E
+									// ï¿½E
 									iActionType = IViewAction.ACTION_ID_ONFLICKRIGHT;
 								}
 							}
@@ -150,16 +148,16 @@ public class Button extends absWidget {
 								&& Math.abs(diffY) <= FLICK_RECOGNIZED_RANGE_HIGH )
 								)
 						{
-							// Y‚ªƒtƒŠƒbƒN’†
-							// ‚½‚¾‚µAX‚É‚àƒtƒŠƒbƒN’†‚È‚ç‚ÎA•ª‚©‚ç‚È‚¢‚Ì‚ÅA“ü—Í‰ğœ‚¾‚ªA‚±‚±‚É—ˆ‚Ä‚¢‚é“_‚Å‚»‚Ìƒpƒ^[ƒ“‚Å‚Í‚È‚¢
+							// Yï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½
+							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½AXï¿½É‚ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½È‚ï¿½ÎAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì‚ÅAï¿½ï¿½ï¿½Í‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½É—ï¿½ï¿½Ä‚ï¿½ï¿½éï¿½_ï¿½Å‚ï¿½ï¿½Ìƒpï¿½^ï¿½[ï¿½ï¿½ï¿½Å‚Í‚È‚ï¿½
 							if( diffY < 0 )
 							{
-								// ‰º
+								// ï¿½ï¿½
 								iActionType = IViewAction.ACTION_ID_ONFLICKDOWN;
 							}
 							else
 							{
-								// ã
+								// ï¿½ï¿½
 								iActionType = IViewAction.ACTION_ID_ONFLICKUP;
 							}
 						}
@@ -192,7 +190,7 @@ public class Button extends absWidget {
 							}
 		                }
 					}
-					// •K‚¸android‚Éˆ—‚ğ‚Â‚È‚®
+					// ï¿½Kï¿½ï¿½androidï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚È‚ï¿½
 					return false;
 //					}
 //					return false;

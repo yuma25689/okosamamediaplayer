@@ -19,14 +19,14 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ImageView.ScaleType;
 
 /**
- * ƒ^ƒu‚ğ–Í•í‚µ‚½ƒNƒ‰ƒXB‚±‚ÌƒNƒ‰ƒX‚Í•\¦‚ğ‚½‚È‚¢B
- * ƒ^ƒu‚Æ‚¢‚¤‚æ‚è‚ÍAMediator‚É‹ß‚¢B
- * ƒ^ƒu‚Ìì¬‚¨‚æ‚ÑAƒ^ƒuã‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì—LŒø/–³ŒøA•\¦/”ñ•\¦‚Ì‚İ‚ğ§Œä‚·‚é
+ * ï¿½^ï¿½uï¿½ï¿½Í•í‚µï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½Bï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½Í•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½B
+ * ï¿½^ï¿½uï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÍAMediatorï¿½É‹ß‚ï¿½ï¿½B
+ * ï¿½^ï¿½uï¿½Ìì¬ï¿½ï¿½ï¿½ï¿½ÑAï¿½^ï¿½uï¿½ï¿½ÌƒRï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½Ì—Lï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½\ï¿½ï¿½/ï¿½ï¿½\ï¿½ï¿½ï¿½Ì‚İ‚ğ§Œä‚·ï¿½ï¿½
  * @author 25689
  *
  */
@@ -76,8 +76,8 @@ public class Tab extends TabComponentParent {
 	}
 	
 	/**
-	 * ƒ^ƒu‘S‘Ì‚Ìì¬
-	 * @return 0:³í 0ˆÈŠO:ˆÙí
+	 * ï¿½^ï¿½uï¿½Sï¿½Ì‚Ìì¬
+	 * @return 0:ï¿½ï¿½ï¿½ï¿½ 0ï¿½ÈŠO:ï¿½Ùï¿½
 	 */
 	@Override
 	public int create(int panelLayoutId) {
@@ -86,19 +86,19 @@ public class Tab extends TabComponentParent {
 		OkosamaMediaPlayerActivity act 
 		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 
-		// ƒ^ƒu‚Ìƒpƒlƒ‹‚ğì¬
+		// ï¿½^ï¿½uï¿½Ìƒpï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ì¬
 		LayoutInflater inflator = act.getLayoutInflater();
 		tabBaseLayout = (ViewGroup)inflator.inflate(panelLayoutId, null, false);
-		// ƒpƒlƒ‹ˆÊ’u‚Ìİ’è(FILL_PARENT)
+		// ï¿½pï¿½lï¿½ï¿½ï¿½Ê’uï¿½Ìİ’ï¿½(FILL_PARENT)
 		RelativeLayout.LayoutParams lp 
 		= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
         		0, 0
         );
 		tabBaseLayout.setLayoutParams(lp);
-		// ƒ^ƒuƒ{ƒ^ƒ“‚ğ’u‚­ƒwƒbƒ_‚Æ‚È‚éƒŒƒCƒAƒEƒg
+		// ï¿½^ï¿½uï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½wï¿½bï¿½_ï¿½Æ‚È‚éƒŒï¿½Cï¿½Aï¿½Eï¿½g
 		RelativeLayout rlHdr = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_header);
-		// ƒ^ƒu‚Ìƒ{ƒ^ƒ“‚¾‚¯‚Í‚±‚±‚Åì‚éH
-		// ƒvƒŒƒCƒ^ƒuƒ{ƒ^ƒ“
+		// ï¿½^ï¿½uï¿½Ìƒ{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½Åï¿½ï¿½H
+		// ï¿½vï¿½ï¿½ï¿½Cï¿½^ï¿½uï¿½{ï¿½^ï¿½ï¿½
 		mapBtn.put( TabPage.TABPAGE_ID_PLAY, DroidWidgetKit.getInstance().MakeButton() );
 		TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
 			ControlIDs.PLAY_TAB_BUTTON, null, ComponentType.BUTTON, 
@@ -114,7 +114,7 @@ public class Tab extends TabComponentParent {
 				TabPage.TABPAGE_ID_PLAY ) );
 		mapBtn.get(TabPage.TABPAGE_ID_PLAY).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
 		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_PLAY).getView());
-		// ƒLƒ…[ƒ^ƒuƒ{ƒ^ƒ“
+		// ï¿½Lï¿½ï¿½ï¿½[ï¿½^ï¿½uï¿½{ï¿½^ï¿½ï¿½
 		mapBtn.put( TabPage.TABPAGE_ID_NOW_PLAYLIST, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData
 		= new TabComponentPropertySetter(
@@ -131,7 +131,7 @@ public class Tab extends TabComponentParent {
 		mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
 		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_NOW_PLAYLIST).getView());
 		
-		// ƒƒfƒBƒAƒ^ƒuƒ{ƒ^ƒ“
+		// ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½^ï¿½uï¿½{ï¿½^ï¿½ï¿½
 		mapBtn.put( TabPage.TABPAGE_ID_MEDIA, DroidWidgetKit.getInstance().MakeButton() );
 		tabBtnCreationData
 		= new TabComponentPropertySetter(
@@ -147,7 +147,7 @@ public class Tab extends TabComponentParent {
 				this.getInternalID(), TabPage.TABPAGE_ID_MEDIA ) );
 		mapBtn.get(TabPage.TABPAGE_ID_MEDIA).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
 		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_MEDIA).getView());
-		// ƒRƒ“ƒgƒ[ƒ‰ƒ{ƒ^ƒ“
+		// ï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½
 		mapBtn.put( TabPage.TABPAGE_ID_CONTROLLER, act.getControllerShowHideBtn() );
 		tabBtnCreationData
 		= new TabComponentPropertySetter(
@@ -163,7 +163,7 @@ public class Tab extends TabComponentParent {
 		mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).acceptConfigurator(new TabComponentActionSetter( actMapTemp ));
 		OkosamaMediaPlayerActivity.removeFromParent(mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).getView());
 		rlHdr.addView(mapBtn.get(TabPage.TABPAGE_ID_CONTROLLER).getView());				
-		// ŒŸõƒpƒlƒ‹•\¦ƒ{ƒ^ƒ“
+		// ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½lï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½
 		mapBtn.put( TabPage.TABPAGE_ID_SEARCH, act.getSearchPanelShowHideBtn() );
 		tabBtnCreationData
 		= new TabComponentPropertySetter(
@@ -182,40 +182,40 @@ public class Tab extends TabComponentParent {
 		
 		RelativeLayout rlCont = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_contents);
 		
-		// ƒ^ƒu‚Ì’Ç‰Á
+		// ï¿½^ï¿½uï¿½Ì’Ç‰ï¿½
 		addChild( TabPage.TABPAGE_ID_PLAY, 
 				new TabPagePlay2( this, pageContainer, rlCont ) );
 		addChild( TabPage.TABPAGE_ID_NOW_PLAYLIST, 
 				new TabPageNowPlaylist( this, pageContainer, rlCont ));
 		addChild( TabPage.TABPAGE_ID_MEDIA, 
 				new TabPageMedia( this, pageContainer, rlCont ) );//new TabPageMedia( this, pageContainer, rlCont ) );
-		// ƒ^ƒuƒy[ƒW‚ÍAsetCurrentTab‚ğ“Ç‚ñ‚¾AƒAƒNƒeƒBƒu‚È‚à‚Ì‚¾‚¯‚ªì‚ç‚ê‚éB
-		// ‚È‚º‚©ƒ^ƒuƒy[ƒW‚Ìcreate‚ÍŒÄ‚ñ‚Å‚Í‚¢‚¯‚È‚¢‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½B
-		// ‚Ü‚½Acreate‚Ìƒ^ƒuID‚Í•s–¾‚È‚Ì‚ÅAsetCurrentTab‚Í‚±‚±‚Å‚ÍŒÄ‚Î‚¸AãˆÊ‚ÉŒÄ‚Î‚¹‚éB
+		// ï¿½^ï¿½uï¿½yï¿½[ï¿½Wï¿½ÍAsetCurrentTabï¿½ï¿½Ç‚ñ‚¾ï¿½ï¿½Aï¿½Aï¿½Nï¿½eï¿½Bï¿½uï¿½È‚ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+		// ï¿½È‚ï¿½ï¿½ï¿½ï¿½^ï¿½uï¿½yï¿½[ï¿½Wï¿½ï¿½createï¿½ÍŒÄ‚ï¿½Å‚Í‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Æ‚É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B
+		// ï¿½Ü‚ï¿½ï¿½Acreateï¿½ï¿½ï¿½Ìƒ^ï¿½uIDï¿½Í•sï¿½ï¿½ï¿½È‚Ì‚ÅAsetCurrentTabï¿½Í‚ï¿½ï¿½ï¿½ï¿½Å‚ÍŒÄ‚Î‚ï¿½ï¿½Aï¿½ï¿½Ê‚ÉŒÄ‚Î‚ï¿½ï¿½ï¿½B
 		
 		// rlCont.setBackgroundResource(R.color.gradiant_base);
-		// VideoView‚ÍAg‚í‚È‚¢‚ªAÅ‰‚É“Ë‚Á‚Ş‚Æ‚«‚É‚È‚º‚©‰æ–Ê‚ªƒuƒ‰ƒbƒNƒAƒEƒg‚·‚é‚Ì‚ÅA
-		// ‚±‚±‚ÅÅ‰‚É“Ë‚Á‚ñ‚Å‚¨‚­i‚±‚±‚Í‹N“®‚É‚­‚é‚Æ‚±‚ë‚È‚Ì‚ÅAƒuƒ‰ƒbƒNƒAƒEƒg‚µ‚Ä‚à•s©‘R‚³‚ª‚È‚¢‚Æv‚í‚ê‚éj
+		// VideoViewï¿½ÍAï¿½gï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Aï¿½Åï¿½ï¿½É“Ë‚ï¿½ï¿½ï¿½ï¿½Ş‚Æ‚ï¿½ï¿½É‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½Ê‚ï¿½ï¿½uï¿½ï¿½ï¿½bï¿½Nï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½ï¿½Ì‚ÅA
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ÅÅï¿½ï¿½É“Ë‚ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½Í‹Nï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½È‚Ì‚ÅAï¿½uï¿½ï¿½ï¿½bï¿½Nï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½Ä‚ï¿½ï¿½sï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ævï¿½ï¿½ï¿½ï¿½j
 		SurfaceView videoView 
 		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoView();
 		videoView.setVisibility(View.GONE);
 		OkosamaMediaPlayerActivity.removeFromParent( videoView );
 
-		// ƒ^ƒu‚Ìƒpƒlƒ‹‚ğe‚©‚ç—^‚¦‚ç‚ê‚½ƒŒƒCƒAƒEƒg‚É’Ç‰Á
+		// ï¿½^ï¿½uï¿½Ìƒpï¿½lï¿½ï¿½ï¿½ï¿½eï¿½ï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½É’Ç‰ï¿½
 		componentContainer.addView(tabBaseLayout);		
 		return errCode;
 	}
 	
 	int lastSelectedTabIndexForEnableAllTab = 0;
 	/**
-	 * ƒ^ƒuØ‚è‘Ö‚¦’†‚ÌƒƒbƒN‚¾‚ªA–{—ˆ‚ÍŒ³‚ÌEnable‚ğl—¶‚µ‚½§Œä‚ª•K—v
+	 * ï¿½^ï¿½uï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½{ï¿½ï¿½ï¿½ÍŒï¿½ï¿½ï¿½Enableï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä‚ªï¿½Kï¿½v
 	 * @param bEnable
 	 */
 	public void setEnableAllTab(boolean bEnable,int iTabPageId)
 	{
 		for( int i=0; i < mapBtn.size(); ++i )
 		{
-			// ‚ ‚Ü‚è‚æ‚­‚È‚¢‚ªA‘I‘ğ’†‚Ìƒ^ƒuƒ{ƒ^ƒ“‚ÍA‚±‚±‚ÅEnable=true‚É‚Í‚³‚¹‚È‚¢
+			// ï¿½ï¿½ï¿½Ü‚ï¿½æ‚­ï¿½È‚ï¿½ï¿½ï¿½ï¿½Aï¿½Iï¿½ğ’†‚Ìƒ^ï¿½uï¿½{ï¿½^ï¿½ï¿½ï¿½ÍAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Enable=trueï¿½É‚Í‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 			if( bEnable == true )
 			{
 				if( //iCurrentTabPageId == mapBtn.keyAt(i) )
@@ -231,8 +231,8 @@ public class Tab extends TabComponentParent {
 	}
 	
 	/**
-	 * Œ»İ‚Ìƒ^ƒu‚ğİ’è‚·‚é
-	 * Œ»óATabSelectAction‚Å‚ÍŒ‹‹Ç‚±‚ê‚ªŒÄ‚Î‚ê‚é
+	 * ï¿½ï¿½ï¿½İ‚Ìƒ^ï¿½uï¿½ï¿½İ’è‚·ï¿½ï¿½
+	 * ï¿½ï¿½ï¿½ï¿½ATabSelectActionï¿½Å‚ÍŒï¿½ï¿½Ç‚ï¿½ï¿½ê‚ªï¿½Ä‚Î‚ï¿½ï¿½
 	 * @param tabPageId
 	 */
 	public void setCurrentTab(int tabPageId,boolean save)
@@ -249,21 +249,21 @@ public class Tab extends TabComponentParent {
 	                MusicSettingsActivity.PREFERENCES_FILE, Context.MODE_PRIVATE);
 	        bAnimExec = prefs.getBoolean(MusicSettingsActivity.KEY_ENABLE_ANIMATION, false);
 						
-			// ˆê“x‘S‚Ä‚Ìƒ^ƒu‚Ì‘I‘ğ‚ğ‰ğœ
+			// ï¿½ï¿½xï¿½Sï¿½Ä‚Ìƒ^ï¿½uï¿½Ì‘Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			if( null != children.get(iCurrentTabPageId,null) )
 			{
-	    		// Œ»İ‘I‘ğ’†‚Ìƒ^ƒu‚Ìƒ^ƒuƒy[ƒW‚ğƒNƒŠƒA‚·‚é
+	    		// ï¿½ï¿½ï¿½İ‘Iï¿½ğ’†‚Ìƒ^ï¿½uï¿½Ìƒ^ï¿½uï¿½yï¿½[ï¿½Wï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½
 				children.get(iCurrentTabPageId).setActivate(false);
 				bOutExec = true;
 	   		}
-			// Œ»İ‘I‘ğ’†‚Ìƒ^ƒu‚ğV‚µ‚¢‚à‚Ì‚Éİ’è‚·‚é
+			// ï¿½ï¿½ï¿½İ‘Iï¿½ğ’†‚Ìƒ^ï¿½uï¿½ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Éİ’è‚·ï¿½ï¿½
 			if( null != children.get(tabPageId,null) )
 			{
 				children.get(tabPageId).setActivate(true);
 	   		}
 			iCurrentTabPageId = tabPageId;
-			// ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚É‘I‘ğ‚³‚ê‚½ƒ^ƒu‚Ì‰æ–ÊID‚ğİ’è‚·‚é
-			// ‚±‚ÌêŠ‚¾‚¯‚Å‚¢‚¢‚©‚Ç‚¤‚©‚Í•s–¾
+			// ï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½É‘Iï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½^ï¿½uï¿½Ì‰ï¿½ï¿½IDï¿½ï¿½İ’è‚·ï¿½ï¿½
+			// ï¿½ï¿½ï¿½ÌêŠï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Í•sï¿½ï¿½
 	        if( save == true )
 	        {
 	    		OkosamaMediaPlayerActivity act 
@@ -279,7 +279,7 @@ public class Tab extends TabComponentParent {
 
 	}
 	/**
-	 * ‚±‚Ìƒ^ƒu‚ğ”jŠü‚·‚é
+	 * ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public void destroy()
 	{

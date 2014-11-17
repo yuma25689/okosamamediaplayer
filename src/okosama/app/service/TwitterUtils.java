@@ -16,12 +16,6 @@ public class TwitterUtils {
     private static final String TOKEN_SECRET = "token_secret";
     private static final String PREF_NAME = "twitter_access_token";
 
-    /**
-     * TwitterƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚µ‚Ü‚·BƒAƒNƒZƒXƒg[ƒNƒ“‚ª•Û‘¶‚³‚ê‚Ä‚¢‚ê‚Î©“®“I‚ÉƒZƒbƒg‚µ‚Ü‚·B
-     * 
-     * @param context
-     * @return
-     */
     public static Twitter getTwitterInstance(Context context) {
         String consumerKey = context.getString(R.string.twitter_consumer_key);
         String consumerSecret = context.getString(R.string.twitter_consumer_secret);
@@ -43,7 +37,7 @@ public class TwitterUtils {
         return twitter;
     }
     /**
-     * OAuthƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚µ‚Ü‚·B
+     * OAuthï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
      * 
      * @param context
      * @return
@@ -56,23 +50,17 @@ public class TwitterUtils {
         Log.d("consumerSecret",consumerSecret);
         ConfigurationBuilder conf = new ConfigurationBuilder().setUseSSL(true);
         OAuthAuthorization _oauth = null;
-        //Twitetr4j‚Ìİ’è‚ğ“Ç‚İ‚Ş
+        //Twitetr4jï¿½Ìİ’ï¿½ï¿½Ç‚İï¿½ï¿½ï¿½
         //Configuration conf = ConfigurationContext.getInstance();
  
-        //Oauth”FØƒIƒuƒWƒFƒNƒgì¬
+        //Oauthï¿½Fï¿½ØƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ì¬
         _oauth = new OAuthAuthorization(conf.build());
-        //Oauth”FØƒIƒuƒWƒFƒNƒg‚ÉconsumerKey‚ÆconsumerSecret‚ğİ’è
+        //Oauthï¿½Fï¿½ØƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½consumerKeyï¿½ï¿½consumerSecretï¿½ï¿½İ’ï¿½
         _oauth.setOAuthConsumer(consumerKey, consumerSecret);
         _oauth.setOAuthAccessToken(null);
         return _oauth;
     }
 
-    /**
-     * ƒAƒNƒZƒXƒg[ƒNƒ“‚ğƒvƒŠƒtƒ@ƒŒƒ“ƒX‚É•Û‘¶‚µ‚Ü‚·B
-     * 
-     * @param context
-     * @param accessToken
-     */
     public static void storeAccessToken(Context context, AccessToken accessToken) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME,
                 Context.MODE_PRIVATE);
@@ -82,12 +70,7 @@ public class TwitterUtils {
         editor.commit();
     }
 
-    /**
-     * ƒAƒNƒZƒXƒg[ƒNƒ“‚ğƒvƒŠƒtƒ@ƒŒƒ“ƒX‚©‚ç“Ç‚İ‚İ‚Ü‚·B
-     * 
-     * @param context
-     * @return
-     */
+
     public static AccessToken loadAccessToken(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME,
                 Context.MODE_PRIVATE);
@@ -100,11 +83,7 @@ public class TwitterUtils {
         }
     }
 
-    /**
-     * ƒAƒNƒZƒXƒg[ƒNƒ“‚ª‘¶İ‚·‚éê‡‚Ítrue‚ğ•Ô‚µ‚Ü‚·B
-     * 
-     * @return
-     */
+
     public static boolean hasAccessToken(Context context) {
         return loadAccessToken(context) != null;
     }

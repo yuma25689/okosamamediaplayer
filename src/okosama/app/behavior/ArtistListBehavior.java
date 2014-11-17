@@ -1,20 +1,8 @@
 package okosama.app.behavior;
 
-import android.content.Intent;
-//import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.MenuItem;
-import android.view.SubMenu;
-import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.AdapterView;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import okosama.app.ControlIDs;
 import okosama.app.DeleteItems;
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.CreatePlaylist;
@@ -29,6 +17,19 @@ import okosama.app.storage.ArtistChildData;
 import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
+import android.content.Intent;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuItem;
+import android.view.SubMenu;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
+//import android.net.Uri;
 
 public class ArtistListBehavior extends IExpListBehavior implements Database.Defs {
 
@@ -37,7 +38,7 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	@Override
 	public void onItemClick(ExpandableListView parent, View v, int grouppos, int childpos, long id)
 	{
-		// ‚±‚ê‚ªchildclick‚Æ‚µ‚Äg‚í‚ê‚é
+		// ï¿½ï¿½ï¿½ê‚ªchildclickï¿½Æ‚ï¿½ï¿½Ägï¿½ï¿½ï¿½ï¿½
 		ArtistChildData data = 
 				(ArtistChildData)
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getArtistAdp().getChild(grouppos, childpos);
@@ -48,7 +49,7 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 			// Cursor cursor = Database.getInstance(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity()).getCursor(Database.ArtistCursorName);
 			// cursor.moveToPosition(grouppos);
 			mCurrentArtistId = data.getArtistId(); // cursor.getString(cursor.getColumnIndex(BaseColumns._ID));
-			// TODO: –{“–‚ÉAll‚Å‚¢‚¢‚Ì‚©‚Í”÷–­
+			// TODO: ï¿½{ï¿½ï¿½ï¿½ï¿½Allï¿½Å‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½Í”ï¿½ï¿½ï¿½
 			SearchPanel.getInstance().clearAllControlValue();
 			OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setArtistID(mCurrentArtistId);
 		}
@@ -80,38 +81,38 @@ public class ArtistListBehavior extends IExpListBehavior implements Database.Def
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfoIn) {
 		
 		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-		// TODO: ‚±‚±‚ÉExpandableListView‚ª“ü‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Í”÷–­B—vŠm”FB
+		// TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ExpandableListViewï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Í”ï¿½ï¿½ï¿½ï¿½Bï¿½vï¿½mï¿½Fï¿½B
 		ExpandableListView v = (ExpandableListView) view;
 //        Cursor artistCursor = Database.getInstance(activity).getCursor(Database.ArtistCursorName);
 //        if( artistCursor == null )
 //        {
-//        	Log.w("onCreateContextMenu - Artist","cursor is null");
+//        	LogWrapper.w("onCreateContextMenu - Artist","cursor is null");
 //        	return;
 //        }
 		// ArtistAlbumListAdapter adapter = activity.getArtistAdp();
         ArtistAlbumListRawAdapter adapter = activity.getArtistAdp();
 		if( adapter == null )
 		{
-        	Log.w("onCreateContextMenu - Artist","adapter is null");
+        	LogWrapper.w("onCreateContextMenu - Artist","adapter is null");
 			return;
 		}
         
-		// ‘I‘ğ‚µ‚½‚à‚Ì‚ğÄ¶
+		// ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½Äï¿½
         menu.add(0, PLAY_SELECTION, 0, R.string.play_selection);
-        // ƒvƒŒƒCƒŠƒXƒg‚É’Ç‰Á
+        // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½É’Ç‰ï¿½
         SubMenu sub = menu.addSubMenu(0, ADD_TO_PLAYLIST, 0, R.string.add_to_playlist);
         Database.makePlaylistMenu(activity, sub);
-        // íœ
+        // ï¿½íœ
         menu.add(0, DELETE_ITEM, 0, R.string.delete_item);
         
-        // ‘I‘ğ‚³‚ê‚½€–Ú‚ÌˆÊ’u‚ğæ“¾
+        // ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Ú‚ÌˆÊ’uï¿½ï¿½ï¿½æ“¾
         ExpandableListContextMenuInfo mi = (ExpandableListContextMenuInfo) menuInfoIn;
         
         int itemtype = ExpandableListView.getPackedPositionType(mi.packedPosition);
         int gpos = ExpandableListView.getPackedPositionGroup(mi.packedPosition);
         int cpos = ExpandableListView.getPackedPositionChild(mi.packedPosition);
         if (itemtype == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-        	// ƒOƒ‹[ƒv‚ª‘I‘ğ‚³‚ê‚½
+        	// ï¿½Oï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ê‚½
             if (gpos == -1) {
                 // this shouldn't happen
                 Log.d("Artist/Album", "no group");

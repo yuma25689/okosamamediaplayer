@@ -20,12 +20,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.view.KeyEvent;
 //import android.os.Handler;
 //import android.os.Message;
-import android.view.KeyEvent;
 
 /**
- * BroadcastReceiver‚ğŒp³BAudioManager.registerMediaButtonEventReceiver‚É“o˜^
+ * BroadcastReceiverï¿½ï¿½ï¿½pï¿½ï¿½ï¿½BAudioManager.registerMediaButtonEventReceiverï¿½É“oï¿½^
  */
 public class MediaButtonIntentReceiver extends BroadcastReceiver {
 
@@ -36,15 +36,15 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
     private static boolean mDown = false;
 //    private static boolean mLaunched = false;
 
-    // ƒnƒ“ƒhƒ‰‚Ìì¬
-    // ƒI[ƒgƒVƒƒƒbƒtƒ‹—p
-    // ¡‚Ì‚Æ‚±‚ëA‚±‚±‚Å‚ÍÀ‘•‚µ‚È‚¢
+    // ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Ìì¬
+    // ï¿½Iï¿½[ï¿½gï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½p
+    // ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Å‚Íï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 //    private static Handler mHandler = new Handler() {
 //        @Override
 //        public void handleMessage(Message msg) {
 //            switch (msg.what) {
 //                case MSG_LONGPRESS_TIMEOUT:
-//                	// ƒƒ“ƒOƒvƒŒƒXƒ^ƒCƒ€ƒAƒEƒg
+//                	// ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½vï¿½ï¿½ï¿½Xï¿½^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½g
 //                    if (!mLaunched) {
 //                        Context context = (Context)msg.obj;
 //                        Intent i = new Intent();
@@ -60,23 +60,23 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
 //    };
     
     /**
-     * óM
+     * ï¿½ï¿½Mï¿½ï¿½
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-    	// Action‚Ìæ“¾
+    	// Actionï¿½Ìæ“¾
         String intentAction = intent.getAction();
         if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intentAction)) {
         	// Broadcast intent, 
         	// a hint for applications that audio is about to become 'noisy' due to a change in audio outputs.
-        	// ƒT[ƒrƒX‚Éƒ|[ƒYƒRƒ}ƒ“ƒh‚ğ“Š‚°‚é
+        	// ï¿½Tï¿½[ï¿½rï¿½Xï¿½Éƒ|ï¿½[ï¿½Yï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ğ“Š‚ï¿½ï¿½ï¿½
             Intent i = new Intent(context, MediaPlaybackService.class);
             i.setAction(MediaPlaybackService.SERVICECMD);
             i.putExtra(MediaPlaybackService.CMDNAME, MediaPlaybackService.CMDPAUSE);
             context.startService(i);
         } else if (Intent.ACTION_MEDIA_BUTTON.equals(intentAction)) {
         	// MediaButton
-        	// ƒL[ƒCƒxƒ“ƒg‚Ìæ“¾
+        	// ï¿½Lï¿½[ï¿½Cï¿½xï¿½ï¿½ï¿½gï¿½Ìæ“¾
             KeyEvent event = (KeyEvent)
                     intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
             
@@ -84,7 +84,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
                 return;
             }
 
-            // event‚©‚çAƒL[ƒR[ƒhAƒAƒNƒVƒ‡ƒ“AƒCƒxƒ“ƒgŠÔ‚ğæ“¾
+            // eventï¿½ï¿½ï¿½ï¿½Aï¿½Lï¿½[ï¿½Rï¿½[ï¿½hï¿½Aï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Cï¿½xï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ô‚ï¿½ï¿½æ“¾
             int keycode = event.getKeyCode();
             int action = event.getAction();
             long eventtime = event.getEventTime();
@@ -96,22 +96,22 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
             String command = null;
             switch (keycode) {
                 case KeyEvent.KEYCODE_MEDIA_STOP:
-                	// Stopƒ{ƒ^ƒ“‚È‚ç‚Î
-                	// ƒXƒgƒbƒvƒRƒ}ƒ“ƒh‚ğŠi”[
+                	// Stopï¿½{ï¿½^ï¿½ï¿½ï¿½È‚ï¿½ï¿½
+                	// ï¿½Xï¿½gï¿½bï¿½vï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½iï¿½[
                     command = MediaPlaybackService.CMDSTOP;
                     break;
                 case KeyEvent.KEYCODE_HEADSETHOOK:
-                	// ƒwƒbƒhƒZƒbƒgŠ„‚è‚İƒL[H
+                	// ï¿½wï¿½bï¿½hï¿½Zï¿½bï¿½gï¿½ï¿½ï¿½èï¿½İƒLï¿½[ï¿½H
                 case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                	// ƒgƒOƒ‹ƒ|[ƒYƒRƒ}ƒ“ƒh
+                	// ï¿½gï¿½Oï¿½ï¿½ï¿½|ï¿½[ï¿½Yï¿½Rï¿½}ï¿½ï¿½ï¿½h
                     command = MediaPlaybackService.CMDTOGGLEPAUSE;
                     break;
                 case KeyEvent.KEYCODE_MEDIA_NEXT:
-                	// nextƒRƒ}ƒ“ƒh
+                	// nextï¿½Rï¿½}ï¿½ï¿½ï¿½h
                     command = MediaPlaybackService.CMDNEXT;
                     break;
                 case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                	// previousƒRƒ}ƒ“ƒh
+                	// previousï¿½Rï¿½}ï¿½ï¿½ï¿½h
                     command = MediaPlaybackService.CMDPREVIOUS;
                     break;
             }
@@ -119,18 +119,18 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
             if (command != null) {
                 if (action == KeyEvent.ACTION_DOWN) {
                     if (mDown) {
-                    	// Šù‚Éƒ_ƒEƒ“ƒtƒ‰ƒO‚ª‚½‚Á‚Ä‚¢‚é‚Ì‚É—ˆ‚½ƒŠƒs[ƒg
-                    	// autoshuffle—p‚Ìƒ\[ƒX‚È‚Ì‚ÅA¡‚Ì‚Æ‚±‚ëÀ‘•‚µ‚È‚¢‚à‚Ì‚Æ‚·‚é
+                    	// ï¿½ï¿½ï¿½Éƒ_ï¿½Eï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚É—ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½[ï¿½g
+                    	// autoshuffleï¿½pï¿½Ìƒ\ï¿½[ï¿½Xï¿½È‚Ì‚ÅAï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ï¿½
 //                        if (MediaPlaybackService.CMDTOGGLEPAUSE.equals(command)
 //                                && mLastClickTime != 0 
 //                                && eventtime - mLastClickTime > LONG_PRESS_DELAY) {
-//                        	// ƒgƒOƒ‹ƒ|[ƒYƒ{ƒ^ƒ“‚ğƒƒ“ƒOƒvƒŒƒX‚ÍAƒƒ“ƒOƒvƒŒƒXƒ^ƒCƒ€ƒAƒEƒg‚ğƒnƒ“ƒhƒ‰‚É‘—M
+//                        	// ï¿½gï¿½Oï¿½ï¿½ï¿½|ï¿½[ï¿½Yï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½vï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ÍAï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½vï¿½ï¿½ï¿½Xï¿½^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½É‘ï¿½ï¿½M
 //                            mHandler.sendMessage(
 //                                    mHandler.obtainMessage(MSG_LONGPRESS_TIMEOUT, context));
 //                        }
                     } else {
                         // if this isn't a repeat event
-                    	// ‰‰ñ‚Í‚±‚¿‚ç
+                    	// ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½
 
                         // The service may or may not be running, but we need to send it
                         // a command.
@@ -144,7 +144,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
                             context.startService(i);
                             mLastClickTime = 0;
                         } else {
-                        	// ‚³‚Á‚«Ši”[‚µ‚½ƒRƒ}ƒ“ƒh‚ğ“Š‚°‚é
+                        	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ğ“Š‚ï¿½ï¿½ï¿½
                             i.putExtra(MediaPlaybackService.CMDNAME, command);
                             context.startService(i);
                             mLastClickTime = eventtime;

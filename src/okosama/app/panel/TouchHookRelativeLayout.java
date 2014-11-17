@@ -13,9 +13,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
-// import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+// import android.view.View;
 
 public class TouchHookRelativeLayout extends RelativeLayout {
 
@@ -30,7 +30,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	
 	public static final int SHOW_MOVEINFO_RECOGNIZE_PLAY_LEFT = 5;
 	public static final int SHOW_MOVEINFO_RECOGNIZE_PLAY_RIGHT = 5;
-	// ƒtƒŠƒbƒN‚Å‚Ç‚ê‚¾‚¯“®‚©‚µ‚½Œã‚Å—£‚µ‚½‚ç—×‚Ìƒ^ƒu‚ÖˆÚ“®‚·‚é‚©
+	// ï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½Å‚Ç‚ê‚¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å—ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚Ìƒ^ï¿½uï¿½ÖˆÚ“ï¿½ï¿½ï¿½ï¿½é‚©
 	public static final int MOVE_RECOGNIZE_PLAY_LEFT = 140;
 	public static final int MOVE_RECOGNIZE_PLAY_RIGHT =140;
 
@@ -48,10 +48,10 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	int orgY = 0;
 	int firstX = 0;
 	int firstY = 0;
-    int currentX;   //View‚Ì¶•ÓÀ•WFX²
-    int currentY;   //View‚Ìã•ÓÀ•WFY²
-    int offsetX;    //‰æ–Êƒ^ƒbƒ`ˆÊ’u‚ÌÀ•WFX²
-    int offsetY;    //‰æ–Êƒ^ƒbƒ`ˆÊ’u‚ÌÀ•WFY²
+    int currentX;   //Viewï¿½Ìï¿½ï¿½Óï¿½ï¿½Wï¿½FXï¿½ï¿½
+    int currentY;   //Viewï¿½Ìï¿½Óï¿½ï¿½Wï¿½FYï¿½ï¿½
+    int offsetX;    //ï¿½ï¿½Êƒ^ï¿½bï¿½`ï¿½Ê’uï¿½Ìï¿½ï¿½Wï¿½FXï¿½ï¿½
+    int offsetY;    //ï¿½ï¿½Êƒ^ï¿½bï¿½`ï¿½Ê’uï¿½Ìï¿½ï¿½Wï¿½FYï¿½ï¿½
 
 	public TouchHookRelativeLayout(Context context) {
 		super(context);
@@ -61,9 +61,9 @@ public class TouchHookRelativeLayout extends RelativeLayout {
     }
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent event)  {
-	    // ƒ^ƒbƒ`‚³‚ê‚½‚ç‚Ü‚¸onInterceptTouchEvent‚ªŒÄ‚Î‚ê‚é
-	    // ‚±‚±‚Åtrue‚ğ•Ô‚¹‚ÎeView‚ÌonTouchEvent
-	    // ‚±‚±‚Åfalse‚ğ•Ô‚¹‚ÎqView‚ÌonClick‚â‚çonLongClick‚â‚ç
+	    // ï¿½^ï¿½bï¿½`ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½Ü‚ï¿½onInterceptTouchEventï¿½ï¿½ï¿½Ä‚Î‚ï¿½ï¿½
+	    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½trueï¿½ï¿½Ô‚ï¿½ï¿½ÎeViewï¿½ï¿½onTouchEvent
+	    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½falseï¿½ï¿½Ô‚ï¿½ï¿½ÎqViewï¿½ï¿½onClickï¿½ï¿½ï¿½onLongClickï¿½ï¿½ï¿½
 		boolean bRet = false;
         int x = (int) event.getRawX();
         int y = (int) event.getRawY();
@@ -96,8 +96,8 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	}
 	@Override
 	public boolean onTouchEvent(MotionEvent event)  {
-	    // ‚±‚±‚Åtrue‚ğ•Ô‚·‚ÆƒCƒxƒ“ƒg‚Í‚±‚±‚ÅI—¹
-	    // ‚±‚±‚Åfalse‚ğ•Ô‚·‚ÆqView‚ÌonClick‚â‚çonLongClick‚â‚ç
+	    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½trueï¿½ï¿½Ô‚ï¿½ï¿½ÆƒCï¿½xï¿½ï¿½ï¿½gï¿½Í‚ï¿½ï¿½ï¿½ï¿½ÅIï¿½ï¿½
+	    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½falseï¿½ï¿½Ô‚ï¿½ï¿½ÆqViewï¿½ï¿½onClickï¿½ï¿½ï¿½onLongClickï¿½ï¿½ï¿½
 		boolean bRet = true;
         int x = (int) event.getRawX();
         int y = (int) event.getRawY();
@@ -113,21 +113,21 @@ public class TouchHookRelativeLayout extends RelativeLayout {
             // bRet = true;
             if( bLeftShow == false && SHOW_MOVEINFO_RECOGNIZE_PLAY_RIGHT < orgX - currentX )
             {
-                // ‰E‚Öˆê’èˆÈã‚Í‚È‚ê‚½‚çƒ^ƒu‚ÌˆÚ“®‚Ì•\¦‚ğŠJn
+                // ï¿½Eï¿½Öˆï¿½ï¿½Èï¿½Í‚È‚ê‚½ï¿½ï¿½^ï¿½uï¿½ÌˆÚ“ï¿½ï¿½Ì•\ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½n
             	//bShow = 
             	updateTabInfoPanel( MoveTabInfo.RIGHT_1 );
             }
             else if( bRightShow == false && SHOW_MOVEINFO_RECOGNIZE_PLAY_LEFT < orgX + currentX )
             {
-                // ¶‚Öˆê’èˆÈã‚Í‚È‚ê‚½‚çƒ^ƒu‚ÌˆÚ“®‚Ì•\¦‚ğŠJn
+                // ï¿½ï¿½ï¿½Öˆï¿½ï¿½Èï¿½Í‚È‚ê‚½ï¿½ï¿½^ï¿½uï¿½ÌˆÚ“ï¿½ï¿½Ì•\ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½n
             	//bShow = 
             	updateTabInfoPanel( MoveTabInfo.LEFT_1 );
             }
 			layout( currentX, currentY, currentX + getWidth(), currentY + getHeight() );
 //            if( bShow == false )
 //            {
-//            	// ‚»‚êˆÈŠO‚Ìê‡AƒNƒŠƒAH
-//                // ‘S‚Ä‚Ìƒ^ƒuˆÚ“®ƒpƒlƒ‹î•ñ‚ğƒNƒŠƒA‚·‚é
+//            	// ï¿½ï¿½ï¿½ï¿½ÈŠOï¿½Ìê‡ï¿½Aï¿½Nï¿½ï¿½ï¿½Aï¿½H
+//                // ï¿½Sï¿½Ä‚Ìƒ^ï¿½uï¿½Ú“ï¿½ï¿½pï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½
 //                clearAllMoveTabInfoPanel();            	
 //            }
         	break;
@@ -137,7 +137,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	        break;
 	    case MotionEvent.ACTION_UP:
             layout(orgX, orgY, orgX + getWidth(), orgY + getHeight());
-            // •K—v‚ª‚ ‚éê‡Aƒ^ƒu‚ÌˆÚ“®‚ğs‚¤
+            // ï¿½Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½^ï¿½uï¿½ÌˆÚ“ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
 	    	if( nextMoveTabInfo != null )
 	    	{
 	    		IViewAction action = new TabSelectAction( 
@@ -146,11 +146,11 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	    		action.doAction(null);
 	    		nextMoveTabInfo = null;
 	    	}
-            // ‘S‚Ä‚Ìƒ^ƒuˆÚ“®ƒpƒlƒ‹î•ñ‚ğƒNƒŠƒA‚·‚é
+            // ï¿½Sï¿½Ä‚Ìƒ^ï¿½uï¿½Ú“ï¿½ï¿½pï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½
             clearAllMoveTabInfoPanel();
             
-            // ‚±‚±‚É“ü‚ê‚é‚Ì‚Íc”O‚¾‚ªAPlayƒ^ƒu‚Ìê‡A
-            // •K—v‚ª‚ ‚ê‚Îƒrƒ…[ƒ^ƒbƒv‚ÉƒRƒ“ƒpƒl•\¦‚ğÁ‹‚·‚é
+            // ï¿½ï¿½ï¿½ï¿½ï¿½É“ï¿½ï¿½ï¿½ï¿½Ì‚Ícï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½APlayï¿½^ï¿½uï¿½Ìê‡ï¿½A
+            // ï¿½Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îƒrï¿½ï¿½ï¿½[ï¿½^ï¿½bï¿½vï¿½ï¿½ï¿½ÉƒRï¿½ï¿½ï¿½pï¿½lï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             ITabComponent page = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getCurrentTabPage();
             if( page != null && page instanceof TabPagePlay )
             {
@@ -174,13 +174,13 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	
 	RelativeLayout rlPanel = null;
 	/**
-	 * ˆÚ“®æƒ^ƒuî•ñ•\¦ƒpƒlƒ‹‚Ìİ’è
-	 * @return true:¬Œ÷ false:¸”s
+	 * ï¿½Ú“ï¿½ï¿½ï¿½^ï¿½uï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½pï¿½lï¿½ï¿½ï¿½Ìİ’ï¿½
+	 * @return true:ï¿½ï¿½ï¿½ï¿½ false:ï¿½ï¿½ï¿½s
 	 * @param iMoveTabIdx
 	 */
 	public boolean updateTabInfoPanel(int iMoveTabIdx)
 	{
-		// ƒpƒlƒ‹‚É•\¦‚·‚éî•ñ‚ğæ“¾‚·‚é
+		// ï¿½pï¿½lï¿½ï¿½ï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
     	if( 0 <= mapMoveTabIdIdx.indexOfKey( iMoveTabIdx ))//MoveTabInfo.RIGHT_1 ))
     	{
     		MoveTabInfo ti = mapMoveTabIdIdx.get( iMoveTabIdx );
@@ -191,16 +191,16 @@ public class TouchHookRelativeLayout extends RelativeLayout {
     				&& ti.getPanelId() != null
     				&& ti.getImageViewId() != null )
     		{
-    			// ƒ^ƒu‚ªƒƒbƒN’†‚È‚ç‚ÎAˆÚ“®‚Å‚«‚È‚¢‚à‚Ì‚Æ‚·‚é
+    			// ï¿½^ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½È‚ï¿½ÎAï¿½Ú“ï¿½ï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ï¿½
     			Tab tab = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabStocker().getTab(ti.getTabId());
     			if( tab.isLocking() )
     			{
     				return false;
     			}
-    			// ‚Ü‚¾ƒ^ƒuî•ñƒpƒlƒ‹‚ª•\¦‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î
+    			// ï¿½Ü‚ï¿½ï¿½^ï¿½uï¿½ï¿½ï¿½pï¿½lï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½
     			if( ti.isShowing() == false )
     			{
-	    			// TODO:‚½‚Ô‚ñA‹¤’Ê‰»‚Å‚«‚é
+	    			// TODO:ï¿½ï¿½ï¿½Ô‚ï¿½Aï¿½ï¿½ï¿½Ê‰ï¿½ï¿½Å‚ï¿½ï¿½ï¿½
 	    			if( ti.tabInfoIndex == MoveTabInfo.RIGHT_1 && bLeftShow == false )
 	    			{
 	    				//TabMoveRightInfoPanel.insertToLayout(this);
@@ -214,20 +214,20 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	        			rlPanel = (RelativeLayout) findViewById( ti.getPanelId() );
 	    			}
     			}
-            	// ƒ^ƒuæ“¾
+            	// ï¿½^ï¿½uï¿½æ“¾
         		if( rlPanel != null )
         		{
         			/*
         			if( ti.isShowing() == false )
         			{
-	        			// ƒpƒlƒ‹‚ÌƒCƒ[ƒW‚ğİ’è
+	        			// ï¿½pï¿½lï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½İ’ï¿½
 	        			ImageView iv = (ImageView) rlPanel.findViewById( ti.getImageViewId() );
 	        			if( false )//iv != null )
 	        			{
 	        				if( ti.getTabImageResId() != null )
 	        				{
-	        					// ˆÚ“®æƒ^ƒu‚ÌƒCƒ[ƒW‚ªæ“¾‚Å‚«‚½ê‡
-	        					// ‚»‚ê‚ğAİ’è‚·‚é
+	        					// ï¿½Ú“ï¿½ï¿½ï¿½^ï¿½uï¿½ÌƒCï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ê‡
+	        					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½İ’è‚·ï¿½ï¿½
 	        					iv.setImageDrawable(
 	        							OkosamaMediaPlayerActivity.
 	        							getResourceAccessor().
@@ -250,7 +250,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	        					
 	        				}
 	        			}
-            			// ƒpƒlƒ‹‚ğ•\¦
+            			// ï¿½pï¿½lï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½
 	        			rlPanel.setVisibility(View.VISIBLE);
         			}*/
     				int parent_width = getWidth();
@@ -272,7 +272,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 					{
 						x = -1 * width + currentX;
 					}
-					// ‚È‚é‚×‚­ŠÈ’P‚ÈƒtƒŠƒbƒN‚Å“’B‚·‚é‚æ‚¤‚ÉAˆÚ“®—Ê‚ğFLICK_MOVE_SPEED”{‚·‚é
+					// ï¿½È‚ï¿½×‚ï¿½ï¿½È’Pï¿½Èƒtï¿½ï¿½ï¿½bï¿½Nï¿½Å“ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½ÉAï¿½Ú“ï¿½ï¿½Ê‚ï¿½FLICK_MOVE_SPEEDï¿½{ï¿½ï¿½ï¿½ï¿½
 					x = (int)(x * FLICK_MOVE_SPEED);
 		            x = limitMaxCurrentX( x );
 		            
@@ -302,8 +302,8 @@ public class TouchHookRelativeLayout extends RelativeLayout {
                 	if( ( bRightShow &&  border_right < -1 * currentX ) 
                 	|| ( bLeftShow && border_left < width + x ) )
                 	{
-                		// ¡—£‚µ‚½‚çˆÚ“®‚·‚éê‡
-                		// ”wŒi‚Ì“§–¾“x‚ğ‰º‚°‚é
+                		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ê‡
+                		// ï¿½wï¿½iï¿½Ì“ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 		rlPanel.setBackgroundColor(
                 			OkosamaMediaPlayerActivity.getResourceAccessor().getColor(color.move_info_move));
                 		nextMoveTabInfo = ti;
@@ -312,7 +312,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
                 	{
                 		Log.d("x","=" + x);
                 		Log.d("width","=" + width);
-                		// ‚»‚¤‚Å‚È‚¢
+                		// ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½
                 		rlPanel.setBackgroundColor(
                 			OkosamaMediaPlayerActivity.getResourceAccessor().getColor(color.move_info_moving));
                 		nextMoveTabInfo = null;
@@ -323,7 +323,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
     	return true;
 	}
 	/**
-	 * w’è‚³‚ê‚½X‚ª§ŒÀ‚ğ’´‚¦‚Ä‚¢‚½‚çA‚»‚Ì§ŒÀ‚¢‚Á‚Ï‚¢‚É‚µ‚Ä–ß‚·
+	 * ï¿½wï¿½è‚³ï¿½ê‚½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ğ’´‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï‚ï¿½ï¿½É‚ï¿½ï¿½Ä–ß‚ï¿½
 	 */
 	public int limitMaxCurrentX(int currentX)
 	{
@@ -347,7 +347,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
 	}
 	
 	/**
-	 * ‚±‚ÌƒŒƒCƒAƒEƒg‚Å•\¦‰Â”\‚È‘S‚Ä‚ÌˆÚ“®ƒ^ƒuî•ñ‚ğƒNƒŠƒA‚·‚é
+	 * ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½Å•\ï¿½ï¿½ï¿½Â”\ï¿½È‘Sï¿½Ä‚ÌˆÚ“ï¿½ï¿½^ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½
 	 */
 	public void clearAllMoveTabInfoPanel()
 	{
@@ -361,16 +361,16 @@ public class TouchHookRelativeLayout extends RelativeLayout {
     	    		&& ti.getPanelId() != null
     				&& ti.getImageViewId() != null )
     		{
-    			// ƒ^ƒuî•ñƒpƒlƒ‹‚ª•\¦‚³‚ê‚Ä‚¢‚½‚ç
+    			// ï¿½^ï¿½uï¿½ï¿½ï¿½pï¿½lï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½
         		RelativeLayout rl = (RelativeLayout) findViewById( ti.getPanelId() );
         		if( rl != null )
         		{
-        			// ƒpƒlƒ‹‚ÌƒCƒ[ƒW‚ğƒNƒŠƒA
+        			// ï¿½pï¿½lï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
         			ImageView iv = (ImageView) rl.findViewById( ti.getImageViewId() );
         			if( iv != null )
         			{
     					iv.setImageDrawable(null);    					
-            			// ƒpƒlƒ‹‚ğ”ñ•\¦
+            			// ï¿½pï¿½lï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½
             			// rl.setVisibility(View.GONE);
         				int parent_width = getWidth();    					
         				int width = OkosamaMediaPlayerActivity.dispInfo.getCorrectionXConsiderDensity( 
@@ -384,7 +384,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
     					{
     						x = -1 * width;
     					}
-    					// ‚È‚é‚×‚­ŠÈ’P‚ÈƒtƒŠƒbƒN‚Å“’B‚·‚é‚æ‚¤‚ÉAˆÚ“®—Ê‚ğFLICK_MOVE_SPEED”{‚·‚é
+    					// ï¿½È‚ï¿½×‚ï¿½ï¿½È’Pï¿½Èƒtï¿½ï¿½ï¿½bï¿½Nï¿½Å“ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½ÉAï¿½Ú“ï¿½ï¿½Ê‚ï¿½FLICK_MOVE_SPEEDï¿½{ï¿½ï¿½ï¿½ï¿½
         				int y = OkosamaMediaPlayerActivity.dispInfo.getCorrectionYConsiderDensity(
         						currentY);
         				int height = OkosamaMediaPlayerActivity.dispInfo.getCorrectionYConsiderDensity(
@@ -395,7 +395,7 @@ public class TouchHookRelativeLayout extends RelativeLayout {
         				RelativeLayout.LayoutParams lp = (LayoutParams) rl.getLayoutParams();
         				lp.leftMargin = x;
         				lp.topMargin = y;
-        				lp.width = 0;	// ”ñ•\¦
+        				lp.width = 0;	// ï¿½ï¿½\ï¿½ï¿½
         				lp.height = height;
         				rl.setLayoutParams(lp);
     					

@@ -3,7 +3,6 @@ package okosama.app.action;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.panel.SearchPanel;
 import okosama.app.storage.FilterData;
-import okosama.app.tab.TabPage;
 
 public class FilterCurrentTabAction implements IViewAction {
 
@@ -13,7 +12,7 @@ public class FilterCurrentTabAction implements IViewAction {
 		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		FilterData data = SearchPanel.getInstance().getFilterData();
 
-		// ‘I‘ğ’†‚Ìƒ^ƒu‚ÌƒtƒBƒ‹ƒ^ƒŠƒ“ƒO
+		// ï¿½Iï¿½ğ’†‚Ìƒ^ï¿½uï¿½Ìƒtï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½O
 		act.getAdpStocker().setFilterData(act.getCurrentTabPageId(), data);
 //		switch( act.getCurrentTabPageId() )
 //		{
@@ -28,9 +27,9 @@ public class FilterCurrentTabAction implements IViewAction {
 //		case TabPage.TABPAGE_ID_VIDEO:
 //			break;
 //		default:
-//			// í•Ê‚ª‚È‚¢ê‡‚ÍA•\¦‚³‚¹‚È‚¢
+//			// ï¿½ï¿½Ê‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½ÍAï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 //		}
-		// ŒŸõƒpƒlƒ‹‚Ìíœ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½lï¿½ï¿½ï¿½Ìíœ
 		SearchPanel.removeFromParent();
 		return 0;
 	}

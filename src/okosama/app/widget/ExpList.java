@@ -1,19 +1,19 @@
 package okosama.app.widget;
 
+import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.R;
+import okosama.app.behavior.IExpListBehavior;
 import android.app.Activity;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.R;
-import okosama.app.behavior.IExpListBehavior;
 
 public class ExpList extends absWidget {
 	
 	public static int LISTID_ARTIST = 300;
 	
 	/**
-	 * À‘•ƒNƒ‰ƒX
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 	 */
 	private ExpListImpl impl;
 
@@ -35,12 +35,12 @@ public class ExpList extends absWidget {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
-				// ƒNƒŠƒbƒN‚Ìˆ—
+				// ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
 				behavior.onItemClick( parent, v, groupPosition, childPosition, id);
 				return false;
 			}
 		});
-		// TODO: Œ»óAxml‚ÌØ‚è‘Ö‚¦‚Ì‰æ‘œ‚Í’Êíƒ[ƒh‚¾‚ªA‚Å‚«‚½‚ç©‘Oƒƒ\ƒbƒh‚Å‰æ¿‚ğˆ«‚­‚µ‚Äƒ[ƒh‚µ‚½‚¢
+		// TODO: ï¿½ï¿½ï¿½ï¿½Axmlï¿½ÌØ‚ï¿½Ö‚ï¿½ï¿½Ì‰æ‘œï¿½Í’Êíƒï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Å‚ï¿½ï¿½ï¿½ï¿½ç©ï¿½Oï¿½ï¿½ï¿½\ï¿½bï¿½hï¿½Å‰æ¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äƒï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		impl.setGroupIndicator(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getResources().getDrawable(R.drawable.selector_exp_ind));
 				//OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(
 				//		R.drawable.exp_ind));

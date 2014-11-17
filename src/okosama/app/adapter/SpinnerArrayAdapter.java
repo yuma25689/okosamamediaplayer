@@ -2,17 +2,16 @@ package okosama.app.adapter;
 
 import java.util.ArrayList;
 
-import android.widget.ArrayAdapter;
-
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.storage.ISimpleData;
+import android.widget.ArrayAdapter;
 
 public class SpinnerArrayAdapter<T extends ISimpleData> extends ArrayAdapter<T> {
 	private final String mNoSelection;
 
     /**
-     * ƒAƒ_ƒvƒ^‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * ï¿½Aï¿½_ï¿½vï¿½^ï¿½ÌƒRï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
      * @param currentactivity
      * @param layout
      * @param cursor

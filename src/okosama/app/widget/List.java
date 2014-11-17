@@ -1,16 +1,16 @@
 package okosama.app.widget;
 
+import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.R;
+import okosama.app.behavior.IListBehavior;
 import android.app.Activity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
-import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.R;
-import okosama.app.behavior.IListBehavior;
 
 public class List extends absWidget {
 
-	// ‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å—˜—p‚·‚éƒŠƒXƒg‚Ì–¼Ì
+	// ï¿½ï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Å—ï¿½ï¿½pï¿½ï¿½ï¿½éƒŠï¿½Xï¿½gï¿½Ì–ï¿½ï¿½ï¿½
 	public static int LISTID_ALBUM = 201;
 	public static int LISTID_SONG = 202;
 	public static int LISTID_PLAYLIST = 203;
@@ -18,7 +18,7 @@ public class List extends absWidget {
 	public static int LISTID_VIDEO = 205;
 	
 	/**
-	 * À‘•ƒNƒ‰ƒX
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 	 */
 	private ListImpl impl;
 
@@ -37,7 +37,7 @@ public class List extends absWidget {
 			@Override
 			public void onItemClick(AdapterView<?> l, View v,
 					int pos, long id) {
-                // ƒNƒŠƒbƒN‚Ìˆ—
+                // ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
 				behavior.onItemClick(l, v, pos, id);
 			}
         });
@@ -67,7 +67,7 @@ public class List extends absWidget {
 //				@Override
 //				public void onItemClick(AdapterView<?> l, View v,
 //						int pos, long id) {
-//	                // ƒNƒŠƒbƒN‚Ìˆ—
+//	                // ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
 //					behavior.onItemClick(l, v, pos, id);
 //				}
 //	        });

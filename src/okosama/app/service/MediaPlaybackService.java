@@ -16,10 +16,22 @@
 
 package okosama.app.service;
 
+import java.io.FileDescriptor;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.ref.WeakReference;
+import java.util.Random;
+import java.util.Vector;
+
+import okosama.app.LogWrapper;
+import okosama.app.MusicSettingsActivity;
+import okosama.app.OkosamaMediaPlayerActivity;
+import okosama.app.R;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -27,7 +39,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.BroadcastReceiver;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
@@ -40,9 +51,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.os.SystemClock;
-import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
@@ -54,21 +65,10 @@ import android.view.WindowManager;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import java.io.FileDescriptor;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.ref.WeakReference;
-import java.util.Random;
-import java.util.Vector;
-
-import okosama.app.MusicSettingsActivity;
-import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.R;
-
 /**
  * Provides "background" audio playback capabilities, allowing the
  * user to switch between activities without stopping playback.
- * ƒoƒbƒNƒOƒ‰ƒEƒ“ƒh‚Å‚ÌƒI[ƒfƒBƒI‚ÌƒvƒŒƒCƒoƒbƒN‚ğ‰Â”\‚É‚µAƒAƒNƒeƒBƒrƒeƒB‚Ì•ÏX‚Å‚àƒvƒŒƒC‚ğ~‚ß‚È‚¢H
+ * ï¿½oï¿½bï¿½Nï¿½Oï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½hï¿½Å‚ÌƒIï¿½[ï¿½fï¿½Bï¿½Iï¿½Ìƒvï¿½ï¿½ï¿½Cï¿½oï¿½bï¿½Nï¿½ï¿½ï¿½Â”\ï¿½É‚ï¿½ï¿½Aï¿½Aï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½Ì•ÏXï¿½Å‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½~ï¿½ß‚È‚ï¿½ï¿½H
  */
 public class MediaPlaybackService extends Service {
     /** used to specify whether enqueue() should start playing
@@ -182,15 +182,15 @@ public class MediaPlaybackService extends Service {
     private static final int IDLE_DELAY = 60000;
     
     /**
-     * ƒtƒF[ƒhƒCƒ“‚µ‚È‚ª‚çÄ¶‚·‚é
+     * ï¿½tï¿½Fï¿½[ï¿½hï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½
      */
     private void startAndFadeIn() {
-    	// ˆ—‚ÍAƒnƒ“ƒhƒ‰‚É”C‚¹‚é
+    	// ï¿½ï¿½ï¿½ï¿½ï¿½ÍAï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½É”Cï¿½ï¿½ï¿½ï¿½
         mMediaplayerHandler.sendEmptyMessageDelayed(FADEIN, 10);
     }
     
     /**
-     * ƒnƒ“ƒhƒ‰
+     * ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½
      */
     private Handler mMediaplayerHandler = new Handler() {
         float mCurrentVolume = 1.0f;
@@ -199,21 +199,21 @@ public class MediaPlaybackService extends Service {
             // MusicUtils.debugLog("mMediaplayerHandler.handleMessage " + msg.what);
             switch (msg.what) {
                 case FADEIN:
-                	// ƒtƒF[ƒhƒCƒ“ˆ—
+                	// ï¿½tï¿½Fï¿½[ï¿½hï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     if (!isPlaying()) {
-                    	// ‚Ü‚¾ƒvƒŒƒC‚³‚ê‚Ä‚¢‚È‚¢
-                    	// Ä¶Bƒ{ƒŠƒ…[ƒ€‚ğ0‚©‚çn‚ß‚ÄA‚à‚¤ˆê“xFADEIN‚ğ‘—M
+                    	// ï¿½Ü‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½
+                    	// ï¿½Äï¿½ï¿½Bï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½ï¿½ï¿½nï¿½ß‚ÄAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xFADEINï¿½ğ‘—M
                         mCurrentVolume = 0f;
                         mPlayer.setVolume(mCurrentVolume);
                         play();
                         mMediaplayerHandler.sendEmptyMessageDelayed(FADEIN, 10);
                     } else {
-                    	// ƒ{ƒŠƒ…[ƒ€‚ğã‚°‚é
+                    	// ï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ã‚°ï¿½ï¿½
                         mCurrentVolume += 0.01f;
                         if (mCurrentVolume < 1.0f) {
                             mMediaplayerHandler.sendEmptyMessageDelayed(FADEIN, 10);
                         } else {
-                        	// ƒ{ƒŠƒ…[ƒ€‚ª1‚É‚È‚Á‚½‚çAFADEINI—¹
+                        	// ï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½1ï¿½É‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½AFADEINï¿½Iï¿½ï¿½
                             mCurrentVolume = 1.0f;
                         }
                         mPlayer.setVolume(mCurrentVolume);
@@ -251,7 +251,7 @@ public class MediaPlaybackService extends Service {
     };
 
     /**
-     * ƒuƒ[ƒhƒLƒƒƒXƒgƒŒƒV[ƒo‚Ìİ’è
+     * ï¿½uï¿½ï¿½ï¿½[ï¿½hï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Vï¿½[ï¿½oï¿½Ìİ’ï¿½
      */
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
     	/**
@@ -259,48 +259,48 @@ public class MediaPlaybackService extends Service {
     	 */
         @Override
         public void onReceive(Context context, Intent intent) {
-        	// intent‚©‚çAction‚ğæ“¾‚·‚é
+        	// intentï¿½ï¿½ï¿½ï¿½Actionï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
             String action = intent.getAction();
-            // intent‚©‚çƒRƒ}ƒ“ƒh–¼‚ğæ“¾‚·‚é
+            // intentï¿½ï¿½ï¿½ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
             String cmd = intent.getStringExtra("command");
             // MusicUtils.debugLog("mIntentReceiver.onReceive " + action + " / " + cmd);
             if (CMDNEXT.equals(cmd) || NEXT_ACTION.equals(action)) {
-                // ƒRƒ}ƒ“ƒh‚ªŸ‚ÖƒRƒ}ƒ“ƒh‚¾‚Á‚½
+                // ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ÖƒRï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 next(true);
             } else if (CMDPREVIOUS.equals(cmd) || PREVIOUS_ACTION.equals(action)) {
-            	// ƒRƒ}ƒ“ƒh‚ª‘O‚ÖƒRƒ}ƒ“ƒh‚¾‚Á‚½
+            	// ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Oï¿½ÖƒRï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 prev();
             } else if (CMDTOGGLEPAUSE.equals(cmd) || TOGGLEPAUSE_ACTION.equals(action)) {
             	// Log.d("test","getPause");
-            	// ƒgƒOƒ‹ƒ|[ƒYƒRƒ}ƒ“ƒh‚¾‚Á‚½
+            	// ï¿½gï¿½Oï¿½ï¿½ï¿½|ï¿½[ï¿½Yï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 if (isPlaying()) {
-                	// ƒvƒŒƒC’†‚È‚ç‚ÎA~‚ß‚é
+                	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½È‚ï¿½ÎAï¿½~ï¿½ß‚ï¿½
                     pause();
-                    // ˆê“I‚ÈHƒtƒH[ƒJƒX‚Ì¸‚¢‚É‚æ‚éƒ|[ƒYƒtƒ‰ƒOH‚ğ—‚Æ‚·H
+                    // ï¿½êï¿½Iï¿½ÈHï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½Ìï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½|ï¿½[ï¿½Yï¿½tï¿½ï¿½ï¿½Oï¿½Hï¿½ğ—‚Æ‚ï¿½ï¿½H
                     mPausedByTransientLossOfFocus = false;
                 } else {
-                	// ƒvƒŒƒC’†‚Å‚È‚¯‚ê‚ÎAƒvƒŒƒC‚·‚é
+                	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½ÎAï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½
                     play();
                 }
             } else if (CMDPAUSE.equals(cmd) || PAUSE_ACTION.equals(action)) {
-            	// ƒ|[ƒYƒRƒ}ƒ“ƒh‚¾‚Á‚½
-            	// ƒ|[ƒY‚·‚é
+            	// ï¿½|ï¿½[ï¿½Yï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            	// ï¿½|ï¿½[ï¿½Yï¿½ï¿½ï¿½ï¿½
                 pause();
-                // ˆê“I‚ÈHƒtƒH[ƒJƒX‚Ì¸‚¢‚É‚æ‚éƒ|[ƒYƒtƒ‰ƒOH‚ğ—‚Æ‚·H
+                // ï¿½êï¿½Iï¿½ÈHï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½Ìï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½|ï¿½[ï¿½Yï¿½tï¿½ï¿½ï¿½Oï¿½Hï¿½ğ—‚Æ‚ï¿½ï¿½H
                 mPausedByTransientLossOfFocus = false;
             } else if (CMDSTOP.equals(cmd)) {
-            	// ƒXƒgƒbƒvƒRƒ}ƒ“ƒh
-            	// ƒ|[ƒY‚·‚é
+            	// ï¿½Xï¿½gï¿½bï¿½vï¿½Rï¿½}ï¿½ï¿½ï¿½h
+            	// ï¿½|ï¿½[ï¿½Yï¿½ï¿½ï¿½ï¿½
                 pause();
-                // ˆê“I‚ÈHƒtƒH[ƒJƒX‚Ì¸‚¢‚É‚æ‚éƒ|[ƒYƒtƒ‰ƒOH‚ğ—‚Æ‚·H
+                // ï¿½êï¿½Iï¿½ÈHï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½Ìï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½|ï¿½[ï¿½Yï¿½tï¿½ï¿½ï¿½Oï¿½Hï¿½ğ—‚Æ‚ï¿½ï¿½H
                 mPausedByTransientLossOfFocus = false;
-                // ˆÊ’u0‚ÉƒV[ƒN
+                // ï¿½Ê’u0ï¿½ÉƒVï¿½[ï¿½N
                 seek(0);
             } else if (MediaAppWidgetProvider.CMDAPPWIDGETUPDATE.equals(cmd)) {
-            	// ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒEƒBƒWƒFƒbƒg‚ÌƒAƒbƒvƒf[ƒgƒRƒ}ƒ“ƒh
+            	// ï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Eï¿½Bï¿½Wï¿½Fï¿½bï¿½gï¿½ÌƒAï¿½bï¿½vï¿½fï¿½[ï¿½gï¿½Rï¿½}ï¿½ï¿½ï¿½h
                 // Someone asked us to refresh a set of specific widgets, probably
                 // because they were just added.
-            	// “Á’è‚Ìwidget‚ğƒŠƒtƒŒƒbƒVƒ…‚·‚éBwidget‚Ìid‚ğæ“¾‚µAperformUpdate‚É“n‚·H
+            	// ï¿½ï¿½ï¿½ï¿½ï¿½widgetï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bwidgetï¿½ï¿½idï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½AperformUpdateï¿½É“nï¿½ï¿½ï¿½H
                 int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
                 mAppWidgetProvider.performUpdate(MediaPlaybackService.this, appWidgetIds);
             } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
@@ -308,7 +308,7 @@ public class MediaPlaybackService extends Service {
             	int iCon = intent.getIntExtra("state",0);
             	if( iCon == 1 )
             	{
-            		// ƒwƒbƒhƒzƒ“Ú‘±
+            		// ï¿½wï¿½bï¿½hï¿½zï¿½ï¿½ï¿½Ú‘ï¿½
             		boolean bPlugAndPlay = false;
                     SharedPreferences prefs = getSharedPreferences(
                             MusicSettingsActivity.PREFERENCES_FILE, MODE_PRIVATE);
@@ -333,7 +333,7 @@ public class MediaPlaybackService extends Service {
             	}
             	else if( iCon == 0 )
             	{
-            		// ƒwƒbƒhƒzƒ“Ø’f
+            		// ï¿½wï¿½bï¿½hï¿½zï¿½ï¿½ï¿½Ø’f
             		// Toast.makeText(context, "headset disconnect - pause", Toast.LENGTH_SHORT).show();
         			if( isPlaying() )
         			{
@@ -357,54 +357,54 @@ public class MediaPlaybackService extends Service {
     private OnAudioFocusChangeListener mAudioFocusListener = new OnAudioFocusChangeListener() {
         @Override
 		public void onAudioFocusChange(int focusChange) {
-//        	ƒI[ƒfƒBƒIƒtƒH[ƒJƒX‚ğ—v‹‚·‚é‚ ‚ç‚ä‚éƒI[ƒfƒBƒI‚ğÄ¶‚·‚é‘O‚ÉAg—p‚·‚éƒXƒgƒŠ[ƒ€‚ÌƒI[ƒfƒBƒIƒtƒH[ƒJƒX‚ğæ“¾‚·‚é•K—v‚ª—L‚è‚Ü‚·B
-//        	‚±‚ê‚ÍrequestAudioFocus()‚ğƒR[ƒ‹‚µAƒŠƒNƒGƒXƒg‚ª¬Œ÷‚µ‚½‚çAUDIOFOCUS_REQUEST_GRANTED‚ª•Ô‚³‚ê‚Ü‚·B
-//        	‚ ‚È‚½‚ÍAƒI[ƒfƒBƒIƒtƒH[ƒJƒX‚ğ’ZŠú“I‚©’·Šú“I‚É—v‹‚·‚é‚©‚ÉŠÖ‚í‚ç‚¸ƒXƒgƒŠ[ƒ€‚ğw’è‚·‚é•K—v‚ª—L‚è‚Ü‚·B’ZŠÔ‚Ì‚İƒI[ƒfƒBƒI‚ğÄ¶‚·‚é‚Æl‚¦‚ç‚ê‚éê‡i—á‚¦‚Î‰¹ºƒiƒrjƒgƒ‰ƒ“ƒWƒFƒ“ƒgƒtƒH[ƒJƒX‚ğ—v‹‚µ‚Ü‚·B
-//        	‚¸‚Á‚ÆƒI[ƒfƒBƒI‚ğÄ¶‚·‚é‚Æ—\‘zo—ˆ‚éê‡Ai—á‚¦‚Î‰¹Šy‚ÌÄ¶jƒp[ƒ}ƒlƒ“ƒgƒI[ƒfƒBƒIƒtƒH[ƒJƒX‚ğ—v‹‚µ‚Ü‚·B        	
-        	// AudioFocus‚ªAV‚µ‚­‚È‚Á‚½H
+//        	ï¿½Iï¿½[ï¿½fï¿½Bï¿½Iï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½é‚ ï¿½ï¿½ï¿½ï¿½Iï¿½[ï¿½fï¿½Bï¿½Iï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ÉAï¿½gï¿½pï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÌƒIï¿½[ï¿½fï¿½Bï¿½Iï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½Kï¿½vï¿½ï¿½ï¿½Lï¿½ï¿½Ü‚ï¿½ï¿½B
+//        	ï¿½ï¿½ï¿½ï¿½ï¿½requestAudioFocus()ï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Nï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½AUDIOFOCUS_REQUEST_GRANTEDï¿½ï¿½ï¿½Ô‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+//        	ï¿½ï¿½ï¿½È‚ï¿½ï¿½ÍAï¿½Iï¿½[ï¿½fï¿½Bï¿½Iï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½Zï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½É—vï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½ÉŠÖ‚ï¿½ç‚¸ï¿½Xï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚·ï¿½ï¿½Kï¿½vï¿½ï¿½ï¿½Lï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½Zï¿½ï¿½ï¿½Ô‚Ì‚İƒIï¿½[ï¿½fï¿½Bï¿½Iï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½Ælï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½iï¿½á‚¦ï¿½Î‰ï¿½ï¿½ï¿½ï¿½iï¿½rï¿½jï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+//        	ï¿½ï¿½ï¿½ï¿½ï¿½ÆƒIï¿½[ï¿½fï¿½Bï¿½Iï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½Æ—\ï¿½zï¿½oï¿½ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½iï¿½á‚¦ï¿½Î‰ï¿½ï¿½yï¿½ÌÄï¿½ï¿½jï¿½pï¿½[ï¿½}ï¿½lï¿½ï¿½ï¿½gï¿½Iï¿½[ï¿½fï¿½Bï¿½Iï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B        	
+        	// AudioFocusï¿½ï¿½ï¿½Aï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½H
             // AudioFocus is a new feature: focus updates are made verbose on purpose
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_LOSS:
-                	// ƒtƒH[ƒJƒX‚ğ¸‚Á‚½H
-                    Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
+                	// ï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½H
+                    LogWrapper.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
                     if(isPlaying()) {
-                    	// ƒvƒŒƒC’†‚Å‚ ‚ê‚Î
-                    	// ƒ|[ƒY‚·‚é
+                    	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½
+                    	// ï¿½|ï¿½[ï¿½Yï¿½ï¿½ï¿½ï¿½
                         mPausedByTransientLossOfFocus = false;
                         pause();
                     }
                     break;
-//                    ƒgƒ‰ƒ“ƒWƒFƒ“ƒgƒtƒH[ƒJƒX‚ğ—v‹‚µ‚Ä‚¢‚é‚Æ‚«A’Ç‰Á‚ÌƒIƒvƒVƒ‡ƒ“‚ª—L‚è‚Ü‚·Bƒ_ƒbƒN(Œãq)‚ğ—LŒø‚É‚·‚é‚©‚Ç‚¤‚©A’Êís‹V‚ª—Ç‚¢ƒI[ƒfƒBƒIƒAƒvƒŠ‚ÍƒI[ƒfƒBƒIƒtƒH[ƒJƒX‚ğ¸‚¤‚Æ‚·‚®‚ÉÄ¶‚ğƒTƒCƒŒƒ“ƒg‚É‚µ‚Ü‚·B
-//                    ƒ_ƒbƒN‚ğ‹–‚·ƒgƒ‰ƒ“ƒWƒFƒ“ƒgƒtƒH[ƒJƒX‚ğ—v‹‚·‚é–‚ÅA‘¼‚ÌƒAƒvƒŠ‚ÉƒI[ƒfƒBƒIƒtƒH[ƒJƒX‚ª–ß‚é‚Ü‚Å’á‰¹—Ê‚É‚·‚é‚±‚Æ‚ÅÄ¶‚µ‘±‚¯‚é–‚ªo—ˆ‚é‚Æ‘¼‚ÌƒAƒvƒŠ‚É“`‚¦‚Ü‚·B
+//                    ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Aï¿½Ç‰ï¿½ï¿½ÌƒIï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½_ï¿½bï¿½N(ï¿½ï¿½q)ï¿½ï¿½Lï¿½ï¿½ï¿½É‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Aï¿½Êï¿½sï¿½Vï¿½ï¿½ï¿½Ç‚ï¿½ï¿½Iï¿½[ï¿½fï¿½Bï¿½Iï¿½Aï¿½vï¿½ï¿½ï¿½ÍƒIï¿½[ï¿½fï¿½Bï¿½Iï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ÉÄï¿½ï¿½ï¿½ï¿½Tï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½gï¿½É‚ï¿½ï¿½Ü‚ï¿½ï¿½B
+//                    ï¿½_ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½é–ï¿½ÅAï¿½ï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½ÉƒIï¿½[ï¿½fï¿½Bï¿½Iï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½ï¿½ß‚ï¿½Ü‚Å’á‰¹ï¿½Ê‚É‚ï¿½ï¿½é‚±ï¿½Æ‚ÅÄï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é–ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½Æ‘ï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½É“`ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                	// ˆê“I‚ÉƒtƒH[ƒJƒX‚ğ¸‚Á‚½H
-                    Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
+                	// ï¿½êï¿½Iï¿½Éƒtï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½H
+                    LogWrapper.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
                     if(isPlaying()) {
-                    	// ƒvƒŒƒC’†‚Å‚ ‚ê‚Î
-                    	// ƒgƒ‰ƒ“ƒWƒFƒ“ƒgƒtƒH[ƒJƒXƒtƒ‰ƒO‚ğ—§‚Ä‚Ä‚©‚çAƒ|[ƒY‚·‚é
+                    	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½
+                    	// ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½tï¿½ï¿½ï¿½Oï¿½ğ—§‚Ä‚Ä‚ï¿½ï¿½ï¿½Aï¿½|ï¿½[ï¿½Yï¿½ï¿½ï¿½ï¿½
                         mPausedByTransientLossOfFocus = true;
                         pause();
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
-                	// AudioFocus‚ğ“¾‚½
-                    Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN");
+                	// AudioFocusï¿½ğ“¾‚ï¿½
+                    LogWrapper.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN");
                     if(!isPlaying() && mPausedByTransientLossOfFocus) {
-                    	// ƒvƒŒƒC’†‚Å‚Í‚È‚­Aƒgƒ‰ƒ“ƒWƒFƒ“ƒg‚¾‚Á‚½ê‡
-                    	// ƒgƒ‰ƒ“ƒWƒFƒ“ƒgƒtƒ‰ƒO‚ğ—‚Æ‚µAÄ¶‚·‚é
+                    	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Å‚Í‚È‚ï¿½ï¿½Aï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡
+                    	// ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½tï¿½ï¿½ï¿½Oï¿½ğ—‚Æ‚ï¿½ï¿½Aï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½
                         mPausedByTransientLossOfFocus = false;
                         startAndFadeIn();
                     }
                     break;
                 default:
-                    Log.e(LOGTAG, "Unknown audio focus change code");
+                    LogWrapper.e(LOGTAG, "Unknown audio focus change code");
             }
         }
     };
 
     /**
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^ ‰½‚à‚µ‚È‚¢
+     * ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
      */
     public MediaPlaybackService() {
     }
@@ -418,29 +418,29 @@ public class MediaPlaybackService extends Service {
 
         // AudioManager provides access to volume and ringer mode control.
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        // ƒƒbƒN‰æ–Ê‚Ì‘€ì‚ğˆ—‚·‚éMediaButtonIntentReceiver‚ğ“o˜^
+        // ï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½Ê‚Ì‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½MediaButtonIntentReceiverï¿½ï¿½oï¿½^
         mAudioManager.registerMediaButtonEventReceiver(
         		new ComponentName(getPackageName(),
                 MediaButtonIntentReceiver.class.getName()));
         
-        // İ’è‚ğæ“¾
+        // ï¿½İ’ï¿½ï¿½ï¿½æ“¾
         mPreferences = getSharedPreferences("Music", MODE_WORLD_READABLE | MODE_WORLD_WRITEABLE);
-        // SDƒJ[ƒh‚ÌID‚ğæ“¾
+        // SDï¿½Jï¿½[ï¿½hï¿½ï¿½IDï¿½ï¿½ï¿½æ“¾
         mCardId = StorageInfo.getCardId(this);
         
-        // ŠO•”ƒXƒgƒŒ[ƒW‚ÌƒŠƒXƒi‚ğ“o˜^
+        // ï¿½Oï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½[ï¿½Wï¿½Ìƒï¿½ï¿½Xï¿½iï¿½ï¿½oï¿½^
         registerExternalStorageListener();
 
         // Needs to be done in this thread, since otherwise ApplicationContext.getPowerManager() crashes.
-        // ƒvƒŒƒCƒ„[‚ğì¬
+        // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ì¬
         mPlayer = new MultiPlayer();
-        // ƒvƒŒƒCƒ„[‚Éƒnƒ“ƒhƒ‰‚ğİ’è
+        // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Éƒnï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½İ’ï¿½
         mPlayer.setHandler(mMediaplayerHandler);
 
-        // İ’è‚ÌÄ“Ç‚İ‚İ
+        // ï¿½İ’ï¿½ÌÄ“Ç‚İï¿½ï¿½ï¿½
         reloadQueue();
         
-        // ƒtƒBƒ‹ƒ^‚ğ‚©‚¯‚ÄAIntentReceiver‚ğ“o˜^
+        // ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄAIntentReceiverï¿½ï¿½oï¿½^
         IntentFilter commandFilter = new IntentFilter();
         commandFilter.addAction(SERVICECMD);
         commandFilter.addAction(TOGGLEPAUSE_ACTION);
@@ -450,16 +450,16 @@ public class MediaPlaybackService extends Service {
         commandFilter.addAction(Intent.ACTION_HEADSET_PLUG);
         registerReceiver(mIntentReceiver, commandFilter);
         
-        // “dŒ¹ŠÇ—H
+        // ï¿½dï¿½ï¿½ï¿½Ç—ï¿½ï¿½H
         PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
-        // WakeLock‚Ìæ“¾H
+        // WakeLockï¿½Ìæ“¾ï¿½H
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
-        // WakeLock‚ÍQÆƒJƒEƒ“ƒg•û®‚Å‚È‚¢İ’è‚É‚·‚éH
+        // WakeLockï¿½ÍQï¿½ÆƒJï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½İ’ï¿½É‚ï¿½ï¿½ï¿½H
         mWakeLock.setReferenceCounted(false);
 
         // If the service was idle, but got killed before it stopped itself, the
         // system will relaunch it. Make sure it gets stopped again in that case.
-        // ‚µ‚Î‚ç‚­‚µ‚½‚ç~‚ß‚é‚ç‚µ‚¢
+        // ï¿½ï¿½ï¿½Î‚ç‚­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~ï¿½ß‚ï¿½ç‚µï¿½ï¿½
         Message msg = mDelayedStopHandler.obtainMessage();
         mDelayedStopHandler.sendMessageDelayed(msg, IDLE_DELAY);
     }
@@ -468,15 +468,15 @@ public class MediaPlaybackService extends Service {
     public void onDestroy() {
         // Check that we're not being destroyed while something is still playing.
         if (isPlaying()) {
-        	// I—¹‚ÉƒvƒŒƒC’†‚Å‚ ‚ê‚ÎAƒGƒ‰[ƒƒOo—Í
-            Log.e(LOGTAG, "Service being destroyed while still playing.");
+        	// ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Éƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ÎAï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Oï¿½oï¿½ï¿½
+            LogWrapper.e(LOGTAG, "Service being destroyed while still playing.");
         }
         // release all MediaPlayer resources, including the native player and wakelocks
         mPlayer.release();
         mPlayer = null;
 
-        // Ä¶‚ªI‚í‚Á‚½‚çÅŒã‚ÉabandonAudioFocus()‚ğŠmÀ‚ÉŒÄ‚Ñ‚Ü‚·B
-        // ‚±‚ê‚ÍƒVƒXƒeƒ€‚Ö‚±‚êˆÈãƒtƒH[ƒJƒX‚ğ—v‹‚µ‚È‚¢–‚ÆAudioManager.OnAudioFocusChangeListenerŒQ‚©‚ç‚Ì‰ğœ‚ğ’Ê’m‚µ‚Ü‚·B
+        // ï¿½Äï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÅŒï¿½ï¿½abandonAudioFocus()ï¿½ï¿½ï¿½mï¿½ï¿½ï¿½ÉŒÄ‚Ñ‚Ü‚ï¿½ï¿½B
+        // ï¿½ï¿½ï¿½ï¿½ÍƒVï¿½Xï¿½eï¿½ï¿½ï¿½Ö‚ï¿½ï¿½ï¿½Èï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½AudioManager.OnAudioFocusChangeListenerï¿½Qï¿½ï¿½ï¿½ï¿½Ì‰ï¿½ï¿½ï¿½ï¿½ï¿½Ê’mï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
         mAudioManager.abandonAudioFocus(mAudioFocusListener);
         
         // make sure there aren't any other messages coming
@@ -484,24 +484,24 @@ public class MediaPlaybackService extends Service {
         mMediaplayerHandler.removeCallbacksAndMessages(null);
 
         if (mCursor != null) {
-        	// ƒJ[ƒ\ƒ‹ƒNƒ[ƒY
+        	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½Y
             mCursor.close();
             mCursor = null;
         }
 
-        // IntentReceiver‚Ì“o˜^‰ğœ
+        // IntentReceiverï¿½Ì“oï¿½^ï¿½ï¿½ï¿½ï¿½
         unregisterReceiver(mIntentReceiver);
         if (mUnmountReceiver != null) {
-        	// UnMountReceiver‚Ì“o˜^‰ğœ
+        	// UnMountReceiverï¿½Ì“oï¿½^ï¿½ï¿½ï¿½ï¿½
             unregisterReceiver(mUnmountReceiver);
             mUnmountReceiver = null;
         }
-        // WakeLock‚ÌƒŠƒŠ[ƒX
+        // WakeLockï¿½Ìƒï¿½ï¿½ï¿½ï¿½[ï¿½X
         mWakeLock.release();
         super.onDestroy();
     }
     
-    // 16i”‚Ìchar”z—ñH
+    // 16ï¿½iï¿½ï¿½ï¿½ï¿½charï¿½zï¿½ï¿½H
     private final char hexdigits [] = new char [] {
             '0', '1', '2', '3',
             '4', '5', '6', '7',
@@ -510,19 +510,19 @@ public class MediaPlaybackService extends Service {
     };
 
     /**
-     * İ’è‚Ì•Û‘¶
+     * ï¿½İ’ï¿½Ì•Û‘ï¿½
      * @param full
      */
     private void saveQueue(boolean full) {
         if (mOneShot) {
-        	// OneShot‚È‚çA–ß‚é
+        	// OneShotï¿½È‚ï¿½Aï¿½ß‚ï¿½
             return;
         }
-        // İ’è‚ğ•ÒWƒ‚[ƒh‚Åæ“¾
+        // ï¿½İ’ï¿½ï¿½ÒWï¿½ï¿½ï¿½[ï¿½hï¿½Åæ“¾
         Editor ed = mPreferences.edit();
         //long start = System.currentTimeMillis();
         if (full) {
-        	// ƒtƒ‹ƒZ[ƒu‚Ìê‡
+        	// ï¿½tï¿½ï¿½ï¿½Zï¿½[ï¿½uï¿½Ìê‡
             StringBuilder q = new StringBuilder();
             
             // The current playlist is saved as a list of "reverse hexadecimal"
@@ -531,15 +531,15 @@ public class MediaPlaybackService extends Service {
             // more often without worrying too much about performance.
             // (saving the full state takes about 40 ms under no-load conditions
             // on the phone)
-            // ƒvƒŒƒCƒŠƒXƒg‚Ì’·‚³‚ğæ“¾‚µA‚»‚Ì•ªƒ‹[ƒv
+            // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ì’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½[ï¿½v
             int len = mPlayListLen;
             for (int i = 0; i < len; i++) {
-            	// ƒvƒŒƒCƒŠƒXƒg‚Ìidæ“¾
+            	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½idï¿½æ“¾
                 long n = mPlayList[i].getId();
                 if (n == 0) {
                     q.append("0;");
                 } else {
-                	// 0ˆÈŠO‚Ìê‡A‚¨‚»‚ç‚­reverse hexadecimalŒ`®‚ÅŠi”[‚³‚ê‚Ä‚¢‚é
+                	// 0ï¿½ÈŠOï¿½Ìê‡ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ç‚­reverse hexadecimalï¿½`ï¿½ï¿½ï¿½ÅŠiï¿½[ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
                     while (n != 0) {
                         int digit = (int)(n & 0xf);
                         n >>= 4;
@@ -548,14 +548,14 @@ public class MediaPlaybackService extends Service {
                     q.append(";");
                 }
             }
-            //Log.i("@@@@ service", "created queue string in " + (System.currentTimeMillis() - start) + " ms");
-            // queue‚Æ‚µ‚ÄAƒvƒŒƒCƒŠƒXƒg‚Ìid‚Ì”z—ñ‚ğ;‹æØ‚è‚É‚µ‚½•¶š—ñ‚ğŠi”[
+            //LogWrapper.i("@@@@ service", "created queue string in " + (System.currentTimeMillis() - start) + " ms");
+            // queueï¿½Æ‚ï¿½ï¿½ÄAï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½idï¿½Ì”zï¿½ï¿½ï¿½;ï¿½ï¿½Ø‚ï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½[
             ed.putString("queue", q.toString());
-            // ƒJ[ƒhID‚ğŠi”[
+            // ï¿½Jï¿½[ï¿½hIDï¿½ï¿½ï¿½iï¿½[
             ed.putInt("cardid", mCardId);
             if (mShuffleMode != SHUFFLE_NONE) {
-            	// ƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚ªİ’è‚³‚ê‚Ä‚¢‚½‚ç
-            	// ƒqƒXƒgƒŠ[‚ğƒZ[ƒu‚·‚é
+            	// ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½
+            	// ï¿½qï¿½Xï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Zï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½
                 // In shuffle mode we need to save the history too
                 len = mHistory.size();
                 q.setLength(0);
@@ -575,24 +575,24 @@ public class MediaPlaybackService extends Service {
                 ed.putString("history", q.toString());
             }
         }
-        // Œ»İ‚ÌˆÊ’u
+        // ï¿½ï¿½ï¿½İ‚ÌˆÊ’u
         ed.putInt("curpos", mPlayPos);
         if (mPlayer.isInitialized()) {
-        	// ƒƒfƒBƒAƒvƒŒƒCƒ„[‚ª‰Šú‰»Ï‚İ‚È‚ç‚Î
-        	// ‚»‚ÌˆÊ’u‚ğ•Û
+        	// ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï‚İ‚È‚ï¿½ï¿½
+        	// ï¿½ï¿½ï¿½ÌˆÊ’uï¿½ï¿½Ûï¿½
             ed.putLong("seekpos", mPlayer.position());
         }
-        // ƒŠƒs[ƒgƒ‚[ƒh‚ÆƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚ğ•Û
+        // ï¿½ï¿½ï¿½sï¿½[ï¿½gï¿½ï¿½ï¿½[ï¿½hï¿½ÆƒVï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½Ûï¿½
         ed.putInt("repeatmode", mRepeatMode);
         ed.putInt("shufflemode", mShuffleMode);
-        // ‹L˜^
+        // ï¿½Lï¿½^
         ed.commit();
   
-        //Log.i("@@@@ service", "saved state in " + (System.currentTimeMillis() - start) + " ms");
+        //LogWrapper.i("@@@@ service", "saved state in " + (System.currentTimeMillis() - start) + " ms");
     }
 
     /**
-     * ƒLƒ…[‚ÌƒŠƒ[ƒh
+     * ï¿½Lï¿½ï¿½ï¿½[ï¿½Ìƒï¿½ï¿½ï¿½ï¿½[ï¿½h
      */
     private void reloadQueue() {
         String q = null;
@@ -600,46 +600,46 @@ public class MediaPlaybackService extends Service {
         // boolean newstyle = false;
         int id = mCardId;
         if (mPreferences.contains("cardid")) {
-        	// card id‚ª•Û‘¶‚³‚ê‚Ä‚¢‚ê‚ÎA‚»‚ê‚ğæ“¾‚µAnew styleƒtƒ‰ƒO‚ğ—§‚Ä‚é
+        	// card idï¿½ï¿½ï¿½Û‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ÎAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Anew styleï¿½tï¿½ï¿½ï¿½Oï¿½ğ—§‚Ä‚ï¿½
             // newstyle = true;
             id = mPreferences.getInt("cardid", mCardId);
         }
         if (id == mCardId) {
             // Only restore the saved playlist if the card is still
             // the same one as when the playlist was saved
-        	// cardid‚ª•Ï‚í‚Á‚Ä‚¢‚È‚¢
-        	// queue‚ğæ“¾
+        	// cardidï¿½ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½
+        	// queueï¿½ï¿½ï¿½æ“¾
             q = mPreferences.getString("queue", "");
         }
         int qlen = q != null ? q.length() : 0;
         if (qlen > 1) {
-        	// æ“¾‚³‚ê‚½queue‚Ì‰ğÍ
-            //Log.i("@@@@ service", "loaded queue: " + q);
+        	// ï¿½æ“¾ï¿½ï¿½ï¿½ê‚½queueï¿½Ì‰ï¿½ï¿½
+            //LogWrapper.i("@@@@ service", "loaded queue: " + q);
             int plen = 0;
             int n = 0;
             int shift = 0;
             for (int i = 0; i < qlen; i++) {
                 char c = q.charAt(i);
                 if (c == ';') {
-                	// ‹æØ‚è•¶š”­Œ©
-                	// ƒvƒŒƒCƒŠƒXƒg‚Ì—ÌˆæŠm•Û
+                	// ï¿½ï¿½Ø‚è•¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ì—Ìˆï¿½mï¿½ï¿½
                     ensurePlayListCapacity(plen + 1);
-                    // ƒvƒŒƒCƒŠƒXƒg‚ğ‚PŒÂŠi”[
+                    // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Pï¿½ÂŠiï¿½[
                     mPlayList[plen] = new MediaInfo( n, MediaInfo.MEDIA_TYPE_AUDIO );
-                    // Ÿ‚©‚ç‚Ìƒ‹[ƒv‚É”õ‚¦‚Ä‰Šú‰»
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½[ï¿½vï¿½É”ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½
                     plen++;
                     n = 0;
                     shift = 0;
                 } else {
-                	// ‹æØ‚è•¶š‚Å‚È‚¢
-                	// n‚ÌŒvZ
+                	// ï¿½ï¿½Ø‚è•¶ï¿½ï¿½ï¿½Å‚È‚ï¿½
+                	// nï¿½ÌŒvï¿½Z
                     if (c >= '0' && c <= '9') {
                         n += ((c - '0') << shift);
                     } else if (c >= 'a' && c <= 'f') {
                         n += ((10 + c - 'a') << shift);
                     } else {
                         // bogus playlist data
-                    	// ‹U•¨‚ÌƒvƒŒƒCƒŠƒXƒgHİ’è‚ª‰ó‚ê‚Ä‚¢‚éH
+                    	// ï¿½Uï¿½ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Hï¿½İ’è‚ªï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½H
                         plen = 0;
                         break;
                     }
@@ -648,11 +648,11 @@ public class MediaPlaybackService extends Service {
             }
             mPlayListLen = plen;
             
-            // curpos‚Ìæ“¾
+            // curposï¿½Ìæ“¾
             int pos = mPreferences.getInt("curpos", 0);
             if (pos < 0 || pos >= mPlayListLen) {
                 // The saved playlist is bogus, discard it
-            	// •Û‘¶‚³‚ê‚Ä‚¢‚½ˆÊ’u‚ª‰ó‚ê‚Ä‚¢‚½‚çAƒŠƒZƒbƒg‚·‚é
+            	// ï¿½Û‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½Ê’uï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½ï¿½ï¿½
                 mPlayListLen = 0;
                 return;
             }
@@ -663,11 +663,11 @@ public class MediaPlaybackService extends Service {
             // To deal with this, try querying for the current file, and if
             // that fails, wait a while and try again. If that too fails,
             // assume there is a problem and don't restore the state.
-            // ƒJ[ƒh‚Ì‘}“ü‚ÅreloadQueue‚ªŒÄ‚Î‚ê‚½A‚·‚®‚ÉƒvƒƒoƒCƒ_‚ÉƒNƒGƒŠ‚ğ“Š‚°‚é‚±‚Æ‚Í‚Å‚«‚È‚¢‚©‚à‚µ‚ê‚È‚¢
-            // ‚±‚ê‚ğˆµ‚¤‚Æ‚«AŒ»İ‚Ìƒtƒ@ƒCƒ‹‚ÌƒNƒGƒŠ‚Éƒgƒ‰ƒC‚µA‚»‚ê‚ª¸”s‚µ‚½‚çA‚µ‚Î‚ç‚­‘Ò‚Á‚Ä‚à‚¤ˆê“xƒgƒ‰ƒC‚·‚é
-            // ‚»‚ê‚à‚Ü‚½¸”s‚µ‚½‚çA–â‘è‚ª‚ ‚é‚Ì‚ğ–À‚¾‚Æ‚µAó‘Ô‚ğƒŠƒXƒgƒA‚µ‚È‚¢
+            // ï¿½Jï¿½[ï¿½hï¿½Ì‘}ï¿½ï¿½ï¿½ï¿½reloadQueueï¿½ï¿½ï¿½Ä‚Î‚ê‚½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Éƒvï¿½ï¿½ï¿½oï¿½Cï¿½_ï¿½ÉƒNï¿½Gï¿½ï¿½ï¿½ğ“Š‚ï¿½ï¿½é‚±ï¿½Æ‚Í‚Å‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Aï¿½ï¿½ï¿½İ‚Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ÌƒNï¿½Gï¿½ï¿½ï¿½Éƒgï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ê‚ªï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Î‚ç‚­ï¿½Ò‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½gï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½è‚ªï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Aï¿½ï¿½Ô‚ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½Aï¿½ï¿½ï¿½È‚ï¿½
             // MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-            // Œ»İ‚ÌƒvƒŒƒCƒŠƒXƒg‚Ìid‚ÅŒŸõB‚¨‚»‚ç‚­‘¶İŠm”F
+            // ï¿½ï¿½ï¿½İ‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½idï¿½ÅŒï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½ç‚­ï¿½ï¿½ï¿½İŠmï¿½F
             Uri uri = null;
             String [] cursorCols = null;
         	mCurrentType = mPlayList[mPlayPos].getMediaType();
@@ -686,7 +686,7 @@ public class MediaPlaybackService extends Service {
                         new String [] {"_id"}, "_id=" + mPlayList[mPlayPos].getId() , null, null);
             if (crsr == null || crsr.getCount() == 0) {
                 // wait a bit and try again
-            	// ¸”s‚µ‚½‚çA3•b‘Ò‚Á‚ÄƒŠƒgƒ‰ƒCH
+            	// ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½A3ï¿½bï¿½Ò‚ï¿½ï¿½Äƒï¿½ï¿½gï¿½ï¿½ï¿½Cï¿½H
                 SystemClock.sleep(3000);
                 crsr = getContentResolver().query(
                         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -696,7 +696,7 @@ public class MediaPlaybackService extends Service {
                 crsr.close();
             }
 
-            // ‰º‹L‚ÌAŸ‚Ì‹È‚ÖƒXƒLƒbƒv‚Å‚«‚È‚¢H
+            // ï¿½ï¿½ï¿½Lï¿½Ìï¿½ï¿½Aï¿½ï¿½ï¿½Ì‹È‚ÖƒXï¿½Lï¿½bï¿½vï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½H
             // Make sure we don't auto-skip to the next song, since that
             // also starts playback. What could happen in that case is:
             // - music is paused
@@ -707,43 +707,43 @@ public class MediaPlaybackService extends Service {
             // - music service is restarted, service restores state, doesn't find
             //   the "current" file, goes to the next and: playback starts on its
             //   own, potentially at some random inconvenient time.
-            // ƒI[ƒvƒ“¸”s‚ÌƒJƒEƒ“ƒ^‚ğ20‚Å‰Šú‰»H——R‚Í•ª‚©‚ç‚È‚¢EEE
+            // ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ÌƒJï¿½Eï¿½ï¿½ï¿½^ï¿½ï¿½20ï¿½Åï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Hï¿½ï¿½ï¿½Rï¿½Í•ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Eï¿½Eï¿½E
             mOpenFailedCounter = 20;
-            // ƒGƒ‰[‚Å‚àƒƒbƒZ[ƒW‚ğo—Í‚µ‚È‚¢ƒ‚[ƒh
+            // ï¿½Gï¿½ï¿½ï¿½[ï¿½Å‚ï¿½ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½oï¿½Í‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½[ï¿½h
             mQuietMode = true;
-            // Œ»İ‚Ì‹È‚ğƒI[ƒvƒ“
+            // ï¿½ï¿½ï¿½İ‚Ì‹È‚ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½
             openCurrent();
             mQuietMode = false;
             if (!mPlayer.isInitialized()) {
                 // couldn't restore the saved state
-            	// ‚¨‚»‚ç‚­ƒI[ƒvƒ“¸”s
+            	// ï¿½ï¿½ï¿½ï¿½ï¿½ç‚­ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½s
                 mPlayListLen = 0;
                 return;
             }
             
-            // seekˆÊ’u‚ğæ“¾
+            // seekï¿½Ê’uï¿½ï¿½ï¿½æ“¾
             long seekpos = mPreferences.getLong("seekpos", 0);
-            // seekˆÊ’u‚ª0ˆÈã‚ÅAseekˆÊ’u‚ª‹È‚Ì’·‚³‚æ‚è‚à¬‚³‚¯‚ê‚ÎAseekˆÊ’u‚ÖˆÚ“®
+            // seekï¿½Ê’uï¿½ï¿½0ï¿½Èï¿½ÅAseekï¿½Ê’uï¿½ï¿½ï¿½È‚Ì’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎAseekï¿½Ê’uï¿½ÖˆÚ“ï¿½
             seek(seekpos >= 0 && seekpos < duration() ? seekpos : 0);
-            // ƒLƒ…[‚ğƒŠƒXƒgƒA‚µ‚½‚±‚ÆA‚»‚Ì‚Ìƒ|ƒWƒVƒ‡ƒ“‚ğƒƒOo—Í
+            // ï¿½Lï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÆAï¿½ï¿½ï¿½Ìï¿½ï¿½Ìƒ|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½oï¿½ï¿½
             Log.d(LOGTAG, "restored queue, currently at position "
                     + position() + "/" + duration()
                     + " (requested " + seekpos + ")");
-            // repeatƒ‚[ƒh‚ğƒŠƒXƒgƒA
+            // repeatï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½A
             int repmode = mPreferences.getInt("repeatmode", REPEAT_NONE);
             if (repmode != REPEAT_ALL && repmode != REPEAT_CURRENT) {
                 repmode = REPEAT_NONE;
             }
             mRepeatMode = repmode;
 
-            // ƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚ğƒŠƒXƒgƒA
+            // ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½A
             int shufmode = mPreferences.getInt("shufflemode", SHUFFLE_NONE);
             if (shufmode != SHUFFLE_AUTO && shufmode != SHUFFLE_NORMAL) {
                 shufmode = SHUFFLE_NONE;
             }
             if (shufmode != SHUFFLE_NONE) {
-            	// ƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚Ìê‡
-            	// ƒqƒXƒgƒŠ[‚ğƒŠƒXƒgƒAH
+            	// ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½Ìê‡
+            	// ï¿½qï¿½Xï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½Aï¿½H
                 // in shuffle mode we need to restore the history too
                 q = mPreferences.getString("history", "");
                 qlen = q != null ? q.length() : 0;
@@ -757,8 +757,8 @@ public class MediaPlaybackService extends Service {
                         if (c == ';') {
                             if (n >= mPlayListLen) {
                                 // bogus history data
-                            	// ƒf[ƒ^‚ª‰ó‚ê‚Ä‚¢‚éê‡
-                            	// ƒqƒXƒgƒŠ[ƒ}ƒbƒv‚ğƒNƒŠƒA‚µ‚ÄA”²‚¯‚é
+                            	// ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡
+                            	// ï¿½qï¿½Xï¿½gï¿½ï¿½ï¿½[ï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ÄAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                                 mHistory.clear();
                                 break;
                             }
@@ -781,9 +781,9 @@ public class MediaPlaybackService extends Service {
                 }
             }
             if (shufmode == SHUFFLE_AUTO) {
-            	// ƒI[ƒgƒVƒƒƒbƒtƒ‹‚Ìê‡
+            	// ï¿½Iï¿½[ï¿½gï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½Ìê‡
                 if (! makeAutoShuffleList()) {
-                	// ƒI[ƒgƒVƒƒƒbƒtƒ‹‚ÌƒŠƒXƒg‚ğì¬‚µA‚¾‚ß‚È‚çƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚ğ‰ğœ‚·‚é
+                	// ï¿½Iï¿½[ï¿½gï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½Ìƒï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ß‚È‚ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     shufmode = SHUFFLE_NONE;
                 }
             }
@@ -792,32 +792,32 @@ public class MediaPlaybackService extends Service {
     }
     
     /**
-     * ƒT[ƒrƒX‚ªƒoƒCƒ“ƒh‚³‚ê‚½‚Æ‚«
+     * ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½oï¿½Cï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ê‚½ï¿½Æ‚ï¿½
      */
     @Override
     public IBinder onBind(Intent intent) {
-    	// ŠÔ‚ğ’u‚¢‚Ä’â~‚·‚éƒnƒ“ƒhƒ‰‚ÌƒƒbƒZ[ƒW‚ğƒNƒŠƒA
+    	// ï¿½ï¿½ï¿½Ô‚ï¿½uï¿½ï¿½ï¿½Ä’ï¿½~ï¿½ï¿½ï¿½ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Ìƒï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
         mDelayedStopHandler.removeCallbacksAndMessages(null);
-        // ƒT[ƒrƒX—˜—p’†ƒtƒ‰ƒO‚ğON‚É
+        // ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½pï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½ONï¿½ï¿½
         mServiceInUse = true;
-        // ƒoƒCƒ“ƒ_‚ğ•Ô‹p
-        // ’†g‚ÍAServiceStub(this)‚ç‚µ‚¢B©“®¶¬‚Åì‚ç‚ê‚éƒNƒ‰ƒX‚©H
+        // ï¿½oï¿½Cï¿½ï¿½ï¿½_ï¿½ï¿½Ô‹p
+        // ï¿½ï¿½ï¿½gï¿½ÍAServiceStub(this)ï¿½ç‚µï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½H
         return mBinder;
     }
 
     /**
-     * ‚à‚¤ˆê“xƒoƒCƒ“ƒh‚³‚ê‚½‚Æ‚«H
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½oï¿½Cï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ê‚½ï¿½Æ‚ï¿½ï¿½H
      */
     @Override
     public void onRebind(Intent intent) {
-    	// ŠÔ‚ğ’u‚¢‚Ä’â~‚·‚éƒnƒ“ƒhƒ‰‚ÌƒƒbƒZ[ƒW‚ğƒNƒŠƒA
+    	// ï¿½ï¿½ï¿½Ô‚ï¿½uï¿½ï¿½ï¿½Ä’ï¿½~ï¿½ï¿½ï¿½ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Ìƒï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
         mDelayedStopHandler.removeCallbacksAndMessages(null);
-        // ƒT[ƒrƒX—˜—p’†ƒtƒ‰ƒO‚ğON‚É
+        // ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½pï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½ONï¿½ï¿½
         mServiceInUse = true;
     }
 
     /**
-     * ƒXƒ^[ƒg V‚µ‚¢android‚Å‚ÍonStart‚Éæ‚Á‚Ä‘ã‚í‚é‚ç‚µ‚¢
+     * ï¿½Xï¿½^ï¿½[ï¿½g ï¿½Vï¿½ï¿½ï¿½ï¿½androidï¿½Å‚ï¿½onStartï¿½Éï¿½ï¿½ï¿½Ä‘ï¿½ï¿½ï¿½ç‚µï¿½ï¿½
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -825,18 +825,18 @@ public class MediaPlaybackService extends Service {
         mDelayedStopHandler.removeCallbacksAndMessages(null);
 
         if (intent != null) {
-        	// intent‚ªw’è‚³‚ê‚Ä‚¢‚½‚ç
-        	// actionæ“¾
+        	// intentï¿½ï¿½ï¿½wï¿½è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½
+        	// actionï¿½æ“¾
             String action = intent.getAction();
-            // ƒRƒ}ƒ“ƒhæ“¾
+            // ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½æ“¾
             String cmd = intent.getStringExtra("command");
             // MusicUtils.debugLog("onStartCommand " + action + " / " + cmd);
 
             if (CMDNEXT.equals(cmd) || NEXT_ACTION.equals(action)) {
-            	// Ÿ‚ÖƒRƒ}ƒ“ƒh Ÿ‚ÖƒAƒNƒVƒ‡ƒ“
+            	// ï¿½ï¿½ï¿½ÖƒRï¿½}ï¿½ï¿½ï¿½h ï¿½ï¿½ï¿½ÖƒAï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½
                 next(true);
             } else if (CMDPREVIOUS.equals(cmd) || PREVIOUS_ACTION.equals(action)) {
-            	// ‘O‚Ö
+            	// ï¿½Oï¿½ï¿½
                 if (position() < 2000) {
                     prev();
                 } else {
@@ -844,7 +844,7 @@ public class MediaPlaybackService extends Service {
                     play();
                 }
             } else if (CMDTOGGLEPAUSE.equals(cmd) || TOGGLEPAUSE_ACTION.equals(action)) {
-            	// ƒgƒOƒ‹ƒ|[ƒY
+            	// ï¿½gï¿½Oï¿½ï¿½ï¿½|ï¿½[ï¿½Y
                 if (isPlaying()) {
                     pause();
                     mPausedByTransientLossOfFocus = false;
@@ -852,11 +852,11 @@ public class MediaPlaybackService extends Service {
                     play();
                 }
             } else if (CMDPAUSE.equals(cmd) || PAUSE_ACTION.equals(action)) {
-            	// ƒ|[ƒY
+            	// ï¿½|ï¿½[ï¿½Y
                 pause();
                 mPausedByTransientLossOfFocus = false;
             } else if (CMDSTOP.equals(cmd)) {
-            	// ƒXƒgƒbƒv
+            	// ï¿½Xï¿½gï¿½bï¿½v
                 pause();
                 mPausedByTransientLossOfFocus = false;
                 seek(0);
@@ -869,40 +869,40 @@ public class MediaPlaybackService extends Service {
         Message msg = mDelayedStopHandler.obtainMessage();
         mDelayedStopHandler.sendMessageDelayed(msg, IDLE_DELAY);
         
-        // ‚Æ‚è‚ ‚¦‚¸‚±‚±‚É‚¾‚¯AActivity‚Ö‚Ìƒ{ƒ^ƒ“XV’Ê’mˆ—‚ğ“ü‚ê‚é
+        // ï¿½Æ‚è‚ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½ï¿½AActivityï¿½Ö‚Ìƒ{ï¿½^ï¿½ï¿½ï¿½Xï¿½Vï¿½Ê’mï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Intent activityNotifyIntent = new Intent();
         activityNotifyIntent.setAction(
         		OkosamaMediaPlayerActivity.MEDIA_SERVICE_NOTIFY);
         getBaseContext().sendBroadcast(activityNotifyIntent);
         
-        // ƒT[ƒrƒX‚ª‹­§I—¹‚µ‚½ê‡AƒT[ƒrƒX‚ÍÄ‹N“®‚·‚éonStartCommand()‚ªÄ“xŒÄ‚Ño‚³‚êAIntent‚Énull‚ª“n‚³‚ê‚é
+        // ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½Tï¿½[ï¿½rï¿½Xï¿½ÍÄ‹Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½onStartCommand()ï¿½ï¿½ï¿½Ä“xï¿½Ä‚Ñoï¿½ï¿½ï¿½ï¿½AIntentï¿½ï¿½nullï¿½ï¿½ï¿½nï¿½ï¿½ï¿½ï¿½ï¿½
         return START_STICKY;
     }
     
     /**
-     * ƒoƒCƒ“ƒh‰ğœ
+     * ï¿½oï¿½Cï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½
      */
     @Override
     public boolean onUnbind(Intent intent) {
-    	// ƒT[ƒrƒX’†ƒtƒ‰ƒO‚ğ—‚Æ‚·
+    	// ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ğ—‚Æ‚ï¿½
         mServiceInUse = false;
 
-        // ƒtƒ‹ƒZ[ƒu
+        // ï¿½tï¿½ï¿½ï¿½Zï¿½[ï¿½u
         // Take a snapshot of the current playlist
         saveQueue(true);
 
         if (isPlaying() || mPausedByTransientLossOfFocus) {
             // something is currently playing, or will be playing once 
             // an in-progress action requesting audio focus ends, so don't stop the service now.
-        	// ƒvƒŒƒC’†‚âƒgƒ‰ƒ“ƒWƒFƒ“ƒgƒtƒH[ƒJƒX¸‚¢’†H‚È‚ç‚ÎAƒT[ƒrƒX‚Í‚±‚±‚Å‚Í~‚ß‚¸A‚È‚ñ‚ç‚©‚ÌƒAƒNƒVƒ‡ƒ“‚ª©“®‚Å‹N‚±‚é‚Ì‚ğ‘Ò‚Â
+        	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Hï¿½È‚ï¿½ÎAï¿½Tï¿½[ï¿½rï¿½Xï¿½Í‚ï¿½ï¿½ï¿½ï¿½Å‚Í~ï¿½ß‚ï¿½ï¿½Aï¿½È‚ï¿½ç‚©ï¿½ÌƒAï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‹Nï¿½ï¿½ï¿½ï¿½Ì‚ï¿½Ò‚ï¿½
             return true;
         }
         
         // If there is a playlist but playback is paused, then wait a while
         // before stopping the service, so that pause/resume isn't slow.
         // Also delay stopping the service if we're transitioning between tracks.
-        // ƒvƒŒƒC‚ª~‚Ü‚Á‚Ä‚¢‚é‚Ì‚ÉAƒvƒŒƒCƒŠƒXƒg—L‚è
-        // ‚µ‚Î‚ç‚­‘Ò‚Á‚Ä‚©‚çƒT[ƒrƒX‚ğ~‚ß‚é
+        // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½~ï¿½Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ÉAï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Lï¿½ï¿½
+        // ï¿½ï¿½ï¿½Î‚ç‚­ï¿½Ò‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½~ï¿½ß‚ï¿½
         if (mPlayListLen > 0  || mMediaplayerHandler.hasMessages(TRACK_ENDED)) {
             Message msg = mDelayedStopHandler.obtainMessage();
             mDelayedStopHandler.sendMessageDelayed(msg, IDLE_DELAY);
@@ -910,33 +910,33 @@ public class MediaPlaybackService extends Service {
         }
         
         // No active playlist, OK to stop the service right now
-        // ‚·‚®~‚ß‚é
+        // ï¿½ï¿½ï¿½ï¿½ï¿½~ï¿½ß‚ï¿½
         stopSelf(mServiceStartId);
         return true;
     }
     
     /**
-     * ŠÔ‚ğ’u‚¢‚Ä‚©‚ç‰¹Šy‚ğ~‚ß‚é‚½‚ß‚Ìƒnƒ“ƒhƒ‰H
+     * ï¿½ï¿½ï¿½Ô‚ï¿½uï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ç‰¹ï¿½yï¿½ï¿½ï¿½~ï¿½ß‚é‚½ï¿½ß‚Ìƒnï¿½ï¿½ï¿½hï¿½ï¿½ï¿½H
      */
     private Handler mDelayedStopHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-        	// ƒƒbƒZ[ƒW‚Ìˆ—
+        	// ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Ìï¿½ï¿½ï¿½
             // Check again to make sure nothing is playing right now
             if (isPlaying() || mPausedByTransientLossOfFocus || mServiceInUse
                     || mMediaplayerHandler.hasMessages(TRACK_ENDED)) {
-            	// Ä¶’†
-            	// ƒgƒ‰ƒ“ƒWƒFƒ“ƒg’†
-            	// ƒT[ƒrƒX—˜—p’†
-            	// ƒgƒ‰ƒbƒNI—¹‘Ò‚¿H
-            	// ‚Ìê‡Aó‘Ô‚ğ•Û‚¹‚¸‚ÉI—¹
+            	// ï¿½Äï¿½ï¿½ï¿½
+            	// ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½ï¿½
+            	// ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½pï¿½ï¿½
+            	// ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½Iï¿½ï¿½ï¿½Ò‚ï¿½ï¿½H
+            	// ï¿½Ìê‡ï¿½Aï¿½ï¿½Ô‚ï¿½Ûï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉIï¿½ï¿½
                 return;
             }
             // save the queue again, because it might have changed
             // since the user exited the music app (because of
             // party-shuffle or because the play-position changed)
             saveQueue(true);
-            // ˆø”‚ÍAThe most recent start identifier received in onStart(Intent, int)
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ÍAThe most recent start identifier received in onStart(Intent, int)
             stopSelf(mServiceStartId);
         }
     };
@@ -949,7 +949,7 @@ public class MediaPlaybackService extends Service {
     public void closeExternalStorageFiles(String storagePath) {
         // stop playback and clean up if the SD card is going to be unmounted.
         stop(true);
-        // mNowPlayingListener‚­‚ç‚¢‚Å‚µ‚©óM‚µ‚Ä‚¢‚È‚¢‚Á‚Û‚¢
+        // mNowPlayingListenerï¿½ï¿½ï¿½ç‚¢ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Û‚ï¿½
         notifyChange(QUEUE_CHANGED);
         notifyChange(META_CHANGED);
     }
@@ -958,40 +958,40 @@ public class MediaPlaybackService extends Service {
      * Registers an intent to listen for ACTION_MEDIA_EJECT notifications.
      * The intent will call closeExternalStorageFiles() if the external media
      * is going to be ejected, so applications can clean up any files they have open.
-     * ƒƒfƒBƒA‚ªæ‚èo‚³‚ê‚½‚Ìˆ—
+     * ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
      */
     public void registerExternalStorageListener() {
         if (mUnmountReceiver == null) {
-        	// ƒAƒ“ƒ}ƒEƒ“ƒgƒŒƒV[ƒo‚ª‚Ü‚¾‚È‚¢ê‡
+        	// ï¿½Aï¿½ï¿½ï¿½}ï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Vï¿½[ï¿½oï¿½ï¿½ï¿½Ü‚ï¿½ï¿½È‚ï¿½ï¿½ê‡
             mUnmountReceiver = new BroadcastReceiver() {
-            	// ƒAƒ“ƒ}ƒEƒ“ƒgƒŒƒV[ƒo‚ğì¬‚·‚é
+            	// ï¿½Aï¿½ï¿½ï¿½}ï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Vï¿½[ï¿½oï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                	// óM
+                	// ï¿½ï¿½Mï¿½ï¿½
                     String action = intent.getAction();
                     if (action.equals(Intent.ACTION_MEDIA_EJECT)) {
-                    	// ƒƒfƒBƒA‚ªæ‚èo‚³‚ê‚½ê‡
-                    	// ƒLƒ…[‚ğ•Û‘¶
+                    	// ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ê‚½ï¿½ê‡
+                    	// ï¿½Lï¿½ï¿½ï¿½[ï¿½ï¿½Û‘ï¿½
                         saveQueue(true);
-                        // ‚±‚ê‚ª‚½‚Á‚Ä‚¢‚½‚çA‚à‚¤ˆê“xó‘Ô‚ğƒZ[ƒu‚·‚é‚Ì‚ğ–h~‚·‚éH
+                        // ï¿½ï¿½ï¿½ê‚ªï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½Ô‚ï¿½ï¿½Zï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½Ì‚ï¿½hï¿½~ï¿½ï¿½ï¿½ï¿½H
                         mOneShot = true; // This makes us not save the state again later,
                                          // which would be wrong because the song ids and
                                          // card id might not match. 
-                        // ŠO•”ƒXƒgƒŒ[ƒW‚ğ•Â‚¶‚é
+                        // ï¿½Oï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½Â‚ï¿½ï¿½ï¿½
                         closeExternalStorageFiles(intent.getData().getPath());
                     } else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
-                    	// ƒƒfƒBƒA‚ªƒ}ƒEƒ“ƒg‚³‚ê‚½
-                        mMediaMountedCount++; // ƒ}ƒEƒ“ƒgƒJƒEƒ“ƒg‚ğƒCƒ“ƒNƒŠƒƒ“ƒg
+                    	// ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½ï¿½ï¿½}ï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ê‚½
+                        mMediaMountedCount++; // ï¿½}ï¿½Eï¿½ï¿½ï¿½gï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½g
                         mCardId = StorageInfo.getCardId(MediaPlaybackService.this);
-                        // İ’è‚ÌƒŠƒ[ƒhH
+                        // ï¿½İ’ï¿½Ìƒï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½H
                         reloadQueue();
-                        // •ÏX‚Ìƒuƒ[ƒhƒLƒƒƒXƒg’Ê’m
+                        // ï¿½ÏXï¿½Ìƒuï¿½ï¿½ï¿½[ï¿½hï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½Ê’m
                         notifyChange(QUEUE_CHANGED);
                         notifyChange(META_CHANGED);
                     }
                 }
             };
-            // ƒCƒWƒFƒNƒg‚Æƒ}ƒEƒ“ƒg‚¾‚¯ó‚¯æ‚é‚æ‚¤‚ÉHƒtƒBƒ‹ƒ^‚ğ‚©‚¯‚ÄAUnmountReceiver‚ğ“o˜^‚·‚é
+            // ï¿½Cï¿½Wï¿½Fï¿½Nï¿½gï¿½Æƒ}ï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯ï¿½ï¿½æ‚¤ï¿½ÉHï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄAUnmountReceiverï¿½ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½
             IntentFilter iFilter = new IntentFilter();
             iFilter.addAction(Intent.ACTION_MEDIA_EJECT);
             iFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
@@ -1021,23 +1021,23 @@ public class MediaPlaybackService extends Service {
      */
     private void notifyChange(String what) {
         
-    	// Šî–{‚Íintent‚ğƒuƒ[ƒhƒLƒƒƒXƒg‚Å“Š‚°‚é‚¾‚¯H
+    	// ï¿½ï¿½{ï¿½ï¿½intentï¿½ï¿½ï¿½uï¿½ï¿½ï¿½[ï¿½hï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½Å“ï¿½ï¿½ï¿½ï¿½é‚¾ï¿½ï¿½ï¿½H
         Intent i = new Intent(what);
         // audioId
         i.putExtra("id", Long.valueOf(getAudioId()));
-        // ƒA[ƒeƒBƒXƒg–¼
+        // ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½
         i.putExtra("artist", getArtistName());
-        // ƒAƒ‹ƒoƒ€–¼
+        // ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½
         i.putExtra("album",getAlbumName());
-        // ƒgƒ‰ƒbƒN–¼
+        // ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½
         i.putExtra("track", getTrackName());
         sendBroadcast(i);
         
         if (what.equals(QUEUE_CHANGED)) {
-        	// ƒLƒ…[‚ª•Ï‚í‚Á‚½ƒƒbƒZ[ƒW‚Ìê‡Aİ’è‚ğƒtƒ‹‚ÅÄ“x•Û‘¶
+        	// ï¿½Lï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Ìê‡ï¿½Aï¿½İ’ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ÅÄ“xï¿½Û‘ï¿½
             saveQueue(true);
         } else {
-        	// ‚»‚Ì‘¼‚Ìê‡Aƒtƒ‹‚Å‚Í‚È‚¢İ’è‚Åİ’è‚ğÄ“x•Û‘¶
+        	// ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½Ìê‡ï¿½Aï¿½tï¿½ï¿½ï¿½Å‚Í‚È‚ï¿½ï¿½İ’ï¿½Åİ’ï¿½ï¿½ï¿½Ä“xï¿½Û‘ï¿½
             saveQueue(false);
         }
         
@@ -1046,7 +1046,7 @@ public class MediaPlaybackService extends Service {
     }
 
     /**
-     * ƒvƒŒƒCƒŠƒXƒg‚ÌƒLƒƒƒpƒVƒeƒB‚ğŠm•Û‚·‚é
+     * ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ÌƒLï¿½ï¿½ï¿½pï¿½Vï¿½eï¿½Bï¿½ï¿½ï¿½mï¿½Û‚ï¿½ï¿½ï¿½
      * @param size
      */
     private void ensurePlayListCapacity(int size) {
@@ -1054,7 +1054,7 @@ public class MediaPlaybackService extends Service {
             // reallocate at 2x requested size so we don't
             // need to grow and copy the array for every
             // insert
-        	// ’Ç‰Á‚²‚Æ‚É”z—ñ‚ÌŠg‘å‚ÆƒRƒs[‚ğ–h‚®‚½‚ß‚ÉAƒTƒCƒY‚Ì2”{‚Ì—Ìˆæ‚ğŠm•Û
+        	// ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½Æ‚É”zï¿½ï¿½ÌŠgï¿½ï¿½ÆƒRï¿½sï¿½[ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ß‚ÉAï¿½Tï¿½Cï¿½Yï¿½ï¿½2ï¿½{ï¿½Ì—Ìˆï¿½ï¿½ï¿½mï¿½ï¿½
             MediaInfo [] newlist = new MediaInfo[size * 2];
             int len = mPlayList != null ? mPlayList.length : mPlayListLen;
             for (int i = 0; i < len; i++) {
@@ -1062,7 +1062,7 @@ public class MediaPlaybackService extends Service {
             	{
             		continue;
             	}
-            	// Œ»İ‚ÌƒvƒŒƒCƒŠƒXƒg‚Ìİ’è’l‚ğV‚µ‚¢ƒŠƒXƒg‚ÉƒRƒs[
+            	// ï¿½ï¿½ï¿½İ‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ìİ’ï¿½lï¿½ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½ÉƒRï¿½sï¿½[
             	newlist[i] = new MediaInfo( mPlayList[i].getId(), mPlayList[i].getMediaType() );
             }
             mPlayList = newlist;
@@ -1072,9 +1072,9 @@ public class MediaPlaybackService extends Service {
     }
     
     /**
-     * ƒvƒŒƒCƒŠƒXƒg‚Ö‚Ì’Ç‰Á
+     * ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ö‚Ì’Ç‰ï¿½
      * @param list
-     * @param position ƒvƒŒƒCƒŠƒXƒg‚Ì‘}“üˆÊ’u
+     * @param position ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ì‘}ï¿½ï¿½ï¿½Ê’u
      */
     // insert the list of songs at the specified position in the playlist
     private void addToPlayList(long [] list, int[] type, int position) {
@@ -1107,41 +1107,41 @@ public class MediaPlaybackService extends Service {
      * the first track.
      * If the action is NOW, playback will switch to the first of
      * the new tracks immediately.
-     * Œ»İ‚ÌƒvƒŒƒCƒŠƒXƒg‚Éƒgƒ‰ƒbƒN‚ÌƒŠƒXƒg‚ğ’Ç‰Á
-     * Œ»İÄ¶’†‚Ì‚à‚Ì‚ª‚È‚¯‚ê‚ÎAÅ‰‚Ìƒgƒ‰ƒbƒN‚ğÄ¶
-     * action‚ªNOW‚È‚ç‚ÎA‚·‚®V‚µ‚¢ƒgƒ‰ƒbƒN‚ÌÅ‰‚ğÄ¶
+     * ï¿½ï¿½ï¿½İ‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Éƒgï¿½ï¿½ï¿½bï¿½Nï¿½Ìƒï¿½ï¿½Xï¿½gï¿½ï¿½Ç‰ï¿½
+     * ï¿½ï¿½ï¿½İÄï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½Ì‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ÎAï¿½Åï¿½ï¿½Ìƒgï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Äï¿½
+     * actionï¿½ï¿½NOWï¿½È‚ï¿½ÎAï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ÌÅï¿½ï¿½ï¿½ï¿½Äï¿½
      * @param list The list of tracks to append.
      * @param action NOW, NEXT or LAST
      */
     public void enqueue(long [] list, int[] type, int action) {
         synchronized(this) {
             if (action == NEXT && mPlayPos + 1 < mPlayListLen) {
-            	// ƒlƒNƒXƒgw’è‚ÅAŸ‚ÌˆÊ’u‚É‘}“ü‰Â”\‚Èê‡
-            	// Œ»İˆÊ’u+1‚É‘}“ü
+            	// ï¿½lï¿½Nï¿½Xï¿½gï¿½wï¿½ï¿½ÅAï¿½ï¿½ï¿½ÌˆÊ’uï¿½É‘}ï¿½ï¿½ï¿½Â”\ï¿½Èê‡
+            	// ï¿½ï¿½ï¿½İˆÊ’u+1ï¿½É‘}ï¿½ï¿½
                 addToPlayList(list, type, mPlayPos + 1);
-                // QUEUE_CHANGED’Ê’m
-                // ->ƒLƒ…[‚Ì•Û‘¶‚Æv‚í‚ê‚é
+                // QUEUE_CHANGEDï¿½Ê’m
+                // ->ï¿½Lï¿½ï¿½ï¿½[ï¿½Ì•Û‘ï¿½ï¿½Ævï¿½ï¿½ï¿½ï¿½
                 notifyChange(QUEUE_CHANGED);
             } else {
                 // action == LAST || action == NOW || mPlayPos + 1 == mPlayListLen
-            	// ƒlƒNƒXƒg‚Å‚È‚¢ê‡AÅŒã”ö‚É’Ç‰Á‚·‚é
+            	// ï¿½lï¿½Nï¿½Xï¿½gï¿½Å‚È‚ï¿½ï¿½ê‡ï¿½Aï¿½ÅŒï¿½ï¿½ï¿½É’Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½
                 addToPlayList(list, type, Integer.MAX_VALUE);
                 notifyChange(QUEUE_CHANGED);
                 if (action == NOW) {
-                	// NOW‚Ìê‡
-                	// ’Ç‰Á‚µ‚½‚à‚Ì‚Ì“ª‚©‚çÄ¶
+                	// NOWï¿½Ìê‡
+                	// ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Ì“ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
                     mPlayPos = mPlayListLen - list.length;
                     openCurrent();
                     play();
-                    // META_CHANGED‘—M
-                    // å‚ÉA•\¦‚ÌXVH
+                    // META_CHANGEDï¿½ï¿½ï¿½M
+                    // ï¿½ï¿½ÉAï¿½\ï¿½ï¿½ï¿½ÌXï¿½Vï¿½H
                     notifyChange(META_CHANGED);
                     return;
                 }
             }
             if (mPlayPos < 0) {
-            	// Ä¶ˆÊ’u‚ªƒ}ƒCƒiƒX‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚Ä‚¢‚½‚çAÄ¶ˆÊ’u‚ğ0‚É‚µ‚ÄÄ¶‚·‚éH
-            	// ->ƒ}ƒCƒiƒX‚É‚È‚é‚Æ‚¢‚¤ó‹µ‚ª‚æ‚­‚í‚©‚ç‚È‚¢
+            	// ï¿½Äï¿½ï¿½Ê’uï¿½ï¿½ï¿½}ï¿½Cï¿½iï¿½Xï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Äï¿½ï¿½Ê’uï¿½ï¿½0ï¿½É‚ï¿½ï¿½ÄÄï¿½ï¿½ï¿½ï¿½ï¿½H
+            	// ->ï¿½}ï¿½Cï¿½iï¿½Xï¿½É‚È‚ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ó‹µ‚ï¿½ï¿½æ‚­ï¿½í‚©ï¿½ï¿½È‚ï¿½
                 mPlayPos = 0;
                 openCurrent();
                 play();
@@ -1155,57 +1155,57 @@ public class MediaPlaybackService extends Service {
      * and prepares for starting playback at the specified
      * position in the list, or a random position if the
      * specified position is 0.
-     * Œ»İ‚ÌƒvƒŒƒCƒŠƒXƒg‚ğAV‚µ‚­w’è‚³‚ê‚½ƒŠƒXƒg‚Å’u‚«Š·‚¦‚éiŒ»İ‚ÌƒvƒŒƒCƒŠƒXƒg‚Í”jŠüj
-     * ˆÊ’u0‚ªw’è‚³‚ê‚½‚çƒ‰ƒ“ƒ_ƒ€ˆÊ’u‚©‚çA‚»‚êˆÈŠO‚ªw’è‚³‚ê‚Ä‚¢‚½‚ç‚»‚ÌˆÊ’u‚©‚çÄ¶‚·‚é
+     * ï¿½ï¿½ï¿½İ‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Aï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚³ï¿½ê‚½ï¿½ï¿½ï¿½Xï¿½gï¿½Å’uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½İ‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Í”jï¿½ï¿½ï¿½j
+     * ï¿½Ê’u0ï¿½ï¿½ï¿½wï¿½è‚³ï¿½ê‚½ï¿½çƒ‰ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½Ê’uï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ÈŠOï¿½ï¿½ï¿½wï¿½è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ç‚»ï¿½ÌˆÊ’uï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½
      * @param list The new list of tracks.
      */
     public void open(long [] list, int [] type, int position) {
         synchronized (this) {
-        	// ‚±‚ÌƒNƒ‰ƒX‚ğƒƒbƒN
+        	// ï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½bï¿½N
             if (mShuffleMode == SHUFFLE_AUTO) {
-            	// ƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚¾‚Á‚½‚çAƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚ğ‰ğœ‚·‚é
+            	// ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 mShuffleMode = SHUFFLE_NORMAL;
             }
-            // ‰ß‹‚Ìid‚Æ‚µ‚ÄAŒ»İÄ¶’†‚Ì‹È‚Ìid‚ğæ“¾
+            // ï¿½ß‹ï¿½ï¿½ï¿½idï¿½Æ‚ï¿½ï¿½ÄAï¿½ï¿½ï¿½İÄï¿½ï¿½ï¿½ï¿½Ì‹È‚ï¿½idï¿½ï¿½ï¿½æ“¾
             long oldId = getAudioId();
             int listlength = list.length;
             boolean newlist = true;
             if (mPlayListLen == listlength) {
-            	// ‘O‚ÌƒvƒŒƒCƒŠƒXƒg‚Ì’·‚³‚ÆV‚µ‚¢ƒŠƒXƒg‚Ì’·‚³‚ªˆê’vH
+            	// ï¿½Oï¿½Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ì’ï¿½ï¿½ï¿½ï¿½ÆVï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½Ì’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½H
                 // possible fast path: list might be the same
                 newlist = false;
                 for (int i = 0; i < listlength; i++) {
                     if (list[i] != mPlayList[i].getId() || type[i] != mPlayList[i].getMediaType() ) {
-                    	// ’Pƒ‚ÉA‘S‚Ä‚Ì€–Ú‚Ì’l‚ğ“ü‚ê‘Ö‚¦‚é
+                    	// ï¿½Pï¿½ï¿½ï¿½ÉAï¿½Sï¿½Ä‚Ìï¿½ï¿½Ú‚Ì’lï¿½ï¿½ï¿½ï¿½ï¿½Ö‚ï¿½ï¿½ï¿½
                         newlist = true;
                         break;
                     }
                 }
             }
             if (newlist) {
-            	// ƒŠƒXƒg‚ğã‘‚«‚·‚é(-1w’è‚Å“ª‚©‚çã‘‚«)
-            	// ‚»‚ñ‚È‚É‚·‚Î‚ç‚µ‚¢‚â‚è•û‚Å‚Í‚È‚¢‚Ì‚©‚à‚µ‚ê‚È‚¢‚ªA‘½•ªƒTƒCƒY‚àŠm•Û‚³‚ê‚é
+            	// ï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ã‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(-1ï¿½wï¿½ï¿½Å“ï¿½ï¿½ï¿½ï¿½ï¿½ã‘ï¿½ï¿½)
+            	// ï¿½ï¿½ï¿½ï¿½È‚É‚ï¿½ï¿½Î‚ç‚µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚Í‚È‚ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Tï¿½Cï¿½Yï¿½ï¿½ï¿½mï¿½Û‚ï¿½ï¿½ï¿½ï¿½
                 addToPlayList(list, type, -1);
-                // ƒŠƒXƒg‚ª•ÏX‚³‚ê‚½‚Ì‚ÅA•Û‘¶‚³‚¹‚é
+                // ï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ÏXï¿½ï¿½ï¿½ê‚½ï¿½Ì‚ÅAï¿½Û‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 notifyChange(QUEUE_CHANGED);
             }
-            // ‘O‚ÌÄ¶ˆÊ’u‚ğæ“¾H
+            // ï¿½Oï¿½ÌÄï¿½ï¿½Ê’uï¿½ï¿½ï¿½æ“¾ï¿½H
             // int oldpos = mPlayPos;
             if (position >= 0) {
-            	// ˆø”‚ÅˆÊ’u‚ªw’è‚³‚ê‚Ä‚¢‚½‚çA‚»‚ê‚ğÄ¶ˆÊ’u‚É‚·‚é
+            	// ï¿½ï¿½ï¿½ï¿½ï¿½ÅˆÊ’uï¿½ï¿½ï¿½wï¿½è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½Ê’uï¿½É‚ï¿½ï¿½ï¿½
                 mPlayPos = position;
             } else {
-            	// w’è‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚çAƒ‰ƒ“ƒ_ƒ€’l‚ğÄ¶ˆÊ’u‚É‚·‚é
+            	// ï¿½wï¿½è‚³ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½Äï¿½ï¿½Ê’uï¿½É‚ï¿½ï¿½ï¿½
                 mPlayPos = mRand.nextInt(mPlayListLen);
             }
-            // Ä¶—š—ğƒNƒŠƒA
+            // ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
             mHistory.clear();
 
             saveBookmarkIfNeeded();
-            // Œ»İƒvƒŒƒCƒŠƒXƒg‚ÌƒI[ƒvƒ“
+            // ï¿½ï¿½ï¿½İƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ÌƒIï¿½[ï¿½vï¿½ï¿½
             openCurrent();
             if (oldId != getAudioId()) {
-            	// ‹È‚ª•Ï‚í‚Á‚½‚çA•\¦‚ğXV
+            	// ï¿½È‚ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½V
                 notifyChange(META_CHANGED);
             }
         }
@@ -1213,22 +1213,22 @@ public class MediaPlaybackService extends Service {
     
     /**
      * Moves the item at index1 to index2.
-     * ƒvƒŒƒCƒŠƒXƒg‚Ì€–Ú‚ğˆÚ“®‚·‚é
-     * ‘½•ªA’Pƒ‚É“ü‚ê‘Ö‚¦‚é‚¾‚¯B‚½‚¾‚µA“ü‚ê‘Ö‚¦‚É‚æ‚Á‚Ä‘¼‚Ì€–Ú‚Ì‡”Ô‚ÆA
-     * ƒvƒŒƒC’†‚Ìindex‚à•Ï‚í‚é‚ç‚µ‚¢
+     * ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ìï¿½ï¿½Ú‚ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Pï¿½ï¿½ï¿½É“ï¿½ï¿½ï¿½Ö‚ï¿½ï¿½é‚¾ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Ö‚ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‘ï¿½ï¿½Ìï¿½ï¿½Ú‚Ìï¿½ï¿½Ô‚ÆA
+     * ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½indexï¿½ï¿½ï¿½Ï‚ï¿½ï¿½ç‚µï¿½ï¿½
      * @param index1
      * @param index2
      */
     public void moveQueueItem(int index1, int index2) {
         synchronized (this) {
-        	// ‚±‚ÌƒNƒ‰ƒX‚ğƒƒbƒN
+        	// ï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½bï¿½N
             if (index1 >= mPlayListLen) {
-            	// Å‰‚Ì‚ªAƒvƒŒƒCƒŠƒXƒg’·‚æ‚è‚à‘å‚«‚¢
-            	// index‚ğAÅŒã‚Ì€–Ú‚ÖˆÚ“®
+            	// ï¿½Åï¿½ï¿½Ì‚ï¿½ï¿½Aï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½å‚«ï¿½ï¿½
+            	// indexï¿½ï¿½ï¿½Aï¿½ÅŒï¿½Ìï¿½ï¿½Ú‚ÖˆÚ“ï¿½
                 index1 = mPlayListLen - 1;
             }
             if (index2 >= mPlayListLen) {
-            	// 1‚Æ“¯—l
+            	// 1ï¿½Æ“ï¿½ï¿½l
                 index2 = mPlayListLen - 1;
             }
             if (index1 < index2) {
@@ -1260,14 +1260,14 @@ public class MediaPlaybackService extends Service {
 
     /**
      * Returns the current play list
-     * Œ»İ‚ÌƒvƒŒƒCƒŠƒXƒg‚ğ•Ô‹pH
+     * ï¿½ï¿½ï¿½İ‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½Ô‹pï¿½H
      * @return An array of integers containing the IDs of the tracks in the play list
-     * ƒvƒŒƒCƒŠƒXƒg‚Ì”z—ñ(=AudioID‚Ì”z—ñ)
+     * ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ì”zï¿½ï¿½(=AudioIDï¿½Ì”zï¿½ï¿½)
      */
     public long [] getQueue() {
         synchronized (this) {
-        	// ƒNƒ‰ƒX‚ÌƒƒbƒN
-        	// ’Pƒ‚ÉAŒ»İ‚ÌƒvƒŒƒCƒŠƒXƒg‚ğƒRƒs[‚µ‚½”z—ñ‚ğreturn
+        	// ï¿½Nï¿½ï¿½ï¿½Xï¿½Ìƒï¿½ï¿½bï¿½N
+        	// ï¿½Pï¿½ï¿½ï¿½ÉAï¿½ï¿½ï¿½İ‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ï¿½ï¿½return
             int len = mPlayListLen;
             long [] list = new long[len];
             for (int i = 0; i < len; i++) {
@@ -1278,14 +1278,14 @@ public class MediaPlaybackService extends Service {
     }
     /**
      * Returns the current play list
-     * Œ»İ‚ÌƒvƒŒƒCƒŠƒXƒg‚ğ•Ô‹pH
+     * ï¿½ï¿½ï¿½İ‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½Ô‹pï¿½H
      * @return An array of integers containing the IDs of the tracks in the play list
-     * ƒvƒŒƒCƒŠƒXƒg‚Ì”z—ñ(=AudioID‚Ì”z—ñ)
+     * ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ì”zï¿½ï¿½(=AudioIDï¿½Ì”zï¿½ï¿½)
      */
     public int [] getMediaType() {
         synchronized (this) {
-        	// ƒNƒ‰ƒX‚ÌƒƒbƒN
-        	// ’Pƒ‚ÉAŒ»İ‚ÌƒvƒŒƒCƒŠƒXƒg‚ğƒRƒs[‚µ‚½”z—ñ‚ğreturn
+        	// ï¿½Nï¿½ï¿½ï¿½Xï¿½Ìƒï¿½ï¿½bï¿½N
+        	// ï¿½Pï¿½ï¿½ï¿½ÉAï¿½ï¿½ï¿½İ‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ï¿½ï¿½return
             int len = mPlayListLen;
             int [] listType = new int[len];
             for (int i = 0; i < len; i++) {
@@ -1296,25 +1296,25 @@ public class MediaPlaybackService extends Service {
     }
     
     /**
-     * ‘½•ªAŒ»İ‚Ì€–Ú‚ğƒI[ƒvƒ“‚·‚é
-     * stop->‹Èî•ñæ“¾-> 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½İ‚Ìï¿½ï¿½Ú‚ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     * stop->ï¿½Èï¿½ï¿½æ“¾-> 
      */
     private void openCurrent() {
         synchronized (this) {
-        	// ‚¨‚»‚ç‚­‚±‚ÌƒT[ƒrƒX‚ğƒƒbƒN‚·‚é
+        	// ï¿½ï¿½ï¿½ï¿½ï¿½ç‚­ï¿½ï¿½ï¿½ÌƒTï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
             if (mCursor != null) {
-            	// ƒJ[ƒ\ƒ‹‚ªŠi”[‚³‚ê‚Ä‚¢‚½‚çA•Â‚¶‚é
+            	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Â‚ï¿½ï¿½ï¿½
                 mCursor.close();
                 mCursor = null;
             }
             if (mPlayListLen == 0) {
-            	// ƒvƒŒƒCƒŠƒXƒg‚ª‚È‚¯‚ê‚ÎAI—¹
+            	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ÎAï¿½Iï¿½ï¿½
                 return;
             }
-            // ‹È‚ğ~‚ß‚éBfalse=‘¦‚ÅH
+            // ï¿½È‚ï¿½ï¿½~ï¿½ß‚ï¿½Bfalse=ï¿½ï¿½ï¿½ï¿½ï¿½ÅH
             stop(false);
 
-            // Œ»İ‚Ì‹È‚Ìid‚ğæ“¾
+            // ï¿½ï¿½ï¿½İ‚Ì‹È‚ï¿½idï¿½ï¿½ï¿½æ“¾
             String id = String.valueOf(mPlayList[mPlayPos].getId());
             
             Uri uri = null;
@@ -1332,26 +1332,26 @@ public class MediaPlaybackService extends Service {
             }
             
             
-            // Œ»İ‚Ì‹È‚Ìî•ñ‚ğæ“¾
+            // ï¿½ï¿½ï¿½İ‚Ì‹È‚Ìï¿½ï¿½ï¿½ï¿½æ“¾
             mCursor = getContentResolver().query(
             		uri,
             		cursorCols, "_id=" + id , null, null);
             if (mCursor != null) {
-            	// æ“¾‚Å‚«‚½‚ç
-            	// ƒJ[ƒ\ƒ‹‚ÌÅ‰‚Ì€–Ú‚ğAƒI[ƒvƒ“‚·‚é
+            	// ï¿½æ“¾ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½
+            	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ÌÅï¿½ï¿½Ìï¿½ï¿½Ú‚ï¿½ï¿½Aï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 mCursor.moveToFirst();
-                // ƒI[ƒvƒ“iMultiPlayer.setDataSource‚ÅÄ¶€”õ‚³‚ê‚é)
+                // ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½iMultiPlayer.setDataSourceï¿½ÅÄï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
                 open(uri + "/" + id, false, mPlayList[mPlayPos].getMediaType());
                 // go to bookmark if needed
                 if (isPodcast()) {
-                	// Podcast‚Å‚ ‚ê‚Î
-                	// iŒ»İ‚ÌƒJ[ƒ\ƒ‹‚©‚çAPodcastƒtƒ‰ƒO‚ğŒ©‚Ä”»’è‚µ‚Ä‚¢‚éj
-                	// Œ»İ‚ÌƒJ[ƒ\ƒ‹‚©‚çAƒuƒbƒNƒ}[ƒNƒtƒ‰ƒO‚ğæ“¾
+                	// Podcastï¿½Å‚ï¿½ï¿½ï¿½ï¿½
+                	// ï¿½iï¿½ï¿½ï¿½İ‚ÌƒJï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½APodcastï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Ä”ï¿½ï¿½è‚µï¿½Ä‚ï¿½ï¿½ï¿½j
+                	// ï¿½ï¿½ï¿½İ‚ÌƒJï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½uï¿½bï¿½Nï¿½}ï¿½[ï¿½Nï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½æ“¾
                     long bookmark = getBookmark();
                     // Start playing a little bit before the bookmark,
                     // so it's easier to get back in to the narrative.
-                    // ƒuƒbƒNƒ}[ƒN‚©‚çA5s‘O‚Éseek?‚È‚º‚¾‚ë‚¤H
-                    // ƒ†[ƒU‚Í‚¢‚«‚È‚èƒuƒbƒNƒ}[ƒN‚©‚çn‚Ü‚é‚Æ”F¯‚Å‚«‚È‚¢‚©‚ç‚©‚à
+                    // ï¿½uï¿½bï¿½Nï¿½}ï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½A5sï¿½Oï¿½ï¿½seek?ï¿½È‚ï¿½ï¿½ï¿½ï¿½ë‚¤ï¿½H
+                    // ï¿½ï¿½ï¿½[ï¿½Uï¿½Í‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½uï¿½bï¿½Nï¿½}ï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½nï¿½Ü‚ï¿½Æ”Fï¿½ï¿½ï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ç‚©ï¿½ï¿½
                     seek(bookmark - 5000);
                 }
             }
@@ -1359,7 +1359,7 @@ public class MediaPlaybackService extends Service {
     }
 
     /**
-     * ”ñ“¯Šú‚ÅƒI[ƒvƒ“H
+     * ï¿½ñ“¯Šï¿½ï¿½ÅƒIï¿½[ï¿½vï¿½ï¿½ï¿½H
      * @param path
      */
     public void openAsync(String path) {
@@ -1368,17 +1368,17 @@ public class MediaPlaybackService extends Service {
                 return;
             }
             
-            // ƒŠƒs[ƒgƒ‚[ƒh‚ğ‚È‚µ‚ÉH
+            // ï¿½ï¿½ï¿½sï¿½[ï¿½gï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½È‚ï¿½ï¿½ÉH
             mRepeatMode = REPEAT_NONE;
-            // ƒvƒŒƒCƒŠƒXƒg‚ğ1Œ‚ÉH
+            // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½1ï¿½ï¿½ï¿½ÉH
             ensurePlayListCapacity(1);
             mPlayListLen = 1;
             mPlayPos = -1;
             
             mFileToPlay = path;
-            // ƒJ[ƒ\ƒ‹‚ğNull‚ÉH
+            // ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½Nullï¿½ÉH
             mCursor = null;
-            // ”ñ“¯Šú‚ÅÄ¶€”õ
+            // ï¿½ñ“¯Šï¿½ï¿½ÅÄï¿½ï¿½ï¿½ï¿½ï¿½
             mPlayer.setDataSourceAsync(mFileToPlay);
             // oneshot?
             mOneShot = true;
@@ -1387,21 +1387,21 @@ public class MediaPlaybackService extends Service {
     
     /**
      * Opens the specified file and readies it for playback.
-     * “Á’è‚Ìƒtƒ@ƒCƒ‹‚ğƒI[ƒvƒ“‚µA‚»‚ÌÄ¶‚ğ€”õ‚·‚é
+     * ï¿½ï¿½ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ÌÄï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      * @param path The full path of the file to be opened.
      * @param oneshot when set to true, playback will stop after this file completes, instead
      * of moving on to the next track in the list 
      */
     public void open(String path, boolean oneshot, int mediaType) {
         synchronized (this) {
-        	// ‚¨‚»‚ç‚­‚±‚ÌƒT[ƒrƒX‚ğƒƒbƒN‚·‚é
+        	// ï¿½ï¿½ï¿½ï¿½ï¿½ç‚­ï¿½ï¿½ï¿½ÌƒTï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
             if (path == null) {
-            	// ƒpƒX‚ªnull‚È‚ç‚ÎI—¹
+            	// ï¿½pï¿½Xï¿½ï¿½nullï¿½È‚ï¿½ÎIï¿½ï¿½
                 return;
             }
             
             if (oneshot) {
-            	// oneshot‚È‚ç‚ÎAƒŠƒs[ƒg‚µ‚È‚¢İ’è‚É‚µAƒvƒŒƒCƒŠƒXƒg‚ğ1ŒÂ‚É‚·‚é
+            	// oneshotï¿½È‚ï¿½ÎAï¿½ï¿½ï¿½sï¿½[ï¿½gï¿½ï¿½ï¿½È‚ï¿½ï¿½İ’ï¿½É‚ï¿½ï¿½Aï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½1ï¿½Â‚É‚ï¿½ï¿½ï¿½
                 mRepeatMode = REPEAT_NONE;
                 ensurePlayListCapacity(1);
                 mPlayListLen = 1;
@@ -1410,7 +1410,7 @@ public class MediaPlaybackService extends Service {
             
             // if mCursor is null, try to associate path with a database cursor
             if (mCursor == null) {
-            	// ƒJ[ƒ\ƒ‹‚ªnull‚È‚ç‚Î
+            	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½nullï¿½È‚ï¿½ï¿½
                 ContentResolver resolver = getContentResolver();
                 Uri uri = null;
                 String [] cursorCols = null;
@@ -1420,17 +1420,17 @@ public class MediaPlaybackService extends Service {
                 mCurrentType = mPlayList[mPlayPos].getMediaType();
                 
                 if (path.startsWith("content://media/")) {
-                	// ƒpƒX‚ªcontent://media‚Ån‚Ü‚Á‚Ä‚¢‚½‚ç
-                	// ƒpƒX‚ğuri‚É•ÏŠ·
+                	// ï¿½pï¿½Xï¿½ï¿½content://mediaï¿½Ånï¿½Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½
+                	// ï¿½pï¿½Xï¿½ï¿½uriï¿½É•ÏŠï¿½
                     uri = Uri.parse(path);
-                    // ƒNƒGƒŠ‚ÌğŒ‚ğƒNƒŠƒA
+                    // ï¿½Nï¿½Gï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
                     where = null;
                     selectionArgs = null;
                 } else {
-                   // ‚»‚¤‚Å‚È‚¢ê‡‚àAƒpƒX‚ğuri‚É•ÏŠ·‚·‚éH
-                   // TODO:getContentUriForPath‚ğ’²¸
+                   // ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ê‡ï¿½ï¿½ï¿½Aï¿½pï¿½Xï¿½ï¿½uriï¿½É•ÏŠï¿½ï¿½ï¿½ï¿½ï¿½H
+                   // TODO:getContentUriForPathï¿½ğ’²ï¿½
                    // uri = MediaStore.Audio.Media.getContentUriForPath(path);
-                   // ‚±‚Ìê‡AğŒ‚ğİ’è
+                   // ï¿½ï¿½ï¿½Ìê‡ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
                    where = MediaColumns.DATA + "=?";
                    selectionArgs = new String[] { path };
 
@@ -1453,18 +1453,18 @@ public class MediaPlaybackService extends Service {
                 }
                 
                 try {
-                	// ƒNƒGƒŠ‚Ì”­s
+                	// ï¿½Nï¿½Gï¿½ï¿½ï¿½Ì”ï¿½ï¿½s
                     mCursor = resolver.query(uri, cursorCols, where, selectionArgs, null);
                     if  (mCursor != null) {
-                    	// Œ‹‰Ê‚ªæ“¾‚Å‚«‚½
+                    	// ï¿½ï¿½ï¿½Ê‚ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½ï¿½
                         if (mCursor.getCount() == 0) {
-                        	// Œ‹‰Ê‚ª0
-                        	// ƒJ[ƒ\ƒ‹ƒNƒ[ƒY
+                        	// ï¿½ï¿½ï¿½Ê‚ï¿½0
+                        	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½Y
                             mCursor.close();
                             mCursor = null;
                         } else {
-                        	// Œ‹‰Ê‚ª‚PŒˆÈã
-                        	// 1Œ–Ú‚ÌŒ‹‰Ê‚ÌIDCOLIDX‚ğƒvƒŒƒCƒŠƒXƒg‚Æ‚µ‚Ä•Û
+                        	// ï¿½ï¿½ï¿½Ê‚ï¿½ï¿½Pï¿½ï¿½ï¿½Èï¿½
+                        	// 1ï¿½ï¿½ï¿½Ú‚ÌŒï¿½ï¿½Ê‚ï¿½IDCOLIDXï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Æ‚ï¿½ï¿½Ä•Ûï¿½
                             mCursor.moveToNext();
                             ensurePlayListCapacity(1);
                             mPlayListLen = 1;
@@ -1476,36 +1476,36 @@ public class MediaPlaybackService extends Service {
                 } catch (UnsupportedOperationException ex) {
                 }
             }
-            // ƒvƒŒƒCƒ„[‚Ìƒf[ƒ^ƒ\[ƒX‚Æ‚µ‚ÄAw’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ğİ’è‚·‚é
+            // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìƒfï¿½[ï¿½^ï¿½\ï¿½[ï¿½Xï¿½Æ‚ï¿½ï¿½ÄAï¿½wï¿½è‚³ï¿½ê‚½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½İ’è‚·ï¿½ï¿½
             mFileToPlay = path;
-            // Ä¶€”õ‚³‚ê‚é
+            // ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             mPlayer.setDataSource(mFileToPlay,mCurrentType);
             mOneShot = oneshot;
             if (! mPlayer.isInitialized()) {
-            	// ‚Ü‚¾ƒvƒŒƒCƒ„[‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚È‚¢
-            	// ‚à‚µ‚©‚·‚é‚ÆA‚±‚ê‚Í‚Â‚Ü‚èsetDataSource‚ÅƒGƒ‰[‚É‚È‚Á‚½‚±‚Æ‚ğ•\‚·‚Ì‚©‚à‚µ‚ê‚È‚¢
-            	// ‚Æ‚è‚ ‚¦‚¸A~‚ß‚éH
+            	// ï¿½Ü‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½
+            	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÆAï¿½ï¿½ï¿½ï¿½Í‚Â‚Ü‚ï¿½setDataSourceï¿½ÅƒGï¿½ï¿½ï¿½[ï¿½É‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½\ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
+            	// ï¿½Æ‚è‚ ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½~ï¿½ß‚ï¿½H
                 stop(true);
                 if (mOpenFailedCounter++ < 10 &&  mPlayListLen > 1) {
-                	// ƒGƒ‰[ƒJƒEƒ“ƒ^‚ğƒCƒ“ƒNƒŠƒƒ“ƒg
+                	// ï¿½Gï¿½ï¿½ï¿½[ï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½g
                     // beware: this ends up being recursive because next() calls open() again.
-                	// ƒGƒ‰[‚ª10ŒˆÈ‰º‚ÅAƒvƒŒƒCƒŠƒXƒg‚ª2ŒˆÈã‚ ‚ê‚ÎAŸ‚Ì‹È‚ÖH
+                	// ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½10ï¿½ï¿½ï¿½È‰ï¿½ï¿½ÅAï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½2ï¿½ï¿½ï¿½Èã‚ ï¿½ï¿½ÎAï¿½ï¿½ï¿½Ì‹È‚ÖH
                     next(false);
                 }
                 if (! mPlayer.isInitialized() && mOpenFailedCounter != 0) {
                     // need to make sure we only shows this once
-                	// ƒvƒŒƒCƒ„[‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚È‚­‚ÄAƒI[ƒvƒ“¸”s‚ª‚ ‚ê‚Î
-                	// ƒI[ƒvƒ“¸”s‚ÌƒJƒEƒ“ƒ^ƒNƒŠƒA
+                	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ÄAï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                	// ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ÌƒJï¿½Eï¿½ï¿½ï¿½^ï¿½Nï¿½ï¿½ï¿½A
                     mOpenFailedCounter = 0;
                     if (!mQuietMode) {
-                    	// o‚µ‚Ä‚¢‚¢ê‡‚ÍAƒ†[ƒU‚ÉƒGƒ‰[ƒƒbƒZ[ƒWo—ÍH
+                    	// ï¿½oï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍAï¿½ï¿½ï¿½[ï¿½Uï¿½ÉƒGï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½oï¿½ÍH
                         Toast.makeText(this, R.string.playback_failed, Toast.LENGTH_SHORT).show();
                     }
                     Log.d(LOGTAG, "Failed to open file for playback");
                 }
             } else {
-            	// ƒvƒŒƒCƒ„‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚éê‡
-            	// =ƒf[ƒ^ƒ\[ƒXƒI[ƒvƒ“¬Œ÷H
+            	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡
+            	// =ï¿½fï¿½[ï¿½^ï¿½\ï¿½[ï¿½Xï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½H
                 mOpenFailedCounter = 0;
             }
         }
@@ -1517,7 +1517,7 @@ public class MediaPlaybackService extends Service {
 
     /**
      * Starts playback of a previously opened file.
-     * ƒtƒ@ƒCƒ‹ƒI[ƒvƒ“‚æ‚è‘O‚à‚Á‚ÄƒvƒŒƒCƒoƒbƒN‚ğŠJn‚·‚éH
+     * ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Äƒvï¿½ï¿½ï¿½Cï¿½oï¿½bï¿½Nï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½ï¿½H
      */
     public void play() {
         if( this.getCurrentType() == MediaInfo.MEDIA_TYPE_VIDEO )
@@ -1535,69 +1535,69 @@ public class MediaPlaybackService extends Service {
 	                MediaButtonIntentReceiver.class.getName()));
         }
         if (mPlayer.isInitialized()) {
-        	// €”õOK’†‚Å‚ ‚ê‚Î
+        	// ï¿½ï¿½ï¿½ï¿½OKï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½
             // if we are at the end of the song, go to the next song first
-        	// ‹È‚ªI‚í‚Á‚½‚çAŸ‚Ì‹È‚ÌÅ‰‚ÉˆÚ“®‚·‚é
+        	// ï¿½È‚ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ì‹È‚ÌÅï¿½ï¿½ÉˆÚ“ï¿½ï¿½ï¿½ï¿½ï¿½
             long duration = mPlayer.duration();
-            // Œ»İ‹È‚ÌƒŠƒs[ƒg‚Å‚Í‚È‚­AÄ¶ŠÔ‚ª20sˆÈã‚ÅAposition‚ªÄ¶ŠÔ-20s‚æ‚è‘å‚«‚¢
+            // ï¿½ï¿½ï¿½İ‹È‚Ìƒï¿½ï¿½sï¿½[ï¿½gï¿½Å‚Í‚È‚ï¿½ï¿½Aï¿½Äï¿½ï¿½ï¿½ï¿½Ô‚ï¿½20sï¿½Èï¿½ÅApositionï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½-20sï¿½ï¿½ï¿½å‚«ï¿½ï¿½
             if (mRepeatMode != REPEAT_CURRENT && duration > 2000 &&
                 mPlayer.position() >= duration - 2000) {
-            	// Ÿ‚Ì‹È‚Ö
+            	// ï¿½ï¿½ï¿½Ì‹È‚ï¿½
                 next(true);
             }
 
-            // €”õ‚³‚ê‚Ä‚¢‚éƒtƒ@ƒCƒ‹‚ğÄ¶H
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½H
             mPlayer.start();
-            // •ÊƒvƒƒZƒXã‚Å•\¦‰Â”\‚Æ‚È‚éŠK‘w“I‚ÈView‚ğ‹Lq‚·‚éƒNƒ‰ƒX
-            // ƒXƒe[ƒ^ƒXƒo[‚ÌƒŒƒCƒAƒEƒg‚ğİ’èH
+            // ï¿½Êƒvï¿½ï¿½ï¿½Zï¿½Xï¿½ï¿½Å•\ï¿½ï¿½ï¿½Â”\ï¿½Æ‚È‚ï¿½Kï¿½wï¿½Iï¿½ï¿½Viewï¿½ï¿½ï¿½Lï¿½qï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
+            // ï¿½Xï¿½eï¿½[ï¿½^ï¿½Xï¿½oï¿½[ï¿½Ìƒï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½ï¿½İ’ï¿½H
             RemoteViews views = new RemoteViews(getPackageName(), R.layout.statusbar);
-            // ƒCƒ[ƒW‚ğİ’èH
+            // ï¿½Cï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½İ’ï¿½H
             views.setImageViewResource(R.id.icon, R.drawable.stat_notify_musicplayer);
             String ticket;
 //            if (getAudioId() < 0) {
 //                // streaming
-//            	// ƒXƒgƒŠ[ƒ~ƒ“ƒO
+//            	// ï¿½Xï¿½gï¿½ï¿½ï¿½[ï¿½~ï¿½ï¿½ï¿½O
 //                views.setTextViewText(R.id.trackname, getPath());
 //                views.setTextViewText(R.id.artistalbum, null);
 //                ticket = getPath();
 //            } else {
             {
-            	// •’Ê‚ÌƒƒfƒBƒAH
+            	// ï¿½ï¿½ï¿½Ê‚Ìƒï¿½ï¿½fï¿½Bï¿½Aï¿½H
                 String artist = getArtistName();
-                // ƒgƒ‰ƒbƒN–¼‚ğƒrƒ…[‚Éİ’è
+                // ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½Éİ’ï¿½
                 views.setTextViewText(R.id.trackname, getTrackName());
                 if (artist == null || artist.equals(MediaStore.UNKNOWN_STRING)) {
-                	// ƒA[ƒeƒBƒXƒg‚ªæ“¾‚Å‚«‚È‚©‚Á‚½‚çAƒA[ƒeƒBƒXƒg‚ğUnknown‚Éİ’è
+                	// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½Unknownï¿½Éİ’ï¿½
                     artist = getString(R.string.unknown_artist_name);
                 }
-                // ƒAƒ‹ƒoƒ€‚ğæ“¾
+                // ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
                 String album = getAlbumName();
                 if (album == null || album.equals(MediaStore.UNKNOWN_STRING)) {
-                	// ƒAƒ‹ƒoƒ€–¼‚ªæ“¾‚Å‚«‚È‚¯‚ê‚ÎAƒAƒ‹ƒoƒ€–¼‚ğUnknown‚Éæ“¾
+                	// ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ÎAï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Unknownï¿½Éæ“¾
                     album = getString(R.string.unknown_album_name);
                 }
                 
-                // ƒAƒ‹ƒoƒ€–¼‚ÆƒA[ƒeƒBƒXƒg–¼‚ğƒrƒ…[‚Éİ’è
+                // ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ÆƒAï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½Éİ’ï¿½
                 views.setTextViewText(R.id.artistalbum,
                         getString(R.string.notification_artist_album, artist, album)
                         );
                 ticket = getTrackName() + "-" + artist; //+ "[" + album + "]" + " - " + artist;
             }
             
-            // NotificationƒNƒ‰ƒX‚Ìì¬
+            // Notificationï¿½Nï¿½ï¿½ï¿½Xï¿½Ìì¬
             Notification status = new Notification();
             // 
             status.tickerText = ticket;
-            // NotificationƒNƒ‰ƒX‚ÉAƒrƒ…[‚ğİ’è
+            // Notificationï¿½Nï¿½ï¿½ï¿½Xï¿½ÉAï¿½rï¿½ï¿½ï¿½[ï¿½ï¿½İ’ï¿½
             status.contentView = views;
-            // Notification‚ğí’“‚³‚¹‚éH
+            // Notificationï¿½ï¿½ï¿½í’“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½H
             //status.flags |= Notification.FLAG_ONGOING_EVENT;
 //            status.ledARGB = 0xffffff00;
 //            status.ledOnMS = 300;
 //            status.ledOffMS = 1000;
             // status.flags |= Notification.DEFAULT_LIGHTS;
                         
-            // Notification‚ÌƒAƒCƒRƒ“‚ğİ’è
+            // Notificationï¿½ÌƒAï¿½Cï¿½Rï¿½ï¿½ï¿½ï¿½İ’ï¿½
             status.icon = R.drawable.stat_notify_musicplayer;
             SharedPreferences prefs = getSharedPreferences(
                     MusicSettingsActivity.PREFERENCES_FILE, MODE_PRIVATE);            
@@ -1605,12 +1605,12 @@ public class MediaPlaybackService extends Service {
 
             if( bVib )
             {
-	            // ƒoƒCƒu‚·‚ê‚ÎÄ¶’†‚Å‚ ‚é‚±‚Æ‚É‹C‚Ã‚­‚Ì‚Å
+	            // ï¿½oï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ÎÄï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½é‚±ï¿½Æ‚É‹Cï¿½Ã‚ï¿½ï¿½Ì‚ï¿½
 //                status.flags |= Notification.DEFAULT_VIBRATE;
 //                status.vibrate = new long[]{250,50,750,10};
                 Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                 String sVib = prefs.getString(MusicSettingsActivity.KEY_VIBRATE_INTENSITY, "");
-                //Log.e("Vib",sVib);
+                //LogWrapper.e("Vib",sVib);
                 long nVib = 0;
                 if( sVib != null && sVib.length() > 0 )
                 {
@@ -1618,36 +1618,36 @@ public class MediaPlaybackService extends Service {
                 }
                 vibrator.vibrate(nVib);
             }
-            // ƒNƒŠƒbƒN‚É”­s‚³‚ê‚éƒCƒ“ƒeƒ“ƒgH‚¾‚ë‚¤‚©H
-            // ƒ^ƒCƒ~ƒ“ƒO‚ğw’è‚µ‚Ä”­s‚Å‚«‚éƒCƒ“ƒeƒ“ƒg
-            // ¡‰ñ‚Í‘½•ªANotification‚ªƒNƒŠƒbƒN‚³‚ê‚½‚Æ‚«
+            // ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½É”ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½Hï¿½ï¿½ï¿½ë‚¤ï¿½ï¿½ï¿½H
+            // ï¿½^ï¿½Cï¿½~ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½wï¿½è‚µï¿½Ä”ï¿½ï¿½sï¿½Å‚ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½eï¿½ï¿½ï¿½g
+            // ï¿½ï¿½ï¿½ï¿½Í‘ï¿½ï¿½ï¿½ï¿½ANotificationï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ê‚½ï¿½Æ‚ï¿½
             Intent clickIntent = new Intent();
             clickIntent.setClassName(
             		"okosama.app", "okosama.app.OkosamaMediaPlayerActivity");
             status.contentIntent = PendingIntent.getActivity(this, 0,
-            		// TODO: Activity•ÏX
+            		// TODO: Activityï¿½ÏX
             		clickIntent
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), 0);
-            // statusbar‚ÉNotification•\¦
+            // statusbarï¿½ï¿½Notificationï¿½\ï¿½ï¿½
             startForeground(PLAYBACKSERVICE_STATUS, status);
             if (!mIsSupposedToBePlaying) {
-            	// ‚±‚ê‚Í‚¨‚»‚ç‚­ƒvƒŒƒC’†ƒtƒ‰ƒO‚Æ‚µ‚Ä—˜—p‚³‚ê‚Ä‚¢‚é
-            	// ‚Ü‚¾‚»‚ê‚ª‚½‚Á‚Ä‚¢‚È‚¯‚ê‚Î
-            	// —˜—p’†ƒtƒ‰ƒO‚ğ—§‚Ä‚é
+            	// ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ç‚­ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½Æ‚ï¿½ï¿½Ä—ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
+            	// ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½ê‚ªï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½
+            	// ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ğ—§‚Ä‚ï¿½
                 mIsSupposedToBePlaying = true;
-                // Ä¶ó‘Ô‚Ì•ÏX‚ğ’Ê’m‚·‚é
+                // ï¿½Äï¿½ï¿½ï¿½Ô‚Ì•ÏXï¿½ï¿½Ê’mï¿½ï¿½ï¿½ï¿½
                 notifyChange(PLAYSTATE_CHANGED);
             }
 
         } else if (mPlayListLen <= 0) {
-        	// ‰½‚àÄ¶‚³‚ê‚Ä‚¢‚È‚¢‚Æ‚«‚ÉƒvƒŒƒCƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚é‚ÆAƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚É‚·‚éH
+        	// ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Æ‚ï¿½ï¿½Éƒvï¿½ï¿½ï¿½Cï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÆAï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½É‚ï¿½ï¿½ï¿½H
             // This is mostly so that if you press 'play' on a bluetooth headset
             // without every having played anything before, it will still play
             // something.
             if (!mQuietMode) {
-            	// o‚µ‚Ä‚¢‚¢ê‡‚ÍAƒ†[ƒU‚ÉƒGƒ‰[ƒƒbƒZ[ƒWo—ÍH
-            	// TODO: resouce—˜—p
-                Toast.makeText(this, "auto shuffle‚ÅÄ¶‚µ‚Ü‚·I", Toast.LENGTH_SHORT).show();
+            	// ï¿½oï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍAï¿½ï¿½ï¿½[ï¿½Uï¿½ÉƒGï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½oï¿½ÍH
+            	// TODO: resouceï¿½ï¿½ï¿½p
+                Toast.makeText(this, "auto shuffleï¿½ÅÄï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½I", Toast.LENGTH_SHORT).show();
             }
         	
             setShuffleMode(SHUFFLE_AUTO);
@@ -1655,26 +1655,26 @@ public class MediaPlaybackService extends Service {
     }
     
     private void stop(boolean remove_status_icon) {
-    	Log.w("stop","stop come!");
+    	LogWrapper.w("stop","stop come!");
         if (mPlayer.isInitialized()) {
-        	// ƒvƒŒƒCƒ„[’â~
+        	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½~
             mPlayer.stop();
         }
         mFileToPlay = null;
         if (mCursor != null) {
-        	// ƒJ[ƒ\ƒ‹ƒNƒ[ƒY
+        	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½Y
             mCursor.close();
             mCursor = null;
         }
         if (remove_status_icon) {
-        	// ­‚µ‚¨‚¢‚Ä‚©‚ç~‚ß‚éH‚È‚º‚¾‚ë‚¤H
+        	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½~ï¿½ß‚ï¿½Hï¿½È‚ï¿½ï¿½ï¿½ï¿½ë‚¤ï¿½H
             gotoIdleState();
         } else {
-        	// ‘¦’â~H
+        	// ï¿½ï¿½ï¿½ï¿½~ï¿½H
             stopForeground(false);
         }
         if (remove_status_icon) {
-        	// ƒvƒŒƒC’†ƒtƒ‰ƒO‚ğ—‚Æ‚·H
+        	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ğ—‚Æ‚ï¿½ï¿½H
             mIsSupposedToBePlaying = false;
         }
     }
@@ -1692,20 +1692,26 @@ public class MediaPlaybackService extends Service {
     public void pause() {
         synchronized(this) {
         	// Keep screen off
-        	OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);        	
+        	if( OkosamaMediaPlayerActivity.getResourceAccessor() != null
+        	&& OkosamaMediaPlayerActivity.getResourceAccessor().getActivity() != null
+        	&& OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getWindow() != null )
+        	{
+	        	OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getWindow().clearFlags(
+	        			WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        	}
         	
-        	// ‚±‚ÌƒNƒ‰ƒX‚ğƒƒbƒN
+        	// ï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½bï¿½N
             if (isPlaying()) {
-            	// Ä¶’†‚Å‚ ‚ê‚Î
-            	// ƒvƒŒƒCƒ„[‚ğƒ|[ƒY
+            	// ï¿½Äï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½
+            	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½|ï¿½[ï¿½Y
                 mPlayer.pause();
-                // ­‚µŠÔ‚ğ’u‚¢‚ÄƒXƒgƒbƒv
+                // ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½uï¿½ï¿½ï¿½ÄƒXï¿½gï¿½bï¿½v
                 gotoIdleState();
-                // Ä¶’†ƒtƒ‰ƒO‚ğ—‚Æ‚·
+                // ï¿½Äï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ğ—‚Æ‚ï¿½
                 mIsSupposedToBePlaying = false;
-                // Ä¶ó‘Ô‚Ì•ÏX’Ê’m
+                // ï¿½Äï¿½ï¿½ï¿½Ô‚Ì•ÏXï¿½Ê’m
                 notifyChange(PLAYSTATE_CHANGED);
-                // Podcast‚Ìê‡AƒuƒbƒNƒ}[ƒN‚ğDB‚É•Û‘¶
+                // Podcastï¿½Ìê‡ï¿½Aï¿½uï¿½bï¿½Nï¿½}ï¿½[ï¿½Nï¿½ï¿½DBï¿½É•Û‘ï¿½
                 saveBookmarkIfNeeded();
             }
         }
@@ -1720,26 +1726,26 @@ public class MediaPlaybackService extends Service {
         return mIsSupposedToBePlaying;
     }
 
-    // ‚±‚±‚Ü‚Å“Ç‚ñ‚¾
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚Å“Ç‚ï¿½
     /*
       Desired behavior for prev/next/shuffle:
-      ‘O/Ÿ/ƒVƒƒƒbƒtƒ‹‚Ì‚ÌU‚é•‘‚¢
+      ï¿½O/ï¿½ï¿½/ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½Ìï¿½ï¿½ÌUï¿½é•‘ï¿½ï¿½
 
       - NEXT will move to the next track in the list when not shuffling, and to
         a track randomly picked from the not-yet-played tracks when shuffling.
         If all tracks have already been played, pick from the full set, but
         avoid picking the previously played track if possible.
-        ƒVƒƒƒbƒtƒ‹‚Å‚È‚¢ê‡AŸ‚Ö‚ÍƒŠƒXƒg‚ÌŸ‚Ìƒgƒ‰ƒbƒN‚Ö
-        ƒVƒƒƒbƒtƒ‹‚Ìê‡Aƒ‰ƒ“ƒ_ƒ€‚É‚Ü‚¾ƒvƒŒƒC‚³‚ê‚Ä‚¢‚È‚¢‚à‚Ì‚ğ‘I‚ñ‚Å‚»‚Ìƒgƒ‰ƒbƒN‚Ö
+        ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ê‡ï¿½Aï¿½ï¿½ï¿½Ö‚Íƒï¿½ï¿½Xï¿½gï¿½Ìï¿½ï¿½Ìƒgï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½
+        ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½Ìê‡ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½É‚Ü‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½Iï¿½ï¿½Å‚ï¿½ï¿½Ìƒgï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½
       - when shuffling, PREV will go to the previously played track. Hitting PREV
         again will go to the track played before that, etc. When the start of the
         history has been reached, PREV is a no-op.
         When not shuffling, PREV will go to the sequentially previous track (the
         difference with the shuffle-case is mainly that when not shuffling, the
         user can back up to tracks that are not in the history).
-		ƒVƒƒƒbƒtƒ‹’†‚Ì‚Æ‚«APREV‚ÍÄ¶‚³‚ê‚½ƒgƒ‰ƒbƒN‚Ì‘O‚Ì‚â‚Â‚ÖB
-		‚à‚¤ˆê“xPREV‚ğƒqƒbƒg‚·‚é‚Æ‚»‚Ì‘O‚ÖB—š—ğ‚ÌÅ‰‚Ì€–Ú‚Ìê‡APREV‚Í‰½‚à‚µ‚È‚¢
-		ƒVƒƒƒbƒtƒ‹’†‚Å‚È‚¢‚Æ‚«APREV‚ÍƒV[ƒPƒ“ƒX‚Ì‘O‚Ì‹È‚ÖB—š—ğ‚É“à‹Ç‚É‚à–ß‚é‚±‚Æ‚ª‚Å‚«‚éH
+		ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½APREVï¿½ÍÄï¿½ï¿½ï¿½ï¿½ê‚½ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½Ì‘Oï¿½Ì‚ï¿½Â‚ÖB
+		ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xPREVï¿½ï¿½ï¿½qï¿½bï¿½gï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ì‘Oï¿½ÖBï¿½ï¿½ï¿½ï¿½ï¿½ÌÅï¿½ï¿½Ìï¿½ï¿½Ú‚Ìê‡ï¿½APREVï¿½Í‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
+		ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½Æ‚ï¿½ï¿½APREVï¿½ÍƒVï¿½[ï¿½Pï¿½ï¿½ï¿½Xï¿½Ì‘Oï¿½Ì‹È‚ÖBï¿½ï¿½ï¿½ï¿½ï¿½É“ï¿½ï¿½Ç‚É‚ï¿½ï¿½ß‚é‚±ï¿½Æ‚ï¿½ï¿½Å‚ï¿½ï¿½ï¿½H
         Example:
         When playing an album with 10 tracks from the start, and enabling shuffle
         while playing track 5, the remaining tracks (6-10) will be shuffled, e.g.
@@ -1748,27 +1754,27 @@ public class MediaPlaybackService extends Service {
         user will go to tracks 9-6-10-8-5-4-3-2. If the user then hits 'next',
         a random track will be picked again. If at any time user disables shuffling
         the next/previous track will be picked in sequential order again.
-        —áF
-        10ƒgƒ‰ƒbƒN‚ÌƒAƒ‹ƒoƒ€‚ªÄ¶’†‚ÅA‚Tƒgƒ‰ƒbƒN–Ú‚ÅƒVƒƒƒbƒtƒ‹‚É‚³‚ê‚½ê‡Ac‚è‚Ìƒgƒ‰ƒbƒN‚ªƒVƒƒƒbƒtƒ‹‚³‚ê‚é
-        ‚»‚ÌŒãAnext‚Íƒ‰ƒ“ƒ_ƒ€‚¾‚ªAprev‚Í—š—ğ‚ğÄ¶‚·‚é
+        ï¿½ï¿½F
+        10ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ÌƒAï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ÅAï¿½Tï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½Ú‚ÅƒVï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½É‚ï¿½ï¿½ê‚½ï¿½ê‡ï¿½Aï¿½cï¿½ï¿½Ìƒgï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        ï¿½ï¿½ï¿½ÌŒï¿½Anextï¿½Íƒï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aprevï¿½Í—ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½
      */
 
     public void prev() {
         synchronized (this) {
-        	// ƒƒbƒN
+        	// ï¿½ï¿½ï¿½bï¿½N
             if (mOneShot) {
             	// OneShot
                 // we were playing a specific file not part of a playlist, so there is no 'previous'
-            	// ƒvƒŒƒCƒŠƒXƒg“à‚É‚È‚¢“Á’è‚Ìƒtƒ@ƒCƒ‹‚ğÄ¶’†‚È‚ç‚ÎAprev‚Í‚È‚¢B
-            	// ‹È‚Ì“ª‚É–ß‚é‚¾‚¯
+            	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½É‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½È‚ï¿½ÎAprevï¿½Í‚È‚ï¿½ï¿½B
+            	// ï¿½È‚Ì“ï¿½ï¿½É–ß‚é‚¾ï¿½ï¿½
                 seek(0);
                 play();
                 return;
             }
             if (mShuffleMode == SHUFFLE_NORMAL) {
-            	// ƒm[ƒ}ƒ‹ƒVƒƒƒbƒtƒ‹ƒ‚[ƒh
+            	// ï¿½mï¿½[ï¿½}ï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½h
                 // go to previously-played track and remove it from the history
-            	// ‘O‚Ì—š—ğ‚Ìƒgƒ‰ƒbƒN‚ğÄ¶‚µA‚»‚ê‚ğ—š—ğ‚©‚çÁ‚·
+            	// ï¿½Oï¿½Ì—ï¿½ï¿½ï¿½ï¿½Ìƒgï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ğ—š—ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 int histsize = mHistory.size();
                 if (histsize == 0) {
                     // prev is a no-op
@@ -1777,14 +1783,14 @@ public class MediaPlaybackService extends Service {
                 Integer pos = mHistory.remove(histsize - 1);
                 mPlayPos = pos.intValue();
             } else {
-            	// ƒVƒƒƒbƒtƒ‹‚Å‚È‚¢‚È‚çAƒV[ƒPƒ“ƒX‚ğ–ß‚é
+            	// ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½È‚ï¿½Aï¿½Vï¿½[ï¿½Pï¿½ï¿½ï¿½Xï¿½ï¿½ß‚ï¿½
                 if (mPlayPos > 0) {
                     mPlayPos--;
                 } else {
                     mPlayPos = mPlayListLen - 1;
                 }
             }
-            // ƒuƒbƒNƒ}[ƒN•Û‘¶A’â~AƒI[ƒvƒ“AÄ¶A‰æ–ÊXV
+            // ï¿½uï¿½bï¿½Nï¿½}ï¿½[ï¿½Nï¿½Û‘ï¿½ï¿½Aï¿½ï¿½~ï¿½Aï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½Aï¿½Äï¿½ï¿½Aï¿½ï¿½ÊXï¿½V
             saveBookmarkIfNeeded();
             stop(false);
             openCurrent();
@@ -1794,16 +1800,16 @@ public class MediaPlaybackService extends Service {
     }
 
     /**
-     * Ÿ‚Ö
-     * @param force@true‚È‚ç‚ÎA‹­§“IH
+     * ï¿½ï¿½ï¿½ï¿½
+     * @param forceï¿½@trueï¿½È‚ï¿½ÎAï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½H
      */
     public void next(boolean force) {
         synchronized (this) {
-        	// ƒƒbƒN
+        	// ï¿½ï¿½ï¿½bï¿½N
             if (mOneShot) {
                 // we were playing a specific file not part of a playlist, so there is no 'next'
-            	// ƒvƒŒƒCƒŠƒXƒg‚Ì‹È‚ğÄ¶‚µ‚Ä‚¢‚é–ó‚Å‚Í‚È‚¢ê‡
-            	// ‹È‚Ì“ª‚É–ß‚é
+            	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ì‹È‚ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½Å‚Í‚È‚ï¿½ï¿½ê‡
+            	// ï¿½È‚Ì“ï¿½ï¿½É–ß‚ï¿½
                 seek(0);
                 play();
                 return;
@@ -1816,7 +1822,7 @@ public class MediaPlaybackService extends Service {
 
             // Store the current file in the history, but keep the history at a
             // reasonable size
-            // —š—ğ‚ÉŒ»İ‚Ì‹È‚ğ’Ç‰Á
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ÉŒï¿½ï¿½İ‚Ì‹È‚ï¿½Ç‰ï¿½
             if (mPlayPos >= 0) {
                 mHistory.add(Integer.valueOf(mPlayPos));
             }
@@ -1827,15 +1833,15 @@ public class MediaPlaybackService extends Service {
             if (mShuffleMode == SHUFFLE_NORMAL) {
                 // Pick random next track from the not-yet-played ones
                 // TODO: make it work right after adding/removing items in the queue.
-            	// ƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚Ìê‡
-            	// ‚Ü‚¾Ä¶‚³‚ê‚Ä‚¢‚È‚¢‹È‚Ì’†‚©‚çƒ‰ƒ“ƒ_ƒ€Ä¶
+            	// ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½Ìê‡
+            	// ï¿½Ü‚ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½È‚Ì’ï¿½ï¿½ï¿½ï¿½çƒ‰ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½Äï¿½
                 int numTracks = mPlayListLen;
                 int[] tracks = new int[numTracks];
                 for (int i=0;i < numTracks; i++) {
                     tracks[i] = i;
                 }
 
-                // ‚Ü‚¾Ä¶‚³‚ê‚Ä‚¢‚È‚¢‹È‚Ìæ“¾
+                // ï¿½Ü‚ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½È‚Ìæ“¾
                 int numHistory = mHistory.size();
                 int numUnplayed = numTracks;
                 for (int i=0;i < numHistory; i++) {
@@ -1849,21 +1855,21 @@ public class MediaPlaybackService extends Service {
                 // 'numUnplayed' now indicates how many tracks have not yet
                 // been played, and 'tracks' contains the indices of those
                 // tracks.
-                // numUnplayed:‚Ü‚¾ƒvƒŒƒC‚³‚ê‚Ä‚¢‚È‚¢‹È‚Ì”
-                // tracks:‚Ü‚¾ƒvƒŒƒC‚³‚ê‚Ä‚¢‚È‚¢‹È‚ÌƒCƒ“ƒfƒbƒNƒX
+                // numUnplayed:ï¿½Ü‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½È‚Ìï¿½
+                // tracks:ï¿½Ü‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½È‚ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½X
                 if (numUnplayed <=0) {
                     // everything's already been played
-                	// ‘S‚Ä‚ªŠù‚ÉÄ¶‚³‚ê‚Ä‚¢‚é
+                	// ï¿½Sï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ÉÄï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
                     if (mRepeatMode == REPEAT_ALL || force) {
                         //pick from full set
-                    	// ‘S‹ÈƒŠƒs[ƒg‚Ìê‡AÅ‰‚©‚çÄ¶‚·‚é
-                    	// ‹­§‚Ìê‡‚àA“¯—l
+                    	// ï¿½Sï¿½Èƒï¿½ï¿½sï¿½[ï¿½gï¿½Ìê‡ï¿½Aï¿½Åï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½
+                    	// ï¿½ï¿½ï¿½ï¿½ï¿½Ìê‡ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½l
                         numUnplayed = numTracks;
                         for (int i=0;i < numTracks; i++) {
                             tracks[i] = i;
                         }
                     } else {
-                    	// Ä¶‚ğ~‚ß‚é
+                    	// ï¿½Äï¿½ï¿½ï¿½ï¿½~ï¿½ß‚ï¿½
                         // all done
                         gotoIdleState();
                         if (mIsSupposedToBePlaying) {
@@ -1873,7 +1879,7 @@ public class MediaPlaybackService extends Service {
                         return;
                     }
                 }
-                // ƒ‰ƒ“ƒ_ƒ€ˆÊ’u‚Ì¶¬
+                // ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½Ê’uï¿½Ìï¿½ï¿½ï¿½
                 int skip = mRand.nextInt(numUnplayed);
                 int cnt = -1;
                 while (true) {
@@ -1886,31 +1892,31 @@ public class MediaPlaybackService extends Service {
                 }
                 mPlayPos = cnt;
             } else if (mShuffleMode == SHUFFLE_AUTO) {
-            	// ƒI[ƒgƒVƒƒƒbƒtƒ‹‚·‚é
-            	// ‚±‚ÌŠÖ”‚Å‚ÍA‘ÎÛ‚Æ‚È‚é‹È‚ğƒ‰ƒ“ƒ_ƒ€‚É”²‚«o‚µ‚½‚è‚µ‚Ä’²®‚·‚é‚Ì‚Å‚Í‚È‚¢‚©‚Æv‚í‚ê‚éB
+            	// ï¿½Iï¿½[ï¿½gï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            	// ï¿½ï¿½ï¿½ÌŠÖï¿½ï¿½Å‚ÍAï¿½ÎÛ‚Æ‚È‚ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½É”ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½è‚µï¿½Ä’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Å‚Í‚È‚ï¿½ï¿½ï¿½ï¿½Ævï¿½ï¿½ï¿½ï¿½B
                 doAutoShuffleUpdate();
                 mPlayPos++;
             } else {
-            	// ƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚¶‚á‚È‚¢
+            	// ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½È‚ï¿½
                 if (mPlayPos >= mPlayListLen - 1) {
                     // we're at the end of the list
-                	// ƒŠƒXƒg‚ÌÅŒã‚É“’B
+                	// ï¿½ï¿½ï¿½Xï¿½gï¿½ÌÅŒï¿½É“ï¿½ï¿½B
                     if (mRepeatMode == REPEAT_NONE && !force) {
                         // all done
-                    	// ~‚ß‚é
+                    	// ï¿½~ï¿½ß‚ï¿½
                         gotoIdleState();
                         notifyChange(PLAYBACK_COMPLETE);
                         mIsSupposedToBePlaying = false;
                         return;
                     } else if (mRepeatMode == REPEAT_ALL || force) {
-                    	// ƒvƒŒƒCˆÊ’u‚ğÅ‰‚É–ß‚·
+                    	// ï¿½vï¿½ï¿½ï¿½Cï¿½Ê’uï¿½ï¿½ï¿½Åï¿½ï¿½É–ß‚ï¿½
                         mPlayPos = 0;
                     }
                 } else {
                     mPlayPos++;
                 }
             }
-            // ƒuƒbƒNƒ}[ƒN•Û‘¶A‘¦’â~AƒI[ƒvƒ“AÄ¶A‰æ–ÊXV
+            // ï¿½uï¿½bï¿½Nï¿½}ï¿½[ï¿½Nï¿½Û‘ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~ï¿½Aï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½Aï¿½Äï¿½ï¿½Aï¿½ï¿½ÊXï¿½V
             saveBookmarkIfNeeded();
             stop(false);
             openCurrent();
@@ -1920,12 +1926,12 @@ public class MediaPlaybackService extends Service {
     }
     
     /**
-     * ŠÔ‚ğ’u‚¢‚ÄAÄ¶‚ğ~‚ß‚é
+     * ï¿½ï¿½ï¿½Ô‚ï¿½uï¿½ï¿½ï¿½ÄAï¿½Äï¿½ï¿½ï¿½ï¿½~ï¿½ß‚ï¿½
      */
     private void gotoIdleState() {
-    	// DelayStopHandler‚ÌƒƒbƒZ[ƒW‚ğíœH
+    	// DelayStopHandlerï¿½Ìƒï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½íœï¿½H
         mDelayedStopHandler.removeCallbacksAndMessages(null);
-        // IDLE_DELAYŒã‚ÉI—¹
+        // IDLE_DELAYï¿½ï¿½ÉIï¿½ï¿½
         Message msg = mDelayedStopHandler.obtainMessage();
         mDelayedStopHandler.sendMessageDelayed(msg, IDLE_DELAY);
         // Remove this service from foreground state, allowing it to be killed if more memory is needed.
@@ -1934,16 +1940,16 @@ public class MediaPlaybackService extends Service {
     }
     
     /**
-     * Œ»İÄ¶’†‚ÌŠÔ‚ğƒuƒbƒNƒ}[ƒNŠÔ‚Æ‚µ‚Äƒf[ƒ^ƒx[ƒX‚É•Û‘¶‚·‚é‚ç‚µ‚¢
-     * ‚½‚¾‚µAPodcast‚ÉŒÀ‚é
+     * ï¿½ï¿½ï¿½İÄï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½Ô‚ï¿½ï¿½uï¿½bï¿½Nï¿½}ï¿½[ï¿½Nï¿½ï¿½ï¿½Ô‚Æ‚ï¿½ï¿½Äƒfï¿½[ï¿½^ï¿½xï¿½[ï¿½Xï¿½É•Û‘ï¿½ï¿½ï¿½ï¿½ï¿½ç‚µï¿½ï¿½
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½APodcastï¿½ÉŒï¿½ï¿½ï¿½
      */
     private void saveBookmarkIfNeeded() {
         try {
             if (isPodcast()) {
-            	// Ä¶’†‚ÌƒƒfƒBƒA‚ªpodcast‚Ìê‡‚Ì‚İˆ—‚·‚éH
-                long pos = position();	// ƒƒfƒBƒAƒvƒŒƒCƒ„[‚©‚ç“¾‚½Ä¶ŠÔ
-                long bookmark = getBookmark(); // ƒuƒbƒNƒ}[ƒN‚³‚ê‚Ä‚¢‚éŠÔH(=DB‚ÌƒJƒ‰ƒ€)
-                long duration = duration(); // ‹È‚ÌŠÔ
+            	// ï¿½Äï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½fï¿½Bï¿½Aï¿½ï¿½podcastï¿½Ìê‡ï¿½Ì‚İï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½H
+                long pos = position();	// ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ç“¾ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½
+                long bookmark = getBookmark(); // ï¿½uï¿½bï¿½Nï¿½}ï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½éï¿½ÔH(=DBï¿½ÌƒJï¿½ï¿½ï¿½ï¿½)
+                long duration = duration(); // ï¿½È‚Ìï¿½ï¿½ï¿½
                 if ((pos < bookmark && (pos + 10000) > bookmark) ||
                         (pos > bookmark && (pos - 10000) < bookmark)) {
                     // The existing bookmark is close to the current
@@ -1951,13 +1957,13 @@ public class MediaPlaybackService extends Service {
                     return;
                 }
                 if (pos < 15000 || (pos + 10000) > duration) {
-                	// Ä¶ˆÊ’u‚ª15s‚æ‚è¬‚³‚¢‚©A‹È‚Ì’·‚³‚ğ’´‚¦‚Ä‚¢‚éê‡AƒuƒbƒNƒ}[ƒN‚µ‚È‚¢(=ƒuƒbƒNƒ}[ƒNŠÔ‚É0‚ğİ’è)
+                	// ï¿½Äï¿½ï¿½Ê’uï¿½ï¿½15sï¿½ï¿½è¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½È‚Ì’ï¿½ï¿½ï¿½ï¿½ğ’´‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½uï¿½bï¿½Nï¿½}ï¿½[ï¿½Nï¿½ï¿½ï¿½È‚ï¿½(=ï¿½uï¿½bï¿½Nï¿½}ï¿½[ï¿½Nï¿½ï¿½ï¿½Ô‚ï¿½0ï¿½ï¿½İ’ï¿½)
                     // if we're near the start or end, clear the bookmark
                     pos = 0;
                 }
                 
                 // write 'pos' to the bookmark field
-                // ƒuƒbƒNƒ}[ƒNŠÔ‚ğã‘‚«‚·‚é
+                // ï¿½uï¿½bï¿½Nï¿½}ï¿½[ï¿½Nï¿½ï¿½ï¿½Ô‚ï¿½ï¿½ã‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 ContentValues values = new ContentValues();
                 values.put(AudioColumns.BOOKMARK, pos);
                 Uri uri = ContentUris.withAppendedId(
@@ -1970,21 +1976,21 @@ public class MediaPlaybackService extends Service {
 
     // Make sure there are at least 5 items after the currently playing item
     // and no more than 10 items before.
-    // Œ»İÄ¶’†‚Ì€–Ú‚æ‚èŒã‚Ì€–Ú‚ª­‚È‚­‚Æ‚à5ŒÂ‚ ‚èA10ŒÂ‚Í‘O‚É‚È‚¢
+    // ï¿½ï¿½ï¿½İÄï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½Ú‚ï¿½ï¿½ï¿½Ìï¿½ï¿½Ú‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Æ‚ï¿½5ï¿½Â‚ï¿½ï¿½ï¿½A10ï¿½Â‚Í‘Oï¿½É‚È‚ï¿½
     private void doAutoShuffleUpdate() {
         boolean notify = false;
         // remove old entries
         if (mPlayPos > 10) {
-        	// 10ŒÂ–ÚˆÈ~‚È‚ç‚ÎAƒvƒŒƒCƒŠƒXƒg‚ª9ŒÂ‚É‚È‚é‚æ‚¤‚É‚»‚Ì‘O‚Ì€–Ú‚ğ‘S‚ÄíœH
+        	// 10ï¿½Â–ÚˆÈ~ï¿½È‚ï¿½ÎAï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½9ï¿½Â‚É‚È‚ï¿½æ‚¤ï¿½É‚ï¿½ï¿½Ì‘Oï¿½Ìï¿½ï¿½Ú‚ï¿½Sï¿½Äíœï¿½H
             removeTracks(0, mPlayPos - 9);
             notify = true;
         }
         // add new entries if needed
-        // •K—v‚Å‚ ‚ê‚ÎAV‚µ‚¢ƒGƒ“ƒgƒŠ‚ğ’Ç‰Á
+        // ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½ï¿½ÎAï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½Ç‰ï¿½
         int to_add = 7 - (mPlayListLen - (mPlayPos < 0 ? -1 : mPlayPos));
         for (int i = 0; i < to_add; i++) {
             // pick something at random from the list
-        	// ƒŠƒXƒg‚©‚çƒ‰ƒ“ƒ_ƒ€‚É‚Ç‚ê‚©‚ğæ‚èo‚µ‚ÄƒvƒŒƒCƒŠƒXƒg‚ÉŠi”[‚·‚é
+        	// ï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½çƒ‰ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½É‚Ç‚ê‚©ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Äƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½ï¿½
             int idx = mRand.nextInt(mAutoShuffleList.length);
             long which = mAutoShuffleList[idx];
             ensurePlayListCapacity(mPlayListLen + 1);
@@ -2000,7 +2006,7 @@ public class MediaPlaybackService extends Service {
     // A simple variation of Random that makes sure that the
     // value it returns is not equal to the value it returned
     // previously, unless the interval is 1.
-    // ƒCƒ“ƒ^[ƒoƒ‹1‚Å‚È‚¯‚ê‚Î‚»‚ê‚ª–ß‚·’l‚ª‘O‚É–ß‚³‚ê‚½’l‚Æ“™‚µ‚­‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é’Pƒ‚Èƒ‰ƒ“ƒ_ƒ€‚ÌƒoƒŠƒG[ƒVƒ‡ƒ“
+    // ï¿½Cï¿½ï¿½ï¿½^ï¿½[ï¿½oï¿½ï¿½1ï¿½Å‚È‚ï¿½ï¿½ï¿½Î‚ï¿½ï¿½ê‚ªï¿½ß‚ï¿½ï¿½lï¿½ï¿½ï¿½Oï¿½É–ß‚ï¿½ï¿½ê‚½ï¿½lï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½È‚ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½Èƒï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½Ìƒoï¿½ï¿½ï¿½Gï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
     private static class Shuffler {
         private int mPrevious;
         private Random mRandom = new Random();
@@ -2015,14 +2021,14 @@ public class MediaPlaybackService extends Service {
     };
 
     /**
-     * ƒI[ƒgƒVƒƒƒbƒtƒ‹‚ÌƒŠƒXƒgì¬H
+     * ï¿½Iï¿½[ï¿½gï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½Ìƒï¿½ï¿½Xï¿½gï¿½ì¬ï¿½H
      * @return
      */
     private boolean makeAutoShuffleList() {
         ContentResolver res = getContentResolver();
         Cursor c = null;
         try {
-        	// ‰¹Šy‚ÌID‚ğ‘S‚Äæ“¾
+        	// ï¿½ï¿½ï¿½yï¿½ï¿½IDï¿½ï¿½Sï¿½Äæ“¾
             c = res.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     new String[] {BaseColumns._ID}, AudioColumns.IS_MUSIC + "=1",
                     null, null);
@@ -2032,7 +2038,7 @@ public class MediaPlaybackService extends Service {
             int len = c.getCount();
             long [] list = new long[len];
             for (int i = 0; i < len; i++) {
-            	// ‘S•”‚ÌID‚ğƒŠƒXƒg‚ÉŠi”[
+            	// ï¿½Sï¿½ï¿½ï¿½ï¿½IDï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½ÉŠiï¿½[
                 c.moveToNext();
                 list[i] = c.getLong(0);
             }
@@ -2051,8 +2057,8 @@ public class MediaPlaybackService extends Service {
      * Removes the range of tracks specified from the play list. If a file within the range is
      * the file currently being played, playback will move to the next file after the
      * range. 
-     * ƒvƒŒƒCƒŠƒXƒg‚Ìƒgƒ‰ƒbƒN‚Ì‚ ‚é”ÍˆÍ‚ğÁ‚·B
-     * ”ÍˆÍ“à‚Ìƒtƒ@ƒCƒ‹‚ªŒ»İÄ¶’†‚È‚ç‚ÎA”ÍˆÍ‚ÌŒã‚ÌÅ‰‚Ìƒtƒ@ƒCƒ‹‚ÖˆÚ“®‚·‚é
+     * ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ìƒgï¿½ï¿½ï¿½bï¿½Nï¿½Ì‚ï¿½ï¿½ï¿½ÍˆÍ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+     * ï¿½ÍˆÍ“ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İÄï¿½ï¿½ï¿½ï¿½È‚ï¿½ÎAï¿½ÍˆÍ‚ÌŒï¿½ÌÅï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ÖˆÚ“ï¿½ï¿½ï¿½ï¿½ï¿½
      * @param first The first file to be removed
      * @param last The last file to be removed
      * @return the number of tracks deleted
@@ -2067,41 +2073,41 @@ public class MediaPlaybackService extends Service {
     
     private int removeTracksInternal(int first, int last) {
         synchronized (this) {
-        	// ƒNƒ‰ƒXƒƒbƒN
+        	// ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½N
             if (last < first) return 0;
             if (first < 0) first = 0;
             if (last >= mPlayListLen) last = mPlayListLen - 1;
 
             boolean gotonext = false;
             if (first <= mPlayPos && mPlayPos <= last) {
-            	// Á‚³‚ê‚é”ÍˆÍ“à‚ÉAÄ¶’†‚Ì€–Ú‚ª‚ ‚é
+            	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÍˆÍ“ï¿½ï¿½ÉAï¿½Äï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½Ú‚ï¿½ï¿½ï¿½ï¿½ï¿½
                 mPlayPos = first;
                 gotonext = true;
             } else if (mPlayPos > last) {
                 mPlayPos -= (last - first + 1);
             }
             int num = mPlayListLen - last - 1;
-            // ˆÚ“®H
+            // ï¿½Ú“ï¿½ï¿½H
             for (int i = 0; i < num; i++) {
                 mPlayList[first + i] = mPlayList[last + 1 + i];
             }
-            // ’·‚³‚ğí‚éH
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½H
             mPlayListLen -= last - first + 1;
             
             if (gotonext) {
-            	// Ÿ‚Ö
+            	// ï¿½ï¿½ï¿½ï¿½
                 if (mPlayListLen == 0) {
-                	Log.w("playlist len = 0", "stop come!");
-                	// ƒvƒŒƒCƒŠƒXƒg‚Ì’·‚³‚ª0
-                	// ’â~
+                	LogWrapper.w("playlist len = 0", "stop come!");
+                	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ì’ï¿½ï¿½ï¿½ï¿½ï¿½0
+                	// ï¿½ï¿½~
                     stop(true);
                     mPlayPos = -1;
                 } else {
-                	// ƒvƒŒƒCƒŠƒXƒg‚Ì’·‚³‚ª‚ ‚é
+                	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ì’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     if (mPlayPos >= mPlayListLen) {
                         mPlayPos = 0;
                     }
-                    // ~‚ß‚ÄAƒI[ƒvƒ“‚µ‚ÄAŒ»İÄ¶’†‚È‚ç‚ÎAÄ¶‚·‚é
+                    // ï¿½~ï¿½ß‚ÄAï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ÄAï¿½ï¿½ï¿½İÄï¿½ï¿½ï¿½ï¿½È‚ï¿½ÎAï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½
                     boolean wasPlaying = isPlaying();
                     stop(false);
                     openCurrent();
@@ -2117,7 +2123,7 @@ public class MediaPlaybackService extends Service {
     /**
      * Removes all instances of the track with the given id
      * from the playlist.
-     * ƒvƒŒƒCƒŠƒXƒg‚©‚çid‚ğ—^‚¦‚ç‚ê‚½ƒgƒ‰ƒbƒN‚Ì‘S‚Ä‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğíœ‚·‚é
+     * ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½idï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½Ì‘Sï¿½Ä‚ÌƒCï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½ï¿½
      * @param id The id to be removed
      * @return how many instances of the track were removed
      */
@@ -2125,7 +2131,7 @@ public class MediaPlaybackService extends Service {
         int numremoved = 0;
         synchronized (this) {
             for (int i = 0; i < mPlayListLen; i++) {
-            	// ŠY“–id‚Ì‘S‚Ä‚Ìƒgƒ‰ƒbƒN‚ğíœ
+            	// ï¿½Yï¿½ï¿½idï¿½Ì‘Sï¿½Ä‚Ìƒgï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½íœ
                 if (mPlayList[i].getId() == id) {
                     numremoved += removeTracksInternal(i, i);
                     i--;
@@ -2133,50 +2139,50 @@ public class MediaPlaybackService extends Service {
             }
         }
         if (numremoved > 0) {
-        	// •ÏX‚³‚ê‚½‚çAƒLƒ…[•ÏX’Ê’m‚ğ‚¾‚µ‚ÄAƒLƒ…[‚ğ•Û‘¶‚³‚¹‚é
+        	// ï¿½ÏXï¿½ï¿½ï¿½ê‚½ï¿½ï¿½Aï¿½Lï¿½ï¿½ï¿½[ï¿½ÏXï¿½Ê’mï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄAï¿½Lï¿½ï¿½ï¿½[ï¿½ï¿½Û‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             notifyChange(QUEUE_CHANGED);
         }
         return numremoved;
     }
     /**
-     * ƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚ğİ’è‚·‚é
+     * ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½İ’è‚·ï¿½ï¿½
      * @param shufflemode
      */
     public void setShuffleMode(int shufflemode) {
         synchronized(this) {
-        	// ƒNƒ‰ƒX‚ğƒƒbƒN‚·‚é
+        	// ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
             if (mShuffleMode == shufflemode && mPlayListLen > 0) {
-            	// ƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚ª•Ï‰»‚È‚µ‚È‚ç‚ÎA–ß‚é
+            	// ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½Ï‰ï¿½ï¿½È‚ï¿½ï¿½È‚ï¿½ÎAï¿½ß‚ï¿½
                 return;
             }
-            // •ÏX—L‚è
-            // V‚µ‚¢ƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚ğİ’è
+            // ï¿½ÏXï¿½Lï¿½ï¿½
+            // ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½İ’ï¿½
             mShuffleMode = shufflemode;
             if (mShuffleMode == SHUFFLE_AUTO) {
-            	// ƒI[ƒgƒVƒƒƒbƒtƒ‹‚È‚ç‚ÎAƒVƒƒƒbƒtƒ‹ƒŠƒXƒg‚ğì¬
+            	// ï¿½Iï¿½[ï¿½gï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½È‚ï¿½ÎAï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ì¬
                 if (makeAutoShuffleList()) {
-                	// ƒŠƒXƒgì¬
+                	// ï¿½ï¿½ï¿½Xï¿½gï¿½ì¬
                     mPlayListLen = 0;
-                    // ì¬‚³‚ê‚½ƒŠƒXƒg‚ÌŒ”‚ğ‚µ‚Ú‚Á‚Ä‚¢‚éH‚»‚¤‚¢‚¤•—‚ÉŒ©‚¦‚é‚ªEEEŒë‰ğ‚¾‚ë‚¤‚©H
+                    // ï¿½ì¬ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Xï¿½gï¿½ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉŒï¿½ï¿½ï¿½ï¿½é‚ªï¿½Eï¿½Eï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë‚¤ï¿½ï¿½ï¿½H
                     doAutoShuffleUpdate();
-                    // ŠJ‚­
+                    // ï¿½Jï¿½ï¿½
                     mPlayPos = 0;
                     openCurrent();
-                    // Ä¶
+                    // ï¿½Äï¿½
                     play();
-                    // ‰æ–ÊXV
+                    // ï¿½ï¿½ÊXï¿½V
                     notifyChange(META_CHANGED);
                     return;
                 } else {
                     // failed to build a list of files to shuffle
-                	// ƒVƒƒƒbƒtƒ‹—pƒŠƒXƒgì¬¸”s
-                	// ƒVƒƒƒbƒtƒ‹‚È‚µ
+                	// ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½pï¿½ï¿½ï¿½Xï¿½gï¿½ì¬ï¿½ï¿½ï¿½s
+                	// ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½È‚ï¿½
                     mShuffleMode = SHUFFLE_NONE;
                 }
             }
-            // ƒLƒ…[‚ğ•Û‘¶H
-            // ƒtƒ‹‚Å‚Í‚È‚¢‚Ì‚ÅƒvƒŒƒCƒŠƒXƒg‚Í•Û‘¶‚³‚ê‚È‚¢‚Í‚¸‚¾‚ªA—š—ğ‚Í•Û‘¶‚³‚ê‚é‚Æv‚í‚ê‚é
-            // ‚»‚ê‚Å‚¢‚¢‚ñ‚¾‚ë‚¤‚©H
+            // ï¿½Lï¿½ï¿½ï¿½[ï¿½ï¿½Û‘ï¿½ï¿½H
+            // ï¿½tï¿½ï¿½ï¿½Å‚Í‚È‚ï¿½ï¿½Ì‚Åƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Í•Û‘ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Í•Û‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ævï¿½ï¿½ï¿½ï¿½
+            // ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ñ‚¾‚ë‚¤ï¿½ï¿½ï¿½H
             saveQueue(false);
         }
     }
@@ -2186,12 +2192,12 @@ public class MediaPlaybackService extends Service {
     
     public void setRepeatMode(int repeatmode) {
         synchronized(this) {
-        	// ƒNƒ‰ƒX‚ğƒƒbƒN
-        	// ƒŠƒs[ƒgƒ‚[ƒh‚ğİ’è
+        	// ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½bï¿½N
+        	// ï¿½ï¿½ï¿½sï¿½[ï¿½gï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½İ’ï¿½
             mRepeatMode = repeatmode;
-            // ƒLƒ…[‚ğ•Û‘¶H
-            // ƒtƒ‹‚Å‚Í‚È‚¢‚Ì‚ÅƒvƒŒƒCƒŠƒXƒg‚Í•Û‘¶‚³‚ê‚È‚¢‚Í‚¸‚¾‚ªA—š—ğ‚Í•Û‘¶‚³‚ê‚é‚Æv‚í‚ê‚é
-            // ‚»‚ê‚Å‚¢‚¢‚ñ‚¾‚ë‚¤‚©H
+            // ï¿½Lï¿½ï¿½ï¿½[ï¿½ï¿½Û‘ï¿½ï¿½H
+            // ï¿½tï¿½ï¿½ï¿½Å‚Í‚È‚ï¿½ï¿½Ì‚Åƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Í•Û‘ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Í•Û‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ævï¿½ï¿½ï¿½ï¿½
+            // ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ñ‚¾‚ë‚¤ï¿½ï¿½ï¿½H
             saveQueue(false);
         }
     }
@@ -2206,7 +2212,7 @@ public class MediaPlaybackService extends Service {
     /**
      * Returns the path of the currently playing file, or null if
      * no file is currently playing.
-     * Œ»İÄ¶’†‚Ìƒtƒ@ƒCƒ‹‚ğ•Ô‹pBŒ»İÄ¶’†‚Å‚È‚¯‚ê‚ÎAnull
+     * ï¿½ï¿½ï¿½İÄï¿½ï¿½ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½Ô‹pï¿½Bï¿½ï¿½ï¿½İÄï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½ÎAnull
      */
     public String getPath() {
         return mFileToPlay;
@@ -2221,7 +2227,7 @@ public class MediaPlaybackService extends Service {
             if (mPlayPos >= 0 && mPlayer.isInitialized()
             	&& mPlayList[mPlayPos].getMediaType() == MediaInfo.MEDIA_TYPE_AUDIO ) 
             {
-            	// Ä¶ˆÊ’u‚ª—LŒø‚ÅAÄ¶’†‚Å‚ ‚ê‚ÎAÄ¶‚³‚ê‚Ä‚¢‚é‹È‚ÌID‚ğ•Ô‹p
+            	// ï¿½Äï¿½ï¿½Ê’uï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ÅAï¿½Äï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ÎAï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½È‚ï¿½IDï¿½ï¿½Ô‹p
                 return mPlayList[mPlayPos].getId();
             }
         }
@@ -2240,23 +2246,23 @@ public class MediaPlaybackService extends Service {
     
     /**
      * Starts playing the track at the given position in the queue.
-     * w’è‚³‚ê‚½ƒLƒ…[‚ÌˆÊ’u‚Ì‹È‚ğÄ¶
+     * ï¿½wï¿½è‚³ï¿½ê‚½ï¿½Lï¿½ï¿½ï¿½[ï¿½ÌˆÊ’uï¿½Ì‹È‚ï¿½ï¿½Äï¿½
      * @param pos The position in the queue of the track that will be played.
      */
     public void setQueuePosition(int pos) {
         synchronized(this) {
-        	// ‘¦ƒXƒgƒbƒv
+        	// ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½bï¿½v
             stop(false);
             mPlayPos = pos;
-            // ƒI[ƒvƒ“
+            // ï¿½Iï¿½[ï¿½vï¿½ï¿½
             openCurrent();
-            // Ä¶
+            // ï¿½Äï¿½
             play();
-            // ‰æ–ÊXV
+            // ï¿½ï¿½ÊXï¿½V
             notifyChange(META_CHANGED);
             if (mShuffleMode == SHUFFLE_AUTO) {
-            	// ƒI[ƒgƒVƒƒƒbƒtƒ‹
-            	// ƒI[ƒgƒVƒƒƒbƒtƒ‹‚Ì€–Ú‚ğXVH
+            	// ï¿½Iï¿½[ï¿½gï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½
+            	// ï¿½Iï¿½[ï¿½gï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½Ìï¿½ï¿½Ú‚ï¿½ï¿½Xï¿½Vï¿½H
                 doAutoShuffleUpdate();
             }
         }
@@ -2328,9 +2334,9 @@ public class MediaPlaybackService extends Service {
     /**
      * Returns the duration of the file in milliseconds.
      * Currently this method returns -1 for the duration of MIDI files.
-     * ƒtƒ@ƒCƒ‹‚Ì‘ŠÔ‚ğƒ~ƒŠ•b‚Å•Ô‚·
-     * ƒtƒ@ƒCƒ‹‚ªƒI[ƒvƒ“‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎA-1
-     * MIDI‚Ìê‡A-1‚ç‚µ‚¢
+     * ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½~ï¿½ï¿½ï¿½bï¿½Å•Ô‚ï¿½
+     * ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ÎA-1
+     * MIDIï¿½Ìê‡ï¿½A-1ï¿½ç‚µï¿½ï¿½
      */
     public long duration() {
         if (mPlayer != null && mPlayer.isInitialized()) {
@@ -2341,9 +2347,9 @@ public class MediaPlaybackService extends Service {
 
     /**
      * Returns the current playback position in milliseconds
-     * ƒtƒ@ƒCƒ‹‚ÌÄ¶ŠÔ‚ğƒ~ƒŠ•b‚Å•Ô‚·
-     * ƒtƒ@ƒCƒ‹‚ªƒI[ƒvƒ“‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎA-1
-     * MIDI‚Ìê‡A-1‚ç‚µ‚¢
+     * ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÌÄï¿½ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½~ï¿½ï¿½ï¿½bï¿½Å•Ô‚ï¿½
+     * ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ÎA-1
+     * MIDIï¿½Ìê‡ï¿½A-1ï¿½ç‚µï¿½ï¿½
      */
     public long position() {
         if (mPlayer.isInitialized()) {
@@ -2354,7 +2360,7 @@ public class MediaPlaybackService extends Service {
 
     /**
      * Seeks to the position specified.
-     * w’è‚ÌˆÊ’u‚ÉƒV[ƒN
+     * ï¿½wï¿½ï¿½ÌˆÊ’uï¿½ÉƒVï¿½[ï¿½N
      *
      * @param pos The position to seek to, in milliseconds
      */
@@ -2377,8 +2383,8 @@ public class MediaPlaybackService extends Service {
     /**
      * Provides a unified interface for dealing with midi files and
      * other media files.
-     * “‡‚³‚ê‚½ƒCƒ“ƒ^ƒtƒF[ƒX‚ğ’ñ‹Ÿ
-     * midi‚Æ‚»‚Ì‘¼‚ÌƒƒfƒBƒAƒtƒ@ƒCƒ‹‚ğ•ª‚¯‚ÄÄ¶‚Å‚«‚éH
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½Cï¿½ï¿½ï¿½^ï¿½tï¿½Fï¿½[ï¿½Xï¿½ï¿½ï¿½
+     * midiï¿½Æ‚ï¿½ï¿½Ì‘ï¿½ï¿½Ìƒï¿½ï¿½fï¿½Bï¿½Aï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ğ•ª‚ï¿½ï¿½ÄÄï¿½ï¿½Å‚ï¿½ï¿½ï¿½H
      */
     private class MultiPlayer implements android.view.SurfaceHolder.Callback {
         private MediaPlayer mMediaPlayer = new MediaPlayer();
@@ -2386,12 +2392,12 @@ public class MediaPlaybackService extends Service {
         private boolean mIsInitialized = false;
 
         public MultiPlayer() {
-        	// ƒEƒFƒCƒNƒƒbƒN‚Ìİ’è
+        	// ï¿½Eï¿½Fï¿½Cï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½Ìİ’ï¿½
             mMediaPlayer.setWakeMode(MediaPlaybackService.this, PowerManager.PARTIAL_WAKE_LOCK);
         }
 
         /**
-         * ”ñ“¯Šú‚Åƒf[ƒ^ƒ\[ƒX‚ğİ’è
+         * ï¿½ñ“¯Šï¿½ï¿½Åƒfï¿½[ï¿½^ï¿½\ï¿½[ï¿½Xï¿½ï¿½İ’ï¿½
          * @param path
          */
         public void setDataSourceAsync(String path) {
@@ -2430,7 +2436,7 @@ public class MediaPlaybackService extends Service {
             }
         }        
         /**
-         * ƒf[ƒ^ƒ\[ƒX‚ğİ’è
+         * ï¿½fï¿½[ï¿½^ï¿½\ï¿½[ï¿½Xï¿½ï¿½İ’ï¿½
          * @param path
          */
         public void setDataSource(String path, int mediaType) {
@@ -2439,7 +2445,7 @@ public class MediaPlaybackService extends Service {
                 mMediaPlayer.setOnPreparedListener(null);
                 if (path.startsWith("content://")) {
                 	Uri uri = Uri.parse(path);
-                	// String strFileName = uri.getLastPathSegment();// test—p
+                	// String strFileName = uri.getLastPathSegment();// testï¿½p
                     mMediaPlayer.setDataSource(MediaPlaybackService.this, uri);
                 } else {
                     mMediaPlayer.setDataSource(path);
@@ -2450,7 +2456,7 @@ public class MediaPlaybackService extends Service {
                 	= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoViewHolder();
                 	holder.addCallback(this);
 	                holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-	                // surfaceholder‚ª‚Å‚«‚Ä‚©‚çİ’èH
+	                // surfaceholderï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½İ’ï¿½H
 	                // mMediaPlayer.setDisplay(holder);
 	            }
                 else
@@ -2492,7 +2498,7 @@ public class MediaPlaybackService extends Service {
 
         /**
          * You CANNOT use this player anymore after calling release()
-         * ƒŠƒŠ[ƒXŒã‚Í‚±‚ÌƒvƒŒƒCƒ„[‚ğâ‘Î‚Ég‚í‚È‚¢‚±‚Æ
+         * ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Xï¿½ï¿½Í‚ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Î‚Égï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½
          */
         public void release() {
             stop();
@@ -2508,7 +2514,7 @@ public class MediaPlaybackService extends Service {
         }
 
         /**
-         * Ä¶Š®—¹‚ÌƒŠƒXƒiH
+         * ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Xï¿½iï¿½H
          */
         MediaPlayer.OnCompletionListener listener = new MediaPlayer.OnCompletionListener() {
             @Override
@@ -2518,10 +2524,10 @@ public class MediaPlaybackService extends Service {
                 // and allow the device to go to sleep.
                 // This temporary wakelock is released when the RELEASE_WAKELOCK
                 // message is processed, but just in case, put a timeout on it.
-            	// ƒƒfƒBƒAƒvƒŒƒCƒ„[‚ª‚»‚Ìwakelock‚ğƒŠƒŠ[ƒX‚·‚éƒR[ƒ‹ƒoƒbƒN‚©‚ç–ß‚Á‚Ä‚«‚½‚©‚çAˆê“I‚Èwakelock‚ğ“¾‚é
-            	// ‚»‚µ‚ÄƒfƒoƒCƒX‚ªƒXƒŠ[ƒv‚É“ü‚é‚Ì‚ğ‹–‚·
-            	// ˆê“I‚Èwakelock‚ÍRELEASE_WAKELOCK‚ªˆ—‚³‚ê‚½ƒŠƒŠ[ƒX‚³‚ê‚é‚ªA‚±‚ÌƒP[ƒX‚Ìê‡A‚»‚ê‚Éƒ^ƒCƒ€ƒAƒEƒg‚ğİ’è‚·‚éH
-            	// sleep‚©‚ç‚Ì•œ‹AHtimeoutŠÔŒãƒŠƒŠ[ƒX‚·‚é
+            	// ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wakelockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Xï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ß‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½êï¿½Iï¿½ï¿½wakelockï¿½ğ“¾‚ï¿½
+            	// ï¿½ï¿½ï¿½ï¿½ï¿½Äƒfï¿½oï¿½Cï¿½Xï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½[ï¿½vï¿½É“ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½
+            	// ï¿½êï¿½Iï¿½ï¿½wakelockï¿½ï¿½RELEASE_WAKELOCKï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Xï¿½ï¿½ï¿½ï¿½é‚ªï¿½Aï¿½ï¿½ï¿½ÌƒPï¿½[ï¿½Xï¿½Ìê‡ï¿½Aï¿½ï¿½ï¿½ï¿½Éƒ^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½gï¿½ï¿½İ’è‚·ï¿½ï¿½H
+            	// sleepï¿½ï¿½ï¿½ï¿½Ì•ï¿½ï¿½Aï¿½Htimeoutï¿½ï¿½ï¿½ÔŒãƒŠï¿½ï¿½ï¿½[ï¿½Xï¿½ï¿½ï¿½ï¿½
                 mWakeLock.acquire(30000);
                 mHandler.sendEmptyMessage(TRACK_ENDED);
                 mHandler.sendEmptyMessage(RELEASE_WAKELOCK);
@@ -2529,19 +2535,19 @@ public class MediaPlaybackService extends Service {
         };
 
         /**
-         * €”õ‚ÌƒŠƒXƒiH
+         * ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Xï¿½iï¿½H
          */
         MediaPlayer.OnPreparedListener preparedlistener = new MediaPlayer.OnPreparedListener() {
             @Override
 			public void onPrepared(MediaPlayer mp) {
-            	// ‘½•ªAg‚í‚ê‚Ä‚¢‚È‚¢
-            	// TODO: Async‚Ì‚Íg‚¤‚×‚«‚Å‚ÍH
+            	// ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½gï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½
+            	// TODO: Asyncï¿½Ìï¿½ï¿½Ígï¿½ï¿½ï¿½×‚ï¿½ï¿½Å‚ÍH
                 notifyChange(ASYNC_OPEN_COMPLETE);
             }
         };
  
         /**
-         * ƒGƒ‰[‚ÌƒŠƒXƒiH
+         * ï¿½Gï¿½ï¿½ï¿½[ï¿½Ìƒï¿½ï¿½Xï¿½iï¿½H
          */
         MediaPlayer.OnErrorListener errorListener = new MediaPlayer.OnErrorListener() {
             @Override
@@ -2553,7 +2559,7 @@ public class MediaPlaybackService extends Service {
                     // Creating a new MediaPlayer and settings its wakemode does not
                     // require the media service, so it's OK to do this now, while the
                     // service is still being restarted
-                    // mediaplayer‚ğì‚è’¼‚·H
+                    // mediaplayerï¿½ï¿½ï¿½ï¿½è’¼ï¿½ï¿½ï¿½H
                     mMediaPlayer = new MediaPlayer(); 
                     mMediaPlayer.setWakeMode(MediaPlaybackService.this, PowerManager.PARTIAL_WAKE_LOCK);
                     mHandler.sendMessageDelayed(mHandler.obtainMessage(SERVER_DIED), 2000);

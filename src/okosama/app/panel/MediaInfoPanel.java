@@ -1,11 +1,11 @@
 package okosama.app.panel;
 
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.widget.absWidget;
 import android.app.Activity;
-import android.util.Log;
 import android.view.ViewGroup;
 
 public class MediaInfoPanel extends ControlPanel {
@@ -42,7 +42,7 @@ public class MediaInfoPanel extends ControlPanel {
 			}
 			else
 			{
-				Log.e("error","insert sub control panel");
+				LogWrapper.e("error","insert sub control panel");
 			}
 		}
 		public static void removeFromParent() //ViewGroup tabBaseLayout )
@@ -93,12 +93,12 @@ public class MediaInfoPanel extends ControlPanel {
 //					,getNowPlayingAlbumLabel()
 //				};
 			// ---- action
-//			// TimeƒRƒ“ƒ|[ƒlƒ“ƒg
-//			// shuffleƒ{ƒ^ƒ“
+//			// Timeï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½g
+//			// shuffleï¿½{ï¿½^ï¿½ï¿½
 //			SparseArray< IViewAction > actMapShuffle
 //				= new SparseArray< IViewAction >();
 //			actMapShuffle.put( IViewAction.ACTION_ID_ONCLICK, new ToggleShuffleAction() );
-//			// repeatƒ{ƒ^ƒ“
+//			// repeatï¿½{ï¿½^ï¿½ï¿½
 //			SparseArray< IViewAction > actMapRepeat
 //				= new SparseArray< IViewAction >();
 //			actMapRepeat.put( IViewAction.ACTION_ID_ONCLICK, new CycleRepeatAction() );
@@ -107,18 +107,18 @@ public class MediaInfoPanel extends ControlPanel {
 //					new TabComponentActionSetter( actMapShuffle )
 //					,new TabComponentActionSetter( actMapRepeat )
 //				};
-			// ƒ{ƒ^ƒ“‚ğì¬AˆÊ’u‚ğ‡‚í‚¹AƒAƒNƒVƒ‡ƒ“‚ğİ’è‚µAƒŒƒCƒAƒEƒg‚É”z’u
+			// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½Aï¿½Ê’uï¿½ï¿½ï¿½ï¿½ï¿½í‚¹ï¿½Aï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Aï¿½ï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½É”zï¿½u
 			int i=0;
 			for( absWidget widget : widgets )
 			{
 				widget.acceptConfigurator(creationData[i]);
-//				// TODO:ƒ{ƒ^ƒ“‚ÌƒAƒNƒVƒ‡ƒ“‚ğİ’è
+//				// TODO:ï¿½{ï¿½^ï¿½ï¿½ï¿½ÌƒAï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 //				if( actionSetterCont[i] != null )
 //				{
 //					widget.acceptConfigurator(actionSetterCont[i]);
 //				}
 				
-				// ƒ{ƒ^ƒ“‚ğ‚±‚Ìƒ^ƒuq€–Ú‚Æ‚µ‚Ä’Ç‰Á
+				// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½qï¿½ï¿½ï¿½Ú‚Æ‚ï¿½ï¿½Ä’Ç‰ï¿½
 				addChild( creationData[i].getInternalID(), widget );	
 				tabBaseLayout.addView( widget.getView() );
 				i++;

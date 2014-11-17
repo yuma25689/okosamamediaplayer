@@ -3,9 +3,8 @@
  */
 package okosama.app.tab;
 
-import android.util.SparseArray;
-
 import okosama.app.action.IViewAction;
+import android.util.SparseArray;
 
 /**
  * @author 25689

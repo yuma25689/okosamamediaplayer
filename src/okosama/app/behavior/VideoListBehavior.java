@@ -6,19 +6,14 @@ import okosama.app.R;
 import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.Database;
-import okosama.app.storage.TrackData;
 import okosama.app.storage.VideoData;
 import okosama.app.tab.TabPage;
-
-import android.content.ContentUris;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.ContextMenu;
-import android.view.MenuItem;
-import android.view.SubMenu;
-import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 

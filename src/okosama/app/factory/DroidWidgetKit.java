@@ -1,6 +1,5 @@
 package okosama.app.factory;
 
-import android.app.Activity;
 import okosama.app.behavior.IExpListBehavior;
 import okosama.app.behavior.IListBehavior;
 import okosama.app.widget.AutoCompleteEdit;
@@ -14,6 +13,7 @@ import okosama.app.widget.List;
 import okosama.app.widget.ProgressBar;
 import okosama.app.widget.SeekBar;
 import okosama.app.widget.ToggleButton;
+import android.app.Activity;
 
 public class DroidWidgetKit implements IWidgetKit {
 	// singleton

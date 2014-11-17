@@ -3,15 +3,8 @@ package okosama.app.behavior;
 import java.io.File;
 import java.io.IOException;
 
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagException;
-
 import okosama.app.DeleteItems;
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.service.MediaInfo;
@@ -20,17 +13,21 @@ import okosama.app.storage.Database;
 import okosama.app.storage.TrackData;
 import okosama.app.tab.TabPage;
 
+//import org.jaudiotagger.audio.AudioFile;
+//import org.jaudiotagger.audio.AudioFileIO;
+//import org.jaudiotagger.audio.exceptions.CannotReadException;
+//import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+//import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+//import org.jaudiotagger.tag.Tag;
+//import org.jaudiotagger.tag.TagException;
+
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.MediaStore.MediaColumns;
-import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
@@ -105,30 +102,30 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 		}
 		case SHOW_ITEM_INFORMATION:
 		{
-			TrackData data = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().getItem(mSelectedPosition);
-			//Log.d("track_filename",data.getTrackData());
-			File file = new File(data.getTrackData());
-			AudioFile f;
-			try {
-				f = AudioFileIO.read(file);
-				Tag tag = f.getTag();
-				int cnt = tag.getFieldCount();
-			} catch (CannotReadException e) {
-				Log.e("file_info_get_error",e.getMessage());
-				//e.printStackTrace();
-			} catch (IOException e) {
-				Log.e("file_info_get_error",e.getMessage());
-				//e.printStackTrace();
-			} catch (TagException e) {
-				Log.e("file_info_get_error",e.getMessage());
-				//e.printStackTrace();
-			} catch (ReadOnlyFileException e) {
-				Log.e("file_info_get_error",e.getMessage());				
-				//e.printStackTrace();
-			} catch (InvalidAudioFrameException e) {
-				Log.e("file_info_get_error",e.getMessage());				
-				// e.printStackTrace();
-			}
+//			TrackData data = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().getItem(mSelectedPosition);
+//			//Log.d("track_filename",data.getTrackData());
+//			File file = new File(data.getTrackData());
+//			AudioFile f;
+//			try {
+//				f = AudioFileIO.read(file);
+//				Tag tag = f.getTag();
+//				int cnt = tag.getFieldCount();
+//			} catch (CannotReadException e) {
+//				LogWrapper.e("file_info_get_error",e.getMessage());
+//				//e.printStackTrace();
+//			} catch (IOException e) {
+//				LogWrapper.e("file_info_get_error",e.getMessage());
+//				//e.printStackTrace();
+//			} catch (TagException e) {
+//				LogWrapper.e("file_info_get_error",e.getMessage());
+//				//e.printStackTrace();
+//			} catch (ReadOnlyFileException e) {
+//				LogWrapper.e("file_info_get_error",e.getMessage());				
+//				//e.printStackTrace();
+//			} catch (InvalidAudioFrameException e) {
+//				LogWrapper.e("file_info_get_error",e.getMessage());				
+//				// e.printStackTrace();
+//			}
 			// AudioHeader = f.getAudioHeader();			
 		}
 		break;
@@ -139,7 +136,7 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 	       return true;
 	   }
 	
-	   // TODO: Œã‚ÅŽÀ‘•
+	   // TODO: ï¿½ï¿½ÅŽï¿½ï¿½ï¿½
 //	   case NEW_PLAYLIST: {
 //	       Intent intent = new Intent();
 //	       intent.setClass(this, CreatePlaylist.class);
@@ -154,7 +151,7 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 	       return true;
 	   }
 	
-	   // TODO:Œã‚ÅŽÀ‘•
+	   // TODO:ï¿½ï¿½ÅŽï¿½ï¿½ï¿½
 //	   case USE_AS_RINGTONE:
 //	       // Set the system setting to make this the current ringtone
 //	       Database.setRingtone(activity, mSelectedId);
@@ -177,7 +174,7 @@ public class TrackListBehavior extends IListBehavior implements Database.Defs {
 	       return true;
 	   }
 	
-	   // TODO: Œã‚ÅŽÀ‘•
+	   // TODO: ï¿½ï¿½ÅŽï¿½ï¿½ï¿½
 //	   case REMOVE:
 //	       removePlaylistItem(mSelectedPosition);
 //	       return true;

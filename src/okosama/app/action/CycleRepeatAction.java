@@ -2,12 +2,11 @@ package okosama.app.action;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-//import okosama.app.panel.SubControlPanel;
-//import okosama.app.panel.TimeControlPanel;
 import okosama.app.service.MediaPlaybackService;
 import okosama.app.service.MediaPlayerUtil;
-
 import android.os.RemoteException;
+//import okosama.app.panel.SubControlPanel;
+//import okosama.app.panel.TimeControlPanel;
 // import android.view.View;
 
 public class CycleRepeatAction implements IViewAction {

@@ -4,12 +4,12 @@ import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.state.IDisplayState;
-// import android.R;
 import android.os.RemoteException;
+// import android.R;
 // import android.view.View;
 
 /**
- * ƒƒfƒBƒA‚ğw’èŠÔƒV[ƒN‚·‚éƒAƒNƒVƒ‡ƒ“
+ * ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½ï¿½ï¿½wï¿½èï¿½ÔƒVï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½
  * @author 25689
  *
  */
@@ -42,7 +42,7 @@ public final class MediaSeekAction implements IViewAction {
 		        		|| MediaPlayerUtil.sService.getAudioId() != -1 )
 		        {
 		        	MediaPlayerUtil.sService.seek( seekVal );
-		        	// ‚»‚ÌêŒÀ‚è‚Åˆê“x‚¾‚¯ŠÔ“™‚ğXV‚·‚é
+		        	// ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Åˆï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô“ï¿½ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½
                 	IDisplayState statePlayTab 
                 	= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getStateStocker().getState(
                 		//ControlIDs.TAB_ID_PLAY

@@ -12,20 +12,16 @@ import okosama.app.panel.SearchPanel;
 import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.storage.AlbumData;
-import okosama.app.storage.ArtistGroupData;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Audio.AlbumColumns;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
@@ -35,7 +31,7 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 	@Override
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 		// TODO Auto-generated method stub
-		// TODO: ŒŸõğŒ‚ğİ’èŒãAƒgƒ‰ƒbƒNƒ^ƒu‚ÖˆÚ“®
+		// TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½ï¿½Aï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½^ï¿½uï¿½ÖˆÚ“ï¿½
 //        Intent intent = new Intent(Intent.ACTION_PICK);
 //        intent.setDataAndType(Uri.EMPTY, "vnd.android.cursor.dir/track");
 //        intent.putExtra("album", Long.valueOf(id).toString());
@@ -47,7 +43,7 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
 		{
 			return;
 		}
-		// TODO: –{“–‚ÉAll‚Å‚¢‚¢‚Ì‚©‚Í”÷–­
+		// TODO: ï¿½{ï¿½ï¿½ï¿½ï¿½Allï¿½Å‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½Í”ï¿½ï¿½ï¿½
 		SearchPanel.getInstance().clearAllControlValue();
 		OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setAlbumID(String.valueOf(act.getAlbumAdp().getItem(position).getDataId() ) );
 		// act.getTrackAdp().setAlbumId(String.valueOf(act.getAlbumAdp().getItem(position).getAlbumId() ) );
@@ -95,12 +91,12 @@ public class AlbumListBehavior extends IListBehavior implements Database.Defs {
             menu.setHeaderTitle(mCurrentAlbumName);
         }
 //        if (!mIsUnknownAlbum || !mIsUnknownArtist) {
-//        	// TODO ’è”SEARCH‚ğì‚Á‚Ä‚à—Ç‚¢‚ªAƒTƒ“ƒvƒ‹‚Å‚»‚¤‚È‚Á‚Ä‚¢‚È‚¢B‚È‚º‚©’²‚×‚é
+//        	// TODO ï¿½è”SEARCHï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Aï¿½Tï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Bï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚ï¿½
 //            menu.add(0, SEARCH, 0, R.string.search_title);
 //        }
 	}
 
-	// TODO: ‚Æ‚è‚ ‚¦‚¸AV‚µ‚¢ƒvƒŒƒCƒŠƒXƒg‚Ìì¬‚Æ€–Ú‚Ìíœ‚ÍƒRƒƒ“ƒg‚É‚µ‚Ä‚ ‚é
+	// TODO: ï¿½Æ‚è‚ ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ìì¬ï¿½Æï¿½ï¿½Ú‚Ìíœï¿½ÍƒRï¿½ï¿½ï¿½ï¿½ï¿½gï¿½É‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();

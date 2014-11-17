@@ -9,25 +9,18 @@ import okosama.app.R;
 import okosama.app.adapter.IAdapterUpdate;
 import okosama.app.behavior.TrackListBehavior;
 import okosama.app.behavior.VideoListBehavior;
-import okosama.app.factory.DroidWidgetKit;
 import okosama.app.panel.MoveTabInfo;
-import okosama.app.panel.NowPlayingControlPanel;
-import okosama.app.panel.PlayControlPanel;
-import okosama.app.panel.SubControlPanel;
 import okosama.app.panel.TabMoveLeftInfoPanel;
 import okosama.app.panel.TabMoveRightInfoPanel;
-import okosama.app.panel.TimeControlPanel;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
 import okosama.app.widget.List;
 import okosama.app.widget.absWidget;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ImageView.ScaleType;
 
 public class TabPageNowPlaylist extends TabPage {
 
@@ -37,7 +30,7 @@ public class TabPageNowPlaylist extends TabPage {
 		this.parent = parent;
 		this.pageContainer = ll;
 		this.componentContainer = rl;
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å‚±‚Ìƒ^ƒu‚Ìƒ^ƒuID‚ğİ’è
+		// ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½Å‚ï¿½ï¿½Ìƒ^ï¿½uï¿½Ìƒ^ï¿½uIDï¿½ï¿½İ’ï¿½
 		this.tabId = TABPAGE_ID_NOW_PLAYLIST;
 		create(R.layout.tab_layout_content_empty_show );
 //		componentContainer.addView(tabButton.getView());
@@ -45,9 +38,9 @@ public class TabPageNowPlaylist extends TabPage {
 	ViewGroup EmptyPanel = null;
 	@Override
 	public int create(int panelLayoutID) {
-		// ƒtƒŠƒbƒN“ü—Í‘Î‰
+		// ï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Í‘Î‰ï¿½
 		ArrayList<MoveTabInfo> arrMti = new ArrayList<MoveTabInfo>();
-		// ¶ƒtƒŠƒbƒN‚Ìİ’è
+		// ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ìİ’ï¿½
 		MoveTabInfo mti = new MoveTabInfo();
 		mti.setTabInfoIndex( MoveTabInfo.LEFT_1 );
 		mti.setTabId(ControlIDs.TAB_ID_MAIN);
@@ -56,7 +49,7 @@ public class TabPageNowPlaylist extends TabPage {
 		mti.setImageViewId(R.id.left_move_image);
 		mti.setTabImageResId(R.drawable.brat_main_normal);
 		arrMti.add(mti);
-		// ‰EƒtƒŠƒbƒN‚Ìİ’è
+		// ï¿½Eï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ìİ’ï¿½
 		MoveTabInfo mtiR = new MoveTabInfo();
 		mtiR.setTabInfoIndex( MoveTabInfo.RIGHT_1 );
 		mtiR.setTabId(ControlIDs.TAB_ID_MAIN);
@@ -80,7 +73,7 @@ public class TabPageNowPlaylist extends TabPage {
 			EmptyPanel.setVisibility(View.GONE);
 		}
 
-		// NowPlaylistTabƒ{ƒ^ƒ“‚ÌƒAƒNƒVƒ‡ƒ“
+		// NowPlaylistTabï¿½{ï¿½^ï¿½ï¿½ï¿½ÌƒAï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½
 //		SparseArray< IViewAction > actMapTemp
 //			= new SparseArray< IViewAction >();
 //		actMapTemp.put( IViewAction.ACTION_ID_ONCLICK, new TabSelectAction( 
@@ -109,18 +102,18 @@ public class TabPageNowPlaylist extends TabPage {
 		{
 			widgets.add(lst);
 		}			
-		// ƒ{ƒ^ƒ“‚ğì¬AˆÊ’u‚ğ‡‚í‚¹AƒAƒNƒVƒ‡ƒ“‚ğİ’è‚µAƒŒƒCƒAƒEƒg‚É”z’u
+		// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½Aï¿½Ê’uï¿½ï¿½ï¿½ï¿½ï¿½í‚¹ï¿½Aï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Aï¿½ï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½É”zï¿½u
 		int i=0;
 		for( absWidget widget : widgets )
 		{
 			widget.acceptConfigurator(creationData[i]);
-			// TODO:ƒ{ƒ^ƒ“‚ÌƒAƒNƒVƒ‡ƒ“‚ğİ’è
+			// TODO:ï¿½{ï¿½^ï¿½ï¿½ï¿½ÌƒAï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 			//lst.getView().setBackgroundColor(Color.DKGRAY);
-			// ƒ{ƒ^ƒ“‚ğ‚±‚Ìƒ^ƒuq€–Ú‚Æ‚µ‚Ä’Ç‰Á
+			// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½qï¿½ï¿½ï¿½Ú‚Æ‚ï¿½ï¿½Ä’Ç‰ï¿½
 			// addChild( creationData[i].getInternalID(), lst );
 			tabBaseLayout.addView( widget.getView() );
-			// ƒ{ƒ^ƒ“‚ğ”z’u
-			// ‚±‚ê‚ÍAsetActivate‚Ås‚¤
+			// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½zï¿½u
+			// ï¿½ï¿½ï¿½ï¿½ÍAsetActivateï¿½Åsï¿½ï¿½
 			// componentContainer.addView( btn.getView() );
 			i++;
 		}
@@ -147,7 +140,7 @@ public class TabPageNowPlaylist extends TabPage {
 	{
 		if( null != EmptyPanel )
 		{
-			// ƒAƒ_ƒvƒ^‚ª‹ó‚Å‚ ‚éê‡‚Ì‚İAEmpty‚ğ•\¦
+			// ï¿½Aï¿½_ï¿½vï¿½^ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ê‡ï¿½Ì‚İAEmptyï¿½ï¿½\ï¿½ï¿½
 			
 			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 			IAdapterUpdate adp = act.getAdpStocker().get(TabPage.TABPAGE_ID_SONG);
@@ -170,20 +163,20 @@ public class TabPageNowPlaylist extends TabPage {
 	{
 		if( bActivate )
 		{
-			// NowPlaying‚ÌƒŠƒXƒg‚ÍA‚±‚±‚Å•K‚¸•\¦‘O‚ÉAdapter‚Æbehavior‚ğİ’è‚µ’¼‚·
+			// NowPlayingï¿½Ìƒï¿½ï¿½Xï¿½gï¿½ÍAï¿½ï¿½ï¿½ï¿½ï¿½Å•Kï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½Oï¿½ï¿½Adapterï¿½ï¿½behaviorï¿½ï¿½İ’è‚µï¿½ï¿½ï¿½ï¿½
 			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 			List lst = OkosamaMediaPlayerActivity.getResourceAccessor().getNowPlayingListView();			
        		if( MediaPlayerUtil.isNowPlayingVideos() )
        		{
-       			// Œ»İAƒrƒfƒI‚ªÄ¶‘ÎÛ‚Ìê‡
-       			// Adapter‚ÆBehavior‚ğVideo‚Éİ’è‚·‚é
+       			// ï¿½ï¿½ï¿½İAï¿½rï¿½fï¿½Iï¿½ï¿½ï¿½Äï¿½ï¿½ÎÛ‚Ìê‡
+       			// Adapterï¿½ï¿½Behaviorï¿½ï¿½Videoï¿½Éİ’è‚·ï¿½ï¿½
        			lst.setAdapter( act.getVideoAdp() );
        			lst.setBehavior(new VideoListBehavior());
        		}
        		else
        		{
-       			// Œ»İAƒI[ƒfƒBƒI‚ªÄ¶‘ÎÛ‚Ìê‡
-       			// Adapter‚ÆBehavior‚ğTrack‚Éİ’è‚·‚é
+       			// ï¿½ï¿½ï¿½İAï¿½Iï¿½[ï¿½fï¿½Bï¿½Iï¿½ï¿½ï¿½Äï¿½ï¿½ÎÛ‚Ìê‡
+       			// Adapterï¿½ï¿½Behaviorï¿½ï¿½Trackï¿½Éİ’è‚·ï¿½ï¿½
        			lst.setAdapter( act.getTrackAdp() );
        			lst.setBehavior(new TrackListBehavior());       			
        			

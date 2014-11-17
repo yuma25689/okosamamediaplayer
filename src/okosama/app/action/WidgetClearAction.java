@@ -1,9 +1,5 @@
 package okosama.app.action;
 
-import okosama.app.OkosamaMediaPlayerActivity;
-import okosama.app.panel.SearchPanel;
-import okosama.app.storage.FilterData;
-import okosama.app.tab.TabPage;
 import okosama.app.widget.absWidget;
 
 public class WidgetClearAction implements IViewAction {

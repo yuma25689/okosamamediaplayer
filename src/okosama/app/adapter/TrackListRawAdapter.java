@@ -1,24 +1,18 @@
 package okosama.app.adapter;
 
 import java.util.ArrayList;
-//import java.util.Collections;
-//import java.util.HashMap;
 
-//import okosama.app.ControlIDs;
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
 import okosama.app.service.MediaInfo;
-//import okosama.app.adapter.AlbumListRawAdapter.ViewHolder;
 import okosama.app.service.MediaPlayerUtil;
-//import okosama.app.storage.AlbumData;
 import okosama.app.storage.Database;
 import okosama.app.storage.FilterData;
 import okosama.app.storage.GenreData;
-// import okosama.app.storage.QueryHandler;
 import okosama.app.storage.TrackData;
 import okosama.app.tab.TabPage;
-//import okosama.app.storage.TrackQueryHandler;
 import android.content.Context;
 import android.database.CharArrayBuffer;
 import android.database.Cursor;
@@ -27,26 +21,33 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.RemoteException;
-//import android.provider.BaseColumns;
 import android.provider.MediaStore;
-//import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
 import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-//import android.widget.AlphabetIndexer;
-//import android.widget.AlphabetIndexer;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.SectionIndexer;
+import android.widget.TextView;
+//import java.util.Collections;
+//import java.util.HashMap;
+//import okosama.app.ControlIDs;
+//import okosama.app.adapter.AlbumListRawAdapter.ViewHolder;
+//import okosama.app.storage.AlbumData;
+// import okosama.app.storage.QueryHandler;
+//import okosama.app.storage.TrackQueryHandler;
+//import android.provider.BaseColumns;
+//import android.provider.MediaStore.Audio.AlbumColumns;
+//import android.widget.AlphabetIndexer;
+//import android.widget.AlphabetIndexer;
 //import android.widget.SectionIndexer;
 //import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 /**
- * ƒgƒ‰ƒbƒN‚ÌƒŠƒXƒg‚ÌƒAƒ_ƒvƒ^
+ * ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½Ìƒï¿½ï¿½Xï¿½gï¿½ÌƒAï¿½_ï¿½vï¿½^
  * @author 25689
  *
  */
@@ -60,13 +61,13 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 	private ArrayList<String> mSection = new ArrayList<String>();
 	private String[] sections;
 	private ArrayList<TrackData> allItems = new ArrayList<TrackData>();
-	// TODO:Ÿ‚Öƒ{ƒ^ƒ““™
+	// TODO:ï¿½ï¿½ï¿½Öƒ{ï¿½^ï¿½ï¿½ï¿½ï¿½
 	int maxShowCount = 500;
 
 	MediaInfo [] playlist = null;
     private final BitmapDrawable mDefaultAlbumIcon;
 	TabPage page;
-	boolean bDataUpdating = false;	// “à•”ƒf[ƒ^‚ğXV’†‚©‚Ç‚¤‚©
+	boolean bDataUpdating = false;	// ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½
 	boolean bLastError = false;
 	public boolean isDataUpdating()
 	{
@@ -87,7 +88,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     	return ret;
     }
 
-	// ƒJƒ‰ƒ€‚ÌƒCƒ“ƒfƒbƒNƒX•Û—p 
+	// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Ûï¿½ï¿½p 
     int mTitleIdx;
     int mArtistIdx;
     int mDurationIdx;
@@ -139,7 +140,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     //private String mConstraint = null;
     //private boolean mConstraintIsValid = false;
     
-    // ƒrƒ…[•Û—pƒNƒ‰ƒX
+    // ï¿½rï¿½ï¿½ï¿½[ï¿½Ûï¿½ï¿½pï¿½Nï¿½ï¿½ï¿½X
     static class ViewHolder {
         TextView line1;
         TextView line2;
@@ -167,7 +168,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
         // mQueryHandler = new QueryHandler( mActivity.getContentResolver() );
         //, mActivity);
         
-        // album‚Æartist‚ğ•\‚·•¶š—ñ
+        // albumï¿½ï¿½artistï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         mUnknownArtist = mActivity.getString(R.string.unknown_artist_name);
 
         mIsNowPlaying = isnowplaying;
@@ -180,20 +181,20 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
         Bitmap b = OkosamaMediaPlayerActivity.getResourceAccessor().createBitmapFromDrawableId( R.drawable.songtabbtn_selected);
         mDefaultAlbumIcon = new BitmapDrawable(mActivity.getResources(), b);
         mDefaultAlbumIcon.setFilterBitmap(false);
-        // F‚Ì­‚È‚¢(8bit/FˆÈ‰º)ƒfƒoƒCƒX‚É•\¦‚·‚é‚Æ‚«‚ÉAƒfƒBƒU‚ğ‚©‚¯‚é‚©‚Ç‚¤‚©‚ğw’è‚·‚éBtrue‚ÅƒfƒBƒU‚·‚éB’x‚¢B
+        // ï¿½Fï¿½Ìï¿½ï¿½È‚ï¿½(8bit/ï¿½Fï¿½È‰ï¿½)ï¿½fï¿½oï¿½Cï¿½Xï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÉAï¿½fï¿½Bï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚·ï¿½ï¿½Btrueï¿½Åƒfï¿½Bï¿½Uï¿½ï¿½ï¿½ï¿½Bï¿½xï¿½ï¿½ï¿½B
         mDefaultAlbumIcon.setDither(false);
         
         // mQueryHandler = new QueryHandler(currentactivity.getContentResolver(), this );
     }
     
     /**
-     * ƒJƒ‰ƒ€‚ÌƒCƒ“ƒfƒbƒNƒX‚ğİ’è
+     * ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½İ’ï¿½
      * @param cursor
      */
     private int getColumnIndices(Cursor cursor) {
         if (cursor != null) {
-        	// ŠeƒJƒ‰ƒ€‚ÌƒCƒ“ƒfƒbƒNƒX‚ğİ’è
-        	// ƒ^ƒCƒgƒ‹AƒA[ƒeƒBƒXƒgAŠÔ
+        	// ï¿½eï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½İ’ï¿½
+        	// ï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½Aï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½Aï¿½ï¿½ï¿½ï¿½
             mTitleIdx = cursor.getColumnIndexOrThrow(MediaColumns.TITLE);
             mArtistIdx = cursor.getColumnIndexOrThrow(AudioColumns.ARTIST);
             mDataIdx = cursor.getColumnIndexOrThrow(AudioColumns.DATA);
@@ -204,7 +205,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
             //mAlbumArtIndex = cursor.getColumnIndexOrThrow(AlbumColumns.ALBUM_ART);
             
             try {
-            	// ƒI[ƒfƒBƒIH‚Ü‚¸AƒvƒŒƒCƒŠƒXƒg‚ÌƒJƒ‰ƒ€id‚©‚çæ“¾‚ğ‚İA¸”s‚µ‚½‚çƒgƒ‰ƒbƒN‚ÌƒJƒ‰ƒ€id‚©‚çæ“¾‚·‚é‚ç‚µ‚¢
+            	// ï¿½Iï¿½[ï¿½fï¿½Bï¿½Iï¿½Hï¿½Ü‚ï¿½ï¿½Aï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ÌƒJï¿½ï¿½ï¿½ï¿½idï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ï¿½İAï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ÌƒJï¿½ï¿½ï¿½ï¿½idï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ç‚µï¿½ï¿½
                 mAudioIdIdx = cursor.getColumnIndexOrThrow(
                         MediaStore.Audio.Playlists.Members.AUDIO_ID);
             } catch (IllegalArgumentException ex) {
@@ -216,7 +217,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     }
 
     /**
-     * V‚µ‚¢ƒrƒ…[‚Ìì¬H
+     * ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½Ìì¬ï¿½H
      */
     @Override
     public View getView(int pos, View convertView, ViewGroup parent) {
@@ -225,7 +226,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     	   ViewHolder vh = new ViewHolder();
 	       v = inflater.inflate(iLayoutId, null);     	   
            
-           // viewholder‚ÉŠeƒrƒ…[‚ğİ’è‚µAƒ^ƒO‚Éİ’è‚·‚é
+           // viewholderï¿½ÉŠeï¿½rï¿½ï¿½ï¿½[ï¿½ï¿½İ’è‚µï¿½Aï¿½^ï¿½Oï¿½Éİ’è‚·ï¿½ï¿½
            vh.line1 = (TextView) v.findViewById(R.id.line1);
            vh.line2 = (TextView) v.findViewById(R.id.line2);
            vh.line3 = (TextView) v.findViewById(R.id.line3);
@@ -243,7 +244,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     }
     
     /**
-     * ƒrƒ…[‚Ö‚Ì’l‚ğİ’è
+     * ï¿½rï¿½ï¿½ï¿½[ï¿½Ö‚Ì’lï¿½ï¿½İ’ï¿½
      */
     // @Override
     public void bindView(View view, Context context, int pos ) { // TrackData data) {
@@ -252,15 +253,15 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     	{
     		return;
     	}
-    	// ƒrƒ…[ƒzƒ‹ƒ_[‚©‚çŠeƒrƒ…[‚ğæ“¾
+    	// ï¿½rï¿½ï¿½ï¿½[ï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½ï¿½ï¿½ï¿½eï¿½rï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½æ“¾
         ViewHolder vh = (ViewHolder) view.getTag();
         
-        // ƒoƒbƒtƒ@‚ÉAƒ^ƒCƒgƒ‹‚Ì•¶š—ñ‚ğˆê“xæ“¾ŒãAƒrƒ…[‚Éİ’èHTODO:‚È‚ºH
+        // ï¿½oï¿½bï¿½tï¿½@ï¿½ÉAï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½æ“¾ï¿½ï¿½Aï¿½rï¿½ï¿½ï¿½[ï¿½Éİ’ï¿½HTODO:ï¿½È‚ï¿½ï¿½H
         // data.getTrackTitle();
         // cursor.copyStringToBuffer(mTitleIdx, vh.buffer1);
         vh.line1.setText(data.getName());
        
-        // ŠÔ‚ğæ“¾Aİ’è
+        // ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½æ“¾ï¿½Aï¿½İ’ï¿½
         int secs = (int) (data.getTrackDuration()) / 1000; // .getInt(mDurationIdx) / 1000;
         if (secs == 0) {
             vh.duration.setText("");
@@ -271,7 +272,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 //        final StringBuilder builder = mBuilder;
 //        builder.delete(0, builder.length());
 
-        // ƒA[ƒeƒBƒXƒg–¼‚ªæ“¾‚Å‚«‚½‚çAƒrƒ…[‚Éİ’è
+        // ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½rï¿½ï¿½ï¿½[ï¿½Éİ’ï¿½
         String name = data.getTrackArtist();
         if (name == null || name.equals(MediaStore.UNKNOWN_STRING)) {
             //builder.append(mUnknownArtist);
@@ -287,10 +288,10 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
         //builder.getChars(0, len, vh.buffer2, 0);
         vh.line2.setText(name);//vh.buffer2, 0, len);
 
-        // ƒWƒƒƒ“ƒ‹‚ªæ“¾‚Å‚«‚½‚çAƒrƒ…[‚Éİ’è
+        // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½rï¿½ï¿½ï¿½[ï¿½Éİ’ï¿½
         String genre = mActivity.getGenreStocker().getGenreOfAudioString( 
         		data.getTrackAudioId() );
-//        Log.i("genre-get",data.getTrackId() + " " + data.getTrackAudioId() 
+//        LogWrapper.i("genre-get",data.getTrackId() + " " + data.getTrackAudioId() 
 //        		+ " " + data.getTrackTitle() + genre );
         if( genre != null )
         {
@@ -315,8 +316,8 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
         
         // 
         ImageView ivInd = vh.play_indicator;
-        // ƒT[ƒrƒX‚ª‚ ‚èAÄ¶’†‚È‚ç‚ÎAid‚ÉƒLƒ…[‚ÌˆÊ’u‚ğ
-        // Ä¶’†‚Å‚È‚¯‚ê‚ÎAid‚ÉƒI[ƒfƒBƒIid
+        // ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Äï¿½ï¿½ï¿½ï¿½È‚ï¿½ÎAidï¿½ÉƒLï¿½ï¿½ï¿½[ï¿½ÌˆÊ’uï¿½ï¿½
+        // ï¿½Äï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½ÎAidï¿½ÉƒIï¿½[ï¿½fï¿½Bï¿½Iid
         long id = -1;
         if (MediaPlayerUtil.sService != null) {
             // TODO: IPC call on each bind??
@@ -333,13 +334,13 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
         if ( (mIsNowPlaying && pos == id) ||
              (!mIsNowPlaying && !mDisableNowPlayingIndicator 
             		 && data.getTrackAudioId() == id)) {
-        	// Ä¶’†‚ÅÄ¶’†‚Ì‚à‚Ì‚©A
-        	// Ä¶’†‚Å‚È‚­ANowPlayingIndicator‚ğ•\¦‚µ‚È‚¢İ’è‚Å‚à‚È‚­AŒ»İİ’èg—p‚Æ‚µ‚Ä‚¢‚é‚Ì‚ª‘Ò‹@’†‚Ì‹È‚Æ“¯‚¶‚È‚ç
-        	// ƒvƒŒƒCƒŠƒXƒg‚ÌƒCƒ[ƒW‚ğİ’èH
+        	// ï¿½Äï¿½ï¿½ï¿½ï¿½ÅÄï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½Ì‚ï¿½ï¿½A
+        	// ï¿½Äï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ANowPlayingIndicatorï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½İ’ï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½Aï¿½ï¿½ï¿½İİ’ï¿½gï¿½pï¿½Æ‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½Ò‹@ï¿½ï¿½ï¿½Ì‹È‚Æ“ï¿½ï¿½ï¿½ï¿½È‚ï¿½
+        	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ÌƒCï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½İ’ï¿½H
         	ivInd.setImageResource(R.drawable.indicator_ic_mp_playing_list);
         	ivInd.setVisibility(View.VISIBLE);
         } else {
-        	// ƒvƒŒƒCƒŠƒXƒg‚ÌƒCƒ[ƒW‚ğ”ñ•\¦‚ÉH
+        	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ÌƒCï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ÉH
         	ivInd.setVisibility(View.GONE);
         }
         
@@ -348,7 +349,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     
     static ArrayList<TabPage> arrPage = new ArrayList<TabPage>();
     /**
-     * ƒJ[ƒ\ƒ‹‚©‚çAƒAƒ_ƒvƒ^‚Ìƒf[ƒ^‚ğİ’è‚·‚é
+     * ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Aï¿½_ï¿½vï¿½^ï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½İ’è‚·ï¿½ï¿½
      * @param cursor
      * @return
      */
@@ -365,7 +366,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     		return -1;
     	}
     	bDataUpdating = true;
-    	Log.i("stockMediaDataFromDevice","start");
+    	LogWrapper.i("stockMediaDataFromDevice","start");
      	
     	if( page != null )
     	{
@@ -377,16 +378,16 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
             protected Integer doInBackground(Cursor... params) {
-            	Log.i("doInBackground","start");
+            	LogWrapper.i("doInBackground","start");
             	
-            	// ƒJ[ƒ\ƒ‹‚ğƒ‹[ƒv‚·‚é
+            	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½
     			Cursor cursor = Database.getInstance(
     					OkosamaMediaPlayerActivity.isExternalRef()
     			).createTrackCursor(null, null);			
             	
         		if( cursor == null || cursor.isClosed() )
         		{
-        			Log.w("TrackListAdp - doInBk", "cursor closed!");
+        			LogWrapper.w("TrackListAdp - doInBk", "cursor closed!");
         			return -1;
         		}
         		
@@ -402,12 +403,12 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 		            	if( 0 < cursor.getCount() )
 		            	{
 		            	
-			            	Log.i("doInBackground","moveToFirst");
+			            	LogWrapper.i("doInBackground","moveToFirst");
 			        		cursor.moveToFirst();
 			        		do 
 			        		{
 			            		TrackData data = new TrackData();
-			        			// ‘S‚Ä‚Ì—v‘f‚ğƒ‹[ƒv‚·‚é
+			        			// ï¿½Sï¿½Ä‚Ì—vï¿½fï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½
 			            		data.setDataId( cursor.getInt(0));
 			            		data.setName(cursor.getString(mTitleIdx));
 			            		data.setTrackData(cursor.getString(mDataIdx));
@@ -417,7 +418,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 			            		data.setTrackAlbum(cursor.getString(mAlbumIdx));
 			            		data.setTrackAlbumId(cursor.getString(mAlbumIdIdx));
 			            		data.setTrackArtistId(cursor.getString(mArtistIdIdx));
-				          		// Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
+				          		// LogWrapper.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
 			            		if( data.getTrackAlbumId() != null )
 			            		{
 				        			data.setTrackAlbumArt(
@@ -448,8 +449,8 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
             	{
             		bLastError = true;
             	}
-            	// Ši”[I—¹
-            	// “ñdŠÇ—‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚Ä‚¢‚é‚ªAƒAƒ_ƒvƒ^‚É‚à“¯—l‚Ìƒf[ƒ^‚ğŠi”[‚·‚é
+            	// ï¿½iï¿½[ï¿½Iï¿½ï¿½
+            	// ï¿½ï¿½dï¿½Ç—ï¿½ï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½é‚ªï¿½Aï¿½Aï¿½_ï¿½vï¿½^ï¿½É‚ï¿½ï¿½ï¿½ï¿½lï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½
             	updateList();
             	if( arrPage.isEmpty() == false )
             	{
@@ -465,7 +466,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     }
     
     /**
-     * •\¦‚·‚×‚«ƒf[ƒ^‚©‚Ç‚¤‚©‚ğ•Ô‹p‚·‚é
+     * ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½×‚ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½Ô‹pï¿½ï¿½ï¿½ï¿½
      * @param data
      * @return
      */
@@ -476,7 +477,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     	{
     		if( playlist != null )
     		{
-	    		// Ä¶ƒLƒ…[‚É‚ ‚é‚à‚Ì‚µ‚©•\¦‚µ‚È‚¢
+	    		// ï¿½Äï¿½ï¿½Lï¿½ï¿½ï¿½[ï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 	    		for( int i=0; i< playlist.length; ++i )
 	    		{
 	    			if( playlist[i].getId() == data.getTrackAudioId() )
@@ -492,7 +493,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     	}
     	else if( mFilterType == FILTER_NORMAL )
     	{
-	    	// albumID‚Ìƒ`ƒFƒbƒN
+	    	// albumIDï¿½Ìƒ`ï¿½Fï¿½bï¿½N
 	    	if( albumId != null && 0 < albumId.length() ) 
 	    	{
 	    		// Log.d("isShowData"," albumId:" + data.getTrackAlbumId() );     		
@@ -505,7 +506,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 	    			return false;
 	    		}
 	    	}
-	    	// ƒA[ƒeƒBƒXƒgID‚Ìƒ`ƒFƒbƒN
+	    	// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gIDï¿½Ìƒ`ï¿½Fï¿½bï¿½N
 	    	if( artistId != null && 0 < artistId.length() ) 
 	    	{
 	    		//Log.d("isShowData"," artistId:" + data.getTrackArtistId() );     		
@@ -524,13 +525,13 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     }
     
     /**
-     * ƒJ[ƒ\ƒ‹‚ğ•ÏX‚·‚é
+     * ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½
      */
     // @Override
     public void updateList() {
     	Log.d("trackadp - update list","");
     	
-    	// ŒŸõğŒ‚ÌƒŠƒZƒbƒg
+    	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Zï¿½bï¿½g
     	playlist = null;
     	if( mFilterType == FILTER_NOW_QUEUE ) 
     	{
@@ -547,7 +548,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 		       		playlist[i] = new MediaInfo( listId[i], listType[i] );
 		       	}
 	    	} catch( RemoteException ex ) {
-	    		Log.e("Error", "sService getQueue RemoteException occured!");
+	    		LogWrapper.e("Error", "sService getQueue RemoteException occured!");
 	    	}
     	}
     	else if( mFilterType == FILTER_PLAYLIST )
@@ -576,7 +577,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
     	ArrayList<TrackData> items = allItems;
     	clear();
     	
-        // ƒCƒ“ƒfƒNƒT‚Ìİ’è
+        // ï¿½Cï¿½ï¿½ï¿½fï¿½Nï¿½Tï¿½Ìİ’ï¿½
     	mSectionIndex.clear();
     	mSection.clear();
         String pre_initial = "";
@@ -587,7 +588,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 			// Log.d("id", "itemCount:" + allItems.size() + " albumID:" + albumId );
     		int index = 0;
 			for (TrackData data : items) {
-	    		// ‚±‚±‚ÅƒtƒBƒ‹ƒ^‚ğ‚©‚¯‚Ä‚µ‚Ü‚¤H
+	    		// ï¿½ï¿½ï¿½ï¿½ï¿½Åƒtï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½H
 	    		if( false == isShowData( data )
 	    		|| false == isFilterData( data )
 	    		)
@@ -597,9 +598,9 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 	    	    add(data);
 	    	    currentAllAudioIds.add(data.getTrackAudioId());
 	    	    
-	    	    // ƒCƒ“ƒfƒNƒT‚Ìİ’è
-	    	    String initial = data.getName().substring(0, 1); // name‚Ì“ª•¶š‚ğŠî€‚É‹æØ‚é  
-	    	    if(!initial.equalsIgnoreCase(pre_initial)){ // “ª•¶š‚Ì”»’è(“ª•¶š‚ª•Ï‚í‚Á‚½‚ç’Ç‰Á)  
+	    	    // ï¿½Cï¿½ï¿½ï¿½fï¿½Nï¿½Tï¿½Ìİ’ï¿½
+	    	    String initial = data.getName().substring(0, 1); // nameï¿½Ì“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½î€ï¿½É‹ï¿½Ø‚ï¿½  
+	    	    if(!initial.equalsIgnoreCase(pre_initial)){ // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì”ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‰ï¿½)  
 	    	    	mSectionIndex.add( index );//+ index_num); 
 	    	        mSection.add(initial);
 	    	        // index_num++;
@@ -608,14 +609,14 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 	    	    
 	        	if( maxShowCount < this.getCount() )
 	    		{
-	    			// max‚Ì•\¦Œ”ˆÈã‚ÍA•\¦‚µ‚È‚¢
-	    			// TODO:ƒy[ƒW‚«‚è‚©‚¦–¢‘Î‰‚È‚Ì‚ÅAÅ‰‚ÌmaxShowCountŒ‚µ‚©•\¦‚Å‚«‚Ä‚¢‚È‚¢
+	    			// maxï¿½Ì•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Èï¿½ÍAï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
+	    			// TODO:ï¿½yï¿½[ï¿½Wï¿½ï¿½ï¿½è‚©ï¿½ï¿½ï¿½ï¿½ï¿½Î‰ï¿½ï¿½È‚Ì‚ÅAï¿½Åï¿½ï¿½ï¿½maxShowCountï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½
 	    			break;
 	    		}
 	    	    index++;
 	    	}
     	}
-    	// ƒCƒ“ƒfƒNƒT‚Ìİ’è
+    	// ï¿½Cï¿½ï¿½ï¿½fï¿½Nï¿½Tï¿½Ìİ’ï¿½
     	// ArrayList<String> sectionList = new ArrayList<String>(mSection.keySet());   
         //Collections.sort(sectionList);    	
         sections = new String[mSection.size()];  
@@ -639,11 +640,11 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 	}
     
     @Override
-    // ‹È‚Ì•ÏX‚È‚ÇAó‘Ô‚ª•Ï‚í‚Á‚½‚Æ‚«‚ÉAŠO•”‚©‚ç•\¦‚ğXV‚³‚¹‚é
+    // ï¿½È‚Ì•ÏXï¿½ï¿½ï¿½È‚ÇAï¿½ï¿½Ô‚ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÉAï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public int updateStatus()
     {
     	updateList();    	
-    	// •\¦‚ğXV?
+    	// ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½V?
     	notifyDataSetChanged();
     	return 0;
     }
@@ -671,7 +672,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 	}
 	@Override
 	public int getPositionForSection(int section) {
-		// w’è‚³‚ê‚½ƒZƒNƒVƒ‡ƒ“‚ªn‚Ü‚éƒ|ƒWƒVƒ‡ƒ“‚Ìindex‚ğ•Ô‚·
+		// ï¿½wï¿½è‚³ï¿½ê‚½ï¿½Zï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½nï¿½Ü‚ï¿½|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½indexï¿½ï¿½Ô‚ï¿½
 		return mSectionIndex.get(section);
 	}
 	@Override
@@ -694,22 +695,22 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 		filterData = data;
 	}
 	/**
-	 *’:‚È‚ñ‚©•Ï‚¾‚¯‚ÇA•\¦‘ÎÛ‚Ìê‡Atrue
+	 *ï¿½ï¿½:ï¿½È‚ñ‚©•Ï‚ï¿½ï¿½ï¿½ï¿½ÇAï¿½\ï¿½ï¿½ï¿½ÎÛ‚Ìê‡ï¿½Atrue
 	 */
 	@Override
 	public boolean isFilterData(TrackData data) {
 		boolean bRet = true;
 		if( filterData != null && data != null)
 		{
-			// ƒA[ƒeƒBƒXƒgID
-			// TODO: ƒA[ƒeƒBƒXƒg–¼
+			// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gID
+			// TODO: ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½
 			if( filterData.getArtistId() != null )
 			{
 				if( data.getTrackArtistId() != null
 				&& filterData.getArtistId().equals(data.getTrackArtistId()) )
 				{
-					// ƒA[ƒeƒBƒXƒg‚ªƒtƒBƒ‹ƒ^‘ÎÛH
-					// data.getTrackArtistId()‚Í–{“–‚É“ü‚Á‚Ä‚¢‚é‚Ì‚¾‚ë‚¤‚©EEEBTODO:’²¸
+					// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ÎÛH
+					// data.getTrackArtistId()ï¿½Í–{ï¿½ï¿½ï¿½É“ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ë‚¤ï¿½ï¿½ï¿½Eï¿½Eï¿½Eï¿½BTODO:ï¿½ï¿½ï¿½ï¿½
 					bRet = true;
 				}
 				else
@@ -717,13 +718,13 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 					return false;
 				}
 			}
-			// ƒA[ƒeƒBƒXƒg–¼
+			// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½
 			if( filterData.getStrArtist() != null && 0 < filterData.getStrArtist().length() )
 			{
 				if( data.getTrackArtist() != null
 				&& -1 != data.getTrackArtist().indexOf(filterData.getStrArtist()) )
 				{
-					// ƒA[ƒeƒBƒXƒg–¼‚ªˆê•”ˆê’v
+					// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ê•”ï¿½ï¿½v
 					bRet = true;
 				}
 				else
@@ -732,8 +733,8 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 				}
 			}
 			
-			// ƒAƒ‹ƒoƒ€ID
-			// TODO: ƒAƒ‹ƒoƒ€–¼			
+			// ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ID
+			// TODO: ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½			
 			if( filterData.getAlbumId() != null )
 			{
 		    	//setAlbumId( filterData.getAlbumId() );//OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getAlbumID() );
@@ -741,8 +742,8 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 				if( data.getTrackAlbumId() != null
 				&& filterData.getAlbumId().equals(data.getTrackAlbumId()) )
 				{
-					// ƒA[ƒeƒBƒXƒg‚ªƒtƒBƒ‹ƒ^‘ÎÛH
-					// data.getTrackArtistId()‚Í–{“–‚É“ü‚Á‚Ä‚¢‚é‚Ì‚¾‚ë‚¤‚©EEEBTODO:’²¸
+					// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ÎÛH
+					// data.getTrackArtistId()ï¿½Í–{ï¿½ï¿½ï¿½É“ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ë‚¤ï¿½ï¿½ï¿½Eï¿½Eï¿½Eï¿½BTODO:ï¿½ï¿½ï¿½ï¿½
 					bRet = true;
 				}
 				else
@@ -750,13 +751,13 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 					return false;
 				}
 			}
-			// ƒAƒ‹ƒoƒ€–¼
+			// ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½
 			if( filterData.getStrAlbum() != null && 0 < filterData.getStrAlbum().length() )
 			{
 				if( data.getTrackAlbum() != null
 				&& -1 != data.getTrackAlbum().indexOf(filterData.getStrAlbum()) )
 				{
-					// ƒA[ƒeƒBƒXƒg–¼‚ªˆê•”ˆê’v
+					// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ê•”ï¿½ï¿½v
 					bRet = true;
 				}
 				else
@@ -765,7 +766,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 				}
 			}
 			
-			// ƒWƒƒƒ“ƒ‹ID
+			// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ID
 			if( filterData.getGenreId() != null )
 			{
 				ArrayList<GenreData> genres = mActivity.getGenreStocker().getGenreOfAudio( 
@@ -781,7 +782,7 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 					{
 						if( filterData.getGenreId().equals( String.valueOf(genre.getDataId() ) ) )
 						{
-							// ƒWƒƒƒ“ƒ‹‚ªˆê’v
+							// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½v
 							bRet = true;
 							bNoHit = false;
 							break;
@@ -793,16 +794,16 @@ implements IAdapterUpdate<TrackData>, SectionIndexer { //, IFilterable<TrackData
 					return false;
 				}
 			}
-			// TODO:‚»‚ñ‚È‚à‚Ì‚ÅƒtƒBƒ‹ƒ^‚ğ‚©‚¯‚é‹@”\‚Í•s—v‚Æ‚Ív‚¤‚ªA”O‚Ì‚½‚ßƒgƒ‰ƒbƒNID‚à
+			// TODO:ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì‚Åƒtï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½\ï¿½Í•sï¿½vï¿½Æ‚Ívï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Oï¿½Ì‚ï¿½ï¿½ßƒgï¿½ï¿½ï¿½bï¿½NIDï¿½ï¿½
 			
 			
-			// ƒgƒ‰ƒbƒN–¼
+			// ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½
 			if( filterData.getStrSong() != null && 0 < filterData.getStrSong().length() )
 			{
 				if( data.getName() != null
 				&& -1 != data.getName().indexOf(filterData.getStrSong()) )
 				{
-					// ƒgƒ‰ƒbƒN–¼‚ªˆê•”ˆê’v
+					// ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ê•”ï¿½ï¿½v
 					bRet = true;
 				}
 				else

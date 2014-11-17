@@ -4,20 +4,13 @@ import java.util.ArrayList;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.storage.TrackData;
 import okosama.app.storage.VideoData;
+import android.widget.ArrayAdapter;
 // import okosama.app.storage.QueryHandler;
 // import android.content.AsyncQueryHandler;
-import android.content.Context;
-import android.provider.MediaStore;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 /**
- * VideoList‚ÌƒAƒ_ƒvƒ^
+ * VideoListï¿½ÌƒAï¿½_ï¿½vï¿½^
  * @author 25689
  *
  */
@@ -26,7 +19,7 @@ public class VideoSpinnerAdapter extends ArrayAdapter<VideoData> {
 	private final String mNoSelection;
 
     /**
-     * ƒAƒ_ƒvƒ^‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * ï¿½Aï¿½_ï¿½vï¿½^ï¿½ÌƒRï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
      * @param currentactivity
      * @param layout
      * @param cursor

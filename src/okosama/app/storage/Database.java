@@ -5,13 +5,13 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.service.IMediaPlaybackService;
 import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.TabPage;
-
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -36,9 +36,9 @@ import android.view.SubMenu;
 import android.widget.Toast;
 
 /**
- * ƒf[ƒ^ƒx[ƒXƒNƒ‰ƒX
- * ¡‚Ì‚Æ‚±‚ëAƒf[ƒ^ƒx[ƒXƒŠƒ\[ƒX—p‚Ìƒƒ“ƒo‚âstaticŠÖ”‚ğ“K“–‚É“Ë‚Á‚ñ‚Å‚ ‚é‚¾‚¯
- * ‚¢‚ë‚ñ‚ÈŠÖ”‚ğ“Ë‚Á‚ñ‚¾‚½‚¾‚Ì•Ö—˜ƒNƒ‰ƒX‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚Ä‚¢‚é‚Ì‚ÅASingleton‚É‚µ‚Ä‚¨‚­
+ * ï¿½fï¿½[ï¿½^ï¿½xï¿½[ï¿½Xï¿½Nï¿½ï¿½ï¿½X
+ * ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ï¿½Aï¿½fï¿½[ï¿½^ï¿½xï¿½[ï¿½Xï¿½ï¿½ï¿½\ï¿½[ï¿½Xï¿½pï¿½Ìƒï¿½ï¿½ï¿½ï¿½oï¿½ï¿½staticï¿½Öï¿½ï¿½ï¿½Kï¿½ï¿½ï¿½É“Ë‚ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½é‚¾ï¿½ï¿½
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ÈŠÖï¿½ï¿½ï¿½Ë‚ï¿½ï¿½ï¿½ï¿½ñ‚¾‚ï¿½ï¿½ï¿½ï¿½Ì•Ö—ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ÅASingletonï¿½É‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
  * @author 25689
  *
  */
@@ -54,8 +54,8 @@ public class Database {
 		ctx = c;
 	}
 	/**
-	 * ƒVƒ“ƒOƒ‹ƒgƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒXæ“¾
-	 * “¯‚ÉA•K‚¸Context‚ğİ’è‚³‚¹‚é‚½‚ß‚ÉAˆø”‚ÉContext‚ğæ‚ç‚¹‚é
+	 * ï¿½Vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½æ“¾
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ÉAï¿½Kï¿½ï¿½Contextï¿½ï¿½İ’è‚³ï¿½ï¿½ï¿½é‚½ï¿½ß‚ÉAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Contextï¿½ï¿½ï¿½ï¿½ç‚¹ï¿½ï¿½
 	 * @param _ctx
 	 * @return
 	 */
@@ -73,20 +73,20 @@ public class Database {
 	// Context
 	static OkosamaMediaPlayerActivity ctx = null;
 	
-	// playlist’è”
+	// playlistï¿½è”
 	public static final String PlaylistName_NowPlaying = "nowplaying";
 	public static final String PlaylistName_Podcasts = "podcasts";
 	public static final String PlaylistName_RecentlyAdded = "recentlyadded";
 	
 	/**
-	 * “¯Šú‚ÅƒNƒGƒŠ‚ğ”­s‚·‚é
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ÅƒNï¿½Gï¿½ï¿½ï¿½ğ”­sï¿½ï¿½ï¿½ï¿½
 	 * @param context
-	 * @param uri ƒRƒ“ƒeƒ“ƒgƒvƒƒoƒCƒ_H
+	 * @param uri ï¿½Rï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½vï¿½ï¿½ï¿½oï¿½Cï¿½_ï¿½H
 	 * @param projection
 	 * @param selection
 	 * @param selectionArgs
 	 * @param sortOrder
-	 * @param limit max‚ÌŒ”H
+	 * @param limit maxï¿½ÌŒï¿½ï¿½ï¿½ï¿½H
 	 * @return
 	 */
     public static Cursor query(Context context, Uri uri, String[] projection,
@@ -103,7 +103,7 @@ public class Database {
             return resolver.query(uri, projection, selection, selectionArgs, sortOrder);
          } catch (UnsupportedOperationException ex) {
         	String msg = ex.getMessage();
-        	Log.e("queryerror",msg);
+        	LogWrapper.e("queryerror",msg);
             return null;
         }
     }
@@ -113,21 +113,21 @@ public class Database {
     }	
 
     
-    ///////// ‚±‚±‚©‚ç”Ä—p«‚Ì‚È‚¢ŠÖ” //////////////////////////////
+    ///////// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä—pï¿½ï¿½ï¿½Ì‚È‚ï¿½ï¿½Öï¿½ //////////////////////////////
     /**
-     * ƒA[ƒeƒBƒXƒgƒJ[ƒ\ƒ‹‚Ìì¬
+     * ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ìì¬
      * @param async
      * @param filter
      * @return
      */
     public Cursor createArtistCursor() {//AsyncQueryHandler async, String filter) {
 
-    	// ƒA[ƒeƒBƒXƒg–¼‚ª‹ó‚Å‚È‚¢A‚Æ‚¢‚¤ğŒ‚ğ•t‚¯‰Á‚¦‚é
+    	// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½Aï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         StringBuilder where = new StringBuilder();
 //        where.append(ArtistColumns.ARTIST + " != ''");
         String whereclause = where.toString();
         
-        // ƒA[ƒeƒBƒXƒg‚ÌƒRƒ“ƒeƒ“ƒgƒvƒƒoƒCƒ_‚Ìuri‚ğİ’è
+        // ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ÌƒRï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½vï¿½ï¿½ï¿½oï¿½Cï¿½_ï¿½ï¿½uriï¿½ï¿½İ’ï¿½
         Uri uri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
         //String external_string;
         if( get_external == false )
@@ -135,11 +135,11 @@ public class Database {
         	uri = MediaStore.Audio.Artists.INTERNAL_CONTENT_URI;
         }
         
-        // ˆø”‚Åw’è‚³‚ê‚½filter—p‚Ì’PŒê‚ÅASQL‚Ìwhere‹å‚ğw’èH
-        // ƒA[ƒeƒBƒXƒg–¼‚Ìˆê•”‚Ì”z—ñ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Åwï¿½è‚³ï¿½ê‚½filterï¿½pï¿½Ì’Pï¿½ï¿½ÅASQLï¿½ï¿½whereï¿½ï¿½ï¿½ï¿½wï¿½ï¿½H
+        // ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½Ìˆê•”ï¿½Ì”zï¿½ï¿½
         String [] keywords = null;
         
-        // ƒJƒ‰ƒ€‚Ìİ’è
+        // ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ìİ’ï¿½
         String[] cols = new String[] {
                 BaseColumns._ID,
                 ArtistColumns.ARTIST,
@@ -148,21 +148,21 @@ public class Database {
         };
         Cursor ret = null;
 //        if (async != null) {
-//        	// ”ñ“¯Šú‚È‚ç‚ÎA”ñ“¯Šú‚ÅƒNƒGƒŠ”­s
+//        	// ï¿½ñ“¯Šï¿½ï¿½È‚ï¿½ÎAï¿½ñ“¯Šï¿½ï¿½ÅƒNï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½s
 //        	// Log.d("query uri", "uri :" + uri);
 //            async.startQuery(TabPage.TABPAGE_ID_ARTIST, null, uri,
 //                    cols, whereclause , keywords, ArtistColumns.ARTIST_KEY);
 //        } else {
-        	// “¯Šú‚È‚ç‚ÎA“¯Šú‚ÅƒNƒGƒŠ”­s
+        	// ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ÎAï¿½ï¿½ï¿½ï¿½ï¿½ÅƒNï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½s
             ret = query(ctx, uri,
                     cols, whereclause, keywords, ArtistColumns.ARTIST_KEY);
         //}
-        // “¾‚ç‚ê‚½ƒJ[ƒ\ƒ‹‚ğ•Ô‹p
+        // ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½Ô‹p
         return ret;	
     }
     
     /**
-     * ƒAƒ‹ƒoƒ€ƒJ[ƒ\ƒ‹‚Ìì¬
+     * ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ìì¬
      * @param async
      * @param filter
      * @param artistId
@@ -170,22 +170,22 @@ public class Database {
      */
     public Cursor createAlbumCursor() { //AsyncQueryHandler async, String filter ) { // , String artistId) {
     	String artistId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID();
-    	// where‹å‚ğİ’è‚·‚é
+    	// whereï¿½ï¿½ï¿½İ’è‚·ï¿½ï¿½
         StringBuilder where = new StringBuilder();
 //        where.append(AlbumColumns.ALBUM + "!=''");
         String whereclause = where.toString();
         
-        // ƒAƒ‹ƒoƒ€‚ÌƒRƒ“ƒeƒ“ƒgƒvƒƒoƒCƒ_‚Ìuri‚ğİ’è
+        // ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ÌƒRï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½vï¿½ï¿½ï¿½oï¿½Cï¿½_ï¿½ï¿½uriï¿½ï¿½İ’ï¿½
         Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
         String external_string = "external";
         if( get_external == false )
         {
         	uri = MediaStore.Audio.Albums.INTERNAL_CONTENT_URI;
-        	external_string = "internal";	// ‘½•ªA‚±‚ê‚Å‚æ‚¢
+        	external_string = "internal";	// ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Å‚æ‚¢
         }
         
-        // ƒtƒBƒ‹ƒ^‚Ìİ’è
-        // ‚±‚ê‚ÍAƒA[ƒeƒBƒXƒg‚©ƒAƒ‹ƒoƒ€‚Ç‚¿‚ç‚Å‚à‚æ‚¢
+        // ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½Ìİ’ï¿½
+        // ï¿½ï¿½ï¿½ï¿½ÍAï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½æ‚¢
         // Add in the filtering constraints
         String [] keywords = null;
 //        if (filter != null) {
@@ -207,7 +207,7 @@ public class Database {
 //            }
 //        }
         
-        // æ“¾ƒJƒ‰ƒ€‚Ìİ’è
+        // ï¿½æ“¾ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ìİ’ï¿½
         String[] cols = new String[] {
                 BaseColumns._ID,
                 AlbumColumns.ARTIST,
@@ -215,11 +215,11 @@ public class Database {
                 AlbumColumns.ALBUM_ART
         };
         
-        // ƒNƒGƒŠ‚ğ”­s‚·‚é‚ªAartistID‚ªnull‚©‚Ç‚¤‚©‚É‚æ‚Á‚ÄAƒNƒGƒŠ‚ğ•ÏX‚·‚é
+        // ï¿½Nï¿½Gï¿½ï¿½ï¿½ğ”­sï¿½ï¿½ï¿½é‚ªï¿½AartistIDï¿½ï¿½nullï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½ÄAï¿½Nï¿½Gï¿½ï¿½ï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½
         Cursor ret = null;
         if (artistId != null) {
-        	// artistID‚ª“ü—Í‚³‚ê‚Ä‚¢‚éê‡
-        	// uri‚ÉAartist‚ğŠÜ‚ß‚é
+        	// artistIDï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡
+        	// uriï¿½ÉAartistï¿½ï¿½ï¿½Ü‚ß‚ï¿½
 //            if (async != null) {
 //                async.startQuery(TabPage.TABPAGE_ID_ALBUM, null,
 //                        MediaStore.Audio.Artists.Albums.getContentUri(external_string,//"external",
@@ -232,10 +232,10 @@ public class Database {
                         cols, whereclause, keywords, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
 //            }
         } else {
-        	// artistId‚ªnull
-        	// uri‚ÍAalbum‚ğ—˜—p‚·‚é
+        	// artistIdï¿½ï¿½null
+        	// uriï¿½ÍAalbumï¿½ğ—˜—pï¿½ï¿½ï¿½ï¿½
 //            if (async != null) {
-//            	Log.i("uri:", uri.toString());
+//            	LogWrapper.i("uri:", uri.toString());
 //            	//async.startQuery(TabPage.TABPAGE_ID_ALBUM, null, uri, null, null, null, null );
 //                async.startQuery(TabPage.TABPAGE_ID_ALBUM, null, uri,
 //                        cols, whereclause, keywords, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
@@ -246,8 +246,8 @@ public class Database {
         }
         return ret;
     }
-    // ƒvƒŒƒCƒŠƒXƒgƒJ[ƒ\ƒ‹ì¬—p‚Ì’è”
-    // æ“¾‚·‚éƒJƒ‰ƒ€
+    // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ì¬ï¿½pï¿½Ì’è”
+    // ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½
     private static final String[] playlistCols = new String[] {
             MediaStore.Audio.Playlists._ID,
             MediaStore.Audio.Playlists.NAME
@@ -257,7 +257,7 @@ public class Database {
     private static final long PODCASTS_PLAYLIST = -3;
     
     /**
-     * ƒJ[ƒ\ƒ‹‚Ìƒ‰ƒbƒp[‚ğì¬H
+     * ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ìƒï¿½ï¿½bï¿½pï¿½[ï¿½ï¿½ï¿½ì¬ï¿½H
      * @param c
      * @param createShortCut
      * @return
@@ -271,42 +271,42 @@ public class Database {
             Log.d("PlaylistBrowserActivity", "Already wrapped");
             return c;
         }
-        // ‚QŸŒ³•\‚Ìg‚¦‚éƒJ[ƒ\ƒ‹
+        // ï¿½Qï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½Ìgï¿½ï¿½ï¿½ï¿½Jï¿½[ï¿½\ï¿½ï¿½
         MatrixCursor autoplaylistscursor = new MatrixCursor(playlistCols);
         if (createShortCut) {
-        	// ƒVƒ‡[ƒgƒJƒbƒg‚ğì‚éê‡H
-        	// ‘S‚ÄH
+        	// ï¿½Vï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½H
+        	// ï¿½Sï¿½ÄH
             ArrayList<Object> all = new ArrayList<Object>(2);
             all.add(ALL_SONGS_PLAYLIST);
             all.add(ctx.getString(R.string.play_all));
             autoplaylistscursor.addRow(all);
         }
-        // Å‹ß’Ç‰Á‚³‚ê‚½‚à‚ÌH
+        // ï¿½Å‹ß’Ç‰ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ÌH
         ArrayList<Object> recent = new ArrayList<Object>(2);
         recent.add(RECENTLY_ADDED_PLAYLIST);
         recent.add(ctx.getString(R.string.recentlyadded));
         autoplaylistscursor.addRow(recent);
         
-        // ƒA[ƒeƒBƒXƒg‚ÌƒRƒ“ƒeƒ“ƒgƒvƒƒoƒCƒ_‚ğuri‚Éİ’èH
+        // ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ÌƒRï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½vï¿½ï¿½ï¿½oï¿½Cï¿½_ï¿½ï¿½uriï¿½Éİ’ï¿½H
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         //String external_string;
         if( get_external == false )
         {
         	uri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
         }
-        // Podcast‚Ì‚à‚Ì‚ÌŒ”‚ğæ“¾H
+        // Podcastï¿½Ì‚ï¿½ï¿½Ì‚ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½H
         // check if there are any podcasts
         Cursor counter = query(ctx, uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 new String[] {"count(*)"}, "is_podcast=1", null, null);
         if (counter != null) {
-        	// Œ”‚ªæ“¾‚Å‚«‚½‚çH
+        	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½H
             counter.moveToFirst();
-            // Œ”‚ğ•Û
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ûï¿½
             int numpodcasts = counter.getInt(0);
             counter.close();
             if (numpodcasts > 0) {
-            	// Podcast‚ª‚ ‚ê‚Î
-            	// Podcast‚ÌƒVƒ‡[ƒgƒJƒbƒgì¬H
+            	// Podcastï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            	// Podcastï¿½ÌƒVï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ì¬ï¿½H
                 ArrayList<Object> podcasts = new ArrayList<Object>(2);
                 podcasts.add(PODCASTS_PLAYLIST);
                 podcasts.add(ctx.getString(R.string.podcasts_listitem));
@@ -314,26 +314,26 @@ public class Database {
             }
         }
 
-        // Œ³‚ÌƒJ[ƒ\ƒ‹‚ÆA¡ì‚Á‚½‚â‚Â‚ğƒ}[ƒW‚µ‚½ƒJ[ƒ\ƒ‹‚ğì‚éH
+        // ï¿½ï¿½ï¿½ÌƒJï¿½[ï¿½\ï¿½ï¿½ï¿½ÆAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½}ï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½H
         Cursor cc = new MergeCursor(new Cursor [] {autoplaylistscursor, c});
         return cc;
     }
     
     /**
-     * ƒvƒŒƒCƒŠƒXƒg‚ÌƒJ[ƒ\ƒ‹‚ğì¬
+     * ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ÌƒJï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ì¬
      * @param async
      * @param filterstring
      * @return
      */
     public Cursor createPlaylistCursor(AsyncQueryHandler async, String filterstring, boolean createShortCut) {
 
-    	// ƒvƒŒƒCƒŠƒXƒg–¼‚ª‹ó‚Å‚È‚¢‚à‚Ì‚Æ‚¢‚¤ğŒ‚É‚·‚é
+    	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½
         StringBuilder where = new StringBuilder();
         where.append(PlaylistsColumns.NAME + " != ''");
         String whereclause = where.toString();
                
-        // ƒtƒBƒ‹ƒ^‚Ìİ’è
-        // ƒvƒŒƒCƒŠƒXƒg–¼‚Ìˆê’vğŒ
+        // ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½Ìİ’ï¿½
+        // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Ìˆï¿½vï¿½ï¿½ï¿½ï¿½
         // Add in the filtering constraints
         String [] keywords = null;
         if (filterstring != null) {
@@ -350,7 +350,7 @@ public class Database {
             }
         }
         
-        // ƒvƒŒƒCƒŠƒXƒg‚ÌƒRƒ“ƒeƒ“ƒgƒvƒƒoƒCƒ_‚Ìuri‚ğİ’è‚·‚é
+        // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ÌƒRï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½vï¿½ï¿½ï¿½oï¿½Cï¿½_ï¿½ï¿½uriï¿½ï¿½İ’è‚·ï¿½ï¿½
         Uri uri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI;
         //String external_string;
         if( get_external == false )
@@ -359,8 +359,8 @@ public class Database {
         }         
         
         if (async != null) {
-        	// ”ñ“¯Šú‚Ìê‡
-        	// TODO: ó‚¯æ‚Åƒ}[ƒWƒJ[ƒ\ƒ‹‚É‚·‚é•K—v—L‚è
+        	// ï¿½ñ“¯Šï¿½ï¿½Ìê‡
+        	// TODO: ï¿½ó‚¯ï¿½Åƒ}ï¿½[ï¿½Wï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Kï¿½vï¿½Lï¿½ï¿½
             async.startQuery(TabPage.TABPAGE_ID_PLAYLIST, null, uri,
             		playlistCols, whereclause, keywords, PlaylistsColumns.NAME);
             return null;
@@ -369,35 +369,35 @@ public class Database {
         c = query(ctx, uri,//MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI,
         		playlistCols, whereclause, keywords, PlaylistsColumns.NAME);
         
-        // ÅŒã‚ÉAƒVƒ‡[ƒgƒJƒbƒg‚ğ•t‚¯‰Á‚¦‚½ƒJ[ƒ\ƒ‹‚ğ•Ô‹p‚·‚éH
+        // ï¿½ÅŒï¿½ÉAï¿½Vï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½Ô‹pï¿½ï¿½ï¿½ï¿½H
         return c;//mergedCursor(c, createShortCut);
     }
     /**
-     * ƒrƒfƒIƒJ[ƒ\ƒ‹‚Ìì¬
+     * ï¿½rï¿½fï¿½Iï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ìì¬
      * @return
      */
     public Cursor createVideoCursor() { //AsyncQueryHandler async, String filter ) { // , String artistId) {
     	// ALL_SONGS_PLAYLIST String artistId = OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getArtistID();
-    	// where‹å‚ğİ’è‚·‚é
+    	// whereï¿½ï¿½ï¿½İ’è‚·ï¿½ï¿½
         StringBuilder where = new StringBuilder();
         where.append(MediaStore.Video.Media.TITLE + " != '' ");
         String whereclause = where.toString();
         
-        // ƒRƒ“ƒeƒ“ƒgƒvƒƒoƒCƒ_‚Ìuri‚ğİ’è
+        // ï¿½Rï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½vï¿½ï¿½ï¿½oï¿½Cï¿½_ï¿½ï¿½uriï¿½ï¿½İ’ï¿½
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
 //        String external_string = "external";
 //        if( get_external == false )
 //        {
 //        	uri = MediaStore.Video.Media.INTERNAL_CONTENT_URI;
-//        	external_string = "internal";	// ‘½•ªA‚±‚ê‚Å‚æ‚¢
+//        	external_string = "internal";	// ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Å‚æ‚¢
 //        }
         
-        // ƒtƒBƒ‹ƒ^‚Ìİ’è
-        // ‚±‚ê‚ÍAƒA[ƒeƒBƒXƒg‚©ƒAƒ‹ƒoƒ€‚Ç‚¿‚ç‚Å‚à‚æ‚¢
+        // ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½Ìİ’ï¿½
+        // ï¿½ï¿½ï¿½ï¿½ÍAï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½æ‚¢
         // Add in the filtering constraints
         String [] keywords = null;
         
-        // æ“¾ƒJƒ‰ƒ€‚Ìİ’è
+        // ï¿½æ“¾ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ìİ’ï¿½
         String[] cols = new String[] {
                 MediaStore.Video.Media._ID,
                 MediaStore.Video.Media.TITLE,
@@ -407,17 +407,17 @@ public class Database {
                 MediaStore.Video.Media.ARTIST
         };
         
-        // ƒNƒGƒŠ‚ğ”­s‚·‚é‚ªAartistID‚ªnull‚©‚Ç‚¤‚©‚É‚æ‚Á‚ÄAƒNƒGƒŠ‚ğ•ÏX‚·‚é
+        // ï¿½Nï¿½Gï¿½ï¿½ï¿½ğ”­sï¿½ï¿½ï¿½é‚ªï¿½AartistIDï¿½ï¿½nullï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½ÄAï¿½Nï¿½Gï¿½ï¿½ï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½
         Cursor ret = null;
             ret = query(ctx, uri,
                     cols, whereclause, keywords, MediaStore.Video.Media.TITLE + " COLLATE UNICODE");
         return ret;
     }
     
-    // ƒgƒ‰ƒbƒNƒJ[ƒ\ƒ‹—pƒƒ“ƒo•Ï”
-    // ƒ\[ƒg‡
+    // ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½oï¿½Ïï¿½
+    // ï¿½\ï¿½[ï¿½gï¿½ï¿½
     private static String mSortOrder;
-    // ƒJƒ‰ƒ€
+    // ï¿½Jï¿½ï¿½ï¿½ï¿½
     private static final String mPlaylistCols[] = new String[] {
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.TITLE,
@@ -430,12 +430,12 @@ public class Database {
             MediaStore.Audio.Media.ARTIST_ID,
             MediaStore.Audio.Media.DURATION
     };    
-    // ƒJƒ‰ƒ€
+    // ï¿½Jï¿½ï¿½ï¿½ï¿½
     private static final String mGenreCols[] = new String[] {
             MediaStore.Audio.Genres._ID,
             MediaStore.Audio.Genres.NAME,
     };    
-    // ƒvƒŒƒCƒŠƒXƒg‚ÌƒJƒ‰ƒ€H
+    // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ÌƒJï¿½ï¿½ï¿½ï¿½ï¿½H
     static final String mPlaylistMemberCols[] = new String[] {
             MediaStore.Audio.Playlists.Members._ID,
             MediaStore.Audio.Media.TITLE,
@@ -452,7 +452,7 @@ public class Database {
     };    
     //private Cursor createTrackCursor(TrackListAdapter.TrackQueryHandler queryhandler, String filter,
     /**
-     * ƒgƒ‰ƒbƒNƒJ[ƒ\ƒ‹‚Ìì¬
+     * ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ìì¬
      * @param queryhandler
      * @param filter
      * @param async
@@ -462,18 +462,18 @@ public class Database {
         ) 
     {
         Cursor ret = null;
-        // ƒ\[ƒgğŒ‚ÉAƒ^ƒCƒgƒ‹‚ğİ’è
+        // ï¿½\ï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ÉAï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½ï¿½İ’ï¿½
         mSortOrder = AudioColumns.TITLE_KEY;
-        // ƒ^ƒCƒgƒ‹‚ª‹ó‚Å‚È‚¢‚à‚Ì‚ğğŒ‚É
+        // ï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         StringBuilder where = new StringBuilder();
         where.append(MediaColumns.TITLE + " != ''");
 
-        // ƒtƒBƒ‹ƒ^‚ğİ’è
-        // ‚±‚Ìê‡AƒA[ƒeƒBƒXƒg‚Æƒgƒ‰ƒbƒNH
+        // ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½İ’ï¿½
+        // ï¿½ï¿½ï¿½Ìê‡ï¿½Aï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½Æƒgï¿½ï¿½ï¿½bï¿½Nï¿½H
         // Add in the filtering constraints
         String [] keywords = null;
         
-        // ƒgƒ‰ƒbƒN‚ÌƒRƒ“ƒeƒ“ƒgƒvƒƒoƒCƒ_‚Ìuri‚ğİ’è
+        // ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ÌƒRï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½vï¿½ï¿½ï¿½oï¿½Cï¿½_ï¿½ï¿½uriï¿½ï¿½İ’ï¿½
     	Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 //    	String strExOrIn = "external";
 //        if( get_external == false )
@@ -483,18 +483,18 @@ public class Database {
 //        }        	
         
         	mSortOrder = AudioColumns.TRACK + ", " + mSortOrder;
-            // ‰¹Šyw’è
+            // ï¿½ï¿½ï¿½yï¿½wï¿½ï¿½
             where.append(" AND " + AudioColumns.IS_MUSIC + "=1");
             where.append(" AND " + AudioColumns.IS_ALARM + "=0");
             where.append(" AND " + AudioColumns.IS_NOTIFICATION + "=0");
             where.append(" AND " + AudioColumns.IS_PODCAST + "=0");
-            // ƒNƒGƒŠ”­s
-            // Log.i("query1","query1");
+            // ï¿½Nï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½s
+            // LogWrapper.i("query1","query1");
 //            ret = queryhandler.doQuery(ctx, uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
 //            		mPlaylistCols, where.toString() , keywords, mSortOrder, async);
         //}
             if (async != null) {
-            	Log.i("uri:", uri.toString());
+            	LogWrapper.i("uri:", uri.toString());
             	//async.startQuery(TabPage.TABPAGE_ID_ALBUM, null, uri, null, null, null, null );
                 async.startQuery(TabPage.TABPAGE_ID_SONG, null, uri,
                 		mPlaylistCols, where.toString(), keywords, mSortOrder);
@@ -504,58 +504,58 @@ public class Database {
             }
             //return ret;
 
-        // ”ñ“¯Šú‚Å‚àAnowplaying‚Ìê‡‚ÍƒƒbƒZ[ƒW‚ª”ò‚ñ‚Å‚±‚È‚¢‚Ì‚ÅA‚»‚±‚Å‰Šú‰»‚Å‚«‚È‚¢B
-        // ‚»‚ê‚É‘Î‰
+        // ï¿½ñ“¯Šï¿½ï¿½Å‚ï¿½ï¿½Anowplayingï¿½Ìê‡ï¿½Íƒï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½Ì‚ÅAï¿½ï¿½ï¿½ï¿½ï¿½Åï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½B
+        // ï¿½ï¿½ï¿½ï¿½É‘Î‰ï¿½
         // This special case is for the "nowplaying" cursor, which cannot be handled
         // asynchronously using AsyncQueryHandler, so we do some extra initialization here.
         //if (ret != null && async) {
-        	// TODO:À‘•
+        	// TODO:ï¿½ï¿½ï¿½ï¿½
             // ctx.initAdapter(TabPage.TABPAGE_ID_SONG,ret);
             //setTitle();
         //}
         return ret;
     }
     /**
-     * ƒWƒƒƒ“ƒ‹ƒJ[ƒ\ƒ‹‚Ìì¬
+     * ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ìì¬
      * @return Cursor
      */
     public Cursor createGenreCursor() 
     {
         Cursor ret = null;
-        // ƒ\[ƒgğŒ‚ÉA–¼‘O‚ğİ’è
+        // ï¿½\ï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ÉAï¿½ï¿½ï¿½Oï¿½ï¿½İ’ï¿½
         //mSortOrder = GenresColumns.NAME;
-        // ƒ^ƒCƒgƒ‹‚ª‹ó‚Å‚È‚¢‚à‚Ì‚ğğŒ‚É
+        // ï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         StringBuilder where = new StringBuilder();
         where.append(GenresColumns.NAME + " != ''");
 
-        // ƒtƒBƒ‹ƒ^‚ğİ’è
+        // ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½İ’ï¿½
         // Add in the filtering constraints
         String [] keywords = null;
         
-        // ƒWƒƒƒ“ƒ‹‚ÌƒRƒ“ƒeƒ“ƒgƒvƒƒoƒCƒ_‚Ìuri‚ğİ’è
+        // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒRï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½vï¿½ï¿½ï¿½oï¿½Cï¿½_ï¿½ï¿½uriï¿½ï¿½İ’ï¿½
     	Uri uri = MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI;
         
-        // ƒNƒGƒŠ”­s
+        // ï¿½Nï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½s
         ret = query(ctx, uri,
         		mGenreCols, where.toString(), keywords, GenresColumns.NAME);
         return ret;
     }
     /**
-     * ‚»‚ÌƒWƒƒƒ“ƒ‹‚Ì‘S‚Ä‚ÌŠy‹È‚ğæ“¾‚µ‚½ƒJ[ƒ\ƒ‹‚ğì¬
+     * ï¿½ï¿½ï¿½ÌƒWï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‘Sï¿½Ä‚ÌŠyï¿½È‚ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ì¬
      * @return Cursor
      */
     public Cursor createSongListCursorFromGenre(long genreId) 
     {
         Cursor ret = null;
         
-        // ƒgƒ‰ƒbƒN‚ÌƒRƒ“ƒeƒ“ƒgƒvƒƒoƒCƒ_‚Ìuri‚ğİ’è
+        // ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ÌƒRï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½vï¿½ï¿½ï¿½oï¿½Cï¿½_ï¿½ï¿½uriï¿½ï¿½İ’ï¿½
     	String strExOrIn = "external";
         if( get_external == false )
         {
         	strExOrIn = "internal";
         }        	
         Uri uri = MediaStore.Audio.Genres.Members.getContentUri(strExOrIn, genreId);
-        // Log.i("genre - uri", "uri = " + uri);
+        // LogWrapper.i("genre - uri", "uri = " + uri);
         String[] cols = new String[] {
         	MediaStore.Audio.Media._ID //,
         	//MediaStore.Audio.Genres.Members.AUDIO_ID
@@ -568,14 +568,14 @@ public class Database {
         where.append(" AND " + AudioColumns.IS_NOTIFICATION + "=0");
         where.append(" AND " + AudioColumns.IS_PODCAST + "=0");
         
-        // ƒNƒGƒŠ”­s
+        // ï¿½Nï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½s
         ret = query(ctx, uri,
         		cols, where.toString(), null, null);
         return ret;
     }
 
     /**
-     * nowplayingƒJ[ƒ\ƒ‹ƒNƒ‰ƒXH
+     * nowplayingï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½H
      * @author 25689
      *
      */
@@ -583,19 +583,19 @@ public class Database {
     {
         public NowPlayingCursor(IMediaPlaybackService service, String [] cols)
         {
-        	// ƒJƒ‰ƒ€AƒT[ƒrƒX‚ğŠi”[AƒJ[ƒ\ƒ‹‚Ìì¬
+        	// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½iï¿½[ï¿½Aï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ìì¬
             mCols = cols;
             mService  = service;
             makeNowPlayingCursor();
         }
         /**
-         * Œ»İƒvƒŒƒCƒŠƒXƒg‚ÌƒJ[ƒ\ƒ‹‚ğ“à•”‚Éì¬‚·‚éH
+         * ï¿½ï¿½ï¿½İƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ÌƒJï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éì¬ï¿½ï¿½ï¿½ï¿½H
          */
         private void makeNowPlayingCursor() {
-        	// ‰Šú‰»H
+        	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½H
             mCurrentPlaylistCursor = null;
             try {
-            	// Œ»İ‚ÌƒvƒŒƒCƒŠƒXƒgæ“¾H
+            	// ï¿½ï¿½ï¿½İ‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½æ“¾ï¿½H
                 mNowPlaying = mService.getQueue();
             } catch (RemoteException ex) {
                 mNowPlaying = new long[0];
@@ -605,9 +605,9 @@ public class Database {
                 return;
             }
 
-            // where‹å‚Ìì¬
+            // whereï¿½ï¿½Ìì¬
             StringBuilder where = new StringBuilder();
-            // ID‚ªAnowplaying‚Ì’†‚É‚ ‚é‚à‚Ì
+            // IDï¿½ï¿½ï¿½Anowplayingï¿½Ì’ï¿½ï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             where.append(BaseColumns._ID + " IN (");
             for (int i = 0; i < mSize; i++) {
                 where.append(mNowPlaying[i]);
@@ -617,27 +617,27 @@ public class Database {
             }
             where.append(")");
 
-            // uri‚Ìİ’è
-            // ƒgƒ‰ƒbƒN‚ÌƒRƒ“ƒeƒ“ƒgƒvƒƒoƒCƒ_
+            // uriï¿½Ìİ’ï¿½
+            // ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ÌƒRï¿½ï¿½ï¿½eï¿½ï¿½ï¿½gï¿½vï¿½ï¿½ï¿½oï¿½Cï¿½_
             Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             //String external_string;
             if( get_external == false )
             {
             	uri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
             }
-            // ƒNƒGƒŠ”­s
+            // ï¿½Nï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½s
             mCurrentPlaylistCursor = query(ctx,
                     uri,//MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     mCols, where.toString(), null, BaseColumns._ID);
 
             if (mCurrentPlaylistCursor == null) {
-            	// ƒJ[ƒ\ƒ‹æ“¾¸”s
+            	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½s
                 mSize = 0;
                 return;
             }
             
-            // ƒI[ƒfƒBƒI‚ÌID‚ğæ“¾‚·‚éH
-            // ‚È‚ñ‚Æ‚È‚­AŒ³‚Ì‚à‚Ì‚Æ“¯‚¶‚æ‚¤‚È‚à‚Ì‚ªæ‚ê‚»‚¤‚ÉŒ©‚¦‚é‚ªEEE
+            // ï¿½Iï¿½[ï¿½fï¿½Bï¿½Iï¿½ï¿½IDï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½H
+            // ï¿½È‚ï¿½Æ‚È‚ï¿½ï¿½Aï¿½ï¿½ï¿½Ì‚ï¿½ï¿½Ì‚Æ“ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½È‚ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ê‚»ï¿½ï¿½ï¿½ÉŒï¿½ï¿½ï¿½ï¿½é‚ªï¿½Eï¿½Eï¿½E
             int size = mCurrentPlaylistCursor.getCount();
             mCursorIdxs = new long[size];
             mCurrentPlaylistCursor.moveToFirst();
@@ -649,24 +649,24 @@ public class Database {
             mCurrentPlaylistCursor.moveToFirst();
             mCurPos = -1;
             
-            // ‚Ç‚¤‚â‚çA‚±‚±‚ÅŒ³‚Ì‚à‚Ì‚ÆAƒf[ƒ^ƒx[ƒX‚©‚ç‚Ìæ“¾’l‚Ì·•ª‚ğƒ`ƒFƒbƒN‚µAƒxƒŠƒtƒ@ƒC‚ÆƒtƒBƒbƒNƒX‚ğs‚¤
+            // ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ÅŒï¿½ï¿½Ì‚ï¿½ï¿½Ì‚ÆAï¿½fï¿½[ï¿½^ï¿½xï¿½[ï¿½Xï¿½ï¿½ï¿½ï¿½Ìæ“¾ï¿½lï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½Aï¿½xï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½Æƒtï¿½Bï¿½bï¿½Nï¿½Xï¿½ï¿½ï¿½sï¿½ï¿½
             // At this point we can verify the 'now playing' list we got
             // earlier to make sure that all the items in there still exist
             // in the database, and remove those that aren't. This way we
             // don't get any blank items in the list.
             try {
-            	// ƒŠƒ€[ƒu‚³‚ê‚½ƒgƒ‰ƒbƒN‚ğ’²‚×‚é
+            	// ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½uï¿½ï¿½ï¿½ê‚½ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ğ’²‚×‚ï¿½
                 int removed = 0;
                 for (int i = mNowPlaying.length - 1; i >= 0; i--) {
                     long trackid = mNowPlaying[i];
                     int crsridx = Arrays.binarySearch(mCursorIdxs, trackid);
                     if (crsridx < 0) {
-                        Log.i("@@@@@", "item no longer exists in db: " + trackid);
+                        LogWrapper.i("@@@@@", "item no longer exists in db: " + trackid);
                         removed += mService.removeTrack(trackid);
                     }
                 }
                 if (removed > 0) {
-                	// Äİ’è
+                	// ï¿½Äİ’ï¿½
                     mNowPlaying = mService.getQueue();
                     mSize = mNowPlaying.length;
                     if (mSize == 0) {
@@ -686,7 +686,7 @@ public class Database {
         }
 
         /**
-         * Œ»İ‹È‚ÌˆÚ“®H
+         * ï¿½ï¿½ï¿½İ‹È‚ÌˆÚ“ï¿½ï¿½H
          */
         @Override
         public boolean onMove(int oldPosition, int newPosition)
@@ -711,14 +711,14 @@ public class Database {
         }
 
         /**
-         * €–Ú‚ÌíœH
+         * ï¿½ï¿½ï¿½Ú‚Ìíœï¿½H
          * @param which
          * @return
          */
         public boolean removeItem(int which)
         {
             try {
-            	// w’èƒgƒ‰ƒbƒN‚ğíœH
+            	// ï¿½wï¿½ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½íœï¿½H
                 if (mService.removeTracks(which, which) == 0) {
                     return false; // delete failed
                 }
@@ -735,7 +735,7 @@ public class Database {
         }
         
         /**
-         * ƒLƒ…[‚Ì€–Ú‚ğˆÚ“®‚·‚é
+         * ï¿½Lï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½Ú‚ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½
          * @param from
          * @param to
          */
@@ -749,7 +749,7 @@ public class Database {
         }
 
         /**
-         * ƒvƒŒƒCƒŠƒXƒg‚Ì‘S‚Ä‚Ìid‚ğƒƒOo—ÍH
+         * ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½Ì‘Sï¿½Ä‚ï¿½idï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½oï¿½ÍH
          */
 //        private void dump() {
 //            String where = "(";
@@ -760,11 +760,11 @@ public class Database {
 //                }
 //            }
 //            where += ")";
-//            Log.i("NowPlayingCursor: ", where);
+//            LogWrapper.i("NowPlayingCursor: ", where);
 //        }
 
         /**
-         * Œ»İs‚Ìw’èƒJƒ‰ƒ€‚Ì•¶š—ñæ“¾H
+         * ï¿½ï¿½ï¿½İsï¿½Ìwï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½H
          */
         @Override
         public String getString(int column)
@@ -777,7 +777,7 @@ public class Database {
             }
         }
         /**
-         * Œ»İs‚Ìw’èƒJƒ‰ƒ€‚Ìshortæ“¾H
+         * ï¿½ï¿½ï¿½İsï¿½Ìwï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½shortï¿½æ“¾ï¿½H
          */
         @Override
         public short getShort(int column)
@@ -786,7 +786,7 @@ public class Database {
         }
 
         /**
-         * Œ»İs‚Ìw’èƒJƒ‰ƒ€‚Ìintæ“¾H
+         * ï¿½ï¿½ï¿½İsï¿½Ìwï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½intï¿½æ“¾ï¿½H
          */
         @Override
         public int getInt(int column)
@@ -800,7 +800,7 @@ public class Database {
         }
 
         /**
-         * Œ»İs‚Ìw’èƒJƒ‰ƒ€‚Ìlongæ“¾H
+         * ï¿½ï¿½ï¿½İsï¿½Ìwï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½longï¿½æ“¾ï¿½H
          */
         @Override
         public long getLong(int column)
@@ -814,7 +814,7 @@ public class Database {
         }
 
         /**
-         * Œ»İs‚Ìw’èƒJƒ‰ƒ€‚Ìfloatæ“¾H
+         * ï¿½ï¿½ï¿½İsï¿½Ìwï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½floatï¿½æ“¾ï¿½H
          */
         @Override
         public float getFloat(int column)
@@ -823,7 +823,7 @@ public class Database {
         }
 
         /**
-         * Œ»İs‚Ìw’èƒJƒ‰ƒ€‚Ìdoubleæ“¾H
+         * ï¿½ï¿½ï¿½İsï¿½Ìwï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½doubleï¿½æ“¾ï¿½H
          */
         @Override
         public double getDouble(int column)
@@ -832,7 +832,7 @@ public class Database {
         }
 
         /**
-         * Œ»İs‚Ìw’èƒJƒ‰ƒ€‚Ìisnullæ“¾H
+         * ï¿½ï¿½ï¿½İsï¿½Ìwï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½isnullï¿½æ“¾ï¿½H
          */
         @Override
         public boolean isNull(int column)
@@ -854,7 +854,7 @@ public class Database {
         }
 
         /**
-         * Äì¬
+         * ï¿½Äì¬
          */
         @Override
         public boolean requery()
@@ -1018,7 +1018,7 @@ public class Database {
         if (list == null) {
             // this shouldn't happen (the menuitems shouldn't be visible
             // unless the selected item represents something playable
-            Log.e("MusicBase", "ListSelection null");
+            LogWrapper.e("MusicBase", "ListSelection null");
         } else {
             int size = list.length;
             ContentResolver resolver = context.getContentResolver();
@@ -1054,7 +1054,7 @@ public class Database {
     	
     	if( listType.length != list.length )
     	{
-    		Log.e("delete tracks","listtype size != list size");
+    		LogWrapper.e("delete tracks","listtype size != list size");
     		return;
     	}
 
@@ -1088,7 +1088,7 @@ public class Database {
 	    	{
 	    		listVideo[i] = lstVideoId.get(i);
 	    	}
-	    	// ƒrƒfƒI‚Ìíœ
+	    	// ï¿½rï¿½fï¿½Iï¿½Ìíœ
 	    	deleteVideoTracks(context, listVideo);
     	}
     }
@@ -1140,7 +1140,7 @@ public class Database {
                     if (!f.delete()) {
                         // I'm not sure if we'd ever get here (deletion would
                         // have to fail, but no exception thrown)
-                        Log.e("MusicUtils", "Failed to delete file " + name);
+                        LogWrapper.e("MusicUtils", "Failed to delete file " + name);
                     }
                     c.moveToNext();
                 } catch (SecurityException ex) {
@@ -1207,7 +1207,7 @@ public class Database {
                     if (!f.delete()) {
                         // I'm not sure if we'd ever get here (deletion would
                         // have to fail, but no exception thrown)
-                        Log.e("MusicUtils", "Failed to delete file " + name);
+                        LogWrapper.e("MusicUtils", "Failed to delete file " + name);
                     }
                     c.moveToNext();
                 } catch (SecurityException ex) {

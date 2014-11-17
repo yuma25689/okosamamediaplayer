@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
 import okosama.app.service.MediaInfo;
 import okosama.app.service.MediaPlayerUtil;
-import okosama.app.storage.*;
+import okosama.app.storage.ArtistChildData;
+import okosama.app.storage.ArtistGroupData;
+import okosama.app.storage.Database;
+import okosama.app.storage.FilterData;
+import okosama.app.storage.GenreData;
 import okosama.app.tab.TabPage;
-// import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
@@ -28,9 +32,10 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+// import android.content.AsyncQueryHandler;
 
 /**
- * ƒA[ƒeƒBƒXƒg‚ÌƒAƒ_ƒvƒ^
+ * ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ÌƒAï¿½_ï¿½vï¿½^
  * @author 25689
  *
  */
@@ -51,11 +56,11 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 	int iChildLayoutId = 0;
     // private final Drawable mNowListOverlay;
 	
-	// ‘½•ªŒ»İƒvƒŒƒC’†‚Ì‚É•\¦‚·‚é‰æ‘œ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Ìï¿½ï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ‘œ
     private final Drawable mNowPlayingOverlay;
-    // ƒfƒtƒHƒ‹ƒg‚ÌƒAƒ‹ƒoƒ€‚ÌƒAƒCƒRƒ“H
+    // ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½ÌƒAï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ÌƒAï¿½Cï¿½Rï¿½ï¿½ï¿½H
     private final BitmapDrawable mDefaultAlbumIcon;
-    // ƒCƒ“ƒfƒbƒNƒX•Û—p
+    // ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Ûï¿½ï¿½p
     private int mGroupArtistIdIdx;
     private int mGroupArtistIdx;
     private int mGroupAlbumIdx;
@@ -68,14 +73,14 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
     private final StringBuilder mBuffer = new StringBuilder();
     private final Object[] mFormatArgs = new Object[1];
     private final Object[] mFormatArgs3 = new Object[3];
-    // ƒCƒ“ƒfƒNƒT
+    // ï¿½Cï¿½ï¿½ï¿½fï¿½Nï¿½T
     // private MusicAlphabetIndexer mIndexer;
-    // ƒAƒNƒeƒBƒrƒeƒB
+    // ï¿½Aï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½B
     private OkosamaMediaPlayerActivity mActivity;
     // private AsyncQueryHandler mQueryHandler;
 //    private String mConstraint = null;
 //    private boolean mConstraintIsValid = false;
-    // view‚Ì•Û—p
+    // viewï¿½Ì•Ûï¿½ï¿½p
     static class ViewHolder {
         TextView line1;
         TextView line2;
@@ -109,8 +114,8 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
     		int clayout,
     		TabPage page ) {
         // super(currentactivity, listGroup, glayout, listChild, clayout );
-        // activity‚Ìì¬
-        // QueryHandler‚Ìì¬
+        // activityï¿½Ìì¬
+        // QueryHandlerï¿½Ìì¬
     	this.page = page;
         mActivity = currentactivity;
         this.inflater 
@@ -128,39 +133,39 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
         mNowPlayingOverlay = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.indicator_ic_mp_playing_list);
         // mNowListOverlay = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.playlist_press);
         mDefaultAlbumIcon =  (BitmapDrawable)OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.albumart_mp_unknown_list);
-        // Filter‚ÆƒfƒBƒU‚ğ–¢w’è‚É‚µ‚ÄAƒrƒbƒgƒ}ƒbƒv‚ğ‚‘¬‚É‚·‚é
+        // Filterï¿½Æƒfï¿½Bï¿½Uï¿½ğ–¢wï¿½ï¿½É‚ï¿½ï¿½ÄAï¿½rï¿½bï¿½gï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½
         // no filter or dither, it's a lot faster and we can't tell the difference
         mDefaultAlbumIcon.setFilterBitmap(false);
         mDefaultAlbumIcon.setDither(false);
         
         //mContext = context;
-        // Œ»İ‚ÌƒJ[ƒ\ƒ‹‚ÌƒJƒ‰ƒ€‚ÌƒCƒ“ƒfƒbƒNƒX‚ğİ’è
+        // ï¿½ï¿½ï¿½İ‚ÌƒJï¿½[ï¿½\ï¿½ï¿½ï¿½ÌƒJï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½İ’ï¿½
         // getColumnIndices(cursor);
         //mResources = context.getResources();
-        // Šeƒƒ“ƒo•Ï”‚Ì‰Šú‚©
-        // ƒZƒpƒŒ[ƒ^H
+        // ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½oï¿½Ïï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½
+        // ï¿½Zï¿½pï¿½ï¿½ï¿½[ï¿½^ï¿½H
         //mAlbumSongSeparator = currentactivity.getString(R.string.albumsongseparator);
-        // ƒAƒ‹ƒoƒ€AƒA[ƒeƒBƒXƒg
+        // ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Aï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½g
         mUnknownAlbum = currentactivity.getString(R.string.unknown_album_name);
         mUnknownArtist = currentactivity.getString(R.string.unknown_artist_name);
     }
             
     /**
-     * “à•”‚ÌƒNƒGƒŠƒnƒ“ƒhƒ‰‚ğ•Ô‹p
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒNï¿½Gï¿½ï¿½ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½Ô‹p
      * @return
      */
 //    public AsyncQueryHandler getQueryHandler() {
 //        return mQueryHandler;
 //    }
     /**
-     * Œ»İ‚ÌƒJƒ‰ƒ€‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ“à•”‚Éİ’è
+     * ï¿½ï¿½ï¿½İ‚ÌƒJï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éİ’ï¿½
      * @param cursor
      */
     private int getColumnIndices(Cursor cursor) {
         if (cursor != null) {
-        	// ƒJ[ƒ\ƒ‹‚ªİ’è‚³‚ê‚Ä‚¢‚½‚ç
-        	// id,ƒA[ƒeƒBƒXƒgid,ƒAƒ‹ƒoƒ€id,ƒ\ƒ“ƒOid,ƒCƒ“ƒfƒNƒT
-        	// ‚Æ‚è‚ ‚¦‚¸A‘½•ªƒOƒ‹[ƒv—p‚¾‚Æv‚í‚ê‚é
+        	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½
+        	// id,ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gid,ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½id,ï¿½\ï¿½ï¿½ï¿½Oid,ï¿½Cï¿½ï¿½ï¿½fï¿½Nï¿½T
+        	// ï¿½Æ‚è‚ ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½[ï¿½vï¿½pï¿½ï¿½ï¿½Ævï¿½ï¿½ï¿½ï¿½
             mGroupArtistIdIdx = cursor.getColumnIndexOrThrow(BaseColumns._ID);
             mGroupArtistIdx = cursor.getColumnIndexOrThrow(ArtistColumns.ARTIST);
             mGroupAlbumIdx = cursor.getColumnIndexOrThrow(ArtistColumns.NUMBER_OF_ALBUMS);
@@ -180,37 +185,37 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
     }
 
     /**
-     * V‚µ‚¢ƒOƒ‹[ƒvƒrƒ…[‚ğì¬‚µA•Ô‹p‚·‚éH
+     * ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½[ï¿½vï¿½rï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Aï¿½Ô‹pï¿½ï¿½ï¿½ï¿½H
      */
     public View newGroupView() { //Context context, boolean isExpanded, ViewGroup parent) {
-    	// ƒrƒ…[‚Ìæ“¾H
+    	// ï¿½rï¿½ï¿½ï¿½[ï¿½Ìæ“¾ï¿½H
 	    View v = inflater.inflate(iGroupLayoutId, null); 
     	
-        // ƒAƒCƒRƒ“‚Ìƒrƒ…[æ“¾A‚»‚ÌƒŒƒCƒAƒEƒg‚ğæ“¾H
+        // ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½Ìƒrï¿½ï¿½ï¿½[ï¿½æ“¾ï¿½Aï¿½ï¿½ï¿½Ìƒï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½æ“¾ï¿½H
         ImageView iv = (ImageView) v.findViewById(R.id.icon);
-        // ‚±‚±‚ÍAƒAƒCƒRƒ“‚Ìƒrƒ…[‚ÌƒŒƒCƒAƒEƒg‚ğ‘‚«Š·‚¦‚Ä‚¢‚é‚Ì‚¾‚ë‚¤‚©H
-        // TODO: ‚È‚ñ‚¾‚©‘‚«Š·‚¦‚ç‚ê‚Ä‚¢‚È‚­‚ÄˆÓ–¡‚È‚¢‚æ‚¤‚É‚àŒ©‚¦‚é‚¯‚ÇEEE
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ÍAï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½Ìƒrï¿½ï¿½ï¿½[ï¿½Ìƒï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ë‚¤ï¿½ï¿½ï¿½H
+        // TODO: ï¿½È‚ñ‚¾‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ÄˆÓ–ï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‚¯ï¿½ÇEï¿½Eï¿½E
         ViewGroup.LayoutParams p = iv.getLayoutParams();
         p.width = ViewGroup.LayoutParams.WRAP_CONTENT;
         //p.height = 64; //ViewGroup.LayoutParams.;
-        // ƒrƒ…[ƒzƒ‹ƒ_[‚Ìì¬
+        // ï¿½rï¿½ï¿½ï¿½[ï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½Ìì¬
         ViewHolder vh = new ViewHolder();
         vh.line1 = (TextView) v.findViewById(R.id.line1);
         vh.line2 = (TextView) v.findViewById(R.id.line2);
         vh.play_indicator = (ImageView) v.findViewById(R.id.play_indicator);
         vh.icon = (ImageView) v.findViewById(R.id.icon);
         vh.icon.setPadding(0, 0, 1, 0);
-        // ƒ^ƒO‚Éƒrƒ…[ƒzƒ‹ƒ_[‚ğİ’è
+        // ï¿½^ï¿½Oï¿½Éƒrï¿½ï¿½ï¿½[ï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½ï¿½İ’ï¿½
         v.setTag(vh);
         return v;
     }
 
     /**
-     * V‚µ‚¢chileView‚ğì¬‚µA•Ô‹p‚·‚éH
+     * ï¿½Vï¿½ï¿½ï¿½ï¿½chileViewï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Aï¿½Ô‹pï¿½ï¿½ï¿½ï¿½H
      */
     public View newChildView() {
         View v = inflater.inflate(iChildLayoutId, null);
-    	// ViewHolder‚Ìì¬
+    	// ViewHolderï¿½Ìì¬
         ViewHolder vh = new ViewHolder();
         vh.line1 = (TextView) v.findViewById(R.id.line1);
         vh.line2 = (TextView) v.findViewById(R.id.line2);
@@ -218,23 +223,23 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
         vh.icon = (ImageView) v.findViewById(R.id.icon);
         vh.icon.setBackgroundDrawable(mDefaultAlbumIcon);
         vh.icon.setPadding(0, 0, 1, 0);
-        // ƒ^ƒO‚Éƒrƒ…[ƒzƒ‹ƒ_[‚ğİ’è
+        // ï¿½^ï¿½Oï¿½Éƒrï¿½ï¿½ï¿½[ï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½ï¿½İ’ï¿½
         v.setTag(vh);
         return v;
     }
     
     /**
-     * ƒOƒ‹[ƒvƒrƒ…[‚Ì•R•t‚¯
+     * ï¿½Oï¿½ï¿½ï¿½[ï¿½vï¿½rï¿½ï¿½ï¿½[ï¿½Ì•Rï¿½tï¿½ï¿½
      */
     // @Override
     public void bindGroupView(View view, 
     		Context context, ArtistGroupData data, boolean isexpanded) {
 
-    	// ƒ^ƒO‚©‚çƒrƒ…[ƒzƒ‹ƒ_[‚ğæ“¾
+    	// ï¿½^ï¿½Oï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½ï¿½ï¿½æ“¾
         ViewHolder vh = (ViewHolder) view.getTag();
 
-        // ƒJ[ƒ\ƒ‹‚©‚ç’l‚ğæ“¾‚µ‚ÄAƒrƒ…[‚Éİ’è‚·‚é
-        // ƒA[ƒeƒBƒXƒg
+        // ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ÄAï¿½rï¿½ï¿½ï¿½[ï¿½Éİ’è‚·ï¿½ï¿½
+        // ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½g
         String artist = data.getName();// cursor.getString(mGroupArtistIdx);
         String displayartist = artist;
         boolean unknown = artist == null || artist.equals(MediaStore.UNKNOWN_STRING);
@@ -243,19 +248,19 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
         }
         vh.line1.setText(displayartist);
 
-        // ƒAƒ‹ƒoƒ€A‹È‚Ì”H‚¾‚ë‚¤‚©H
+        // ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Aï¿½È‚Ìï¿½ï¿½Hï¿½ï¿½ï¿½ë‚¤ï¿½ï¿½ï¿½H
         int numalbums = data.getNumOfAlbums(); // cursor.getInt(mGroupAlbumIdx);
         int numsongs = data.getNumOfTracks(); // cursor.getInt(mGroupSongIdx);
         
-        // æ“¾‚µ‚½ƒAƒ‹ƒoƒ€”A‹È”‚©‚çAƒ‰ƒxƒ‹‚ğì¬‚µAİ’è
+        // ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Èï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Aï¿½İ’ï¿½
         String songs_albums = ResourceAccessor.makeAlbumsLabel(context,
                 numalbums, numsongs, unknown);
         
         vh.line2.setText(songs_albums);
         
-        // Œ»İ‚ÌƒA[ƒeƒBƒXƒg‚ÆAƒŒƒR[ƒh‚ÌƒA[ƒeƒBƒXƒgID‚ğ”äŠr‚µA“¯‚¶‚È‚ç‚ÎAÄ¶’†‚É‚·‚éH
-        // TODO:‰½‚©A‚»‚ê‚Å‚ÍƒA[ƒeƒBƒXƒg‚Ì•Ê‚ÌƒAƒ‹ƒoƒ€‚Å‚àÄ¶’†‚É‚È‚Á‚Ä‚µ‚Ü‚¤‹C‚ª‚·‚é‚ªA
-        // ‚±‚ÌƒŠƒXƒg‚Å‚ÍƒAƒ‹ƒoƒ€‚Ì‹æ•Ê‚Í‚È‚¢‚Ì‚©‚à
+        // ï¿½ï¿½ï¿½İ‚ÌƒAï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ÆAï¿½ï¿½ï¿½Rï¿½[ï¿½hï¿½ÌƒAï¿½[ï¿½eï¿½Bï¿½Xï¿½gIDï¿½ï¿½ï¿½rï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ÎAï¿½Äï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½H
+        // TODO:ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Å‚ÍƒAï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½Ì•Ê‚ÌƒAï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Å‚ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½é‚ªï¿½A
+        // ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Xï¿½gï¿½Å‚ÍƒAï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ì‹ï¿½Ê‚Í‚È‚ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½
         long currentartistid = MediaPlayerUtil.getCurrentArtistId();
         long artistid = data.getDataId(); // cursor.getLong(mGroupArtistIdIdx);
         if (currentartistid == artistid && !isexpanded) {
@@ -266,8 +271,8 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
     }
 
     /**
-     * qƒrƒ…[‚ğİ’è
-     * ‚Ç‚¤‚â‚çAqƒrƒ…[‚É‚ÍAŠY“–ƒA[ƒeƒBƒXƒg‚ÌƒAƒ‹ƒoƒ€‚Ìˆê——‚ğİ’è‚·‚é
+     * ï¿½qï¿½rï¿½ï¿½ï¿½[ï¿½ï¿½İ’ï¿½
+     * ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Aï¿½qï¿½rï¿½ï¿½ï¿½[ï¿½É‚ÍAï¿½Yï¿½ï¿½ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ÌƒAï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ìˆê——ï¿½ï¿½İ’è‚·ï¿½ï¿½
      */
     // @Override
     public void bindChildView(View view, Context context, ArtistChildData data ) { //Context context, Cursor cursor ) { // , boolean islast) {
@@ -277,10 +282,10 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
     		return;
     	}
     	
-    	// ƒ^ƒO‚©‚çƒrƒ…[ƒzƒ‹ƒ_[‚ğæ“¾
+    	// ï¿½^ï¿½Oï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½ï¿½ï¿½æ“¾
         ViewHolder vh = (ViewHolder) view.getTag();
 
-        // ƒAƒ‹ƒoƒ€–¼‚ğæ“¾Aİ’è
+        // ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½Aï¿½İ’ï¿½
         String name = data.getAlbumName();// cursor.getString(cursor.getColumnIndexOrThrow(AlbumColumns.ALBUM));
         String displayname = name;
         boolean unknown = name == null || name.equals(MediaStore.UNKNOWN_STRING); 
@@ -289,29 +294,29 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
         }
         vh.line1.setText(displayname);
 
-        // ‹È”‚ÆƒA[ƒeƒBƒXƒg‚Ì‹È”‚ğæ“¾
+        // ï¿½Èï¿½ï¿½ÆƒAï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½Ì‹Èï¿½ï¿½ï¿½ï¿½æ“¾
         int numsongs = data.getNumOfSongs(); // cursor.getInt(cursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS));
         int numartistsongs = data.getNumOfSongsForArtist();// cursor.getInt(cursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS_FOR_ARTIST));
 
         final StringBuilder builder = mBuffer;
         builder.delete(0, builder.length());
         if (unknown) {
-        	// ƒA[ƒeƒBƒXƒg‚ª•ª‚©‚ç‚È‚¢ê‡AƒA[ƒeƒBƒXƒg‚Ì”‚ğ‹È”‚É‚·‚éH
+        	// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½Aï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½Ìï¿½ï¿½ï¿½ï¿½Èï¿½ï¿½É‚ï¿½ï¿½ï¿½H
             numsongs = numartistsongs;
         }
           
-        // ‹È”‚ğİ’è
+        // ï¿½Èï¿½ï¿½ï¿½İ’ï¿½
         if (numsongs == 1) {
             builder.append(context.getString(R.string.onesong));
         } else {
             if (numsongs == numartistsongs) {
-            	// ƒA[ƒeƒBƒXƒg‚Ì‹È”‚ÆA‹È”‚ªˆê’v
-            	// ‹È”‚ÍA‚P‚Â‚¾‚¯İ’èH
+            	// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½Ì‹Èï¿½ï¿½ÆAï¿½Èï¿½ï¿½ï¿½ï¿½ï¿½v
+            	// ï¿½Èï¿½ï¿½ÍAï¿½Pï¿½Â‚ï¿½ï¿½ï¿½ï¿½İ’ï¿½H
                 final Object[] args = mFormatArgs;
                 args[0] = numsongs;
                 builder.append(OkosamaMediaPlayerActivity.getResourceAccessor().getQuantityString(R.plurals.Nsongs, numsongs, args));
             } else {
-            	// ˆê’v‚µ‚È‚¢ê‡A‚R‚Âİ’èH‹È”AƒA[ƒeƒBƒXƒg‹È”AƒA[ƒeƒBƒXƒg–¼H
+            	// ï¿½ï¿½vï¿½ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½Aï¿½Rï¿½Âİ’ï¿½Hï¿½Èï¿½ï¿½Aï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½Èï¿½ï¿½Aï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½H
                 final Object[] args = mFormatArgs3;
                 args[0] = numsongs;
                 args[1] = numartistsongs;
@@ -321,25 +326,25 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
         }
         vh.line2.setText(builder.toString());
         
-        // ƒAƒ‹ƒoƒ€ƒA[ƒg‚Ìæ“¾Aİ’è
+        // ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Aï¿½[ï¿½gï¿½Ìæ“¾ï¿½Aï¿½İ’ï¿½
         ImageView iv = vh.icon;
         // We don't actually need the path to the thumbnail file,
         // we just use it to see if there is album art or not
         String art = data.getAlbumArt(); //cursor.getString(cursor.getColumnIndexOrThrow(
                 //AlbumColumns.ALBUM_ART));
         if (unknown || art == null || art.length() == 0) {
-        	// •ª‚©‚ç‚È‚¢ê‡‚ÍAƒfƒtƒHƒ‹ƒg‚ğİ’è‚·‚é
+        	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½ÍAï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½ï¿½İ’è‚·ï¿½ï¿½
             iv.setBackgroundDrawable(mDefaultAlbumIcon);
             iv.setImageDrawable(null);
         } else {
-        	// •ª‚©‚éê‡‚ÍADatabase‚©‚çæ“¾‚·‚é
+        	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍADatabaseï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
             long artIndex = Long.parseLong(data.getAlbumId()); // cursor.getLong(0);
             Drawable d = MediaPlayerUtil.getCachedArtwork(context, artIndex, mDefaultAlbumIcon);
             iv.setImageDrawable(d);
         }
 
-        // Ä¶’†‚ÌƒAƒ‹ƒoƒ€‚Ìid‚ÆA‚±‚Ì€–Ú‚ÌƒAƒ‹ƒoƒ€‚Ìid‚ğæ“¾‚µA
-        // ˆê’v‚µ‚½‚çŒ»İƒvƒŒƒC’†‚É‚·‚é
+        // ï¿½Äï¿½ï¿½ï¿½ï¿½ÌƒAï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½idï¿½ÆAï¿½ï¿½ï¿½Ìï¿½ï¿½Ú‚ÌƒAï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½idï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½A
+        // ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½çŒ»ï¿½İƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½
         long currentalbumid = MediaPlayerUtil.getCurrentAlbumId();
         long aid =  Long.parseLong(data.getAlbumId()); // cursor.getLong(0);
         iv = vh.play_indicator;
@@ -352,16 +357,16 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 
 
     /**
-     * qƒrƒ…[‚ÌƒJ[ƒ\ƒ‹‚ğæ“¾H
-     * TODO:•s—v‚È‚Ì‚ÅA‚à‚Á‚ÆŒy‚¢ˆ—‚É’u‚«Š·‚¦‚é‚±‚Æ
+     * ï¿½qï¿½rï¿½ï¿½ï¿½[ï¿½ÌƒJï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½H
+     * TODO:ï¿½sï¿½vï¿½È‚Ì‚ÅAï¿½ï¿½ï¿½ï¿½ï¿½ÆŒyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É’uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‚±ï¿½ï¿½
      */
     // @Override
     protected Cursor getChildrenCursor(long groupId) { //, String artistName ) { //Cursor groupCursor) {
         
-    	// ƒOƒ‹[ƒvƒJ[ƒ\ƒ‹‚©‚çA‚»‚ÌƒA[ƒeƒBƒXƒg‚Ìid‚ğæ“¾‚·‚é
+    	// ï¿½Oï¿½ï¿½ï¿½[ï¿½vï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ÌƒAï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½idï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
         // long id = groupCursor.getLong(groupCursor.getColumnIndexOrThrow(BaseColumns._ID));
         
-        // ƒJƒ‰ƒ€–¼‚Ìİ’è
+        // ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìİ’ï¿½
         String[] cols = new String[] {
                 BaseColumns._ID,
                 AlbumColumns.ALBUM,
@@ -369,15 +374,15 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
                 AlbumColumns.NUMBER_OF_SONGS_FOR_ARTIST,
                 AlbumColumns.ALBUM_ART
         };
-        // uri‚Ìæ“¾
-        // ŠO•”ƒXƒgƒŒ[ƒW‚©“à•”‚©‚É‚æ‚Á‚Ä‹““®‚ğ•ÏX
+        // uriï¿½Ìæ“¾
+        // ï¿½Oï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‹ï¿½ï¿½ï¿½ï¿½ï¿½ÏX
         //Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
         String external_string = "external";
         if( OkosamaMediaPlayerActivity.isExternalRef() == false )
         {
-        	external_string = "internal";	// ‘½•ªA‚±‚ê‚Å‚æ‚¢
+        	external_string = "internal";	// ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Å‚æ‚¢
         }        
-        // ƒNƒGƒŠ”­s
+        // ï¿½Nï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½s
         Cursor c = Database.query(mActivity,
                 MediaStore.Audio.Artists.Albums.getContentUri(external_string, groupId),
                 cols, null, null, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
@@ -416,7 +421,7 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 	}
 
 	/**
-	 * q‚Ìƒf[ƒ^‚ÍA“WŠJ‚É‚±‚ÌŠÖ”‚Å“Ç‚İ‚İ
+	 * ï¿½qï¿½Ìƒfï¿½[ï¿½^ï¿½ÍAï¿½Wï¿½Jï¿½ï¿½ï¿½É‚ï¿½ï¿½ÌŠÖï¿½ï¿½Å“Ç‚İï¿½ï¿½ï¿½
 	 */
 	@Override
 	public int getChildrenCount(int groupPosition) {
@@ -444,19 +449,19 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
         		{
                     ArtistChildData dataChild = new ArtistChildData();
                    
-                    // album–¼
+                    // albumï¿½ï¿½
                     dataChild.setAlbumName(
                     	childCursor.getString(childCursor.getColumnIndexOrThrow(AlbumColumns.ALBUM) ) 
                     );
-                    // album ‹È”
+                    // album ï¿½Èï¿½
                     dataChild.setNumOfSongs(
                     	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS))
                     );
-                    // artist ‹È”
+                    // artist ï¿½Èï¿½
                     dataChild.setNumOfSongsForArtist( 
                     	childCursor.getInt(childCursor.getColumnIndexOrThrow(AlbumColumns.NUMBER_OF_SONGS_FOR_ARTIST))
                     );
-                    // artist–¼
+                    // artistï¿½ï¿½
                     dataChild.setArtistName(
                     	data.getName()
                     	//childCursor.getString(childCursor.getColumnIndexOrThrow(ArtistColumns.ARTIST))
@@ -492,7 +497,7 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 
 	@Override
 	public Object getGroup(int groupPosition) {
-		// Log.e("arsit","getGroup" + groupPosition + " " + groupData.containsKey(groupPosition));
+		// LogWrapper.e("arsit","getGroup" + groupPosition + " " + groupData.containsKey(groupPosition));
 		if( // groupData.get(groupPosition,null) != null )
 				groupData.containsKey(groupPosition) == true
 				)
@@ -520,7 +525,7 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-		//Log.e("getGroup","artist");
+		//LogWrapper.e("getGroup","artist");
 		View v = convertView;
 		if( v == null )
 		{
@@ -531,7 +536,7 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 		{
 			bindGroupView(v,mActivity,data,isExpanded);
 		}
-		// Œ»óAfilter‚ª‚©‚©‚Á‚Ä‚¢‚éê‡Anull‚É‚È‚Á‚Ä‚µ‚Ü‚¤H
+		// ï¿½ï¿½ï¿½ï¿½Afilterï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½Anullï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½H
 		return v;
 	}
 
@@ -546,7 +551,7 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 	}
 	
     /**
-     * ƒf[ƒ^‚Ì•ÏXH
+     * ï¿½fï¿½[ï¿½^ï¿½Ì•ÏXï¿½H
      */
     // @Override
     public void updateData(
@@ -556,8 +561,8 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
     		HashMap<Integer,ArtistChildData[]> child
     		) {
     	// mapIdAndArt.clear();
-    	// ƒOƒ‹[ƒv‚Ìƒ}ƒbƒv‚ğƒtƒBƒ‹ƒ^‚ğ‚©‚¯‚È‚ª‚çƒRƒs[
-    	// ƒRƒs[‚µ‚½ƒ}ƒbƒv‚¾‚¯Afilter‚ğ‚©‚¯‚Äì‚è’¼‚·
+    	// ï¿½Oï¿½ï¿½ï¿½[ï¿½vï¿½Ìƒ}ï¿½bï¿½vï¿½ï¿½ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½Rï¿½sï¿½[
+    	// ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Afilterï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½è’¼ï¿½ï¿½
     	HashMap<Integer,ArtistGroupData> group2 = new HashMap<Integer,ArtistGroupData>();
     	if( filterData != null )
     	{
@@ -566,7 +571,7 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
     		{
     			if( true == isFilterData( entryTmp.getValue() ) )
     			{
-    				// ’Šo‘ÎÛ‚Ìê‡‚Ì‚İAŠi”[‚·‚é
+    				// ï¿½ï¿½ï¿½oï¿½ÎÛ‚Ìê‡ï¿½Ì‚İAï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½
     				group2.put(i,entryTmp.getValue());
     				i++;
     			}
@@ -578,7 +583,7 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
     	}
     	
     	this.groupData = group2;
-    	this.childData = child;// 2014/1/18 “WŠJ‚Éæ“¾‚·‚é‚Ì‚Å‚¢‚¢‚Æv‚í‚ê‚½‚Ì‚Å‚±‚±‚ÅƒNƒŠƒA
+    	this.childData = child;// 2014/1/18 ï¿½Wï¿½Jï¿½ï¿½ï¿½Éæ“¾ï¿½ï¿½ï¿½ï¿½Ì‚Å‚ï¿½ï¿½ï¿½ï¿½Ævï¿½ï¿½ê‚½ï¿½Ì‚Å‚ï¿½ï¿½ï¿½ï¿½ÅƒNï¿½ï¿½ï¿½A
     	Log.d("updateData","artist" + group.size());
     	notifyDataSetChanged();
     }
@@ -595,10 +600,10 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
     		return -1;
     	}
     	bDataUpdating = true;
-    	// Log.i("insertAllDataFromCursor","start");
+    	// LogWrapper.i("insertAllDataFromCursor","start");
     	
 //    	if (mActivity.isFinishing() && cursor != null ) {
-//        	// ƒAƒNƒeƒBƒrƒeƒB‚ªI—¹’†‚ÅA‚Ü‚¾ƒJ[ƒ\ƒ‹‚ªc‚Á‚Ä‚¢‚éê‡AƒJ[ƒ\ƒ‹‚ğƒNƒ[ƒY
+//        	// ï¿½Aï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ÅAï¿½Ü‚ï¿½ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½Y
 //            cursor.close();
 //            cursor = null;
 //        }
@@ -611,17 +616,17 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
             protected Integer doInBackground(Cursor... params) {
-            	Log.i("doInBackground","start");
+            	LogWrapper.i("doInBackground","start");
             	
             	bLastError = false;
-            	// ƒJ[ƒ\ƒ‹‚ğƒ‹[ƒv‚·‚é
+            	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½
             	Cursor cursor = Database.getInstance(
             			OkosamaMediaPlayerActivity.isExternalRef()
             	).createArtistCursor();//null, null);            	
             	// Cursor cursor = params[0];
         		if( cursor == null || cursor.isClosed() )
         		{
-        			Log.w("ArtistAlbumListAdp - doInBk", "cursor closed!");
+        			LogWrapper.w("ArtistAlbumListAdp - doInBk", "cursor closed!");
         			return -1;
         		}
         		try 
@@ -636,14 +641,14 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 	            	if( 0 < cursor.getCount() )
 	            	{
 	        		
-		                Log.i("doInBackground","moveToFirst");
+		                LogWrapper.i("doInBackground","moveToFirst");
 		            	int i=0;
 		        		cursor.moveToFirst();
 		        		do 
 		        		{
 		                    ArtistGroupData data = new ArtistGroupData();
 		                    
-		            		// ‘S‚Ä‚Ì—v‘f‚ğƒ‹[ƒv‚·‚é
+		            		// ï¿½Sï¿½Ä‚Ì—vï¿½fï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½
 		                    data.setGroupId(i);
 		                    data.setName( cursor.getString(mGroupArtistIdx) );
 		                    data.setNumOfAlbums( cursor.getInt(mGroupAlbumIdx) );
@@ -668,15 +673,15 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
             @Override
             protected void onPostExecute(Integer ret) 
             {
-            	Log.i("onPostExecute","ret=" + ret );
+            	LogWrapper.i("onPostExecute","ret=" + ret );
             	if( ret < 0 )
             	{
             		groupDataTmp.clear();
             		childDataTmp.clear();
             		bLastError = true;
             	}
-            	// Ši”[I—¹
-            	// “ñdŠÇ—‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚Ä‚¢‚é‚ªAƒAƒ_ƒvƒ^‚É‚à“¯—l‚Ìƒf[ƒ^‚ğŠi”[‚·‚é
+            	// ï¿½iï¿½[ï¿½Iï¿½ï¿½
+            	// ï¿½ï¿½dï¿½Ç—ï¿½ï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½é‚ªï¿½Aï¿½Aï¿½_ï¿½vï¿½^ï¿½É‚ï¿½ï¿½ï¿½ï¿½lï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½
             	updateData( groupDataTmp, childDataTmp );
             	// TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_ARTIST);
             	if( page != null )
@@ -722,12 +727,12 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 		this.childData = childData;
 	}
     @Override
-    // ‹È‚Ì•ÏX‚È‚ÇAó‘Ô‚ª•Ï‚í‚Á‚½‚Æ‚«‚ÉAŠO•”‚©‚ç•\¦‚ğXV‚³‚¹‚é
+    // ï¿½È‚Ì•ÏXï¿½ï¿½ï¿½È‚ÇAï¿½ï¿½Ô‚ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÉAï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public int updateStatus()
     {
-    	// 2014/1/18 add filter—p
+    	// 2014/1/18 add filterï¿½p
     	updateData( groupDataTmp, childDataTmp );    	
-    	// •\¦‚ğXV?
+    	// ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½V?
     	notifyDataSetChanged();
     	return 0;
     }
@@ -768,21 +773,21 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 	}
 
 	/**
-	 *’:‚È‚ñ‚©•Ï‚¾‚¯‚ÇA•\¦‘ÎÛ‚Ìê‡Atrue
+	 *ï¿½ï¿½:ï¿½È‚ñ‚©•Ï‚ï¿½ï¿½ï¿½ï¿½ÇAï¿½\ï¿½ï¿½ï¿½ÎÛ‚Ìê‡ï¿½Atrue
 	 */	
 	@Override
 	public boolean isFilterData(ArtistGroupData data) {
 		boolean bRet = true;
 		if( filterData != null && data != null)
 		{
-			// ƒA[ƒeƒBƒXƒgID
+			// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gID
 			if( filterData.getArtistId() != null )
 			{
 				if( data.getDataId() != -1
 				&& filterData.getArtistId().equals(String.valueOf(data.getDataId())) )
 				{
-					// ƒA[ƒeƒBƒXƒg‚ªƒtƒBƒ‹ƒ^‘ÎÛH
-					// data.getTrackArtistId()‚Í–{“–‚É“ü‚Á‚Ä‚¢‚é‚Ì‚¾‚ë‚¤‚©EEEBTODO:’²¸
+					// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ÎÛH
+					// data.getTrackArtistId()ï¿½Í–{ï¿½ï¿½ï¿½É“ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ë‚¤ï¿½ï¿½ï¿½Eï¿½Eï¿½Eï¿½BTODO:ï¿½ï¿½ï¿½ï¿½
 					bRet = true;
 				}
 				else
@@ -790,13 +795,13 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 					return false;
 				}
 			}
-			// ƒA[ƒeƒBƒXƒg–¼
+			// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½
 			if( filterData.getStrArtist() != null && 0 < filterData.getStrArtist().length() )
 			{
 				if( data.getName() != null
 				&& -1 != data.getName().indexOf(filterData.getStrArtist()) )
 				{
-					// ƒA[ƒeƒBƒXƒg–¼‚ªˆê•”ˆê’v
+					// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ê•”ï¿½ï¿½v
 					bRet = true;
 				}
 				else
@@ -805,7 +810,7 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 				}
 			}
 			
-			// ƒWƒƒƒ“ƒ‹ID
+			// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ID
 			if( filterData.getGenreId() != null )
 			{
 				OkosamaMediaPlayerActivity activity = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
@@ -827,14 +832,14 @@ implements IAdapterUpdate<ArtistGroupData> { //, IFilterable {//<ArtistGroupData
 							{
 								if( filterData.getGenreId().equals( String.valueOf(genre.getDataId() ) ) )
 								{
-									// ƒWƒƒƒ“ƒ‹‚ªˆê’v
+									// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½v
 									bRet = true;
 									bNoHit = false;
 									break;
 								}
 							}
 						}
-						// ƒA[ƒeƒBƒXƒg‚Ì’†‚Å‚P‹È‚Å‚àƒqƒbƒg‚·‚ê‚ÎA‚»‚ÌƒA[ƒeƒBƒXƒg‚ÍŒŸõ‘ÎÛ
+						// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½Ì’ï¿½ï¿½Å‚Pï¿½È‚Å‚ï¿½ï¿½qï¿½bï¿½gï¿½ï¿½ï¿½ï¿½ÎAï¿½ï¿½ï¿½ÌƒAï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ÍŒï¿½ï¿½ï¿½ï¿½Îï¿½
 						if( false == bNoHit )
 						{
 							break;

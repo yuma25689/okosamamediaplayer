@@ -1,12 +1,12 @@
 package okosama.app.tab;
 
-import android.app.Activity;
-import android.util.SparseArray;
 import okosama.app.action.HideTabComponentAction;
 import okosama.app.action.IViewAction;
 import okosama.app.action.NoAction;
 import okosama.app.action.ShowTabComponentAction;
 import okosama.app.behavior.IBehavior;
+import android.app.Activity;
+import android.util.SparseArray;
 
 public abstract class TabLeaf implements ITabComponent {
 	// public static final int TAGKEY_LISTNAME = 1205;
@@ -20,7 +20,7 @@ public abstract class TabLeaf implements ITabComponent {
 	protected SparseArray<ITabComponent> children
 	= new SparseArray<ITabComponent>();
 	/**
-	 * q€–Ú‚Ì’Ç‰Á
+	 * ï¿½qï¿½ï¿½ï¿½Ú‚Ì’Ç‰ï¿½
 	 * @param child
 	 */
 	@Override
@@ -88,7 +88,7 @@ public abstract class TabLeaf implements ITabComponent {
 	}
 	
 	/**
-	 * Active‚©‚Ç‚¤‚©‚ğİ’è
+	 * Activeï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 	 * @param b
 	 */
 	@Override
@@ -96,17 +96,17 @@ public abstract class TabLeaf implements ITabComponent {
 	{
 		if( bActivate )
 		{
-			// ƒAƒNƒeƒBƒu‰»‚³‚ê‚½
+			// ï¿½Aï¿½Nï¿½eï¿½Bï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½
 			ShowTabComponentAction.getInstance().doAction( getView() );			
 		}
 		else
 		{
-			// ƒAƒNƒeƒBƒu‚Å‚Í‚È‚­‚È‚Á‚½
+			// ï¿½Aï¿½Nï¿½eï¿½Bï¿½uï¿½Å‚Í‚È‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½
 			HideTabComponentAction.getInstance().doAction( getView() );
 		}
 	}
 	/**
-	 * Visible‚©‚Ç‚¤‚©‚ğİ’è
+	 * Visibleï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 	 * @param b
 	 */
 	@Override
@@ -114,12 +114,12 @@ public abstract class TabLeaf implements ITabComponent {
 	{
 		if( b )
 		{
-			// •\¦
+			// ï¿½\ï¿½ï¿½
 			ShowTabComponentAction.getInstance().doAction( getView() );			
 		}
 		else
 		{
-			// ”ñ•\¦
+			// ï¿½ï¿½\ï¿½ï¿½
 			HideTabComponentAction.getInstance().doAction( getView() );
 		}
 	}
@@ -131,7 +131,7 @@ public abstract class TabLeaf implements ITabComponent {
 	}
 
 	/**
-	 * İ’è‚³‚ê‚½ƒAƒNƒVƒ‡ƒ“‚Ì“à—e‚ğAƒRƒ“ƒ|[ƒlƒ“ƒg‚Éİ’è‚·‚é
+	 * ï¿½İ’è‚³ï¿½ê‚½ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½eï¿½ï¿½ï¿½Aï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½Éİ’è‚·ï¿½ï¿½
 	 */
 	@Override
 	public void configureAction()

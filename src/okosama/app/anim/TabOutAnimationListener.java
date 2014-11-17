@@ -1,6 +1,7 @@
 package okosama.app.anim;
 
 import okosama.app.ControlIDs;
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
@@ -27,7 +28,7 @@ public class TabOutAnimationListener implements AnimationListener {
     public void onAnimationEnd(Animation animation) {
 		Log.d("onAnimationEnd","come:" + tabId);
     	
-		//Log.i("anim_end","ok");
+		//LogWrapper.i("anim_end","ok");
 		componentContainer.post(new Runnable() {
             @Override
 			public void run() {
@@ -53,21 +54,21 @@ public class TabOutAnimationListener implements AnimationListener {
 	@Override
 	public void onAnimationRepeat(Animation animation) {
 		// TODO Auto-generated method stub
-		Log.i("anim_repeat","ok");
+		LogWrapper.i("anim_repeat","ok");
 		
 	}
 
 	@Override
 	public void onAnimationStart(Animation animation) {
 		// TODO Auto-generated method stub
-		Log.i("anim_start","ok");
+		LogWrapper.i("anim_start","ok");
 	}  
 	public void ReleaseTabSelectionLock( int tabId )
 	{
 		lastLockTabId = 0;
-		// ƒ^ƒu‚ÌƒƒbƒN‰ğœ
+		// ï¿½^ï¿½uï¿½Ìƒï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
 		Tab tab = null;
-		// TODO: ƒ^ƒuID‚©‚çƒ^ƒu‚ğæ“¾‚·‚éŠÖ”‚ğì¬
+		// TODO: ï¿½^ï¿½uIDï¿½ï¿½ï¿½ï¿½^ï¿½uï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½Öï¿½ï¿½ï¿½ï¿½ì¬
 		if( tabId == ControlIDs.TAB_ID_MAIN )
 		{
 			tab = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabStocker().getTab(ControlIDs.TAB_ID_MAIN);

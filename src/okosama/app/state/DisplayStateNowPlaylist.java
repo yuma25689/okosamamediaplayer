@@ -1,23 +1,22 @@
 package okosama.app.state;
 
-import android.view.Menu;
-import android.view.MenuItem;
 import okosama.app.AppStatus;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.action.SearchPanelShowHideAction;
-import okosama.app.behavior.TrackListBehavior;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class DisplayStateNowPlaylist extends absDisplayStateMediaTab {
 
 	@Override
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
-		// ‹È‘I‘ğ‰æ–Ê‚Ö‚ÌØ‚è‘Ö‚¦
-		// ‚±‚±‚ªƒ^ƒu‘I‘ğˆ—‚Ì––’[H‘Š“–•Ï‚Èì‚è‚¾‚ªEEE
+		// ï¿½È‘Iï¿½ï¿½ï¿½ï¿½Ê‚Ö‚ÌØ‚ï¿½Ö‚ï¿½
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½uï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì–ï¿½ï¿½[ï¿½Hï¿½ï¿½ï¿½ï¿½ï¿½Ï‚Èï¿½è‚¾ï¿½ï¿½ï¿½Eï¿½Eï¿½E
 		tab.setCurrentTab(TabPage.TABPAGE_ID_NOW_PLAYLIST, true);
 		//IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_NOW_PLAYLIST );
 		//action.doAction(null);
@@ -47,7 +46,7 @@ public class DisplayStateNowPlaylist extends absDisplayStateMediaTab {
 		switch( item.getItemId() )
 		{
 		case MENU_UPDATE:
-			// NowPlaylist‚ğÄ“x’[––‚©‚ç“Ç‚İ’¼‚·
+			// NowPlaylistï¿½ï¿½ï¿½Ä“xï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚İ’ï¿½ï¿½ï¿½
 			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
 				ControlIDs.TAB_ID_MAIN,
 				true

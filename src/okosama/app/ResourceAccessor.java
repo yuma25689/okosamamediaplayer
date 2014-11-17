@@ -7,17 +7,12 @@ package okosama.app;
 //import java.util.Map;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Locale;
 
-import okosama.app.behavior.IListBehavior;
-import okosama.app.behavior.TrackListBehavior;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.TabChangeAnimation;
-import okosama.app.widget.Button;
 import okosama.app.widget.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -31,15 +26,13 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Environment;
-import android.util.Log;
 import android.util.SparseArray;
-import android.view.SurfaceView;
 
 /**
- * ƒŠƒ\[ƒX‚ÉƒAƒNƒZƒX‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
- * dalvik‚Ì§ŒÀ(‚¨‚»‚ç‚­A24MB`48MB‚­‚ç‚¢‚Ìƒƒ‚ƒŠŠm•Û‚Å—‚¿‚é)
- * ‚ğ‰ñ”ğ‚·‚é‚½‚ß‚ÉA‚È‚é‚×‚­Drawable‚ª20MBˆÈã‚É‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
- * (1‰æ–Ê‚Åg‚¤Drawable‚ÌƒTƒCƒY‚ª‚»‚ê‚ğ’´‚¦‚Ä‚µ‚Ü‚¤A‚È‚Ç‚Ì‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢ê‡‚Íœ‚­)
+ * ï¿½ï¿½ï¿½\ï¿½[ï¿½Xï¿½ÉƒAï¿½Nï¿½Zï¿½Xï¿½ï¿½ï¿½é‚½ï¿½ß‚ÌƒNï¿½ï¿½ï¿½X
+ * dalvikï¿½Ìï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ç‚­ï¿½A24MBï¿½`48MBï¿½ï¿½ï¿½ç‚¢ï¿½Ìƒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Û‚Å—ï¿½ï¿½ï¿½ï¿½ï¿½)
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ß‚ÉAï¿½È‚ï¿½×‚ï¿½Drawableï¿½ï¿½20MBï¿½Èï¿½É‚È‚ï¿½È‚ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½ï¿½
+ * (1ï¿½ï¿½Ê‚Ågï¿½ï¿½Drawableï¿½ÌƒTï¿½Cï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ğ’´‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Aï¿½È‚Ç‚Ì‚Ç‚ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½Íï¿½ï¿½ï¿½)
  * @author 25689
  *
  */
@@ -47,7 +40,7 @@ public final class ResourceAccessor {
 	
 	public static String SELECTOR_PREFIX ="selector_";
 	public TabChangeAnimation tabAnim = new TabChangeAnimation();
-	// ‚±‚±‚ÉAƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Ìó‘Ô‚ğŠi”[‚·‚é
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ÉAï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½Ô‚ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½
 	public AppStatus appStatus = new AppStatus();
 	public MotionObserver motionObserver = new MotionObserver();
 	public void initMotionSenser(Activity act)
@@ -90,9 +83,9 @@ public final class ResourceAccessor {
 	private SparseArray<Bitmap> bmpArray = new SparseArray<Bitmap>();
 	
 	
-	// ƒŠƒ\[ƒX‚ğæ“¾‚·‚é‚½‚ß‚ÌƒAƒNƒeƒBƒrƒeƒB‚ğİ’è
-	// TODO: ‚µ‚©‚µA‚±‚±‚É•Û‚µ‚Ä‚¨‚­‚ÆA
-	// Ä‹N“®Œã‚È‚Ç‚ÉƒAƒNƒeƒBƒrƒeƒB‚ª—LŒø‚©‚Ç‚¤‚©’²‚×‚È‚­‚Ä‚¢‚¢‚Ì‚¾‚ë‚¤‚©H
+	// ï¿½ï¿½ï¿½\ï¿½[ï¿½Xï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½é‚½ï¿½ß‚ÌƒAï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½ï¿½İ’ï¿½
+	// TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½É•Ûï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ÆA
+	// ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½È‚Ç‚ÉƒAï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ë‚¤ï¿½ï¿½ï¿½H
 	OkosamaMediaPlayerActivity activity;
 	
 	public void setActivity(OkosamaMediaPlayerActivity activity) {
@@ -124,7 +117,7 @@ public final class ResourceAccessor {
 	}
 	public void initSound()
 	{
-		// ‰¹ºo—Íİ’è‚Ì‰Šú‰»‚ğs‚¤
+		// ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½Íİ’ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
 		soundPool = new SoundPool(SOUND_MAX_COUNT,AudioManager.STREAM_MUSIC,100);
 		soundPool.setOnLoadCompleteListener(
 				new OnLoadCompleteListener()
@@ -149,7 +142,7 @@ public final class ResourceAccessor {
 		|| idIndex < 0 
 		|| SOUND_RES_IDS.length <= idIndex)
 		{
-			// –¢‰Šú‰»‚Ìê‡A‚à‚µ‚­‚ÍAindex‚ª–³Œø‚Ìê‡AÄ¶‚µ‚È‚¢
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìê‡ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÍAindexï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìê‡ï¿½Aï¿½Äï¿½ï¿½ï¿½ï¿½È‚ï¿½
 			return;
 		}
 		// id, leftVol, rightVol, priority, loop, speedrate
@@ -175,8 +168,8 @@ public final class ResourceAccessor {
 		
 		Bitmap ret = null;
 		
-		// selector‚Ìê‡Aƒ[ƒh‚Å‚«‚È‚¢
-		// ƒl[ƒ~ƒ“ƒO‹K–ñ‚É‚æ‚Á‚Ä“ª‚ÌƒvƒŒƒtƒBƒbƒNƒX‚ÍŒÅ’è‚Æ‚·‚é
+		// selectorï¿½Ìê‡ï¿½Aï¿½ï¿½ï¿½[ï¿½hï¿½Å‚ï¿½ï¿½È‚ï¿½
+		// ï¿½lï¿½[ï¿½~ï¿½ï¿½ï¿½Oï¿½Kï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä“ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½tï¿½Bï¿½bï¿½Nï¿½Xï¿½ÍŒÅ’ï¿½Æ‚ï¿½ï¿½ï¿½
 		String idString = activity.getResources().getResourceEntryName(id);
 		if(idString.startsWith(SELECTOR_PREFIX))
 		{
@@ -192,12 +185,12 @@ public final class ResourceAccessor {
 			boolean bMemErr = false;
 			try {
 				ret = BitmapFactory.decodeResource(activity.getResources(), id, options);
-//				Log.i("test", activity.getResources().getResourcePackageName(id));
-//				Log.i("test", activity.getResources().getResourceName(id));
-//				Log.i("test", activity.getResources().getResourceEntryName(id));
+//				LogWrapper.i("test", activity.getResources().getResourcePackageName(id));
+//				LogWrapper.i("test", activity.getResources().getResourceName(id));
+//				LogWrapper.i("test", activity.getResources().getResourceEntryName(id));
 			} catch( OutOfMemoryError ex ) {
 				System.gc();
-				Log.e("Out of memory occur","bitmap create");
+				LogWrapper.e("Out of memory occur","bitmap create");
 				bMemErr = true;
 				ret = null;
 			}
@@ -205,7 +198,7 @@ public final class ResourceAccessor {
 			{
 				
 				String log = String.format("%X", id);
-				Log.e("decodeError",log);
+				LogWrapper.e("decodeError",log);
 				if( bMemErr == true )
 					ret = BitmapFactory.decodeResource(activity.getResources(), id, options);
 			}
@@ -241,7 +234,7 @@ public final class ResourceAccessor {
     private static Formatter sFormatter = new Formatter(sFormatBuilder, Locale.getDefault());
 	
     /**
-     * ƒAƒ‹ƒoƒ€‚Ìƒ‰ƒxƒ‹‚ğì¬‚·‚é
+     * ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ìƒï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½
      * @param context
      * @param numalbums
      * @param numsongs
@@ -258,7 +251,7 @@ public final class ResourceAccessor {
 	
 	    Resources r = context.getResources();
 	    if (false == isUnknown) {
-	    	// ƒAƒ‹ƒoƒ€”‚ğİ’è
+	    	// ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 	        String f = r.getQuantityText(R.plurals.Nalbums, numalbums).toString();
 	        sFormatBuilder.setLength(0);
 	        sFormatter.format(f, Integer.valueOf(numalbums));
@@ -268,7 +261,7 @@ public final class ResourceAccessor {
 	        	songs_albums.append(context.getString(R.string.albumsongseparator));
 	        }
 	    }
-    	// ‹È”‚ğİ’è
+    	// ï¿½Èï¿½ï¿½ï¿½İ’ï¿½
         if (numsongs == 1) {
             songs_albums.append(context.getString(R.string.onesong));
         } else {
@@ -280,7 +273,7 @@ public final class ResourceAccessor {
 	    return songs_albums.toString();
 	}	
     /**
-     * ƒAƒ‹ƒoƒ€‚Ìƒ‰ƒxƒ‹‚ğì¬‚·‚é
+     * ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ìƒï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½
      * @param context
      * @param numsongs
      * @return
@@ -294,7 +287,7 @@ public final class ResourceAccessor {
 	    StringBuilder songs_albums = new StringBuilder();
 	
 	    Resources r = context.getResources();
-    	// ‹È”‚ğİ’è
+    	// ï¿½Èï¿½ï¿½ï¿½İ’ï¿½
         if (numsongs == 1) {
             songs_albums.append(context.getString(R.string.onesong));
         } else {
@@ -306,9 +299,9 @@ public final class ResourceAccessor {
 	    return songs_albums.toString();
 	}	
 	/**
-	 * w’è‚³‚ê‚½•b”‚ÌŠÔ‚ğA`ŠÔ‚Æ‚¢‚¤•\¦‚É•Ï‚¦‚é
-	 * TODO:‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å‚ÍA•¶š—ñ‚Å‚ÌŠÔ•\‚Ís‚í‚È‚¢A‚·‚È‚í‚¿Ab’è”Å‚Å‚ ‚èA‚¢‚Â‚©•s—v‚É‚È‚é‚Ì‚ÅAíœ‚·‚é
-	 * ‚»‚à‚»‚àA‚±‚ÌƒNƒ‰ƒX‚É‚¨‚­‚Ì‚Í‚¨‚©‚µ‚¢
+	 * ï¿½wï¿½è‚³ï¿½ê‚½ï¿½bï¿½ï¿½ï¿½Ìï¿½ï¿½Ô‚ï¿½ï¿½Aï¿½`ï¿½ï¿½ï¿½Ô‚Æ‚ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½É•Ï‚ï¿½ï¿½ï¿½
+	 * TODO:ï¿½ï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Å‚ÍAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚Ìï¿½ï¿½Ô•\ï¿½ï¿½ï¿½Ísï¿½ï¿½È‚ï¿½ï¿½Aï¿½ï¿½ï¿½È‚í‚¿ï¿½Aï¿½bï¿½ï¿½Å‚Å‚ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Â‚ï¿½ï¿½sï¿½vï¿½É‚È‚ï¿½Ì‚ÅAï¿½íœï¿½ï¿½ï¿½ï¿½
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½É‚ï¿½ï¿½ï¿½ï¿½Ì‚Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param context
 	 * @param secs
 	 * @return
@@ -358,7 +351,7 @@ public final class ResourceAccessor {
 	}
 	
 	public boolean isSdCanRead() {
-	  //SDƒJ[ƒh‚ª‚ ‚é‚©ƒ`ƒFƒbƒN
+	  //SDï¿½Jï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½`ï¿½Fï¿½bï¿½N
 	  String status = Environment.getExternalStorageState();
 	  if (!status.equals(Environment.MEDIA_MOUNTED)) {
 	    return false;

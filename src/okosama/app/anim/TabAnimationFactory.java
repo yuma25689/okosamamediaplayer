@@ -2,8 +2,8 @@ package okosama.app.anim;
 
 // import android.view.animation.Animation;
 import okosama.app.ControlDefs;
-import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.MotionObserver.MagneticFieldValue;
+import okosama.app.OkosamaMediaPlayerActivity;
 import android.util.Log;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;

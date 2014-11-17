@@ -3,6 +3,7 @@ package okosama.app.state;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import okosama.app.LogWrapper;
 import okosama.app.MusicSettingsActivity;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
@@ -10,13 +11,12 @@ import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.Tab;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.media.audiofx.AudioEffect;
 import android.os.Handler;
 import android.os.RemoteException;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.media.audiofx.AudioEffect;
 
 public abstract class absDisplayState implements IDisplayState {
 	
@@ -25,7 +25,7 @@ public abstract class absDisplayState implements IDisplayState {
 	public static final int MENU_UPDATE = 333;
 	public static final int MENU_SEARCH = 332;
 	
-	// TODO: qƒNƒ‰ƒX‚©‚ç‚ÌƒAƒNƒZƒT
+	// TODO: ï¿½qï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ÌƒAï¿½Nï¿½Zï¿½T
 	double prevAzimuth = 0;
 	double prevPitch = 0;
 	double prevRoll = 0;
@@ -55,14 +55,14 @@ public abstract class absDisplayState implements IDisplayState {
 
 	public void clearReceivers()
 	{
-		// ‘S‚Ä‚ÌBroadcastReceiver‚ğ“o˜^‰ğœ‚·‚é
+		// ï¿½Sï¿½Ä‚ï¿½BroadcastReceiverï¿½ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		for( Entry<String, BroadcastReceiver > e : receivers.entrySet() )
 		{
 			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().unregisterReceiver(e.getValue());
 		}
 		receivers.clear();
-		// ‘S‚Ä‚Ìƒnƒ“ƒhƒ‰‚ÌƒLƒ…[‚ÌƒƒbƒZ[ƒW‚ğƒNƒŠƒA‚·‚éH
-		// ‚¢‚¢‚Ì‚©‚ÈEEEH
+		// ï¿½Sï¿½Ä‚Ìƒnï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ÌƒLï¿½ï¿½ï¿½[ï¿½Ìƒï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½H
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ÈEï¿½Eï¿½Eï¿½H
 		for( Entry<String, Handler > e : handlers.entrySet() )
 		{
 			e.getValue().removeCallbacksAndMessages(null);
@@ -74,7 +74,7 @@ public abstract class absDisplayState implements IDisplayState {
 	public void unregisterReceivers(int status) {
 		if( OkosamaMediaPlayerActivity.getResourceAccessor().getActivity() == null )
 		{
-			Log.e("unregisterReceivers", "activity not set");
+			LogWrapper.e("unregisterReceivers", "activity not set");
 			return;
 		}
 		clearReceivers();
@@ -84,7 +84,7 @@ public abstract class absDisplayState implements IDisplayState {
 	{
 		MenuItem item = null;
 		item = menu.add(Menu.NONE, MENU_UPDATE, Menu.NONE, R.string.update_menu);
-		// TODO: ƒAƒCƒRƒ“‚ğXV‚É ic_menu_refresh‚ª–{“–‚Í‚ ‚é‚Í‚¸H
+		// TODO: ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ ic_menu_refreshï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½Í‚ï¿½ï¿½H
 		item.setIcon(android.R.drawable.ic_popup_sync );
 		item = menu.add(Menu.NONE, MENU_SETTING, Menu.NONE, R.string.setting_menu);
 		item.setIcon(android.R.drawable.ic_menu_preferences );
@@ -103,7 +103,7 @@ public abstract class absDisplayState implements IDisplayState {
 	@Override
 	public int onPrepareOptionsMenu(Menu menu)
 	{
-		menu.clear();	// TODO: ”÷–­
+		menu.clear();	// TODO: ï¿½ï¿½ï¿½ï¿½
 		CreateGenericMenu(menu);
 		
 		return MENU_OK;		
@@ -144,7 +144,7 @@ public abstract class absDisplayState implements IDisplayState {
 	@Override
 	public int ChangeMotion()
 	{
-		// TODO:‚±‚ÌƒNƒ‰ƒX‚Å‚Í•s—v‚©‚à‚µ‚ê‚È‚¢
+		// TODO:ï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½Å‚Í•sï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 //		OkosamaMediaPlayerActivity.getResourceAccessor().motionObserver.
 //		azimuth = OkosamaMediaPlayerActivity.getResourceAccessor().motionObserver.getAzimuth();
 //		pitch = OkosamaMediaPlayerActivity.getResourceAccessor().motionObserver.getPitch();

@@ -2,19 +2,15 @@ package okosama.app.adapter;
 
 import java.util.ArrayList;
 
-import okosama.app.ControlIDs;
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
 import okosama.app.service.MediaInfo;
-import okosama.app.storage.FilterData;
-import okosama.app.storage.GenreData;
-import okosama.app.storage.PlaylistData;
 import okosama.app.storage.Database;
+import okosama.app.storage.FilterData;
+import okosama.app.storage.PlaylistData;
 import okosama.app.tab.TabPage;
-// import okosama.app.storage.QueryHandler;
-// import android.content.AsyncQueryHandler;
-// import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -23,16 +19,18 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.provider.MediaStore.Audio.PlaylistsColumns;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+// import okosama.app.storage.QueryHandler;
+// import android.content.AsyncQueryHandler;
+// import android.content.ContentResolver;
 
 /**
- * AlbumList‚ÌƒAƒ_ƒvƒ^
+ * AlbumListï¿½ÌƒAï¿½_ï¿½vï¿½^
  * @author 25689
  *
  */
@@ -45,7 +43,7 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 	boolean bLastError = false;    	
 	TabPage page;
     
-	boolean bDataUpdating = false;	// “à•”ƒf[ƒ^‚ğXV’†‚©‚Ç‚¤‚©
+	boolean bDataUpdating = false;	// ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½
 	public boolean IsDataUpdating()
 	{
 		return bDataUpdating;
@@ -64,9 +62,9 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
     int mTitleIdx;
     int mIdIdx;
     int mCountIdx;
-    // ƒVƒ‡[ƒgƒJƒbƒgì¬ƒtƒ‰ƒOH
-    // TODO:‚Ç‚¤‚¢‚¤‚Æ‚«‚Éì¬‚·‚é‚Ì‚©•s–¾
-    // ‰ºè‚µ‚½‚çAƒAƒNƒZƒT‚àƒƒ“ƒo•Ï”‚à‚¢‚ç‚È‚¢‚©‚à
+    // ï¿½Vï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½ì¬ï¿½tï¿½ï¿½ï¿½Oï¿½H
+    // TODO:ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Éì¬ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½sï¿½ï¿½
+    // ï¿½ï¿½ï¿½è‚µï¿½ï¿½ï¿½ï¿½Aï¿½Aï¿½Nï¿½Zï¿½Tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½Ïï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½
     boolean createShortcut;
     public boolean isCreateShortcut() {
 		return createShortcut;
@@ -75,7 +73,7 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 		this.createShortcut = createShortcut;
 	}
     
-    // View‚Ìƒzƒ‹ƒ_H
+    // Viewï¿½Ìƒzï¿½ï¿½ï¿½_ï¿½H
     static class ViewHolder {
         TextView line1;
         TextView line2;
@@ -84,7 +82,7 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
     }
    
     /**
-     * ƒAƒ_ƒvƒ^‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * ï¿½Aï¿½_ï¿½vï¿½^ï¿½ÌƒRï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
      * @param currentactivity
      * @param layout
      * @param cursor
@@ -102,37 +100,37 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
         // this.items = items;
         this.iLayoutId = layout;
         this.inflater = (LayoutInflater) currentactivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        // ƒAƒNƒeƒBƒrƒeƒB‚Ìİ’è
-        // ƒNƒGƒŠƒnƒ“ƒhƒ‰‚Ìì¬
+        // ï¿½Aï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½Ìİ’ï¿½
+        // ï¿½Nï¿½Gï¿½ï¿½ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Ìì¬
         //ctx = context;
         // mList = list;
         mActivity = currentactivity;
         //mQueryHandler = new QueryHandler(mActivity.getContentResolver(), mActivity);
         // mQueryHandler = new QueryHandler(mActivity.getContentResolver(), this);
         
-        // album‚Æartist‚ğ•\‚·•¶š—ñ
+        // albumï¿½ï¿½artistï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         mUnknownAlbum = mActivity.getString(R.string.unknown_album_name);
         mUnknownArtist = mActivity.getString(R.string.unknown_artist_name);
-                // ƒŠƒ\[ƒX‚Ìæ“¾
-        // nowplaying‚ÌƒI[ƒo[ƒŒƒCH
+                // ï¿½ï¿½ï¿½\ï¿½[ï¿½Xï¿½Ìæ“¾
+        // nowplayingï¿½ÌƒIï¿½[ï¿½oï¿½[ï¿½ï¿½ï¿½Cï¿½H
         // mResources = mActivity.getResources();
         mNowPlayingOverlay = OkosamaMediaPlayerActivity.getResourceAccessor().getResourceDrawable(R.drawable.indicator_ic_mp_playing_list);
 
-        // ƒAƒ‹ƒoƒ€ƒAƒCƒRƒ“‚Ìì¬H
-        // TODO: ARGB4444‚ğ—˜—p‚·‚é
+        // ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½Ìì¬ï¿½H
+        // TODO: ARGB4444ï¿½ğ—˜—pï¿½ï¿½ï¿½ï¿½
         Bitmap b = OkosamaMediaPlayerActivity.getResourceAccessor().createBitmapFromDrawableId( R.drawable.albumart_mp_unknown_list);
         mDefaultAlbumIcon = new BitmapDrawable(mActivity.getResources(), b);
         // no filter or dither, it's a lot faster and we can't tell the difference
-        // Bitmap‚ğg‚¤Drawable‚É‘Î‚µA‰ñ“]^Šg‘å^k¬‚Ì‚Æ‚«‚ÉƒtƒBƒ‹ƒ^‚ğ‚©‚¯‚é‚©‚Ç‚¤‚©BTrue‚É‚·‚é‚ÆƒLƒŒƒC‚É‚È‚é‚ª’x‚¢B
+        // Bitmapï¿½ï¿½ï¿½gï¿½ï¿½Drawableï¿½É‘Î‚ï¿½ï¿½Aï¿½ï¿½]ï¿½^ï¿½gï¿½ï¿½^ï¿½kï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½Éƒtï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½BTrueï¿½É‚ï¿½ï¿½ï¿½ÆƒLï¿½ï¿½ï¿½Cï¿½É‚È‚é‚ªï¿½xï¿½ï¿½ï¿½B
         mDefaultAlbumIcon.setFilterBitmap(false);
-        // F‚Ì­‚È‚¢(8bit/FˆÈ‰º)ƒfƒoƒCƒX‚É•\¦‚·‚é‚Æ‚«‚ÉAƒfƒBƒU‚ğ‚©‚¯‚é‚©‚Ç‚¤‚©‚ğw’è‚·‚éBtrue‚ÅƒfƒBƒU‚·‚éB’x‚¢B
+        // ï¿½Fï¿½Ìï¿½ï¿½È‚ï¿½(8bit/ï¿½Fï¿½È‰ï¿½)ï¿½fï¿½oï¿½Cï¿½Xï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÉAï¿½fï¿½Bï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚·ï¿½ï¿½Btrueï¿½Åƒfï¿½Bï¿½Uï¿½ï¿½ï¿½ï¿½Bï¿½xï¿½ï¿½ï¿½B
         mDefaultAlbumIcon.setDither(false);
         
-        // ƒJ[ƒ\ƒ‹‚ªİ’è‚³‚ê‚Ä‚¢‚½‚çAŠeƒJƒ‰ƒ€‚Ìindex‚ğ“à•”‚É•Û‚·‚é
+        // ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½eï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½indexï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É•Ûï¿½ï¿½ï¿½ï¿½ï¿½
         // getColumnIndices(cursor);
     }
     /**
-     * ƒNƒGƒŠƒnƒ“ƒhƒ‰‚Ìæ“¾
+     * ï¿½Nï¿½Gï¿½ï¿½ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Ìæ“¾
      * @return
      */
 //    public AsyncQueryHandler getQueryHandler() {
@@ -140,7 +138,7 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 //    }
 
     /**
-     * V‚µ‚¢ƒrƒ…[‚Ìì¬H
+     * ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½Ìì¬ï¿½H
      */
     @Override
     public View getView(int pos, View convertView, ViewGroup parent) {
@@ -161,19 +159,19 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
     }
 
     /**
-     * ƒrƒ…[‚Æƒf[ƒ^‚ğ•R‚Â‚¯‚é
+     * ï¿½rï¿½ï¿½ï¿½[ï¿½Æƒfï¿½[ï¿½^ï¿½ï¿½Rï¿½Â‚ï¿½ï¿½ï¿½
      */
     //@Override
     public void bindView(View view, int pos) {
         
-       	// ƒ^ƒO‚©‚çƒrƒ…[ƒzƒ‹ƒ_[‚ğæ“¾
+       	// ï¿½^ï¿½Oï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½ï¿½ï¿½æ“¾
         ViewHolder vh = (ViewHolder) view.getTag();
-        // position‚©‚çƒf[ƒ^‚ğæ“¾
+        // positionï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½æ“¾
     	PlaylistData data = getItem(pos);
     	
     	if( data == null )
     	{
-    		// ƒf[ƒ^‚ª‚È‚¢‚Æ‚¢‚¤‚Ì‚ÍAŠ®‘S‚É‚¨‚©‚µ‚¢ó‘Ô‚¾‚ªEE
+    		// ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½È‚ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½Ì‚ÍAï¿½ï¿½ï¿½Sï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½ï¿½ï¿½Eï¿½E
     		 vh.line1.setText("");
     		 vh.line2.setText("");
     		 vh.icon.setImageDrawable(null);
@@ -181,27 +179,27 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
     		 return;
     	}
  
-    	// ƒ^ƒCƒgƒ‹‚Ìİ’è
+    	// ï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½Ìİ’ï¿½
        // TextView tv = (TextView) view.findViewById(R.id.line1);
         
         String name = data.getName();
         vh.line1.setText(name);
         
-        // id‚ğæ“¾H
+        // idï¿½ï¿½ï¿½æ“¾ï¿½H
         long id = data.getDataId();
         
-        // id‚Ìí—Ş‚É‚æ‚Á‚ÄAƒAƒCƒRƒ“‚Ì‰æ‘œ‚ğ•Ï‚¦‚é
+        // idï¿½Ìï¿½Ş‚É‚ï¿½ï¿½ï¿½ÄAï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½Ì‰æ‘œï¿½ï¿½Ï‚ï¿½ï¿½ï¿½
         ImageView iv = vh.icon;//(ImageView) view.findViewById(R.id.icon);
         
         iv.setImageResource(R.drawable.playlist_normal);
         
-        // ƒAƒCƒRƒ“‚ÌƒŒƒCƒAƒEƒg‚ğƒŠƒZƒbƒgH
-        // TODO: ˆÓ–¡‚È‚¢‚æ‚¤‚ÉŠ´‚¶‚éEEE
+        // ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½Ìƒï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½H
+        // TODO: ï¿½Ó–ï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½ÉŠï¿½ï¿½ï¿½ï¿½ï¿½Eï¿½Eï¿½E
         ViewGroup.LayoutParams p = iv.getLayoutParams();
         p.width = ViewGroup.LayoutParams.WRAP_CONTENT;
         //p.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
-        // ‘¼‚Íg‚í‚È‚¢
+        // ï¿½ï¿½ï¿½Ígï¿½ï¿½È‚ï¿½
         iv = vh.play_indicator; //view.findViewById(R.id.play_indicator);
         iv.setVisibility(View.GONE);
 
@@ -220,7 +218,7 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
     }
     
     /**
-     * ƒf[ƒ^‚Ì•ÏXH
+     * ï¿½fï¿½[ï¿½^ï¿½Ì•ÏXï¿½H
      */
     // @Override
     public void updateData(ArrayList<PlaylistData> items) {
@@ -228,11 +226,11 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
     	for (PlaylistData data : items) {
     		if( isFilterData(data) == false )
     		{
-    			// ’Šo‘ÎÛ‚Å‚È‚¢ê‡Ši”[‚µ‚È‚¢
+    			// ï¿½ï¿½ï¿½oï¿½ÎÛ‚Å‚È‚ï¿½ï¿½ê‡ï¿½iï¿½[ï¿½ï¿½ï¿½È‚ï¿½
     			continue;
     		}
     	    add(data);
-//        	Log.i("updateData - add","id" + data.getPlaylistId() 
+//        	LogWrapper.i("updateData - add","id" + data.getPlaylistId() 
 //        			+ " name:" + data.getPlaylistName() );    	    
     	}
     	notifyDataSetChanged();
@@ -250,9 +248,9 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
     		return -1;
     	}
     	bDataUpdating = true;
-    	// Log.i("insertAllDataFromCursor","start");
+    	// LogWrapper.i("insertAllDataFromCursor","start");
 //    	if (mActivity.isFinishing() && cursor != null ) {
-//        	// ƒAƒNƒeƒBƒrƒeƒB‚ªI—¹’†‚ÅA‚Ü‚¾ƒJ[ƒ\ƒ‹‚ªc‚Á‚Ä‚¢‚éê‡AƒJ[ƒ\ƒ‹‚ğƒNƒ[ƒY
+//        	// ï¿½Aï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ÅAï¿½Ü‚ï¿½ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½Y
 //            cursor.close();
 //            cursor = null;
 //        }
@@ -265,11 +263,11 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
             protected Integer doInBackground(Cursor... params) {
-            	Log.i("playlist - doInBackground","start");
+            	LogWrapper.i("playlist - doInBackground","start");
             	items.clear();
             	bLastError = false;
             	
-            	// ƒJ[ƒ\ƒ‹‚ğƒ‹[ƒv‚·‚é
+            	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½
             	Cursor cursor = Database.getInstance(
             			OkosamaMediaPlayerActivity.isExternalRef()
             	).createPlaylistCursor(null, null, false);
@@ -278,7 +276,7 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 
         		if( cursor == null || cursor.isClosed() )
         		{
-        			Log.w("PlaylistAdp - doInBk", "cursor closed!");
+        			LogWrapper.w("PlaylistAdp - doInBk", "cursor closed!");
         			return -1;
         		}
         		
@@ -288,7 +286,7 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 	        		{
 	        			return -1;
 	        		}
-	            	Log.i("playlist - doInBackground","moveToFirst");
+	            	LogWrapper.i("playlist - doInBackground","moveToFirst");
 	            	if( 0 < cursor.getCount() )
 	            	{
 	            	
@@ -296,7 +294,7 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 		        		do 
 		        		{
 		            		PlaylistData data = new PlaylistData();
-		        			// ‘S‚Ä‚Ì—v‘f‚ğƒ‹[ƒv‚·‚é
+		        			// ï¿½Sï¿½Ä‚Ì—vï¿½fï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½
 		            		data.setDataId(cursor.getLong(mIdIdx));
 		        			data.setName(cursor.getString(mTitleIdx));
 		        	        if( 0 <= data.getDataId() ) {
@@ -308,7 +306,7 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 		        		        }
 		        	        }
 		        			
-		        			// ‚»‚ñ‚ÈƒJƒ‰ƒ€‚Í‚È‚¢
+		        			// ï¿½ï¿½ï¿½ï¿½ÈƒJï¿½ï¿½ï¿½ï¿½ï¿½Í‚È‚ï¿½
 		        			// data.setPlaylistCount(cursor.getString(mCountIdx));
 		        			items.add(data);
 		        		} while( deleted == false
@@ -326,13 +324,13 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
             @Override
             protected void onPostExecute(Integer ret) 
             {
-            	Log.i("onPostExecute","ret=" + ret );
+            	LogWrapper.i("onPostExecute","ret=" + ret );
             	if( ret < 0 )
             	{
                 	bLastError = true;
             	}
-            	// Ši”[I—¹
-            	// “ñdŠÇ—‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚Ä‚¢‚é‚ªAƒAƒ_ƒvƒ^‚É‚à“¯—l‚Ìƒf[ƒ^‚ğŠi”[‚·‚é
+            	// ï¿½iï¿½[ï¿½Iï¿½ï¿½
+            	// ï¿½ï¿½dï¿½Ç—ï¿½ï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½é‚ªï¿½Aï¿½Aï¿½_ï¿½vï¿½^ï¿½É‚ï¿½ï¿½ï¿½ï¿½lï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½
             	updateData( items );
             	// TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_PLAYLIST);
             	if( page != null )
@@ -348,8 +346,8 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
     private int getColumnIndices(Cursor cursor) {
         if (cursor != null) {
         	try {
-	        	// ƒJ[ƒ\ƒ‹‚ªnull‚Å‚È‚¯‚ê‚Î
-	        	// ƒJ[ƒ\ƒ‹‚©‚çAŠeƒJƒ‰ƒ€‚Ìindex‚ğæ“¾‚µAƒƒ“ƒo•Ï”‚ÉŠi”[‚·‚é
+	        	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½nullï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½
+	        	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½eï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½indexï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½oï¿½Ïï¿½ï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½ï¿½
                 mTitleIdx = cursor.getColumnIndexOrThrow(PlaylistsColumns.NAME);
                 mIdIdx = cursor.getColumnIndexOrThrow(BaseColumns._ID);
                 // mCountIdx = cursor.getColumnIndexOrThrow(BaseColumns._COUNT);
@@ -373,12 +371,12 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 		this.items = items;
 	}
     @Override
-    // ‹È‚Ì•ÏX‚È‚ÇAó‘Ô‚ª•Ï‚í‚Á‚½‚Æ‚«‚ÉAŠO•”‚©‚ç•\¦‚ğXV‚³‚¹‚é
+    // ï¿½È‚Ì•ÏXï¿½ï¿½ï¿½È‚ÇAï¿½ï¿½Ô‚ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÉAï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public int updateStatus()
     {
-    	// 2014/1/18 add filter—p
+    	// 2014/1/18 add filterï¿½p
     	updateData( items );    	
-    	// •\¦‚ğXV?
+    	// ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½V?
     	notifyDataSetChanged();
     	return 0;
     }
@@ -388,7 +386,7 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 	}
 	@Override
 	public int getMainItemCount() {
-		// b’è”Å
+		// ï¿½bï¿½ï¿½ï¿½
 		return 0;// getCount();
 	}
 	@Override
@@ -416,22 +414,22 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 		filterData = data;
 	}
 	/**
-	 *’:‚È‚ñ‚©•Ï‚¾‚¯‚ÇA•\¦‘ÎÛ‚Ìê‡Atrue
+	 *ï¿½ï¿½:ï¿½È‚ñ‚©•Ï‚ï¿½ï¿½ï¿½ï¿½ÇAï¿½\ï¿½ï¿½ï¿½ÎÛ‚Ìê‡ï¿½Atrue
 	 */	
 	@Override
 	public boolean isFilterData(PlaylistData data) {
 		boolean bRet = true;
 		if( filterData != null && data != null)
 		{
-			// TODO: ‚æ‚­l‚¦‚Ä‚İ‚é‚ÆA‘S•”‚¢‚¯‚é‚©‚à‚µ‚ê‚È‚¢			
-//			// ƒA[ƒeƒBƒXƒgID
+			// TODO: ï¿½æ‚­ï¿½lï¿½ï¿½ï¿½Ä‚İ‚ï¿½ÆAï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½			
+//			// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gID
 //			if( filterData.getArtistId() != null )
 //			{
 //				if( data.getTrackArtistId() != null
 //				&& filterData.getArtistId().equals(data.getTrackArtistId()) )
 //				{
-//					// ƒA[ƒeƒBƒXƒg‚ªƒtƒBƒ‹ƒ^‘ÎÛH
-//					// data.getTrackArtistId()‚Í–{“–‚É“ü‚Á‚Ä‚¢‚é‚Ì‚¾‚ë‚¤‚©EEEBTODO:’²¸
+//					// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ÎÛH
+//					// data.getTrackArtistId()ï¿½Í–{ï¿½ï¿½ï¿½É“ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ë‚¤ï¿½ï¿½ï¿½Eï¿½Eï¿½Eï¿½BTODO:ï¿½ï¿½ï¿½ï¿½
 //					bRet = true;
 //				}
 //				else
@@ -439,13 +437,13 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 //					return false;
 //				}
 //			}
-//			// ƒA[ƒeƒBƒXƒg–¼
+//			// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½
 //			if( filterData.getStrArtist() != null && 0 < filterData.getStrArtist().length() )
 //			{
 //				if( data.getTrackArtist() != null
 //				&& -1 != data.getTrackArtist().indexOf(filterData.getStrArtist()) )
 //				{
-//					// ƒA[ƒeƒBƒXƒg–¼‚ªˆê•”ˆê’v
+//					// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ê•”ï¿½ï¿½v
 //					bRet = true;
 //				}
 //				else
@@ -454,8 +452,8 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 //				}
 //			}
 //			
-//			// ƒAƒ‹ƒoƒ€ID
-//			// TODO: ƒAƒ‹ƒoƒ€–¼			
+//			// ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ID
+//			// TODO: ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½			
 //			if( filterData.getAlbumId() != null )
 //			{
 //		    	//setAlbumId( filterData.getAlbumId() );//OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.getAlbumID() );
@@ -463,8 +461,8 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 //				if( data.getTrackAlbumId() != null
 //				&& filterData.getAlbumId().equals(data.getTrackAlbumId()) )
 //				{
-//					// ƒA[ƒeƒBƒXƒg‚ªƒtƒBƒ‹ƒ^‘ÎÛH
-//					// data.getTrackArtistId()‚Í–{“–‚É“ü‚Á‚Ä‚¢‚é‚Ì‚¾‚ë‚¤‚©EEEBTODO:’²¸
+//					// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ÎÛH
+//					// data.getTrackArtistId()ï¿½Í–{ï¿½ï¿½ï¿½É“ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ë‚¤ï¿½ï¿½ï¿½Eï¿½Eï¿½Eï¿½BTODO:ï¿½ï¿½ï¿½ï¿½
 //					bRet = true;
 //				}
 //				else
@@ -472,13 +470,13 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 //					return false;
 //				}
 //			}
-//			// ƒAƒ‹ƒoƒ€–¼
+//			// ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½
 //			if( filterData.getStrAlbum() != null && 0 < filterData.getStrAlbum().length() )
 //			{
 //				if( data.getTrackAlbum() != null
 //				&& -1 != data.getTrackAlbum().indexOf(filterData.getStrAlbum()) )
 //				{
-//					// ƒA[ƒeƒBƒXƒg–¼‚ªˆê•”ˆê’v
+//					// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ê•”ï¿½ï¿½v
 //					bRet = true;
 //				}
 //				else
@@ -487,7 +485,7 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 //				}
 //			}
 			
-//			// ƒWƒƒƒ“ƒ‹ID
+//			// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ID
 //			if( filterData.getGenreId() != null )
 //			{
 //				ArrayList<GenreData> genres = mActivity.getGenreStocker().getGenreOfAudio( 
@@ -503,7 +501,7 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 //					{
 //						if( filterData.getGenreId().equals( String.valueOf(genre.getDataId() ) ) )
 //						{
-//							// ƒWƒƒƒ“ƒ‹‚ªˆê’v
+//							// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½v
 //							bRet = true;
 //							bNoHit = false;
 //							break;
@@ -515,16 +513,16 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 //					return false;
 //				}
 //			}
-//			// TODO:‚»‚ñ‚È‚à‚Ì‚ÅƒtƒBƒ‹ƒ^‚ğ‚©‚¯‚é‹@”\‚Í•s—v‚Æ‚Ív‚¤‚ªA”O‚Ì‚½‚ßƒgƒ‰ƒbƒNID‚à
+//			// TODO:ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì‚Åƒtï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½\ï¿½Í•sï¿½vï¿½Æ‚Ívï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Oï¿½Ì‚ï¿½ï¿½ßƒgï¿½ï¿½ï¿½bï¿½NIDï¿½ï¿½
 			
 			
-//			// ƒgƒ‰ƒbƒN–¼
+//			// ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½
 //			if( filterData.getStrSong() != null && 0 < filterData.getStrSong().length() )
 //			{
 //				if( data.getName() != null
 //				&& -1 != data.getName().indexOf(filterData.getStrSong()) )
 //				{
-//					// ƒgƒ‰ƒbƒN–¼‚ªˆê•”ˆê’v
+//					// ï¿½gï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ê•”ï¿½ï¿½v
 //					bRet = true;
 //				}
 //				else
@@ -532,13 +530,13 @@ implements IAdapterUpdate<PlaylistData> { //, IFilterable<PlaylistData> {
 //					return false;
 //				}
 //			}
-			// ƒvƒŒƒCƒŠƒXƒg–¼
+			// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½
 			if( filterData.getStrPlaylist() != null && 0 < filterData.getStrPlaylist().length() )
 			{
 				if( data.getName() != null
 				&& -1 != data.getName().indexOf(filterData.getStrPlaylist()) )
 				{
-					// ƒvƒŒƒCƒŠƒXƒg–¼‚ªˆê•”ˆê’v
+					// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ê•”ï¿½ï¿½v
 					bRet = true;
 				}
 				else

@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import okosama.app.ControlDefs;
 import okosama.app.ControlIDs;
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.R.drawable;
@@ -25,22 +26,21 @@ import okosama.app.storage.PlaylistData;
 import okosama.app.storage.VideoData;
 import okosama.app.tab.TabComponentActionSetter;
 import okosama.app.tab.TabComponentPropertySetter;
-import okosama.app.tab.TabPage;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
+import okosama.app.tab.TabPage;
 import okosama.app.widget.AutoCompleteEdit;
 import okosama.app.widget.Button;
 import okosama.app.widget.Combo;
-//import okosama.app.widget.Image;
 import okosama.app.widget.absWidget;
 import android.app.Activity;
-//import android.graphics.Color;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView.ScaleType;
+//import okosama.app.widget.Image;
+//import android.graphics.Color;
 
 public class SearchPanel extends ControlPanel {
 	
@@ -145,7 +145,7 @@ public class SearchPanel extends ControlPanel {
 				SearchPanel.getInstance().switchPanelType(SEARCH_PANEL_TYPE_VIDEO);
 				break;
 			default:
-				// í•Ê‚ª‚È‚¢ê‡‚ÍA•\¦‚³‚¹‚È‚¢
+				// ï¿½ï¿½Ê‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½ÍAï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 				return;
 			}
 			if( null != act.getAdpStocker().get(act.getCurrentTabPageId()) )
@@ -182,7 +182,7 @@ public class SearchPanel extends ControlPanel {
 		}
 		else
 		{
-			Log.e("error","insert search control panel");
+			LogWrapper.e("error","insert search control panel");
 		}
 	}
 	public static void removeFromParent()//ToLayout( ViewGroup tabBaseLayout )
@@ -431,18 +431,18 @@ public class SearchPanel extends ControlPanel {
 				null,
 				null
 			};
-		// ƒ{ƒ^ƒ“‚ğì¬AˆÊ’u‚ğ‡‚í‚¹AƒAƒNƒVƒ‡ƒ“‚ğİ’è‚µAƒŒƒCƒAƒEƒg‚É”z’u
+		// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½Aï¿½Ê’uï¿½ï¿½ï¿½ï¿½ï¿½í‚¹ï¿½Aï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Aï¿½ï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½É”zï¿½u
 		int i=0;
 		for( absWidget widget : widgets )
 		{
 			widget.acceptConfigurator(creationData[i]);
-			// TODO:ƒ{ƒ^ƒ“‚ÌƒAƒNƒVƒ‡ƒ“‚ğİ’è
+			// TODO:ï¿½{ï¿½^ï¿½ï¿½ï¿½ÌƒAï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 			if( actionSetterCont[i] != null )
 			{
 				widget.acceptConfigurator(actionSetterCont[i]);
 			}
 			
-			// ƒ{ƒ^ƒ“‚ğ‚±‚Ìƒ^ƒuq€–Ú‚Æ‚µ‚Ä’Ç‰Á
+			// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½qï¿½ï¿½ï¿½Ú‚Æ‚ï¿½ï¿½Ä’Ç‰ï¿½
 			addChild( creationData[i].getInternalID(), widget );			
 			tabBaseLayout.addView( widget.getView() );
 			i++;
@@ -451,7 +451,7 @@ public class SearchPanel extends ControlPanel {
 	}
 
 	/**
-	 * ƒpƒlƒ‹í•Ê‚É‚æ‚Á‚ÄAƒpƒlƒ‹‚Ì“à—e‚ğØ‚è‘Ö‚¦‚é
+	 * ï¿½pï¿½lï¿½ï¿½ï¿½ï¿½Ê‚É‚ï¿½ï¿½ï¿½ÄAï¿½pï¿½lï¿½ï¿½ï¿½Ì“ï¿½ï¿½eï¿½ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½
 	 * @param panelTypeCode
 	 */
 	void switchPanelType(int panelTypeCode)
@@ -459,7 +459,7 @@ public class SearchPanel extends ControlPanel {
 		LayoutParams lpArtist=null;
 		LayoutParams lpAlbum=null;
 		
-		// ’l‚ğˆê’UƒNƒŠƒA
+		// ï¿½lï¿½ï¿½ï¿½ï¿½Uï¿½Nï¿½ï¿½ï¿½A
 		clearAllControlValue();
 		switch( panelTypeCode )
 		{
@@ -674,17 +674,17 @@ public class SearchPanel extends ControlPanel {
 		imgAlbum.addAction(IViewAction.ACTION_ID_ONCLICK, actAlbum);
 		imgAlbum.configureAction();
 		
-		// Song‚ÌƒeƒLƒXƒg
+		// Songï¿½Ìƒeï¿½Lï¿½Xï¿½g
 		TrackSpinnerAdapter adpSong = new TrackSpinnerAdapter(
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
 				android.R.layout.simple_spinner_item,
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTrackAdp().getAllItems());
 		edtSong.setAdapter(adpSong);
 		
-		// Spinner‚ÆƒGƒfƒBƒbƒgƒ{ƒbƒNƒX‚Ì•âŠ®‚Ìİ’è
+		// Spinnerï¿½ÆƒGï¿½fï¿½Bï¿½bï¿½gï¿½{ï¿½bï¿½Nï¿½Xï¿½Ì•âŠ®ï¿½Ìİ’ï¿½
 //		cmbArtist.setAdapter(
 //				(SpinnerAdapter) OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getArtistAdp());
-		// Album‚ÌƒXƒsƒi
+		// Albumï¿½ÌƒXï¿½sï¿½i
 		AlbumSpinnerAdapter adpAlbum = new AlbumSpinnerAdapter(
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
 				android.R.layout.simple_spinner_item,
@@ -699,10 +699,10 @@ public class SearchPanel extends ControlPanel {
 			adpAlbum
 		);
 		adpAlbum.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// Album‚ÌEdit
+		// Albumï¿½ï¿½Edit
 		edtAlbum.setAdapter(adpAlbum);
 		
-		// Artist‚ÌƒXƒsƒi
+		// Artistï¿½ÌƒXï¿½sï¿½i
 		ArrayList<ArtistGroupData> arrArtist = new ArrayList<ArtistGroupData>();
 		HashMap<Integer,ArtistGroupData> groupDataMap = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getArtistAdp().getGroupData();
 		for( ArtistGroupData data : groupDataMap.values() )
@@ -723,10 +723,10 @@ public class SearchPanel extends ControlPanel {
 		);
 		adpArtist.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
-		// Artist‚ÌEdit
+		// Artistï¿½ï¿½Edit
 		edtArtist.setAdapter(adpArtist);
 
-		// Genre‚ÌƒXƒsƒi
+		// Genreï¿½ÌƒXï¿½sï¿½i
 		SpinnerArrayAdapter<GenreData> adpGenre = new SpinnerArrayAdapter<GenreData>(
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
 				android.R.layout.simple_spinner_item,
@@ -741,7 +741,7 @@ public class SearchPanel extends ControlPanel {
 		);
 		adpGenre.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
-		// Playlist‚ÌEdit
+		// Playlistï¿½ï¿½Edit
 		SpinnerArrayAdapter<PlaylistData> adpPlaylist = new SpinnerArrayAdapter<PlaylistData>(		
 		// PlaylistSpinnerAdapter adpPlaylist = new PlaylistSpinnerAdapter(
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),
@@ -754,7 +754,7 @@ public class SearchPanel extends ControlPanel {
 					)
 				);
 		edtPlaylist.setAdapter(adpPlaylist);		
-		// Video‚ÌEdit
+		// Videoï¿½ï¿½Edit
 		SpinnerArrayAdapter<VideoData> adpVideo = new SpinnerArrayAdapter<VideoData>(		
 		// VideoSpinnerAdapter adpVideo = new VideoSpinnerAdapter(
 			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(),

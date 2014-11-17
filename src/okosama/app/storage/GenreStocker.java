@@ -3,6 +3,7 @@ package okosama.app.storage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -12,7 +13,7 @@ import android.util.Log;
 
 public class GenreStocker {
 	public static final String GENRENAME_SEPARATE_STRING = "/";
-	// ƒJƒ‰ƒ€‚ÌƒCƒ“ƒfƒbƒNƒX•Û—p 
+	// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Ûï¿½ï¿½p 
     int mNameIdx;
     int mGenreIdIdx;
     // int mAudioIdIdx = MediaStore.Audio.Media._ID;
@@ -20,18 +21,18 @@ public class GenreStocker {
     
 	private ArrayList<GenreData> allItems = new ArrayList<GenreData>();
 	
-	// ƒI[ƒfƒBƒI‚É‘Î‚·‚éƒWƒƒƒ“ƒ‹‚Ìˆê——
+	// ï¿½Iï¿½[ï¿½fï¿½Bï¿½Iï¿½É‘Î‚ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìˆê——
 	private HashMap<Long,ArrayList<GenreData>> allGenreOfAudio = new HashMap<Long,ArrayList<GenreData>>();
 	
 	/**
-	 * audioid‚É‘Î‚·‚éƒWƒƒƒ“ƒ‹î•ñ‚Ìˆê——‚ğ•Ô‹p‚·‚é
+	 * audioidï¿½É‘Î‚ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìˆê——ï¿½ï¿½Ô‹pï¿½ï¿½ï¿½ï¿½
 	 * @param audioId
 	 * @return
 	 */
 	public ArrayList<GenreData> getGenreOfAudio( long audioId )
 	{
 		ArrayList<GenreData> ret = null;
-		// Log.i("getGenreOfAudio", "allGenreOfAudio size=" + allGenreOfAudio.size() );
+		// LogWrapper.i("getGenreOfAudio", "allGenreOfAudio size=" + allGenreOfAudio.size() );
 		
 		synchronized( allGenreOfAudio )
     	{
@@ -44,7 +45,7 @@ public class GenreStocker {
 	}
 	
 	/**
-	 * String‚ğ•\¦—p‚ÉƒtƒH[ƒ}ƒbƒg‚µ‚Ä•Ô‚·ƒo[ƒWƒ‡ƒ“
+	 * Stringï¿½ï¿½\ï¿½ï¿½ï¿½pï¿½Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½ï¿½ï¿½Ä•Ô‚ï¿½ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½
 	 * @param audioId
 	 * @return
 	 */
@@ -54,7 +55,7 @@ public class GenreStocker {
 		ArrayList<GenreData> lst = getGenreOfAudio(audioId);
 		if( lst != null )
 		{
-			// Log.i("getGenreOfAudio", "getGenre audioId=" + audioId + " size=" + lst.size() );
+			// LogWrapper.i("getGenreOfAudio", "getGenre audioId=" + audioId + " size=" + lst.size() );
 			StringBuilder sb = new StringBuilder();
 			boolean bFirst = true;
 			for( GenreData data : lst )
@@ -76,13 +77,13 @@ public class GenreStocker {
 	}
 	
     /**
-     * ƒJƒ‰ƒ€‚ÌƒCƒ“ƒfƒbƒNƒX‚ğİ’è
+     * ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½İ’ï¿½
      * @param cursor
      */
     private int getColumnIndices(Cursor cursor) {
         if (cursor != null) {
-        	// ŠeƒJƒ‰ƒ€‚ÌƒCƒ“ƒfƒbƒNƒX‚ğİ’è
-        	// ƒ^ƒCƒgƒ‹AƒA[ƒeƒBƒXƒgAŠÔ
+        	// ï¿½eï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½İ’ï¿½
+        	// ï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½Aï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½Aï¿½ï¿½ï¿½ï¿½
         	mNameIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Genres.NAME);
         	mGenreIdIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Genres._ID);
         }
@@ -90,26 +91,26 @@ public class GenreStocker {
     }
 	
     /**
-     * android‚ÌƒƒfƒBƒA‚©‚çAƒWƒƒƒ“ƒ‹‚Ìƒf[ƒ^‚ğ“à•”‚Éİ’è‚·‚é
+     * androidï¿½Ìƒï¿½ï¿½fï¿½Bï¿½Aï¿½ï¿½ï¿½ï¿½Aï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éİ’è‚·ï¿½ï¿½
      * @return
      */
     public int stockMediaDataFromDevice()
     {
-    	Log.i("stockMediaDataFromDevice - genre","start");
+    	LogWrapper.i("stockMediaDataFromDevice - genre","start");
             	
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
             protected Integer doInBackground(Cursor... params) {
-            	Log.i("doInBackground - genre","start");
+            	LogWrapper.i("doInBackground - genre","start");
             	
-            	// ƒJ[ƒ\ƒ‹‚ğƒ‹[ƒv‚·‚é
+            	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½
     			Cursor cursor = Database.getInstance(
     				OkosamaMediaPlayerActivity.isExternalRef()
     			).createGenreCursor();			
             	
         		if( cursor == null || cursor.isClosed() )
         		{
-        			Log.w("genre - doInBk", "cursor is null or cursor closed!");
+        			LogWrapper.w("genre - doInBk", "cursor is null or cursor closed!");
         			return -1;
         		}
         		
@@ -126,12 +127,12 @@ public class GenreStocker {
 			            	allGenreOfAudio.clear();
 			            	if( 0 < cursor.getCount() )
 			            	{
-				            	Log.i("doInBackground","moveToFirst");
+				            	LogWrapper.i("doInBackground","moveToFirst");
 				        		cursor.moveToFirst();
 				        		do 
 				        		{
 				            		GenreData data = new GenreData();
-				        			// ‘S‚Ä‚Ì—v‘f‚ğƒ‹[ƒv‚·‚é
+				        			// ï¿½Sï¿½Ä‚Ì—vï¿½fï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½
 				            		data.setDataId( cursor.getInt(mGenreIdIdx) );
 				            		data.setName( cursor.getString(mNameIdx) );
 				            		
@@ -140,7 +141,7 @@ public class GenreStocker {
 					    			).createSongListCursorFromGenre(data.getDataId());
 					    			try
 					    			{
-								        // Log.i("Tag-Number of songs for this genre", data.getGenreName() + ":" + cursorAudio.getCount()+"");
+								        // LogWrapper.i("Tag-Number of songs for this genre", data.getGenreName() + ":" + cursorAudio.getCount()+"");
 										if(cursorAudio.moveToFirst())
 										{
 											do{
@@ -158,7 +159,7 @@ public class GenreStocker {
 													arrGenreOfAudio = new ArrayList<GenreData>();
 												}
 												arrGenreOfAudio.add(data);
-												// Log.i("stock - genre", audioId + " " + data.getGenreId() );
+												// LogWrapper.i("stock - genre", audioId + " " + data.getGenreId() );
 												allGenreOfAudio.put(audioId, arrGenreOfAudio);
 											}while(
 												OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false

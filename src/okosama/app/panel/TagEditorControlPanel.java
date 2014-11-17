@@ -1,13 +1,13 @@
 package okosama.app.panel;
 
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import android.app.Activity;
-import android.util.Log;
 import android.view.ViewGroup;
 
 /**
- * ‰¹Šyƒtƒ@ƒCƒ‹‚Ìƒ^ƒO‚Ì•ÒW
+ * ï¿½ï¿½ï¿½yï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ìƒ^ï¿½Oï¿½Ì•ÒW
  * @author 25689
  *
  */
@@ -39,7 +39,7 @@ public class TagEditorControlPanel extends ControlPanel {
 		}
 		else
 		{
-			Log.e("error","tag editor control panel");
+			LogWrapper.e("error","tag editor control panel");
 		}
 	}
 	public static void removeFromParent()

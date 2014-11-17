@@ -1,8 +1,8 @@
 package okosama.app.panel;
 
+import okosama.app.LogWrapper;
 import okosama.app.R;
 import android.app.Activity;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
@@ -37,7 +37,7 @@ public class TabMoveRightInfoPanel extends ControlPanel {
 		}
 		else
 		{
-			Log.e("error","insert tab move right info panel");
+			LogWrapper.e("error","insert tab move right info panel");
 		}
 	}
 	public void removeToLayout( ViewGroup tabBaseLayout )

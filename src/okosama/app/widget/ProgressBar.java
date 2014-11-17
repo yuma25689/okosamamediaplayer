@@ -1,13 +1,13 @@
 package okosama.app.widget;
 
+import okosama.app.action.IViewAction;
 import android.app.Activity;
 import android.view.View;
-import okosama.app.action.IViewAction;
 
 /**
- * ‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å—˜—p‚·‚éƒvƒƒOƒŒƒXƒo[‚Ìƒnƒ“ƒhƒ‹
- * ->SeekBar‚ÆŠ¨ˆá‚¢‚µ‚Ä‚¢‚½‚æ‚¤‚È‚Ì‚ÅA‰i‹v‚É—˜—p‚³‚ê‚È‚¢‚©‚à‚µ‚ê‚È‚¢
- * Bridgeƒpƒ^[ƒ“‚ğ“K—p
+ * ï¿½ï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Å—ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Xï¿½oï¿½[ï¿½Ìƒnï¿½ï¿½ï¿½hï¿½ï¿½
+ * ->SeekBarï¿½ÆŠï¿½ï¿½á‚¢ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½È‚Ì‚ÅAï¿½iï¿½vï¿½É—ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
+ * Bridgeï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½Kï¿½p
  * @author 25689
  *
  */
@@ -19,12 +19,12 @@ public class ProgressBar extends absWidget {
 	}
 	
 	/**
-	 * À‘•ƒNƒ‰ƒX
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 	 */
 	private ProgressBarImpl impl;
 
 	/**
-	 * À‘•ƒNƒ‰ƒX‚Ìİ’è
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½Ìİ’ï¿½
 	 * @param impl
 	 */
 	public void setImpl(ProgressBarImpl impl) {
@@ -32,7 +32,7 @@ public class ProgressBar extends absWidget {
 	}
 	
 	/**
-	 * —LŒø–³Œø§Œä
+	 * ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param b
 	 */
 	@Override
@@ -41,7 +41,7 @@ public class ProgressBar extends absWidget {
 		impl.setEnabled(b);
 	}
 	/**
-	 * •\¦§Œä
+	 * ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param b
 	 */
 	@Override
@@ -58,7 +58,7 @@ public class ProgressBar extends absWidget {
 	}
 	@Override
 	public int create() {
-		// TODO ‚à‚Á‚Æ”Ä—p«‚Ì‚ ‚é‚â‚è•û‚É‚Å‚«‚é‚Í‚¸
+		// TODO ï¿½ï¿½ï¿½ï¿½ï¿½Æ”Ä—pï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚Å‚ï¿½ï¿½ï¿½Í‚ï¿½
 		impl = new ProgressBarImpl(activity);
 		//impl.setProgressDrawable(activity.getResources().getDrawable(R.drawable.progress_image));
 		// impl.setIndeterminate(false);

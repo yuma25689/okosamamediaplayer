@@ -1,21 +1,20 @@
 package okosama.app.tab;
 // import android.R;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import okosama.app.MusicSettingsActivity;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.panel.PlayControlPanel;
 import okosama.app.panel.TabMoveLeftInfoPanel;
 import okosama.app.panel.TabMoveRightInfoPanel;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 /**
- * ƒ^ƒu‚Ì‚P‚Â‚Ìƒy[ƒW‚ğ–Í•í‚µ‚½ƒNƒ‰ƒX
+ * ï¿½^ï¿½uï¿½Ì‚Pï¿½Â‚Ìƒyï¿½[ï¿½Wï¿½ï¿½Í•í‚µï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
  * @author 25689
  *
  */
@@ -133,13 +132,13 @@ public abstract class TabPage extends TabComponentParent {
 	boolean bWaitAdd = false;
 	
 	/**
-	 * @return “à•”‚ÌtabId‚ªˆø”‚Ì‚à‚Ì‚Æˆê’v‚·‚é‚© 
+	 * @return ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tabIdï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½Ì‚Æˆï¿½vï¿½ï¿½ï¿½é‚© 
 	 */
 	public boolean IsEqualTabId( int tabId ) {
 		return ( this.tabId == tabId );
 	}
 	/**
-	 * ƒ^ƒuƒy[ƒW‚ÌƒXƒe[ƒ^ƒXƒo[‚Æ‚È‚éViewGroup‚ğæ“¾‚·‚é
+	 * ï¿½^ï¿½uï¿½yï¿½[ï¿½Wï¿½ÌƒXï¿½eï¿½[ï¿½^ï¿½Xï¿½oï¿½[ï¿½Æ‚È‚ï¿½ViewGroupï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
 	 * @return
 	 */
 	public ViewGroup getInfoBar()

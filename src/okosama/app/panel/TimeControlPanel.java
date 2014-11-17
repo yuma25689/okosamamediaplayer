@@ -2,35 +2,32 @@ package okosama.app.panel;
 
 import okosama.app.ControlDefs;
 import okosama.app.ControlIDs;
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.R.drawable;
 import okosama.app.action.IViewAction;
-import okosama.app.action.MediaSeekAction;
 import okosama.app.action.TimeButtonClickAction;
 import okosama.app.action.TimeButtonFlickDownAction;
 import okosama.app.factory.DroidWidgetKit;
-// import okosama.app.tab.ITabComponent;
 import okosama.app.tab.TabComponentActionSetter;
 import okosama.app.tab.TabComponentPropertySetter;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
-import okosama.app.widget.Button;
 import okosama.app.widget.Image;
 import okosama.app.widget.Label;
 import okosama.app.widget.LabelImpl;
 import okosama.app.widget.SeekBar;
 import okosama.app.widget.absWidget;
 import android.app.Activity;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
-import android.view.ViewParent;
+import android.view.ViewGroup;
+import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
+// import okosama.app.tab.ITabComponent;
 //import android.view.LayoutInflater;
 //import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 //import android.widget.RelativeLayout;
-import android.widget.ImageView.ScaleType;
 
 public class TimeControlPanel extends ControlPanel {
 	static TimeControlPanel instance;
@@ -65,7 +62,7 @@ public class TimeControlPanel extends ControlPanel {
 		}
 		else
 		{
-			Log.e("error","insert sub control panel");
+			LogWrapper.e("error","insert sub control panel");
 		}
 	}
 	public static void removeFromParent()//ViewGroup tabBaseLayout )
@@ -224,7 +221,7 @@ public class TimeControlPanel extends ControlPanel {
 				,getDurationLabel()
 			};
 		// ---- action
-		// TimeƒRƒ“ƒ|[ƒlƒ“ƒg
+		// Timeï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½g
 		SparseArray< IViewAction > actMapTime1 = new SparseArray< IViewAction >();
 		SparseArray< IViewAction > actMapTime2 = new SparseArray< IViewAction >();
 		SparseArray< IViewAction > actMapTime3 = new SparseArray< IViewAction >();
@@ -253,22 +250,22 @@ public class TimeControlPanel extends ControlPanel {
 				,new TabComponentActionSetter( actMapTime6 )
 				,null
 			};
-		// ƒ{ƒ^ƒ“‚ğì¬AˆÊ’u‚ğ‡‚í‚¹AƒAƒNƒVƒ‡ƒ“‚ğİ’è‚µAƒŒƒCƒAƒEƒg‚É”z’u
+		// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½Aï¿½Ê’uï¿½ï¿½ï¿½ï¿½ï¿½í‚¹ï¿½Aï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Aï¿½ï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½É”zï¿½u
 		int i=0;
 		for( absWidget widget : widgets )
 		{
 			widget.acceptConfigurator(creationData[i]);
-			// TODO:ƒ{ƒ^ƒ“‚ÌƒAƒNƒVƒ‡ƒ“‚ğİ’è
+			// TODO:ï¿½{ï¿½^ï¿½ï¿½ï¿½ÌƒAï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 			if( actionSetterCont[i] != null )
 			{
 				widget.acceptConfigurator(actionSetterCont[i]);
 			}
 			
-			// ƒ{ƒ^ƒ“‚ğ‚±‚Ìƒ^ƒuq€–Ú‚Æ‚µ‚Ä’Ç‰Á
+			// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½qï¿½ï¿½ï¿½Ú‚Æ‚ï¿½ï¿½Ä’Ç‰ï¿½
 			addChild( creationData[i].getInternalID(), widget );
 			tabBaseLayout.addView( widget.getView() );
-			// ƒ{ƒ^ƒ“‚ğ”z’u
-			// ‚±‚ê‚ÍAsetActivate‚Ås‚¤?
+			// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½zï¿½u
+			// ï¿½ï¿½ï¿½ï¿½ÍAsetActivateï¿½Åsï¿½ï¿½?
 			// componentContainer.addView( btn.getView() );
 			i++;
 		}
@@ -333,7 +330,7 @@ public class TimeControlPanel extends ControlPanel {
         }
         ((LabelImpl)durationLabel.getView()).setText(sDuration);
     }
-    // TODO: Œã‚Å•Ê‚ÉˆÚ‚·‚×‚«
+    // TODO: ï¿½ï¿½Å•Ê‚ÉˆÚ‚ï¿½ï¿½×‚ï¿½
 	SeekBar seekBar = null;
 	public SeekBar getProgressBar()
 	{
@@ -344,7 +341,7 @@ public class TimeControlPanel extends ControlPanel {
 		return seekBar;
 	}    
 	/**
-	 * Active‚©‚Ç‚¤‚©‚ğİ’èBq‚Ì“¯ŠÖ”‚àƒR[ƒ‹‚·‚é
+	 * Activeï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½Bï¿½qï¿½Ì“ï¿½ï¿½Öï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param b
 	 *
 	public void setActivate( boolean b )

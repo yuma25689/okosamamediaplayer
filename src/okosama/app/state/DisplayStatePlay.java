@@ -1,10 +1,10 @@
 package okosama.app.state;
 
-import android.view.Menu;
-import android.view.MenuItem;
 import okosama.app.AppStatus;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class DisplayStatePlay extends absDisplayState {
 
@@ -12,12 +12,12 @@ public class DisplayStatePlay extends absDisplayState {
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
 		tab.setCurrentTab(TabPage.TABPAGE_ID_PLAY, true);
 
-		// ƒTƒu‰æ–Ê‚ª‚ ‚é‚Ì‚ÅA2‚ğ•Ô‹p‚·‚é
+		// ï¿½Tï¿½uï¿½ï¿½Ê‚ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ÅA2ï¿½ï¿½Ô‹pï¿½ï¿½ï¿½ï¿½
 		return 2;
 	}
 	@Override
 	public int registerReceivers(int status) {
-		// ‚±‚Ìƒ^ƒu‚ÍA‘ÎÛŠO
+		// ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½ÍAï¿½ÎÛŠO
 		return 2;
 	}
 	@Override

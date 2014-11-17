@@ -29,15 +29,15 @@ public class TabPageVideoView extends TabPage implements OnTouchListener {
 		this.parent = parent;
 		this.pageContainer = ll;
 		this.componentContainer = rl;
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å‚±‚Ìƒ^ƒu‚Ìƒ^ƒuID‚ğİ’è
+		// ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½Å‚ï¿½ï¿½Ìƒ^ï¿½uï¿½Ìƒ^ï¿½uIDï¿½ï¿½İ’ï¿½
 		this.tabId = TABPAGE_ID_VIDEO_VIEW;
 		create(R.layout.tab_layout_content_generic_flickable );
 	}
 	@Override
 	public int create(int panelLayoutID) {
-		// ƒtƒŠƒbƒN“ü—Í‘Î‰
+		// ï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Í‘Î‰ï¿½
 		ArrayList<MoveTabInfo> arrMti = new ArrayList<MoveTabInfo>();
-		// ¶ƒtƒŠƒbƒN‚Ìİ’è
+		// ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ìİ’ï¿½
 		MoveTabInfo mti = new MoveTabInfo();
 		mti.setTabInfoIndex( MoveTabInfo.LEFT_1 );
 		mti.setTabId(ControlIDs.TAB_ID_PLAY);
@@ -46,7 +46,7 @@ public class TabPageVideoView extends TabPage implements OnTouchListener {
 		mti.setImageViewId(R.id.left_move_image);
 		mti.setTabImageResId(R.drawable.playlist_normal);
 		arrMti.add(mti);
-		// ‰EƒtƒŠƒbƒN‚Ìİ’è
+		// ï¿½Eï¿½tï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ìİ’ï¿½
 		MoveTabInfo mtiR = new MoveTabInfo();
 		mtiR.setImageVertialAlign( MoveTabInfo.VERTIAL_TOP );
 		mtiR.setTabInfoIndex( MoveTabInfo.RIGHT_1 );
@@ -65,7 +65,7 @@ public class TabPageVideoView extends TabPage implements OnTouchListener {
 		tabBaseLayout.setLayoutParams(lp);
 		tabBaseLayout.setBackgroundResource(R.color.gradiant_red);
 		
-		// TODO: ƒT[ƒtƒBƒXƒrƒ…[‚ğ‚¢‚Á‚Ï‚¢‚É“ü‚ê‚é
+		// TODO: ï¿½Tï¿½[ï¿½tï¿½Bï¿½Xï¿½rï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï‚ï¿½ï¿½É“ï¿½ï¿½ï¿½ï¿½
 		SurfaceView videoView 
 		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getVideoView();
 		RelativeLayout.LayoutParams lpVideoView
@@ -120,7 +120,7 @@ public class TabPageVideoView extends TabPage implements OnTouchListener {
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
         case MotionEvent.ACTION_DOWN:
-        	//Log.e("action down","come");
+        	//LogWrapper.e("action down","come");
         	bPanelShow = !bPanelShow;
         	updateControlPanel();
             break;

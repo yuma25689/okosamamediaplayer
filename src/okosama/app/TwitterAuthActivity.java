@@ -1,7 +1,6 @@
 package okosama.app;
 
 import okosama.app.service.TwitterUtils;
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.OAuthAuthorization;
@@ -11,8 +10,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -40,9 +37,9 @@ public class TwitterAuthActivity extends Activity {
         });
     }
         
-    // twitter”FØ
+    // twitterï¿½Fï¿½ï¿½
     /**
-     * OAuth”FØiŒµ–§‚É‚Í”F‰Âj‚ğŠJn‚µ‚Ü‚·B
+     * OAuthï¿½Fï¿½Øiï¿½ï¿½ï¿½ï¿½ï¿½É‚Í”Fï¿½Âjï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
      * 
      * @param listener
      */
@@ -55,7 +52,7 @@ public class TwitterAuthActivity extends Activity {
                     mRequestToken = mOAuth.getOAuthRequestToken(mCallbackURL);
                     return mRequestToken.getAuthorizationURL();
                 } catch (TwitterException e) {
-                	Log.e("auth fail",e.getMessage() + " " + e.getErrorCode() + " " + e.getErrorMessage());
+                	LogWrapper.e("auth fail",e.getMessage() + " " + e.getErrorCode() + " " + e.getErrorMessage());
                     e.printStackTrace();
                 }
                 return null;
@@ -63,18 +60,18 @@ public class TwitterAuthActivity extends Activity {
 
             @Override
             protected void onPostExecute(String url) {
-            	Log.i("TweetAuth - onPostExe","url=" + url);
+            	LogWrapper.i("TweetAuth - onPostExe","url=" + url);
                 if (url != null) {
-                	// ‚È‚º‚©ssl‚Ìİ’è‚È‚Ì‚Éhttp:‚Åæ“¾‚Å‚«‚é‚Ì‚ÅAhttps:‚É•ÏŠ·‚·‚éEEE(TT)
+                	// ï¿½È‚ï¿½ï¿½ï¿½sslï¿½Ìİ’ï¿½È‚Ì‚ï¿½http:ï¿½Åæ“¾ï¿½Å‚ï¿½ï¿½ï¿½Ì‚ÅAhttps:ï¿½É•ÏŠï¿½ï¿½ï¿½ï¿½ï¿½Eï¿½Eï¿½E(TT)
                 	if( url.startsWith("http:") )
                 	{
                 		url = url.replaceFirst("http", "https");
-                    	Log.i("TweetAuth - onPostExe","url(converted)=" + url);
+                    	LogWrapper.i("TweetAuth - onPostExe","url(converted)=" + url);
                 	}
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                 } else {
-                    // ¸”sBBB
+                    // ï¿½ï¿½ï¿½sï¿½Bï¿½Bï¿½B
                 }
             }
         };
@@ -103,11 +100,11 @@ public class TwitterAuthActivity extends Activity {
             @Override
             protected void onPostExecute(AccessToken accessToken) {
                 if (accessToken != null) {
-                    // ”FØ¬Œ÷I
+                    // ï¿½Fï¿½Øï¿½ï¿½ï¿½ï¿½I
                 	Toast.makeText(TwitterAuthActivity.this, R.string.auth_success, Toast.LENGTH_SHORT).show();
                     successOAuth(accessToken);
                 } else {
-                    // ”FØ¸”sBBB
+                    // ï¿½Fï¿½Øï¿½ï¿½sï¿½Bï¿½Bï¿½B
                 	Toast.makeText(TwitterAuthActivity.this, R.string.auth_failed, Toast.LENGTH_SHORT).show();
                 }
             }

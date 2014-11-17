@@ -2,18 +2,12 @@ package okosama.app;
 
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.service.TwitterUtils;
-import twitter4j.RateLimitStatus;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,7 +21,7 @@ public class TweetActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_tweet);
-	    // twitterÇÃê›íË
+	    // twitterÔøΩÃê›íÔøΩ
 	    mTwitter = TwitterUtils.getTwitterInstance(this);
         //mCallbackURL = getString(R.string.twitter_callback_url);
  
@@ -74,7 +68,7 @@ public class TweetActivity extends Activity {
                 	//RateLimitStatus sts = e.getRateLimitStatus();
                 	//sts.get
                     //e.printStackTrace();
-                	Log.e("tweeté∏îs", e.getErrorCode() + " " + e.getMessage() + " " 
+                	LogWrapper.e("tweet failed ", e.getErrorCode() + " " + e.getMessage() + " " 
                     + e.getExceptionCode() + " " + e.getStatusCode() + e.getLocalizedMessage() + e.toString() );
                     return false;
                 }
@@ -83,10 +77,10 @@ public class TweetActivity extends Activity {
             @Override
             protected void onPostExecute(Boolean result) {
                 if (result) {
-                    showToast("ÉcÉCÅ[ÉgÇ™äÆóπÇµÇ‹ÇµÇΩÅI");
+                    showToast("tweet success!");
                     finish();
                 } else {
-                    showToast("ÉcÉCÅ[ÉgÇ…é∏îsÇµÇ‹ÇµÇΩÅBÅBÅB");
+                    showToast("tweet failed!");
                 }
             }
         };

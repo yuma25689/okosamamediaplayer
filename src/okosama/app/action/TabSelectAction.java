@@ -3,11 +3,9 @@ package okosama.app.action;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.tab.TabPage;
-import android.os.Handler;
-import android.os.Message;
 
 /**
- * ƒ^ƒu‚ğ‘I‘ğ‚µ‚½‚ÉÀs‚·‚éƒAƒNƒVƒ‡ƒ“
+ * ï¿½^ï¿½uï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éï¿½ï¿½sï¿½ï¿½ï¿½ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½
  * @author 25689
  *
  */
@@ -38,14 +36,14 @@ public final class TabSelectAction implements IViewAction {
 			}
 			
 			OkosamaMediaPlayerActivity.getResourceAccessor().playSound(6);
-			// ˆÄŠO‚ƒRƒXƒg‚©‚à‚µ‚ê‚È‚¢
+			// ï¿½ÄŠOï¿½ï¿½ï¿½Rï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 			// System.gc();
 			// tabRoot.setCurrentTab(tabId, (tabId != TabPage.TABPAGE_ID_NONE) );
 			//act.setCurrentDisplayId(tabId,tabPageId);
 			
 			if( tabId != ControlIDs.ID_NOT_SPECIFIED && tabPageId != TabPage.TABPAGE_ID_NONE )
 			{			
-				// handler‚É’Ê’m‚·‚é
+				// handlerï¿½É’Ê’mï¿½ï¿½ï¿½ï¿½
 //				Message msg = Message.obtain();
 //				msg.what = MSG_ID_TAB_SELECT;
 //				msg.arg1 = tabId;
@@ -57,7 +55,7 @@ public final class TabSelectAction implements IViewAction {
 //                	return -1;
 //                }
 //                hdr.sendMessage( msg );
-				// ƒXƒŒƒbƒh“à‚Å‚â‚Á‚½‚ç—‚¿‚é‚Æv‚í‚ê‚é
+				// ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½ç—ï¿½ï¿½ï¿½ï¿½Ævï¿½ï¿½ï¿½ï¿½
 				OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().selectTab(tabId,tabPageId,false);
 			}
 		}

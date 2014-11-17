@@ -2,6 +2,7 @@ package okosama.app.adapter;
 
 import java.util.ArrayList;
 
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.ResourceAccessor;
@@ -16,8 +17,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Video.VideoColumns;
 import android.provider.MediaStore.MediaColumns;
+import android.provider.MediaStore.Video.VideoColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * ƒrƒfƒI‚ÌƒŠƒXƒg‚ÌƒAƒ_ƒvƒ^
+ * ï¿½rï¿½fï¿½Iï¿½Ìƒï¿½ï¿½Xï¿½gï¿½ÌƒAï¿½_ï¿½vï¿½^
  * @author 25689
  *
  */
@@ -35,13 +36,13 @@ public class VideoListRawAdapter extends ArrayAdapter<VideoData>
 implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
 	boolean deleted = false;
 	private ArrayList<VideoData> allItems = new ArrayList<VideoData>();
-	// TODO:Ÿ‚Öƒ{ƒ^ƒ““™
+	// TODO:ï¿½ï¿½ï¿½Öƒ{ï¿½^ï¿½ï¿½ï¿½ï¿½
 	int maxShowCount = 80;
 
 	long [] playlist = null;
     private final BitmapDrawable mDefaultIcon;
 	TabPage page;
-	boolean bDataUpdating = false;	// “à•”ƒf[ƒ^‚ğXV’†‚©‚Ç‚¤‚©
+	boolean bDataUpdating = false;	// ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½
 	boolean bLastError = false;
 	public boolean isDataUpdating()
 	{
@@ -62,7 +63,7 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
     	return ret;
     }
 
-	// ƒJƒ‰ƒ€‚ÌƒCƒ“ƒfƒbƒNƒX•Û—p 
+	// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Ûï¿½ï¿½p 
     int mTitleIdx;
     int mDataIdx;
     int mArtistIdx;
@@ -74,7 +75,7 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
     private final String mUnknownArtist;
     private OkosamaMediaPlayerActivity mActivity = null;
     
-    // ƒrƒ…[•Û—pƒNƒ‰ƒX
+    // ï¿½rï¿½ï¿½ï¿½[ï¿½Ûï¿½ï¿½pï¿½Nï¿½ï¿½ï¿½X
     static class ViewHolder {
         TextView line1;
         TextView line2;
@@ -103,19 +104,19 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
         		R.drawable.video_focus );
         mDefaultIcon = new BitmapDrawable(mActivity.getResources(), b);
         mDefaultIcon.setFilterBitmap(false);
-        // F‚Ì­‚È‚¢(8bit/FˆÈ‰º)ƒfƒoƒCƒX‚É•\¦‚·‚é‚Æ‚«‚ÉAƒfƒBƒU‚ğ‚©‚¯‚é‚©‚Ç‚¤‚©‚ğw’è‚·‚éBtrue‚ÅƒfƒBƒU‚·‚éB’x‚¢B
+        // ï¿½Fï¿½Ìï¿½ï¿½È‚ï¿½(8bit/ï¿½Fï¿½È‰ï¿½)ï¿½fï¿½oï¿½Cï¿½Xï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÉAï¿½fï¿½Bï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚·ï¿½ï¿½Btrueï¿½Åƒfï¿½Bï¿½Uï¿½ï¿½ï¿½ï¿½Bï¿½xï¿½ï¿½ï¿½B
         mDefaultIcon.setDither(false);
         
     }
     
     /**
-     * ƒJƒ‰ƒ€‚ÌƒCƒ“ƒfƒbƒNƒX‚ğİ’è
+     * ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½İ’ï¿½
      * @param cursor
      */
     private int getColumnIndices(Cursor cursor) {
         if (cursor != null) {
-        	// ŠeƒJƒ‰ƒ€‚ÌƒCƒ“ƒfƒbƒNƒX‚ğİ’è
-        	// ƒ^ƒCƒgƒ‹AƒA[ƒeƒBƒXƒgAŠÔ
+        	// ï¿½eï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½İ’ï¿½
+        	// ï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½Aï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½Aï¿½ï¿½ï¿½ï¿½
             mVideoIdIdx = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID);
             mTitleIdx = cursor.getColumnIndexOrThrow(MediaColumns.TITLE);
             mDataIdx = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
@@ -129,7 +130,7 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
     }
 
     /**
-     * V‚µ‚¢ƒrƒ…[‚Ìì¬H
+     * ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½Ìì¬ï¿½H
      */
     @Override
     public View getView(int pos, View convertView, ViewGroup parent) {
@@ -138,7 +139,7 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
     	   ViewHolder vh = new ViewHolder();
 	       v = inflater.inflate(iLayoutId, null);     	   
 
-	       // viewholder‚ÉŠeƒrƒ…[‚ğİ’è‚µAƒ^ƒO‚Éİ’è‚·‚é
+	       // viewholderï¿½ÉŠeï¿½rï¿½ï¿½ï¿½[ï¿½ï¿½İ’è‚µï¿½Aï¿½^ï¿½Oï¿½Éİ’è‚·ï¿½ï¿½
            vh.line1 = (TextView) v.findViewById(R.id.line1);
            vh.line2 = (TextView) v.findViewById(R.id.line2);
            vh.duration = (TextView) v.findViewById(R.id.duration);
@@ -156,7 +157,7 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
     }
     
     /**
-     * ƒrƒ…[‚Ö‚Ì’l‚ğİ’è
+     * ï¿½rï¿½ï¿½ï¿½[ï¿½Ö‚Ì’lï¿½ï¿½İ’ï¿½
      */
     // @Override
     public void bindView(View view, Context context, int pos ) {
@@ -165,15 +166,15 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
     	{
     		return;
     	}
-    	// ƒrƒ…[ƒzƒ‹ƒ_[‚©‚çŠeƒrƒ…[‚ğæ“¾
+    	// ï¿½rï¿½ï¿½ï¿½[ï¿½zï¿½ï¿½ï¿½_ï¿½[ï¿½ï¿½ï¿½ï¿½eï¿½rï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½æ“¾
         ViewHolder vh = (ViewHolder) view.getTag();
         
-        // ƒoƒbƒtƒ@‚ÉAƒ^ƒCƒgƒ‹‚Ì•¶š—ñ‚ğˆê“xæ“¾ŒãAƒrƒ…[‚Éİ’èHTODO:‚È‚ºH
+        // ï¿½oï¿½bï¿½tï¿½@ï¿½ÉAï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½æ“¾ï¿½ï¿½Aï¿½rï¿½ï¿½ï¿½[ï¿½Éİ’ï¿½HTODO:ï¿½È‚ï¿½ï¿½H
         // data.getTrackTitle();
         // cursor.copyStringToBuffer(mTitleIdx, vh.buffer1);
         vh.line1.setText(data.getName());
        
-        // ŠÔ‚ğæ“¾Aİ’è
+        // ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½æ“¾ï¿½Aï¿½İ’ï¿½
         int secs = (int) (data.getDuration()) / 1000; // .getInt(mDurationIdx) / 1000;
         if (secs == 0) {
             vh.duration.setText("");
@@ -184,7 +185,7 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
         final StringBuilder builder = mBuilder;
         builder.delete(0, builder.length());
 
-        // ƒA[ƒeƒBƒXƒg–¼‚ªæ“¾‚Å‚«‚½‚çAƒrƒ…[‚Éİ’è
+        // ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½rï¿½ï¿½ï¿½[ï¿½Éİ’ï¿½
         String name = data.getArtist();
         if (name == null || name.equals(MediaStore.UNKNOWN_STRING)) {
             // builder.append(mUnknownArtist);
@@ -210,8 +211,8 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
         
         // 
         //ImageView ivInd = vh.play_indicator;
-        // ƒT[ƒrƒX‚ª‚ ‚èAÄ¶’†‚È‚ç‚ÎAid‚ÉƒLƒ…[‚ÌˆÊ’u‚ğ
-        // Ä¶’†‚Å‚È‚¯‚ê‚ÎAid‚ÉƒI[ƒfƒBƒIid
+        // ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Äï¿½ï¿½ï¿½ï¿½È‚ï¿½ÎAidï¿½ÉƒLï¿½ï¿½ï¿½[ï¿½ÌˆÊ’uï¿½ï¿½
+        // ï¿½Äï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½ÎAidï¿½ÉƒIï¿½[ï¿½fï¿½Bï¿½Iid
 //        long id = -1;
 //        if (MediaPlayerUtil.sService != null) {
 //            // TODO: IPC call on each bind??
@@ -226,7 +227,7 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
     
     static ArrayList<TabPage> arrPage = new ArrayList<TabPage>();
     /**
-     * ƒJ[ƒ\ƒ‹‚©‚çAƒAƒ_ƒvƒ^‚Ìƒf[ƒ^‚ğİ’è‚·‚é
+     * ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Aï¿½_ï¿½vï¿½^ï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½İ’è‚·ï¿½ï¿½
      * @param cursor
      * @return
      */
@@ -243,7 +244,7 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
     		return -1;
     	}
     	bDataUpdating = true;
-    	Log.i("stockMediaDataFromDevice","start");
+    	LogWrapper.i("stockMediaDataFromDevice","start");
     	    	
     	if( page != null )
     	{
@@ -255,9 +256,9 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
         AsyncTask<Cursor, Void, Integer> task = new AsyncTask<Cursor, Void, Integer>() {
             @Override
             protected Integer doInBackground(Cursor... params) {
-            	Log.i("doInBackground","start");
+            	LogWrapper.i("doInBackground","start");
             	
-            	// ƒJ[ƒ\ƒ‹‚ğƒ‹[ƒv‚·‚é
+            	// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½
             	// Cursor cursor = params[0];
     			// OkosamaMediaPlayerActivity.getResourceAccessor().appStatus.setPlaylistID( null );        	
     			Cursor cursor = Database.getInstance(
@@ -266,7 +267,7 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
             	
         		if( cursor == null || cursor.isClosed() )
         		{
-        			Log.w("VideoListAdp - doInBk", "cursor closed!");
+        			LogWrapper.w("VideoListAdp - doInBk", "cursor closed!");
         			return -1;
         		}
         		
@@ -280,12 +281,12 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
 		            	allItems.clear();
 		            	if( 0 < cursor.getCount() )
 		            	{
-			            	Log.i("doInBackground","moveToFirst");
+			            	LogWrapper.i("doInBackground","moveToFirst");
 			        		cursor.moveToFirst();
 			        		do 
 			        		{
 			            		VideoData data = new VideoData();
-			        			// ‘S‚Ä‚Ì—v‘f‚ğƒ‹[ƒv‚·‚é
+			        			// ï¿½Sï¿½Ä‚Ì—vï¿½fï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½
 			            		data.setDataId( cursor.getInt(mVideoIdIdx));
 			            		data.setName(cursor.getString(mTitleIdx));
 			            		data.setArtist(cursor.getString(mArtistIdx));
@@ -294,7 +295,7 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
 			            		// data.setData(cursor.getLong(mDataIdIdx));
 	//		        			data.setTrackAlbumArt(
 	//		        					((AlbumListRawAdapter)mActivity.getAdapter(TabPage.TABPAGE_ID_ALBUM)).getAlbumArtFromId(Integer.parseInt(data.getTrackAlbumId())));
-			          		// Log.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
+			          		// LogWrapper.i("add","albumID:" + data.getTrackAlbumId() + "(" + data.getTrackAlbum() + ")" );
 			            	    allItems.add(data);
 			        		} while( deleted == false // OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().isPaused() == false && 
 			        				&& cursor.moveToNext() );
@@ -318,8 +319,8 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
             	{
             		bLastError = true;
             	}
-            	// Ši”[I—¹
-            	// “ñdŠÇ—‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚Ä‚¢‚é‚ªAƒAƒ_ƒvƒ^‚É‚à“¯—l‚Ìƒf[ƒ^‚ğŠi”[‚·‚é
+            	// ï¿½iï¿½[ï¿½Iï¿½ï¿½
+            	// ï¿½ï¿½dï¿½Ç—ï¿½ï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½é‚ªï¿½Aï¿½Aï¿½_ï¿½vï¿½^ï¿½É‚ï¿½ï¿½ï¿½ï¿½lï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½
             	updateList();
             	// TabPage page = (TabPage) mActivity.getTabStocker().getTab(ControlIDs.TAB_ID_MEDIA).getChild(TabPage.TABPAGE_ID_SONG);
             	if( arrPage.isEmpty() == false )
@@ -341,14 +342,14 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
     }
     
     /**
-     * •\¦‚·‚×‚«ƒf[ƒ^‚©‚Ç‚¤‚©‚ğ•Ô‹p‚·‚é
+     * ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½×‚ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½Ô‹pï¿½ï¿½ï¿½ï¿½
      * @param data
      * @return
      */
     boolean isShowData(VideoData data)
     {
-    	// TODO: Œ»óA©“®‚ÅƒLƒ…[‚ğ•\¦‚·‚é‚©‚»‚¤‚Å‚È‚¢‚©‚ğØ‚è‘Ö‚¦‚Ä‚¢‚é‚ªA
-    	// ©“®‚Å‚Í‚È‚­Aƒ†[ƒU‚É‘I‘ğ‚³‚¹‚é
+    	// TODO: ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ÅƒLï¿½ï¿½ï¿½[ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½Ä‚ï¿½ï¿½é‚ªï¿½A
+    	// ï¿½ï¿½ï¿½ï¿½ï¿½Å‚Í‚È‚ï¿½ï¿½Aï¿½ï¿½ï¿½[ï¿½Uï¿½É‘Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     	// boolean bShow = true;
     	// boolean bQueueExists = false;
  
@@ -363,13 +364,13 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
     }
     
     /**
-     * ƒJ[ƒ\ƒ‹‚ğ•ÏX‚·‚é
+     * ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½
      */
     // @Override
     public void updateList() {
     	Log.d("trackadp - update list","");
     	
-    	// ŒŸõğŒ‚ÌƒŠƒZƒbƒg
+    	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Zï¿½bï¿½g
     	playlist = null;
 				
     	currentAllVideoIds.clear();
@@ -380,7 +381,7 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
     	{
 			// Log.d("id", "itemCount:" + allItems.size() + " albumID:" + albumId );
 			for (VideoData data : items) {
-	    		// ‚±‚±‚ÅƒtƒBƒ‹ƒ^‚ğ‚©‚¯‚Ä‚µ‚Ü‚¤H
+	    		// ï¿½ï¿½ï¿½ï¿½ï¿½Åƒtï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½H
 	    		if( false == isShowData( data ) 
 	    		|| false == isFilterData( data ))
 	    		{
@@ -390,8 +391,8 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
 	    	    currentAllVideoIds.add(data.getDataId());
 	    		if( maxShowCount < this.getCount() )
 	    		{
-	    			// max‚Ì•\¦Œ”ˆÈã‚ÍA•\¦‚µ‚È‚¢
-	    			// TODO:ƒy[ƒW‚«‚è‚©‚¦–¢‘Î‰‚È‚Ì‚ÅAÅ‰‚Ì80Œ‚µ‚©•\¦‚Å‚«‚Ä‚¢‚È‚¢
+	    			// maxï¿½Ì•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Èï¿½ÍAï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
+	    			// TODO:ï¿½yï¿½[ï¿½Wï¿½ï¿½ï¿½è‚©ï¿½ï¿½ï¿½ï¿½ï¿½Î‰ï¿½ï¿½È‚Ì‚ÅAï¿½Åï¿½ï¿½ï¿½80ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½
 	    			break;
 	    		}
 	    	}
@@ -414,11 +415,11 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
 	}
     
     @Override
-    // ‹È‚Ì•ÏX‚È‚ÇAó‘Ô‚ª•Ï‚í‚Á‚½‚Æ‚«‚ÉAŠO•”‚©‚ç•\¦‚ğXV‚³‚¹‚é
+    // ï¿½È‚Ì•ÏXï¿½ï¿½ï¿½È‚ÇAï¿½ï¿½Ô‚ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÉAï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public int updateStatus()
     {
     	updateList();    	
-    	// •\¦‚ğXV?
+    	// ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½V?
     	notifyDataSetChanged();
     	return 0;
     }
@@ -457,20 +458,20 @@ implements IAdapterUpdate<VideoData> { // , IFilterable<VideoData> {
 	}
 
 	/**
-	 *’:‚È‚ñ‚©•Ï‚¾‚¯‚ÇA•\¦‘ÎÛ‚Ìê‡Atrue
+	 *ï¿½ï¿½:ï¿½È‚ñ‚©•Ï‚ï¿½ï¿½ï¿½ï¿½ÇAï¿½\ï¿½ï¿½ï¿½ÎÛ‚Ìê‡ï¿½Atrue
 	 */	
 	@Override
 	public boolean isFilterData(VideoData data) {
 		boolean bRet = true;
 		if( filterData != null && data != null)
 		{
-			// “®‰æ–¼
+			// ï¿½ï¿½ï¿½æ–¼
 			if( filterData.getStrVideo() != null && 0 < filterData.getStrVideo().length() )
 			{
 				if( data.getName() != null
 				&& -1 != data.getName().indexOf(filterData.getStrVideo()) )
 				{
-					// “®‰æ–¼‚ªˆê•”ˆê’v
+					// ï¿½ï¿½ï¿½æ–¼ï¿½ï¿½ï¿½ê•”ï¿½ï¿½v
 					bRet = true;
 				}
 				else

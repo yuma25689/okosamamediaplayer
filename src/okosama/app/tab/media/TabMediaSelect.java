@@ -9,31 +9,31 @@ import okosama.app.factory.DroidWidgetKit;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabComponentActionSetter;
 import okosama.app.tab.TabComponentPropertySetter;
-import okosama.app.tab.TabPage;
 import okosama.app.tab.TabComponentPropertySetter.ComponentType;
+import okosama.app.tab.TabPage;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ImageView.ScaleType;
 
 /**
- * ƒ^ƒu‚ğ–Í•í‚µ‚½ƒNƒ‰ƒXB‚±‚ÌƒNƒ‰ƒX‚Í•\¦‚ğ‚½‚È‚¢B
- * ƒ^ƒu‚Æ‚¢‚¤‚æ‚è‚ÍAMediator‚É‹ß‚¢B
- * ƒ^ƒu‚Ìì¬‚¨‚æ‚ÑAƒ^ƒuã‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì—LŒø/–³ŒøA•\¦/”ñ•\¦‚Ì‚İ‚ğ§Œä‚·‚é
+ * ï¿½^ï¿½uï¿½ï¿½Í•í‚µï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½Bï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½Í•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½B
+ * ï¿½^ï¿½uï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÍAMediatorï¿½É‹ß‚ï¿½ï¿½B
+ * ï¿½^ï¿½uï¿½Ìì¬ï¿½ï¿½ï¿½ï¿½ÑAï¿½^ï¿½uï¿½ï¿½ÌƒRï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½Ì—Lï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½\ï¿½ï¿½/ï¿½ï¿½\ï¿½ï¿½ï¿½Ì‚İ‚ğ§Œä‚·ï¿½ï¿½
  * @author 25689
  *
  */
 public class TabMediaSelect extends Tab {
-	// ‚±‚Ìƒ^ƒu‚Ìƒ{ƒ^ƒ“‚Ì‘å‚«‚³
+	// ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½Ìƒ{ï¿½^ï¿½ï¿½ï¿½Ì‘å‚«ï¿½ï¿½
 	public static final int BUTTON_WIDTH = 90;
 	public static final int BUTTON_HEIGHT = 90;
-	// ‚±‚Ìƒ^ƒu‚Ìƒtƒbƒ^‚Ì‘å‚«‚³
+	// ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½Ìƒtï¿½bï¿½^ï¿½Ì‘å‚«ï¿½ï¿½
 	//static final int HOOTER_SIZE = BUTTON_HEIGHT + Tab.HDR_SIZE;
 	
 	/**
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^ e‚Æ‚Ù‚Ú“¯—l ƒ^ƒuID‚ÉATAB_ID_MEDIA‚ğ—˜—p‚·‚é
+	 * ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ ï¿½eï¿½Æ‚Ù‚Ú“ï¿½ï¿½l ï¿½^ï¿½uIDï¿½ÉATAB_ID_MEDIAï¿½ğ—˜—pï¿½ï¿½ï¿½ï¿½
 	 * @param ID
 	 * @param ll
 	 * @param rl
@@ -43,37 +43,37 @@ public class TabMediaSelect extends Tab {
 	}
 
 	/**
-	 * ƒ^ƒu‘S‘Ì‚Ìì¬
-	 * @return 0:³í 0ˆÈŠO:ˆÙí
+	 * ï¿½^ï¿½uï¿½Sï¿½Ì‚Ìì¬
+	 * @return 0:ï¿½ï¿½ï¿½ï¿½ 0ï¿½ÈŠO:ï¿½Ùï¿½
 	 */
 	@Override
 	public int create(int panelLayoutId) {
 		int errCode = 0;
 		OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 
-		// ƒ^ƒu‚Ìƒpƒlƒ‹‚ğì¬
+		// ï¿½^ï¿½uï¿½Ìƒpï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ì¬
 		LayoutInflater inflator = act.getLayoutInflater();
 		
 		if( false == OkosamaMediaPlayerActivity.getResourceAccessor().isSdCanRead() )
 		{
-			// SDƒJ[ƒh‚ª“Ç‚ß‚È‚¢ó‘Ô‚Ìê‡A‚»‚ê‚ğ•\¦‚·‚éƒrƒ…[‚ğì‚Á‚Ä‚¨‚µ‚Ü‚¢
+			// SDï¿½Jï¿½[ï¿½hï¿½ï¿½ï¿½Ç‚ß‚È‚ï¿½ï¿½ï¿½Ô‚Ìê‡ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½
 			OkosamaMediaPlayerActivity.getResourceAccessor().setReadSDCardSuccess(false);
 			tabBaseLayout = (ViewGroup)inflator.inflate(R.layout.tab_layout_sdcard_cant_read, null, false);
 		}
 		else
 		{
-			// ƒtƒ‰ƒOON‚Ìƒ^ƒCƒ~ƒ“ƒO‚ª‘‚¢‚ªA‚±‚ÌÛ‚»‚ê‚Å‚¢‚¢
+			// ï¿½tï¿½ï¿½ï¿½OONï¿½Ìƒ^ï¿½Cï¿½~ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ÌÛ‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½
 			OkosamaMediaPlayerActivity.getResourceAccessor().setReadSDCardSuccess(true);
 			tabBaseLayout = (ViewGroup)inflator.inflate(panelLayoutId, null, false);
-			// ƒpƒlƒ‹ˆÊ’u‚Ìİ’è(FILL_PARENT)
+			// ï¿½pï¿½lï¿½ï¿½ï¿½Ê’uï¿½Ìİ’ï¿½(FILL_PARENT)
 			RelativeLayout.LayoutParams lp 
 			= OkosamaMediaPlayerActivity.createLayoutParamForAbsolutePosOnBk( 
 	        		0, 0 
 	        );
 			tabBaseLayout.setLayoutParams(lp);
-			// ƒ^ƒuƒ{ƒ^ƒ“‚ğ’u‚­ƒwƒbƒ_‚Æ‚È‚éƒŒƒCƒAƒEƒg
+			// ï¿½^ï¿½uï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½wï¿½bï¿½_ï¿½Æ‚È‚éƒŒï¿½Cï¿½Aï¿½Eï¿½g
 			RelativeLayout rlHooter = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_hooter);
-			// ƒAƒ‹ƒoƒ€ƒ^ƒuƒ{ƒ^ƒ“
+			// ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½^ï¿½uï¿½{ï¿½^ï¿½ï¿½
 			
 			mapBtn.put( TabPage.TABPAGE_ID_ALBUM, DroidWidgetKit.getInstance().MakeButton() );
 			TabComponentPropertySetter tabBtnCreationData = new TabComponentPropertySetter(
@@ -93,7 +93,7 @@ public class TabMediaSelect extends Tab {
 			mapBtn.get(TabPage.TABPAGE_ID_ALBUM).acceptConfigurator(actionSetter);
 			rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_ALBUM).getView());
 	
-			// ƒA[ƒeƒBƒXƒgƒ^ƒuƒ{ƒ^ƒ“
+			// ï¿½Aï¿½[ï¿½eï¿½Bï¿½Xï¿½gï¿½^ï¿½uï¿½{ï¿½^ï¿½ï¿½
 			mapBtn.put( TabPage.TABPAGE_ID_ARTIST, DroidWidgetKit.getInstance().MakeButton() );
 			tabBtnCreationData = new TabComponentPropertySetter(
 				ControlIDs.ARTIST_TAB_BUTTON, null, ComponentType.BUTTON, 
@@ -110,7 +110,7 @@ public class TabMediaSelect extends Tab {
 			mapBtn.get(TabPage.TABPAGE_ID_ARTIST).acceptConfigurator(actionSetter);
 			rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_ARTIST).getView());
 	
-			// ƒ\ƒ“ƒOƒ^ƒu
+			// ï¿½\ï¿½ï¿½ï¿½Oï¿½^ï¿½u
 			mapBtn.put( TabPage.TABPAGE_ID_SONG, DroidWidgetKit.getInstance().MakeButton() );
 			tabBtnCreationData = new TabComponentPropertySetter(
 				ControlIDs.SONG_TAB_BUTTON, null, ComponentType.BUTTON, 
@@ -127,7 +127,7 @@ public class TabMediaSelect extends Tab {
 			mapBtn.get(TabPage.TABPAGE_ID_SONG).acceptConfigurator(actionSetter);
 			rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_SONG).getView());
 			
-			// ƒvƒŒƒCƒŠƒXƒgƒ^ƒu
+			// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½^ï¿½u
 			mapBtn.put( TabPage.TABPAGE_ID_PLAYLIST, DroidWidgetKit.getInstance().MakeButton() );
 			tabBtnCreationData = new TabComponentPropertySetter(
 				ControlIDs.PLAYLIST_TAB_BUTTON, null, ComponentType.BUTTON, 
@@ -144,7 +144,7 @@ public class TabMediaSelect extends Tab {
 			mapBtn.get(TabPage.TABPAGE_ID_PLAYLIST).acceptConfigurator(actionSetter);
 			rlHooter.addView(mapBtn.get(TabPage.TABPAGE_ID_PLAYLIST).getView());
 	
-			// videoƒ^ƒu
+			// videoï¿½^ï¿½u
 			mapBtn.put( TabPage.TABPAGE_ID_VIDEO, DroidWidgetKit.getInstance().MakeButton() );
 			tabBtnCreationData = new TabComponentPropertySetter(
 				ControlIDs.VIDEO_TAB_BUTTON, null, ComponentType.BUTTON, 
@@ -163,7 +163,7 @@ public class TabMediaSelect extends Tab {
 		
 			
 			RelativeLayout rlCont = (RelativeLayout) tabBaseLayout.findViewById(R.id.tab_contents);
-			// ƒ^ƒu‚Ì’Ç‰Á
+			// ï¿½^ï¿½uï¿½Ì’Ç‰ï¿½
 			addChild( TabPage.TABPAGE_ID_ALBUM, new TabPageAlbum( this, pageContainer, rlCont ) );
 			addChild( TabPage.TABPAGE_ID_ARTIST, new TabPageArtist( this, pageContainer, rlCont ) );
 			addChild( TabPage.TABPAGE_ID_SONG, new TabPageSong( this, pageContainer, rlCont ) );
@@ -173,7 +173,7 @@ public class TabMediaSelect extends Tab {
 			rlCont.setBackgroundResource(R.color.gradiant_tab_base);
 		}
 		
-		// ƒ^ƒu‚Ìƒpƒlƒ‹‚ğe‚©‚ç—^‚¦‚ç‚ê‚½ƒŒƒCƒAƒEƒg‚É’Ç‰Á
+		// ï¿½^ï¿½uï¿½Ìƒpï¿½lï¿½ï¿½ï¿½ï¿½eï¿½ï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½É’Ç‰ï¿½
 		componentContainer.addView(tabBaseLayout);
 				
 		return errCode;

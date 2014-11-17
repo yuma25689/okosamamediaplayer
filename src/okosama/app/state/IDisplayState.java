@@ -1,16 +1,16 @@
 package okosama.app.state;
 
+import okosama.app.tab.Tab;
 import android.view.Menu;
 import android.view.MenuItem;
-import okosama.app.tab.Tab;
 
 public interface IDisplayState {
 
 	// Bundle mBundle;
 	
 	/**
-	 * ‚±‚Ì‰æ–Êó‘Ô‚ÉŠî‚Ã‚¢‚Ä‰æ–Ê‚ğØ‚è‘Ö‚¦‚é
-	 * @return 0:³í ƒ}ƒCƒiƒX:ˆÙí ‰æ–ÊID:ƒTƒu‰æ–Ê‚ ‚èi•Ô‚é‚Ì‚Íe‰æ–Ê‚ÌIDj
+	 * ï¿½ï¿½ï¿½Ì‰ï¿½Êï¿½Ô‚ÉŠï¿½Ã‚ï¿½ï¿½Ä‰ï¿½Ê‚ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½
+	 * @return 0:ï¿½ï¿½ï¿½ï¿½ ï¿½}ï¿½Cï¿½iï¿½X:ï¿½Ùï¿½ ï¿½ï¿½ï¿½ID:ï¿½Tï¿½uï¿½ï¿½Ê‚ï¿½ï¿½ï¿½iï¿½Ô‚ï¿½Ì‚Íeï¿½ï¿½Ê‚ï¿½IDï¿½j
 	 */
 	public int ChangeDisplayBasedOnThisState(Tab tab);
 	
@@ -25,19 +25,19 @@ public interface IDisplayState {
 	public static int STATUS_ON_DESTROY = 3;
 	public static int STATUS_ON_PAUSE = 4;
 	/**
-	 * ‚±‚Ì‰æ–Êó‘Ô‚ÉŠî‚Ã‚¢‚ÄABloadcastReceiver‚ğ“o˜^‚·‚é
-	 * @return “o˜^Œ‹‰Ê 0:“o˜^OK 1:“o˜^‘ÎÛ‚Å‚Í‚È‚¢ -1:“o˜^¸”s
+	 * ï¿½ï¿½ï¿½Ì‰ï¿½Êï¿½Ô‚ÉŠï¿½Ã‚ï¿½ï¿½ÄABloadcastReceiverï¿½ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½
+	 * @return ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½ 0:ï¿½oï¿½^OK 1:ï¿½oï¿½^ï¿½ÎÛ‚Å‚Í‚È‚ï¿½ -1:ï¿½oï¿½^ï¿½ï¿½ï¿½s
 	 */
 	public int registerReceivers(int status);
 	
 	/**
-	 * ‚±‚Ì‰æ–Êó‘Ô‚Ì(?)BloadcastReceiver‚ğ‰ğœ‚·‚é
+	 * ï¿½ï¿½ï¿½Ì‰ï¿½Êï¿½Ô‚ï¿½(?)BloadcastReceiverï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public void unregisterReceivers(int status);
 	
 	/**
-	 * Œ»İ‚Ìó‘Ô‚ÅA•\¦‚ğXV‚·‚×‚«‚Æ‚«‚ÉƒR[ƒ‹‚·‚é
-	 * @return Ÿ‚ÌXV‚Ö‚ÌƒJƒEƒ“ƒgƒ_ƒEƒ“(ms) NO_REFRESH‚È‚ç‚ÎAŒp‘±“I‚É‚ÍXV‚µ‚È‚¢
+	 * ï¿½ï¿½ï¿½İ‚Ìï¿½Ô‚ÅAï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½×‚ï¿½ï¿½Æ‚ï¿½ï¿½ÉƒRï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @return ï¿½ï¿½ï¿½ÌXï¿½Vï¿½Ö‚ÌƒJï¿½Eï¿½ï¿½ï¿½gï¿½_ï¿½Eï¿½ï¿½(ms) NO_REFRESHï¿½È‚ï¿½ÎAï¿½pï¿½ï¿½ï¿½Iï¿½É‚ÍXï¿½Vï¿½ï¿½ï¿½È‚ï¿½
 	 */
 	public long updateDisplay();
 	public int updateStatus();

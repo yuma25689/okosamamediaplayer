@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 
 /**
- * tab‚Ì•ÏX‚ª˜A‘Å‚³‚ê‚½‚Ì‚½‚ß‚ÉAƒ^ƒu‚Ì•ÏX‚ÍA‚±‚ÌƒNƒ‰ƒX‚ÉƒLƒ…[‚Æ‚µ‚Ä‚Â‚æ‚¤‚É‚·‚é
+ * tabï¿½Ì•ÏXï¿½ï¿½ï¿½Aï¿½Å‚ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß‚ÉAï¿½^ï¿½uï¿½Ì•ÏXï¿½ÍAï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½ÉƒLï¿½ï¿½ï¿½[ï¿½Æ‚ï¿½ï¿½Äï¿½ï¿½Â‚æ‚¤ï¿½É‚ï¿½ï¿½ï¿½
  * @author 25689
  *
  */
@@ -23,19 +23,19 @@ public class TabChangeAnimation {
 	
 	int tabPageCnt[] = new int[12];
 	
-	// ˆ—“à—e
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½e
 	public static final int TAB_IN = 1;
 	public static final int TAB_OUT = 2;
 	long outAnimDelay = 0;
 	
-	// 1‰ñ‚Ìƒ^ƒuƒZƒŒƒNƒgˆ—‚²‚Æ‚ÉAid‚ğ‚Â‚à‚Ì‚Æ‚·‚é
+	// 1ï¿½ï¿½Ìƒ^ï¿½uï¿½Zï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ÉAidï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ï¿½
 	final int MAX_TABSELECTION_PROCESS_ID = 10000;
 	int tabSelectionProcessId = 0;
 	int mostNewSelectionProcessId = 0;
 	//int lastProcessId = 0;
 	int lastLockTabId = 0;
 	final int MAX_ANIM_WAIT = 1000;
-	// ‚±‚Ìƒtƒ‰ƒO‚ª‚½‚Á‚Ä‚¢‚é‚Æ‚«‚É—ˆ‚½ƒŠƒNƒGƒXƒg‚ÍA‘S‚Ä“¯‚¶‘I‘ğˆ—‚Ìˆê•”‚ÆŒ©‚È‚·
+	// ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½É—ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½Gï¿½Xï¿½gï¿½ÍAï¿½Sï¿½Ä“ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìˆê•”ï¿½ÆŒï¿½ï¿½È‚ï¿½
 	boolean bGroupingTabSelectionProc = false;
 	public void SetTabSelectionLock(boolean b, int tabId, int tabPageId)
 	{
@@ -47,9 +47,9 @@ public class TabChangeAnimation {
 		{
 			lastLockTabId = 0;
 		}
-		// ƒ^ƒu‚ÌƒƒbƒN
+		// ï¿½^ï¿½uï¿½Ìƒï¿½ï¿½bï¿½N
 		Tab tab = null;
-		// TODO: ƒ^ƒuID‚©‚çƒ^ƒu‚ğæ“¾‚·‚éŠÖ”‚ğì¬
+		// TODO: ï¿½^ï¿½uIDï¿½ï¿½ï¿½ï¿½^ï¿½uï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½Öï¿½ï¿½ï¿½ï¿½ì¬
 		if( tabId == ControlIDs.TAB_ID_MAIN )
 		{
 			tab = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().getTabStocker().getTab(ControlIDs.TAB_ID_MAIN);
@@ -129,7 +129,7 @@ public class TabChangeAnimation {
     		TabPage.addLayoutFromParent( tabBaseLayout, componentContainer );
             if( bEnableAnim )
             {
-				// ƒAƒjƒ[ƒVƒ‡ƒ“‚Í“®“I‚É¶¬
+				// ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Í“ï¿½ï¿½Iï¿½Éï¿½ï¿½ï¿½
 				 Animation animIn = TabAnimationFactory.createTabInAnimation(nLevel,nDuration);
 				 Log.d("anim","in start:" + tabId );
 				 tabBaseLayout.startAnimation(animIn);                	

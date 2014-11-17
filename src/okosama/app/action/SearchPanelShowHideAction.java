@@ -1,16 +1,13 @@
 package okosama.app.action;
 
-import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.panel.SearchPanel;
-import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.TabPage;
 // import android.R;
-import android.os.RemoteException;
 // import android.view.View;
 
 /**
- * ƒƒfƒBƒA‚ğw’èŠÔƒV[ƒN‚·‚éƒAƒNƒVƒ‡ƒ“
+ * ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½ï¿½ï¿½wï¿½èï¿½ÔƒVï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½
  * @author 25689
  *
  */

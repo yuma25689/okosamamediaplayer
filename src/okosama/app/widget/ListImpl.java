@@ -1,14 +1,12 @@
 package okosama.app.widget;
 
 import okosama.app.behavior.IListBehavior;
-
 import android.content.Context;
-
 import android.widget.ListView;
 
 /**
- * ‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å—˜—p‚·‚éƒŠƒXƒg‚ÌÀ‘•
- * Bridgeƒpƒ^[ƒ“‚ğ“K—p
+ * ï¿½ï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Å—ï¿½ï¿½pï¿½ï¿½ï¿½éƒŠï¿½Xï¿½gï¿½Ìï¿½ï¿½ï¿½
+ * Bridgeï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½Kï¿½p
  * @author 25689
  *
  */

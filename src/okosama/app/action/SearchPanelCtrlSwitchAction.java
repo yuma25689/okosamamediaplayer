@@ -3,10 +3,9 @@ package okosama.app.action;
 import okosama.app.widget.absWidget;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.RelativeLayout;
 
 /**
- * ŒŸõƒpƒlƒ‹‚ÌƒRƒ“ƒgƒ[ƒ‹‚ğØ‚è‘Ö‚¦‚é
+ * ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½lï¿½ï¿½ï¿½ÌƒRï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½
  * @author 25689
  *
  */

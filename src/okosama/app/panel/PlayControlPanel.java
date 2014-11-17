@@ -1,6 +1,7 @@
 package okosama.app.panel;
 
 import okosama.app.ControlIDs;
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.R.drawable;
@@ -19,10 +20,8 @@ import okosama.app.widget.ButtonImpl;
 import okosama.app.widget.absWidget;
 import android.app.Activity;
 import android.os.RemoteException;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 
@@ -60,7 +59,7 @@ public class PlayControlPanel extends ControlPanel {
 		}
 		else
 		{
-			Log.e("error","insert play control panel");
+			LogWrapper.e("error","insert play control panel");
 		}
 	}
 	public static void removeFromParent()//ViewGroup tabBaseLayout )
@@ -107,7 +106,7 @@ public class PlayControlPanel extends ControlPanel {
 						, null, drawable.okosama_app_widget_bg2, "", ScaleType.FIT_XY
 					),				
 					// --------------------- PROGRESS
-					// TODO: Œã‚Å•Ê‚ÉˆÚ‚·
+					// TODO: ï¿½ï¿½Å•Ê‚ÉˆÚ‚ï¿½
 					new TabComponentPropertySetter(
 						ControlIDs.TIME_PROGRESS, null, ComponentType.PROGRESS, 
 						0, 125, 480, 40
@@ -145,7 +144,7 @@ public class PlayControlPanel extends ControlPanel {
 						, null, drawable.okosama_app_widget_bg2, "", ScaleType.FIT_XY
 					),				
 					// --------------------- PROGRESS
-					// TODO: Œã‚Å•Ê‚ÉˆÚ‚·
+					// TODO: ï¿½ï¿½Å•Ê‚ÉˆÚ‚ï¿½
 					new TabComponentPropertySetter(
 						ControlIDs.TIME_PROGRESS, null, ComponentType.PROGRESS, 
 						0, 0, 40, RelativeLayout.LayoutParams.FILL_PARENT
@@ -163,14 +162,14 @@ public class PlayControlPanel extends ControlPanel {
 				,TimeControlPanel.getInstance().getProgressBar()				
 			};
 		// ---- action
-		// TimeƒRƒ“ƒ|[ƒlƒ“ƒg
+		// Timeï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½g
 		SparseArray< IViewAction > actPlayClick = new SparseArray< IViewAction >();
 		SparseArray< IViewAction > actNextClick = new SparseArray< IViewAction >();
 		SparseArray< IViewAction > actPrevClick = new SparseArray< IViewAction >();
 		actPlayClick.put( IViewAction.ACTION_ID_ONCLICK, new MediaPlayPauseAction() );	
 		actNextClick.put( IViewAction.ACTION_ID_ONCLICK, new NextAction() );	
 		actPrevClick.put( IViewAction.ACTION_ID_ONCLICK, new PrevAction() );	
-		// ProgressBar—p action
+		// ProgressBarï¿½p action
 		SparseArray< IViewAction > actMapProgress = new SparseArray< IViewAction >();
 		actMapProgress.put( IViewAction.ACTION_ID_ONCLICKSEEK, new MediaSeekAction() );	
 
@@ -181,17 +180,17 @@ public class PlayControlPanel extends ControlPanel {
 				,null
 				,new TabComponentActionSetter( actMapProgress )				
 			};
-		// ƒ{ƒ^ƒ“‚ğì¬AˆÊ’u‚ğ‡‚í‚¹AƒAƒNƒVƒ‡ƒ“‚ğİ’è‚µAƒŒƒCƒAƒEƒg‚É”z’u
+		// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½Aï¿½Ê’uï¿½ï¿½ï¿½ï¿½ï¿½í‚¹ï¿½Aï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Aï¿½ï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½É”zï¿½u
 		int i=0;
 		for( absWidget widget : widgets )
 		{
 			widget.acceptConfigurator(creationData[i]);
-			// TODO:ƒ{ƒ^ƒ“‚ÌƒAƒNƒVƒ‡ƒ“‚ğİ’è
+			// TODO:ï¿½{ï¿½^ï¿½ï¿½ï¿½ÌƒAï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 			if( actionSetterCont[i] != null )
 			{
 				widget.acceptConfigurator(actionSetterCont[i]);
 			}
-			// ƒ{ƒ^ƒ“‚ğ‚±‚Ìƒ^ƒuq€–Ú‚Æ‚µ‚Ä’Ç‰Á
+			// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½qï¿½ï¿½ï¿½Ú‚Æ‚ï¿½ï¿½Ä’Ç‰ï¿½
 			addChild( creationData[i].getInternalID(), widget );			
 			tabBaseLayout.addView( widget.getView() );
 			i++;

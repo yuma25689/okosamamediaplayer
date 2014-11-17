@@ -1,9 +1,9 @@
 package okosama.app.panel;
 
 import okosama.app.ControlIDs;
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-import okosama.app.R.color;
 import okosama.app.R.drawable;
 import okosama.app.factory.DroidWidgetKit;
 import okosama.app.service.MediaPlayerUtil;
@@ -18,7 +18,6 @@ import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 
@@ -56,7 +55,7 @@ public class NowPlayingControlPanel extends ControlPanel {
 		}
 		else
 		{
-			Log.e("error","insert sub control panel");
+			LogWrapper.e("error","insert sub control panel");
 		}
 	}
 	public static void removeFromParent() //ViewGroup tabBaseLayout )
@@ -67,7 +66,7 @@ public class NowPlayingControlPanel extends ControlPanel {
 
 			parent = null;
 			
-			// marquee‘Î‰
+			// marqueeï¿½Î‰ï¿½
 			if( instance.getNowPlayingSongLabel() != null && instance.getNowPlayingSongLabel().getView() != null )
 			{
 				LabelImpl tv = ((LabelImpl)instance.getNowPlayingSongLabel().getView());
@@ -128,12 +127,12 @@ public class NowPlayingControlPanel extends ControlPanel {
 				,getNowPlayingAlbumLabel()
 			};
 		// ---- action
-//		// TimeƒRƒ“ƒ|[ƒlƒ“ƒg
-//		// shuffleƒ{ƒ^ƒ“
+//		// Timeï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½g
+//		// shuffleï¿½{ï¿½^ï¿½ï¿½
 //		SparseArray< IViewAction > actMapShuffle
 //			= new SparseArray< IViewAction >();
 //		actMapShuffle.put( IViewAction.ACTION_ID_ONCLICK, new ToggleShuffleAction() );
-//		// repeatƒ{ƒ^ƒ“
+//		// repeatï¿½{ï¿½^ï¿½ï¿½
 //		SparseArray< IViewAction > actMapRepeat
 //			= new SparseArray< IViewAction >();
 //		actMapRepeat.put( IViewAction.ACTION_ID_ONCLICK, new CycleRepeatAction() );
@@ -142,18 +141,18 @@ public class NowPlayingControlPanel extends ControlPanel {
 //				new TabComponentActionSetter( actMapShuffle )
 //				,new TabComponentActionSetter( actMapRepeat )
 //			};
-		// ƒ{ƒ^ƒ“‚ğì¬AˆÊ’u‚ğ‡‚í‚¹AƒAƒNƒVƒ‡ƒ“‚ğİ’è‚µAƒŒƒCƒAƒEƒg‚É”z’u
+		// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½Aï¿½Ê’uï¿½ï¿½ï¿½ï¿½ï¿½í‚¹ï¿½Aï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Aï¿½ï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½É”zï¿½u
 		int i=0;
 		for( absWidget widget : widgets )
 		{
 			widget.acceptConfigurator(creationData[i]);
-//			// TODO:ƒ{ƒ^ƒ“‚ÌƒAƒNƒVƒ‡ƒ“‚ğİ’è
+//			// TODO:ï¿½{ï¿½^ï¿½ï¿½ï¿½ÌƒAï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 //			if( actionSetterCont[i] != null )
 //			{
 //				widget.acceptConfigurator(actionSetterCont[i]);
 //			}
 			
-			// ƒ{ƒ^ƒ“‚ğ‚±‚Ìƒ^ƒuq€–Ú‚Æ‚µ‚Ä’Ç‰Á
+			// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½qï¿½ï¿½ï¿½Ú‚Æ‚ï¿½ï¿½Ä’Ç‰ï¿½
 			addChild( creationData[i].getInternalID(), widget );			
 			tabBaseLayout.addView( widget.getView() );
 			i++;
@@ -172,7 +171,7 @@ public class NowPlayingControlPanel extends ControlPanel {
 				tv.setTextColor(
 						OkosamaMediaPlayerActivity.getResourceAccessor().getColor(
 								android.R.color.primary_text_light_nodisable));
-				tv.setSingleLine(); // •¶š—ñ‚ğ1s‚Å•\¦. ‚±‚ê‚ª‚È‚¢‚Æ•¡”s‚É“n‚Á‚Ä•\¦‚³‚ê‚Ä‚µ‚Ü‚¤‚Ì‚ÅAƒXƒNƒ[ƒ‹‚Å‚«‚È‚¢
+				tv.setSingleLine(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½sï¿½Å•\ï¿½ï¿½. ï¿½ï¿½ï¿½ê‚ªï¿½È‚ï¿½ï¿½Æ•ï¿½ï¿½ï¿½ï¿½sï¿½É“nï¿½ï¿½ï¿½Ä•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Ì‚ÅAï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Å‚ï¿½ï¿½È‚ï¿½
 				tv.setFocusableInTouchMode(true);				
 				//tv.setEllipsize(TruncateAt.MARQUEE);
 				tv.setGravity(Gravity.CENTER);
@@ -193,7 +192,7 @@ public class NowPlayingControlPanel extends ControlPanel {
     	try {
 			if( MediaPlayerUtil.sService != null && MediaPlayerUtil.sService.isPlaying() )
 			{
-				//tv.setSingleLine(); // •¶š—ñ‚ğ1s‚Å•\¦. ‚±‚ê‚ª‚È‚¢‚Æ•¡”s‚É“n‚Á‚Ä•\¦‚³‚ê‚Ä‚µ‚Ü‚¤‚Ì‚ÅAƒXƒNƒ[ƒ‹‚Å‚«‚È‚¢
+				//tv.setSingleLine(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½sï¿½Å•\ï¿½ï¿½. ï¿½ï¿½ï¿½ê‚ªï¿½È‚ï¿½ï¿½Æ•ï¿½ï¿½ï¿½ï¿½sï¿½É“nï¿½ï¿½ï¿½Ä•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Ì‚ÅAï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Å‚ï¿½ï¿½È‚ï¿½
 				//tv.setFocusableInTouchMode(true);	
 				if( TruncateAt.MARQUEE != tv.getEllipsize() )
 				{
@@ -212,7 +211,7 @@ public class NowPlayingControlPanel extends ControlPanel {
 		}
     	if( strValue.equals( tv.getText() ))
     	{
-    		// ‚¢‚¿‚¢‚¿İ’è‚µ’¼‚·‚ÆMarquee‚ªŒø‚¢‚Ä‚¢‚È‚¢‚æ‚¤‚ÉŒ©‚¦‚é‚½‚ßAƒeƒLƒXƒg‚ª“¯‚¶ê‡‚ÍAXV‚µ‚È‚¢
+    		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Marqueeï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½ÉŒï¿½ï¿½ï¿½ï¿½é‚½ï¿½ßAï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍAï¿½Xï¿½Vï¿½ï¿½ï¿½È‚ï¿½
     		return;
     	}
     	tv.setText(strValue);

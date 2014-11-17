@@ -1,14 +1,14 @@
 package okosama.app.widget;
 
+import okosama.app.R;
+import okosama.app.action.IViewAction;
 import android.app.Activity;
 import android.view.View;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import okosama.app.R;
-import okosama.app.action.IViewAction;
 
 /**
- * ‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å—˜—p‚·‚éƒV[ƒNƒo[‚Ìƒnƒ“ƒhƒ‹
- * Bridgeƒpƒ^[ƒ“‚ğ“K—p
+ * ï¿½ï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Å—ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½Vï¿½[ï¿½Nï¿½oï¿½[ï¿½Ìƒnï¿½ï¿½ï¿½hï¿½ï¿½
+ * Bridgeï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½Kï¿½p
  * @author 25689
  *
  */
@@ -20,12 +20,12 @@ public class SeekBar extends absWidget {
 	}
 	
 	/**
-	 * À‘•ƒNƒ‰ƒX
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 	 */
 	private SeekBarImpl impl;
 
 	/**
-	 * À‘•ƒNƒ‰ƒX‚Ìİ’è
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½Ìİ’ï¿½
 	 * @param impl
 	 */
 	public void setImpl(SeekBarImpl impl) {
@@ -33,7 +33,7 @@ public class SeekBar extends absWidget {
 	}
 	
 	/**
-	 * —LŒø–³Œø§Œä
+	 * ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param b
 	 */
 	@Override
@@ -42,7 +42,7 @@ public class SeekBar extends absWidget {
 		impl.setEnabled(b);
 	}
 	/**
-	 * •\¦§Œä
+	 * ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param b
 	 */
 	@Override
@@ -59,7 +59,7 @@ public class SeekBar extends absWidget {
 	}
 	@Override
 	public int create() {
-		// TODO ‚à‚Á‚Æ”Ä—p«‚Ì‚ ‚é‚â‚è•û‚É‚Å‚«‚é‚Í‚¸
+		// TODO ï¿½ï¿½ï¿½ï¿½ï¿½Æ”Ä—pï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚Å‚ï¿½ï¿½ï¿½Í‚ï¿½
 		impl = new SeekBarImpl(activity);
 		impl.setProgressDrawable(activity.getResources().getDrawable(R.drawable.selector_progress_image));
 		impl.setIndeterminate(false);
@@ -108,7 +108,7 @@ public class SeekBar extends absWidget {
 			);
 //			impl.setOnClickListener(new View.OnClickListener() {
 //	            public void onClick(View v) {
-//	                // ƒNƒŠƒbƒN‚Ìˆ—
+//	                // ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
 //	            	actionMap.get( IViewAction.ACTION_ID_ONCLICK )
 //	            		.doAction(v);
 //	            }

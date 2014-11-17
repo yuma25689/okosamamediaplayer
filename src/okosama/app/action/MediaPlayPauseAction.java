@@ -3,13 +3,13 @@ package okosama.app.action;
 
 import okosama.app.AppStatus;
 import okosama.app.OkosamaMediaPlayerActivity;
-//import okosama.app.panel.PlayControlPanel;
-//import okosama.app.panel.SubControlPanel;
 import okosama.app.service.IMediaPlaybackService;
 import okosama.app.service.MediaPlayerUtil;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
+//import okosama.app.panel.PlayControlPanel;
+//import okosama.app.panel.SubControlPanel;
 
 public class MediaPlayPauseAction implements IViewAction {
 

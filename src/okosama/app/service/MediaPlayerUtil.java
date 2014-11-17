@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 import okosama.app.ControlIDs;
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.TimerAlertDialog;
@@ -14,9 +15,7 @@ import okosama.app.action.IViewAction;
 import okosama.app.action.TabSelectAction;
 import okosama.app.storage.Database;
 import okosama.app.tab.TabPage;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -35,24 +34,24 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
-// import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
+// import android.provider.MediaStore;
 
 
 public class MediaPlayerUtil {
 
-	// ƒT[ƒrƒX
+	// ï¿½Tï¿½[ï¿½rï¿½X
     public static IMediaPlaybackService sService = null;
-    // ƒT[ƒrƒXƒg[ƒNƒ“
-    // ‚¨‚»‚ç‚­AƒT[ƒrƒX‚Ì“à•”“I‚ÈID‚Æ‚µ‚Ä—˜—p
+    // ï¿½Tï¿½[ï¿½rï¿½Xï¿½gï¿½[ï¿½Nï¿½ï¿½
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ç‚­ï¿½Aï¿½Tï¿½[ï¿½rï¿½Xï¿½Ì“ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½IDï¿½Æ‚ï¿½ï¿½Ä—ï¿½ï¿½p
     public static class ServiceToken {
         ContextWrapper mWrappedContext;
         ServiceToken(ContextWrapper context) {
             mWrappedContext = context;
         }
     }
-    // ‹N“®’†‚ÌƒT[ƒrƒXŠi”[—pH
+    // ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ÌƒTï¿½[ï¿½rï¿½Xï¿½iï¿½[ï¿½pï¿½H
     private static HashMap<Context, ServiceBinder> sConnectionMap = new HashMap<Context, ServiceBinder>();
     
     public static boolean hasServiceConnection(Context ctx)
@@ -64,119 +63,119 @@ public class MediaPlayerUtil {
     	return sConnectionMap.size();
     }    
     /**
-     * ƒT[ƒrƒXƒoƒCƒ“ƒ_
+     * ï¿½Tï¿½[ï¿½rï¿½Xï¿½oï¿½Cï¿½ï¿½ï¿½_
      * @author 25689
      *
      */
     private static class ServiceBinder implements ServiceConnection {
-    	// ƒT[ƒrƒXƒRƒlƒNƒVƒ‡ƒ“‚ğƒCƒ“ƒvƒŠƒƒ“ƒg
-    	// ƒT[ƒrƒXƒRƒlƒNƒVƒ‡ƒ“‚ğƒƒ“ƒo‚Æ‚µ‚Ä•Û
+    	// ï¿½Tï¿½[ï¿½rï¿½Xï¿½Rï¿½lï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½g
+    	// ï¿½Tï¿½[ï¿½rï¿½Xï¿½Rï¿½lï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½Æ‚ï¿½ï¿½Ä•Ûï¿½
         ServiceConnection mCallback;
-        // ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÅƒT[ƒrƒXƒRƒlƒNƒVƒ‡ƒ“‚ğİ’è
+        // ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½ÅƒTï¿½[ï¿½rï¿½Xï¿½Rï¿½lï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
         ServiceBinder(ServiceConnection callback) {
             mCallback = callback;
         }
         
         /**
-         * ƒT[ƒrƒX‚ªÚ‘±‚³‚ê‚½‚Æ‚«ƒR[ƒ‹‚³‚ê‚éH
+         * ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½Ú‘ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½Æ‚ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½H
          */
         @Override
 		public void onServiceConnected(ComponentName className, android.os.IBinder service) {
-        	// ƒT[ƒrƒX‚ğæ“¾
+        	// ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½æ“¾
             sService = IMediaPlaybackService.Stub.asInterface(service);
             initAlbumArtCache();
             if (mCallback != null) {
-            	// ƒR[ƒ‹ƒoƒbƒN‚ªnull‚Å‚È‚¯‚ê‚ÎAƒR[ƒ‹ƒoƒbƒN‚àƒR[ƒ‹‚·‚é
+            	// ï¿½Rï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½nullï¿½Å‚È‚ï¿½ï¿½ï¿½ÎAï¿½Rï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 mCallback.onServiceConnected(className, service);
             }
         }
         
         /**
-         * ƒT[ƒrƒX‚ªØ’f‚³‚ê‚½‚Æ‚«‚ÉƒR[ƒ‹‚³‚ê‚éH
+         * ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½Ø’fï¿½ï¿½ï¿½ê‚½ï¿½Æ‚ï¿½ï¿½ÉƒRï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½H
          */
         @Override
 		public void onServiceDisconnected(ComponentName className) {
             if (mCallback != null) {
-            	// ƒR[ƒ‹ƒoƒbƒN‚ªnull‚Å‚È‚¯‚ê‚ÎAƒR[ƒ‹ƒoƒbƒN‚ğƒR[ƒ‹‚·‚é
+            	// ï¿½Rï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½nullï¿½Å‚È‚ï¿½ï¿½ï¿½ÎAï¿½Rï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                mCallback.onServiceDisconnected(className);
             }
-            // “à•”‚ÉŠi”[‚³‚ê‚½ƒT[ƒrƒX‚ğƒNƒŠƒA‚·‚é
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½ê‚½ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½
             sService = null;
         }
     }    
     /**
-     * ƒT[ƒrƒX‚ÆƒoƒCƒ“ƒh‚·‚é
+     * ï¿½Tï¿½[ï¿½rï¿½Xï¿½Æƒoï¿½Cï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½
      * @param context
-     * @return ƒT[ƒrƒXƒg[ƒNƒ“
+     * @return ï¿½Tï¿½[ï¿½rï¿½Xï¿½gï¿½[ï¿½Nï¿½ï¿½
      */
     public static ServiceToken bindToService(Activity context) {
         return bindToService(context, null);
     }
 
     /**
-     * ƒT[ƒrƒX‚ÆƒoƒCƒ“ƒh‚·‚é
+     * ï¿½Tï¿½[ï¿½rï¿½Xï¿½Æƒoï¿½Cï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½
      * @param context
      * @param callback
-     * @return ƒT[ƒrƒXƒg[ƒNƒ“
+     * @return ï¿½Tï¿½[ï¿½rï¿½Xï¿½gï¿½[ï¿½Nï¿½ï¿½
      */
     public static ServiceToken bindToService(
     		Activity context, ServiceConnection callback) {
-    	// w’è‚³‚ê‚½ƒAƒNƒeƒBƒrƒeƒB‚©‚çAÀÛ‚ÌƒAƒNƒeƒBƒrƒeƒB‚ğæ“¾‚·‚é
-    	// ˆê’UeƒAƒNƒeƒBƒrƒeƒB‚Ìæ“¾‚ğ‚İ‚ÄA‚»‚ê‚Å‘Ê–Ú‚È‚çw’è‚³‚ê‚½ƒAƒNƒeƒBƒrƒeƒB‚ğ—˜—p‚·‚é
+    	// ï¿½wï¿½è‚³ï¿½ê‚½ï¿½Aï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Û‚ÌƒAï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
+    	// ï¿½ï¿½Uï¿½eï¿½Aï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½Ìæ“¾ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ÄAï¿½ï¿½ï¿½ï¿½Å‘Ê–Ú‚È‚ï¿½wï¿½è‚³ï¿½ê‚½ï¿½Aï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½ğ—˜—pï¿½ï¿½ï¿½ï¿½
         Activity realActivity = context;//.getParent();
 //        if (realActivity == null) {
 //            realActivity = context;
 //        }
-        // ƒAƒNƒeƒBƒrƒeƒB‚ÌƒRƒ“ƒeƒLƒXƒgƒ‰ƒbƒp[‚ğæ“¾
+        // ï¿½Aï¿½Nï¿½eï¿½Bï¿½rï¿½eï¿½Bï¿½ÌƒRï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½bï¿½pï¿½[ï¿½ï¿½ï¿½æ“¾
         ContextWrapper cw = new ContextWrapper(realActivity);
-        // ƒT[ƒrƒX‚ğ‹N“®‚·‚é
+        // ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         cw.startService(new Intent(cw, MediaPlaybackService.class));
-        // ƒT[ƒrƒX‚ÆAw’è‚³‚ê‚½ƒT[ƒrƒXƒRƒlƒNƒVƒ‡ƒ“‚ğƒoƒCƒ“ƒh
+        // ï¿½Tï¿½[ï¿½rï¿½Xï¿½ÆAï¿½wï¿½è‚³ï¿½ê‚½ï¿½Tï¿½[ï¿½rï¿½Xï¿½Rï¿½lï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½Cï¿½ï¿½ï¿½h
         ServiceBinder sb = new ServiceBinder(callback);
-        // ƒT[ƒrƒX‚ğƒT[ƒrƒXƒoƒCƒ“ƒ_‚Æ•R‚Â‚¯‚éH
+        // ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½Tï¿½[ï¿½rï¿½Xï¿½oï¿½Cï¿½ï¿½ï¿½_ï¿½Æ•Rï¿½Â‚ï¿½ï¿½ï¿½H
         if (cw.bindService((new Intent()).setClass(cw, MediaPlaybackService.class), sb, 0)) {
-        	// ¬Œ÷‚µ‚½‚çAƒ}ƒbƒv‚ÉŠi”[‚µ‚Ä‚¨‚­
+        	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½}ï¿½bï¿½vï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
             sConnectionMap.put(cw, sb);
-            // ƒT[ƒrƒX‚ÌID‚Æ‚È‚éƒg[ƒNƒ“‚ğ•Ô‹p‚·‚é
+            // ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½IDï¿½Æ‚È‚ï¿½gï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½Ô‹pï¿½ï¿½ï¿½ï¿½
             return new ServiceToken(cw);
         }
-        // ¸”s‚µ‚½‚çAƒƒOo—Í‚µ‚Änull‚ğ•Ô‹p‚·‚é
-        Log.e("Music", "Failed to bind to service");
+        // ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Oï¿½oï¿½Í‚ï¿½ï¿½ï¿½nullï¿½ï¿½Ô‹pï¿½ï¿½ï¿½ï¿½
+        LogWrapper.e("Music", "Failed to bind to service");
         return null;
     }
     
     /**
-     * ƒoƒCƒ“ƒh‚ğ‰ğœ‚·‚é
+     * ï¿½oï¿½Cï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      * @param token
      */
     public static void unbindFromService(ServiceToken token) {
     	// Toast.makeText(OkosamaMediaPlayerActivity.getResourceAccessor().getActivity(), "unbind", Toast.LENGTH_LONG).show();
             	
         if (token == null) {
-        	// ƒg[ƒNƒ“‚ªnull‚Å‚ ‚ê‚ÎAƒƒO‚ğ‚Í‚¢‚ÄI—¹
-            Log.e("MediaPlayer", "Trying to unbind with null token");
+        	// ï¿½gï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½nullï¿½Å‚ï¿½ï¿½ï¿½ÎAï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Í‚ï¿½ï¿½ÄIï¿½ï¿½
+            LogWrapper.e("MediaPlayer", "Trying to unbind with null token");
             return;
         }
-        // ƒg[ƒNƒ“‚©‚çƒRƒ“ƒeƒLƒXƒgƒ‰ƒbƒp[‚ğæ“¾
+        // ï¿½gï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½bï¿½pï¿½[ï¿½ï¿½ï¿½æ“¾
         ContextWrapper cw = token.mWrappedContext;
-        // w’è‚³‚ê‚½ƒRƒ“ƒeƒLƒXƒgƒ‰ƒbƒp[‚ÌƒGƒ“ƒgƒŠ‚ğíœ‚µA‚»‚ÌƒT[ƒrƒXƒoƒCƒ“ƒ_‚ğæ“¾
+        // ï¿½wï¿½è‚³ï¿½ê‚½ï¿½Rï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½bï¿½pï¿½[ï¿½ÌƒGï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ÌƒTï¿½[ï¿½rï¿½Xï¿½oï¿½Cï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½æ“¾
         ServiceBinder sb = sConnectionMap.remove(cw);
         if (sb == null) {
-        	// ƒT[ƒrƒXƒoƒCƒ“ƒ_‚ªæ“¾‚Å‚«‚È‚©‚Á‚½‚çAƒGƒ‰[ƒƒO‚ğo—Í‚µAˆ—‚ğ”²‚¯‚é
-            Log.e("MediaPlayer", "Trying to unbind for unknown Context");
+        	// ï¿½Tï¿½[ï¿½rï¿½Xï¿½oï¿½Cï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½oï¿½Í‚ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ğ”²‚ï¿½ï¿½ï¿½
+            LogWrapper.e("MediaPlayer", "Trying to unbind for unknown Context");
             return;
         }
-        // ƒT[ƒrƒXƒoƒCƒ“ƒ_‚©‚çAƒT[ƒrƒX‚ÌƒoƒCƒ“ƒh‚ğ‰ğœ‚·‚é
+        // ï¿½Tï¿½[ï¿½rï¿½Xï¿½oï¿½Cï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½Aï¿½Tï¿½[ï¿½rï¿½Xï¿½Ìƒoï¿½Cï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         cw.unbindService(sb);
         token = null;
         if (sConnectionMap.isEmpty()) {
-            // ƒT[ƒrƒX‚ª‚P‚Â‚à‚È‚­‚È‚Á‚½‚çAƒT[ƒrƒX‚ğƒNƒŠƒA‚·‚é
+            // ï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½Pï¿½Â‚ï¿½ï¿½È‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Tï¿½[ï¿½rï¿½Xï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½
             sService = null;
         }
     }
 
     
-    ///////// ‚±‚±‚©‚ç‚µ‚Î‚ç‚­ƒAƒ‹ƒoƒ€ƒA[ƒg—p ///////////
+    ///////// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç‚µï¿½Î‚ç‚­ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Aï¿½[ï¿½gï¿½p ///////////
     // A really simple BitmapDrawable-like class, that doesn't do
     // scaling, dithering or filtering.
     private static class FastBitmapDrawable extends Drawable {
@@ -199,10 +198,10 @@ public class MediaPlayerUtil {
         public void setColorFilter(ColorFilter cf) {
         }
     }    
-    // ƒAƒ‹ƒoƒ€ƒA[ƒg‚ÌƒLƒƒƒbƒVƒ…‚Ìƒ}ƒbƒv
+    // ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Aï¿½[ï¿½gï¿½ÌƒLï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½Ìƒ}ï¿½bï¿½v
     public static final HashMap<Long, Drawable> 
     	sArtCache = new HashMap<Long, Drawable>();    
-    // ƒAƒ‹ƒoƒ€ƒA[ƒg‚ÌƒLƒƒƒbƒVƒ…‚ÌID
+    // ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Aï¿½[ï¿½gï¿½ÌƒLï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½ID
     private static int sArtCacheId = -1; 
     // private static int sArtId = -2;
     // private static Bitmap mCachedBit = null;
@@ -211,11 +210,11 @@ public class MediaPlayerUtil {
     private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
     
     /**
-     * ƒAƒ‹ƒoƒ€ƒA[ƒg‚ÌƒLƒƒƒbƒVƒ…‚ğ‰Šú‰»
+     * ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Aï¿½[ï¿½gï¿½ÌƒLï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     public static void initAlbumArtCache() {
         try {
-        	// ƒƒfƒBƒA‚Ìƒ}ƒEƒ“ƒg‚³‚ê‚½”‚ğid‚Æ‚µ‚Äæ“¾A•ÛH
+        	// ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½Ìƒ}ï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ï¿½idï¿½Æ‚ï¿½ï¿½Äæ“¾ï¿½Aï¿½Ûï¿½ï¿½H
             int id = sService.getMediaMountedCount();
             if (id != sArtCacheId) {
                 clearAlbumArtCache();
@@ -226,7 +225,7 @@ public class MediaPlayerUtil {
         }
     }
     /**
-     * ƒAƒ‹ƒoƒ€ƒA[ƒg‚ÌƒLƒƒƒbƒVƒ…‚ğƒNƒŠƒA
+     * ï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Aï¿½[ï¿½gï¿½ÌƒLï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
      */
     public static void clearAlbumArtCache() {
         synchronized(sArtCache) {
@@ -482,10 +481,10 @@ public class MediaPlayerUtil {
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.e("playAll","service.isPlaying error=" + e.getMessage());
+			LogWrapper.e("playAll","service.isPlaying error=" + e.getMessage());
 		}
         if (list.length == 0 || sService == null) {
-        	// ƒvƒŒƒCƒŠƒXƒg‚ª‹ó‚È‚ç‚ÎAƒƒO‚ğo—ÍAƒg[ƒXƒg‚ğ•\¦‚µ‚ÄI—¹
+        	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½È‚ï¿½ÎAï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½oï¿½ÍAï¿½gï¿½[ï¿½Xï¿½gï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ÄIï¿½ï¿½
             Log.d("MusicUtils", "attempt to play empty song list");
             // Don't try to play empty playlists. Nothing good will come of it.
             String message = context.getString(R.string.emptyplaylist, list.length);
@@ -494,12 +493,12 @@ public class MediaPlayerUtil {
         }
         try {
             if (force_shuffle) {
-            	// ‹­§ƒVƒƒƒbƒtƒ‹ƒ‚[ƒh‚Ìê‡
+            	// ï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½bï¿½tï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½Ìê‡
                 sService.setShuffleMode(MediaPlaybackService.SHUFFLE_NORMAL);
             }
-            // Œ»İ‚ÌƒI[ƒfƒBƒI‚Ìid‚ğæ“¾
+            // ï¿½ï¿½ï¿½İ‚ÌƒIï¿½[ï¿½fï¿½Bï¿½Iï¿½ï¿½idï¿½ï¿½ï¿½æ“¾
             long curid = sService.getAudioId();
-            // Œ»İ‚ÌƒLƒ…[ˆÊ’u‚ğæ“¾
+            // ï¿½ï¿½ï¿½İ‚ÌƒLï¿½ï¿½ï¿½[ï¿½Ê’uï¿½ï¿½ï¿½æ“¾
             int curpos = sService.getQueuePosition();
             if (position != -1 && curpos == position && curid == list[position].getId()) {
                 // The selected file is the file that's currently playing;
@@ -559,7 +558,7 @@ public class MediaPlayerUtil {
             }
         } catch (RemoteException ex) {
         } finally {
-        	// Ä¶‰æ–Ê‚ÖˆÚ“®
+        	// ï¿½Äï¿½ï¿½ï¿½Ê‚ÖˆÚ“ï¿½
 //    		IViewAction action1 = new TabSelectAction( ControlIDs.TAB_ID_MAIN,
 //    				TabPage.TABPAGE_ID_PLAY );
 //    		action1.doAction(null);
@@ -574,10 +573,10 @@ public class MediaPlayerUtil {
 //        			ControlIDs.TAB_ID_MAIN, TabPage.TABPAGE_ID_PLAY, true );
         	
         }
-        // ‰º‹L‚ÌğŒ‚Éˆê’v‚·‚éê‡Aƒ^ƒu‚ğˆÚ“®‚·‚é‚©‚Ç‚¤‚©‚ÌƒAƒ‰[ƒg‚ğo—Í‚·‚é
+        // ï¿½ï¿½ï¿½Lï¿½Ìï¿½ï¿½ï¿½ï¿½Éˆï¿½vï¿½ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½^ï¿½uï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ÌƒAï¿½ï¿½ï¿½[ï¿½gï¿½ï¿½ï¿½oï¿½Í‚ï¿½ï¿½ï¿½
     	OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
-    	if( // false == bAlreadyPlayed // ƒƒfƒBƒA‚ªÄ¶’†‚Å‚È‚©‚Á‚½
-    			// Œ»İ‚Ìƒ^ƒu‚ªƒLƒ…[‚Ìƒ^ƒu‚Å‚È‚¢
+    	if( // false == bAlreadyPlayed // ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½
+    			// ï¿½ï¿½ï¿½İ‚Ìƒ^ï¿½uï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½[ï¿½Ìƒ^ï¿½uï¿½Å‚È‚ï¿½
     	//&& 
     		false == ( act.getTabStocker().getCurrentTabId() == ControlIDs.TAB_ID_MAIN 
     		&& act.getTabStocker().getCurrentTabId() == TabPage.TABPAGE_ID_NOW_PLAYLIST )
@@ -585,11 +584,11 @@ public class MediaPlayerUtil {
     	{
         		
 	    	TimerAlertDialog.Builder dlgConfirm = new TimerAlertDialog.Builder(act);
-	        // ƒAƒ‰[ƒgƒ_ƒCƒAƒƒO‚Ìƒ^ƒCƒgƒ‹‚ğİ’è‚µ‚Ü‚·
+	        // ï¿½Aï¿½ï¿½ï¿½[ï¿½gï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½Ìƒ^ï¿½Cï¿½gï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½
 	    	dlgConfirm.setTitle(R.string.move_playtab_title);
-	        // ƒAƒ‰[ƒgƒ_ƒCƒAƒƒO‚ÌƒƒbƒZ[ƒW‚ğİ’è‚µ‚Ü‚·
+	        // ï¿½Aï¿½ï¿½ï¿½[ï¿½gï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½Ìƒï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½
 	    	dlgConfirm.setMessage(act.getString(R.string.move_playtab_message));
-	        // ƒAƒ‰[ƒgƒ_ƒCƒAƒƒO‚Ìm’èƒ{ƒ^ƒ“‚ªƒNƒŠƒbƒN‚³‚ê‚½‚ÉŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒNƒŠƒXƒi[‚ğ“o˜^‚µ‚Ü‚·
+	        // ï¿½Aï¿½ï¿½ï¿½[ï¿½gï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½Ìmï¿½ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ÉŒÄ‚Ñoï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½ï¿½Xï¿½iï¿½[ï¿½ï¿½oï¿½^ï¿½ï¿½ï¿½Ü‚ï¿½
 	    	dlgConfirm.setPositiveButton(R.string.alert_dialog_yes,
 	                new DialogInterface.OnClickListener() {
 	                    @Override
@@ -599,16 +598,16 @@ public class MediaPlayerUtil {
 	                		action.doAction(null);                        	
 	                    }
 	                });
-	        // ƒAƒ‰[ƒgƒ_ƒCƒAƒƒO‚Ì”Û’èƒ{ƒ^ƒ“‚ªƒNƒŠƒbƒN‚³‚ê‚½‚ÉŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒNƒŠƒXƒi[‚ğ“o˜^‚µ‚Ü‚·
+	        // ï¿½Aï¿½ï¿½ï¿½[ï¿½gï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½Ì”Û’ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ÉŒÄ‚Ñoï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½ï¿½Xï¿½iï¿½[ï¿½ï¿½oï¿½^ï¿½ï¿½ï¿½Ü‚ï¿½
 	    	dlgConfirm.setNegativeButton(R.string.alert_dialog_no,
 	                new DialogInterface.OnClickListener() {
 	                    @Override
 	                    public void onClick(DialogInterface dialog, int which) {
 	                    }
 	                });
-	        // ƒAƒ‰[ƒgƒ_ƒCƒAƒƒO‚ÌƒLƒƒƒ“ƒZƒ‹‚ª‰Â”\‚©‚Ç‚¤‚©‚ğİ’è‚µ‚Ü‚·
+	        // ï¿½Aï¿½ï¿½ï¿½[ï¿½gï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½ÌƒLï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½Â”\ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½
 	    	dlgConfirm.setCancelable(true);
-	    	// ƒAƒ‰[ƒgƒ_ƒCƒAƒƒO‚ğì¬A•\¦‚µ‚Ü‚·
+	    	// ï¿½Aï¿½ï¿½ï¿½[ï¿½gï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ì¬ï¿½Aï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½
 	    	// TimerAlertDialog dlg = 
 			dlgConfirm.create();
 			dlgConfirm.show();
@@ -644,7 +643,7 @@ public class MediaPlayerUtil {
     }
     
     /**
-     *  Ÿ‚Ì‹È‚Ö
+     *  ï¿½ï¿½ï¿½Ì‹È‚ï¿½
      */
     public static void next()
     {
@@ -655,7 +654,7 @@ public class MediaPlayerUtil {
         }    	
     }
     /**
-     *  ‘O‚Ì‹È‚Ö
+     *  ï¿½Oï¿½Ì‹È‚ï¿½
      */
     public static void prev()
     {
@@ -691,8 +690,8 @@ public class MediaPlayerUtil {
 			{
 				if( listType[0] == MediaInfo.MEDIA_TYPE_VIDEO )
 				{
-					// ƒLƒ…[‚É‚ ‚é€–Ú‚ÌÅ‰‚Ì‚P‚Â‚ªVideo‚¾‚Á‚½“_‚ÅAVideo‚Æ‚İ‚È‚·
-					// (Œ»óA‚P‚Â‚Å‚àVideo‚È‚ç‚Î‘S‚ÄVideo‚Ì‚Í‚¸)
+					// ï¿½Lï¿½ï¿½ï¿½[ï¿½É‚ï¿½ï¿½é€ï¿½Ú‚ÌÅï¿½ï¿½Ì‚Pï¿½Â‚ï¿½Videoï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ÅAVideoï¿½Æ‚İ‚È‚ï¿½
+					// (ï¿½ï¿½ï¿½ï¿½Aï¿½Pï¿½Â‚Å‚ï¿½Videoï¿½È‚ï¿½Î‘Sï¿½ï¿½Videoï¿½Ì‚Í‚ï¿½)
 					return true;
 				}
 			}

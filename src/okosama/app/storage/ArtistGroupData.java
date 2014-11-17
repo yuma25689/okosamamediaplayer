@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
-
 import android.provider.MediaStore;
 
 public class ArtistGroupData implements Serializable, ISimpleData {

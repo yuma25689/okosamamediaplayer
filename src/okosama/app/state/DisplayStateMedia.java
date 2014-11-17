@@ -1,26 +1,26 @@
 package okosama.app.state;
 
-import android.view.Menu;
-import android.view.MenuItem;
 import okosama.app.AppStatus;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class DisplayStateMedia extends absDisplayState {
 
 	@Override
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
-		// ƒƒfƒBƒA‘I‘ğ‰æ–Ê‚Ö‚ÌØ‚è‘Ö‚¦
+		// ï¿½ï¿½ï¿½fï¿½Bï¿½Aï¿½Iï¿½ï¿½ï¿½ï¿½Ê‚Ö‚ÌØ‚ï¿½Ö‚ï¿½
 		tab.setCurrentTab(TabPage.TABPAGE_ID_MEDIA, true);
 //		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_MEDIA );
 //		action.doAction(null);
 
-		// ƒTƒu‰æ–Ê‚ª‚ ‚é‚Ì‚ÅA1‚ğ•Ô‹p‚·‚é
+		// ï¿½Tï¿½uï¿½ï¿½Ê‚ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ÅA1ï¿½ï¿½Ô‹pï¿½ï¿½ï¿½ï¿½
 		return TabPage.TABPAGE_ID_MEDIA;
 	}
 	@Override
 	public int registerReceivers(int status) {
-		// ‚±‚Ìƒ^ƒu‚ÍA‘ÎÛŠO
+		// ï¿½ï¿½ï¿½Ìƒ^ï¿½uï¿½ÍAï¿½ÎÛŠO
 		return 1;
 	}
 	@Override

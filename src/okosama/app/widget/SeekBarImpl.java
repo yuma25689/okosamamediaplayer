@@ -1,12 +1,11 @@
 package okosama.app.widget;
 
-import okosama.app.OkosamaMediaPlayerActivity;
 import android.content.Context;
 import android.widget.SeekBar;
 
 /**
- * ‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å—˜—p‚·‚éƒV[ƒNƒo[‚ÌÀ‘•
- * Bridgeƒpƒ^[ƒ“‚ğ“K—p
+ * ï¿½ï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Å—ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½Vï¿½[ï¿½Nï¿½oï¿½[ï¿½Ìï¿½ï¿½ï¿½
+ * Bridgeï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½Kï¿½p
  * @author 25689
  *
  */
@@ -14,7 +13,7 @@ public class SeekBarImpl extends SeekBar {
 
 	public SeekBarImpl(Context context) {
 		super(context,null,android.R.attr.progressBarStyleHorizontal);	
-		// ‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ““Á—L‚Ìİ’è
+		// ï¿½ï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½Ìİ’ï¿½
 		setPadding(0,0,0,0);
 	}
 }

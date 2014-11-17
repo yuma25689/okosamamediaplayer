@@ -2,13 +2,12 @@ package okosama.app.widget;
 
 import android.content.Context;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class EditImpl extends EditText {
 
 	public EditImpl(Context context) {
 		super(context);
-		// ‚±‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ““Á—L‚Ìİ’è
+		// ï¿½ï¿½ï¿½ÌƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½Ìİ’ï¿½
 		// setPadding(0,0,0,0);
 	}
 

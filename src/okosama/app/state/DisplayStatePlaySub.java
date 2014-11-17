@@ -1,11 +1,7 @@
 package okosama.app.state;
 
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-import android.os.RemoteException;
-import android.util.Log;
-import android.view.View;
 import okosama.app.AppStatus;
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.factory.ListenerFactory;
 import okosama.app.panel.NowPlayingControlPanel;
@@ -14,12 +10,16 @@ import okosama.app.service.MediaPlaybackService;
 import okosama.app.service.MediaPlayerUtil;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.os.RemoteException;
+import android.view.View;
 
 public class DisplayStatePlaySub extends absDisplayState {
 
 	@Override
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
-		// ƒvƒŒƒC‘I‘ğ‰æ–Ê‚Ö‚ÌØ‚è‘Ö‚¦
+		// ï¿½vï¿½ï¿½ï¿½Cï¿½Iï¿½ï¿½ï¿½ï¿½Ê‚Ö‚ÌØ‚ï¿½Ö‚ï¿½
 		tab.setCurrentTab(TabPage.TABPAGE_ID_PLAY_SUB, true);
 		//OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		//act.getControllerShowHideBtn().getView().setVisibility(View.GONE);
@@ -86,8 +86,8 @@ public class DisplayStatePlaySub extends absDisplayState {
 			OkosamaMediaPlayerActivity act = OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 	        if( bPlaying )
 	        {
-				// Ä¶’†‚©‚Ç‚¤‚©‚ÅAˆ—‚ğU‚è•ª‚¯‚é
-	        	ret = 1000; //	Ä¶’†‚ÍA1000ms‚²‚Æ‚É‰æ–ÊXV
+				// ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ÅAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½è•ªï¿½ï¿½ï¿½ï¿½
+	        	ret = 1000; //	ï¿½Äï¿½ï¿½ï¿½ï¿½ÍA1000msï¿½ï¿½ï¿½Æ‚É‰ï¿½ÊXï¿½V
 	        }
 	        else
 	        {
@@ -115,13 +115,13 @@ public class DisplayStatePlaySub extends absDisplayState {
         }
         catch( RemoteException ex )
         {
-        	Log.e("error - updateDisplay", ex.getMessage() );
+        	LogWrapper.e("error - updateDisplay", ex.getMessage() );
         }
 		return ret;
 	}
 	@Override
 	public int updateStatus() {
-		// TODO: ƒ{ƒ^ƒ““™H
+		// TODO: ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½H
 		return 0;
 	}
 	

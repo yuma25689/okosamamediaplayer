@@ -1,10 +1,10 @@
 package okosama.app.action;
 import android.view.View;
-// import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
+// import android.view.animation.AlphaAnimation;
 
 /**
- * ƒ^ƒu€–Ú‚ğ‰B‚µ‚½‚¢‚Æ‚«‚ÉÀs‚·‚éƒAƒNƒVƒ‡ƒ“
+ * ï¿½^ï¿½uï¿½ï¿½ï¿½Ú‚ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Éï¿½ï¿½sï¿½ï¿½ï¿½ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½
  * @author 25689
  *
  */

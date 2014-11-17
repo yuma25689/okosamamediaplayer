@@ -2,14 +2,14 @@ package okosama.app.tab;
 
 import java.util.ArrayList;
 
+import okosama.app.LogWrapper;
 import okosama.app.OkosamaMediaPlayerActivity;
 import okosama.app.R;
 import okosama.app.adapter.AlbumListRawAdapter;
 import okosama.app.adapter.ArtistAlbumListRawAdapter;
-import okosama.app.adapter.VideoListRawAdapter;
-// import okosama.app.adapter.PlaylistListAdapter;
 import okosama.app.adapter.PlaylistListRawAdapter;
 import okosama.app.adapter.TrackListRawAdapter;
+import okosama.app.adapter.VideoListRawAdapter;
 import okosama.app.storage.AlbumData;
 import okosama.app.storage.PlaylistData;
 import okosama.app.storage.TrackData;
@@ -17,21 +17,20 @@ import okosama.app.storage.VideoData;
 import okosama.app.widget.absWidget;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
+import android.widget.ToggleButton;
+// import okosama.app.adapter.PlaylistListAdapter;
 
 /**
- * Tab‚Ì\¬—v‘f‚ğì¬‚·‚é‚½‚ß‚É•K—v‚È‘S‚Ä‚Ìî•ñ‚ğ‚±‚±‚ÉŠi”[‚µ‚ÄTabComponent‚É“n‚·
- * ‚Ü‚½A‚»‚ê‚ğTabComponent‚É“K—p‚·‚éƒAƒNƒVƒ‡ƒ“
- * TabComponent‚Ö‚ÌVisitor
+ * Tabï¿½Ì\ï¿½ï¿½ï¿½vï¿½fï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½é‚½ï¿½ß‚É•Kï¿½vï¿½È‘Sï¿½Ä‚Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½ï¿½TabComponentï¿½É“nï¿½ï¿½
+ * ï¿½Ü‚ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½TabComponentï¿½É“Kï¿½pï¿½ï¿½ï¿½ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½
+ * TabComponentï¿½Ö‚ï¿½Visitor
  * @author 25689
  *
  */
@@ -113,7 +112,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 	};
 	
 	
-	boolean external = false;	// TODO:b’è”Å
+	boolean external = false;	// TODO:ï¿½bï¿½ï¿½ï¿½
 	// String internalName;
 	Integer internalID;
 	ComponentType type = ComponentType.NONE;
@@ -143,7 +142,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 	@Override
 	public int configure(ITabComponent component) {
 		component.setInternalID( this.internalID );
-		// ”÷–­‚¾‚ªAActivity‚ÍResourceAccessor‚©‚çæ“¾‚·‚é
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½AActivityï¿½ï¿½ResourceAccessorï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
 		OkosamaMediaPlayerActivity activity 
 		= OkosamaMediaPlayerActivity.getResourceAccessor().getActivity();
 		
@@ -167,7 +166,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		}
 		if( type == ComponentType.BUTTON )
 		{
-			// ‚±‚Ì•Ó‚Ìƒ\[ƒX‚ÍAÅˆ«‚Å‚·B
+			// ï¿½ï¿½ï¿½Ì•Ó‚Ìƒ\ï¿½[ï¿½Xï¿½ÍAï¿½Åˆï¿½ï¿½Å‚ï¿½ï¿½B
 			// ImageButton
 			ImageButton imgBtn = null;
 			if( v instanceof ImageButton )
@@ -182,8 +181,8 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 				}
 				if( imageId != null )
 				{
-					// ƒƒ‚ƒŠ‰ğ•ú‚ÌƒeƒXƒg—p
-					// TODO:Œã‚Å•K‚¸Á‚·
+					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒeï¿½Xï¿½gï¿½p
+					// TODO:ï¿½ï¿½Å•Kï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					imgBtn.setImageBitmap(null);
 					
 					imgBtn.setImageResource(imageId);
@@ -192,7 +191,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			}
 			else
 			{
-				Log.e("component setting error",
+				LogWrapper.e("component setting error",
 						"invalid image button component setting");
 			}
 		}
@@ -221,15 +220,15 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 				}
 				if( imageId != null )
 				{
-					// Selector‚È‚Ì‚ÅA‘½•ªBitmap‚É‚·‚é‚Ì‚Í–³—
-					// TODO: ‚Å‚«‚½‚çŒã‚Å©—ÍÀ‘•H
+					// Selectorï¿½È‚Ì‚ÅAï¿½ï¿½ï¿½ï¿½Bitmapï¿½É‚ï¿½ï¿½ï¿½Ì‚Í–ï¿½ï¿½ï¿½
+					// TODO: ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åï¿½ï¿½Íï¿½ï¿½ï¿½ï¿½H
 					// img.setImageBitmap(OkosamaMediaPlayerActivity.getResourceAccessor().createBitmapFromDrawableId(imageId));
 					img.setImageResource(imageId);
 				}
 			}
 			else
 			{
-				Log.e("component setting error",
+				LogWrapper.e("component setting error",
 						"invalid image component setting");
 			}			
 		}
@@ -244,10 +243,10 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 				// activity.setAlbumList(lst);
 			}
 			
-			// Adapter‚Ìì¬
+			// Adapterï¿½Ìì¬
 			if( activity.getAlbumAdp() == null )
 			{
-				Log.i("AlbumAdapter","re create");
+				LogWrapper.i("AlbumAdapter","re create");
 				activity.putAdapter(//setAlbumAdp(
 					TabPage.TABPAGE_ID_ALBUM,
 					new AlbumListRawAdapter(
@@ -258,15 +257,15 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 					)
 				);
 			}
-			// Adapter‚Ìİ’è
+			// Adapterï¿½Ìİ’ï¿½
 			lst.setAdapter(activity.getAlbumAdp());
 
-			// Activity‚ÌƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚É“o˜^
+			// Activityï¿½ÌƒRï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½É“oï¿½^
 			// lst.setTag(TabLeaf.TAGKEY_LISTNAME, component ); //this.internalName);
 			lst.setTag(component);
 			activity.registerForContextMenu(lst);
 			
-			// ƒJ[ƒ\ƒ‹‚Ìì¬
+			// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ìì¬
 			// Database.getInstance(external).createAlbumCursor(activity.getAlbumAdp().getQueryHandler(), null, null);
 		}
 		////////////// Artist ///////////////////
@@ -282,7 +281,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			
 			if( activity.getArtistAdp() == null )
 			{
-				// Adapter‚Ìì¬
+				// Adapterï¿½Ìì¬
 				activity.putAdapter(//setAlbumAdp(
 						TabPage.TABPAGE_ID_ARTIST,				
 				// activity.setArtistAdp(
@@ -297,15 +296,15 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 						,tabPageParent
 				));
 			}
-			// Adapter‚Ìİ’è
+			// Adapterï¿½Ìİ’ï¿½
 			lst.setAdapter(activity.getArtistAdp());
 
-			// Activity‚ÌƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚É“o˜^
+			// Activityï¿½ÌƒRï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½É“oï¿½^
 			//lst.setTag(TabLeaf.TAGKEY_LISTNAME, component ); //this.internalName);
 			lst.setTag(component);
 			activity.registerForContextMenu(lst);
 
-			// ƒJ[ƒ\ƒ‹‚Ìì¬
+			// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ìì¬
 			// Database.getInstance(external).createArtistCursor(activity.getArtistAdp().getQueryHandler(), null);			
 		}
 		else if( type == ComponentType.LIST_SONG )
@@ -318,7 +317,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 				// activity.setSongList(lst);								
 			}
 			
-			// TODO: ‚±‚ê‚ÍAb’è”Å
+			// TODO: ï¿½ï¿½ï¿½ï¿½ÍAï¿½bï¿½ï¿½ï¿½
 			boolean editMode = false;
 //			 "nowplaying".equals(mPlaylist),
 //             mPlaylist != null &&
@@ -329,7 +328,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			String albumId = "";
 			String artistId = "";
 			
-			// Adapter‚Ìì¬
+			// Adapterï¿½Ìì¬
 			if( activity.getTrackAdp() == null )
 			{
 				//ArrayList<TrackData> data = null;//new ArrayList<TrackData>();
@@ -352,15 +351,15 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			        )
 				);
 			}
-			// Adapter‚Ìİ’è
+			// Adapterï¿½Ìİ’ï¿½
 			lst.setAdapter(activity.getTrackAdp());
 			
-			// Activity‚ÌƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚É“o˜^
+			// Activityï¿½ÌƒRï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½É“oï¿½^
 			// lst.setTag(TabLeaf.TAGKEY_LISTNAME, component ); //this.internalName);
 			lst.setTag(component);
 			activity.registerForContextMenu(lst);
 
-			// ƒJ[ƒ\ƒ‹‚Ìì¬
+			// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ìì¬
 			// Database.getInstance(external).createTrackCursor(activity.getTrackAdp().getQueryHandler(), null, null, true, null, null, null);			
 		}
 		else if( type == ComponentType.LIST_PLAYLIST )
@@ -373,7 +372,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 				// activity.setPlaylistList(lst);				
 			}
 			
-			// Adapter‚Ìì¬
+			// Adapterï¿½Ìì¬
 			if( activity.getPlaylistAdp() == null )
 			{
 				//ArrayList<PlaylistData> data = //new ArrayList<PlaylistData>();
@@ -392,15 +391,15 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 					)
 				);
 			}
-			// Adapter‚Ìİ’è
+			// Adapterï¿½Ìİ’ï¿½
 			lst.setAdapter(activity.getPlaylistAdp());
 			
-			// Activity‚ÌƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚É“o˜^
+			// Activityï¿½ÌƒRï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½É“oï¿½^
 			// lst.setTag(TabLeaf.TAGKEY_LISTNAME, component ); //this.internalName);
 			lst.setTag(component);
 			activity.registerForContextMenu(lst);
 
-			// ƒJ[ƒ\ƒ‹‚Ìì¬
+			// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ìì¬
 			// Database.getInstance(external).createPlaylistCursor(activity.getPlaylistAdp().getQueryHandler(), null, false);						
 		}
 		else if( type == ComponentType.LIST_NOWPLAYLIST )
@@ -412,7 +411,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 				lst = (ListView)v;
 			}
 			
-			// TODO: ‚±‚ê‚ÍAb’è”Å
+			// TODO: ï¿½ï¿½ï¿½ï¿½ÍAï¿½bï¿½ï¿½ï¿½
 			boolean editMode = false;
 //			 "nowplaying".equals(mPlaylist),
 //             mPlaylist != null &&
@@ -423,7 +422,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			String albumId = "";
 			String artistId = "";
 			
-			// Adapter‚Ìì¬
+			// Adapterï¿½Ìì¬
 			if( activity.getTrackAdp() == null )
 			{
 				ArrayList<TrackData> data = new ArrayList<TrackData>();
@@ -446,32 +445,32 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			        )
 				);
 			}
-			// Adapter‚Ìİ’è
+			// Adapterï¿½Ìİ’ï¿½
 			lst.setAdapter(activity.getTrackAdp());
 			
-			// Activity‚ÌƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚É“o˜^
+			// Activityï¿½ÌƒRï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½É“oï¿½^
 			//lst.setTag(TabLeaf.TAGKEY_LISTNAME, component ); //this.internalName);
 			lst.setTag(component);
 			activity.registerForContextMenu(lst);
 
-			// ƒJ[ƒ\ƒ‹‚Ìì¬
-			// Œ»İ‚ÌÄ¶‘ÎÛ‚ÌƒvƒŒƒCƒŠƒXƒg‚ğw’è‚·‚é
+			// ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ìì¬
+			// ï¿½ï¿½ï¿½İ‚ÌÄï¿½ï¿½ÎÛ‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½wï¿½è‚·ï¿½ï¿½
 			// Database.getInstance(external).createTrackCursor(activity.getTrackAdp().getQueryHandler(), Database.PlaylistName_NowPlaying, null, true, null, null, null);			
 		}		
 		////////////// Video /////////////////////
 		else if( type == ComponentType.LIST_VIDEO )
 		{
-			// ’Êí‚ÌƒŠƒXƒg
+			// ï¿½Êï¿½Ìƒï¿½ï¿½Xï¿½g
 			ListView lst = null;
 			if( v instanceof ListView )
 			{
 				lst = (ListView)v;
 			}
 			
-			// Adapter‚Ìì¬
+			// Adapterï¿½Ìì¬
 			if( activity.getVideoAdp() == null )
 			{
-				Log.i("VideoAdapter","re create");
+				LogWrapper.i("VideoAdapter","re create");
 				activity.putAdapter(
 					TabPage.TABPAGE_ID_VIDEO,
 					new VideoListRawAdapter(
@@ -482,10 +481,10 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 					)
 				);
 			}
-			// Adapter‚Ìİ’è
+			// Adapterï¿½Ìİ’ï¿½
 			lst.setAdapter(activity.getVideoAdp());
 
-			// Activity‚ÌƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚É“o˜^
+			// Activityï¿½ÌƒRï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½É“oï¿½^
 			lst.setTag(component);
 			activity.registerForContextMenu(lst);
 		}
@@ -503,8 +502,8 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 		}		
 		if( bkImageId != null )
 		{
-			// ƒƒ‚ƒŠ‰ğ•ú‚ÌƒeƒXƒg—p
-			// TODO:ŒŸØ
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒeï¿½Xï¿½gï¿½p
+			// TODO:ï¿½ï¿½ï¿½ï¿½
 			if( v.getBackground() != null )
 			{
 				v.getBackground().setCallback(null);
@@ -512,7 +511,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			Bitmap bmp = OkosamaMediaPlayerActivity.getResourceAccessor().createBitmapFromDrawableId(bkImageId);
 			if( bmp == null )
 			{
-				// ‘½•ªSelector‚©‰½‚©‚È‚Ì‚ÅABitmap‚É‚·‚é‚Ì‚Í–³—
+				// ï¿½ï¿½ï¿½ï¿½Selectorï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚Ì‚ÅABitmapï¿½É‚ï¿½ï¿½ï¿½Ì‚Í–ï¿½ï¿½ï¿½
 				v.setBackgroundResource(bkImageId);
 			}
 			else
@@ -520,7 +519,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 				BitmapDrawable d = new BitmapDrawable( bmp );
 				v.setBackgroundDrawable(d);
 			}
-			// TODO: ‚Å‚«‚½‚çŒã‚Å©—ÍÀ‘•H
+			// TODO: ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åï¿½ï¿½Íï¿½ï¿½ï¿½ï¿½H
 			// v.setBackgroundResource(bkImageId);
 		}
 		if( clrBack != -1 )
@@ -533,7 +532,7 @@ public class TabComponentPropertySetter implements ITabComponentConfigurator {
 			((absWidget)component).setVisible(visibleFlag);
 	    }
         
-        // ƒŒƒCƒAƒEƒg‚Ö‚Ì”z’u‚ÍAãˆÊ‚Å
+        // ï¿½ï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½Ö‚Ì”zï¿½uï¿½ÍAï¿½ï¿½Ê‚ï¿½
         // m_RLmain.addView(m_musicPlayTabButton);
 		return 0;
 	}

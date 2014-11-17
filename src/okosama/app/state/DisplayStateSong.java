@@ -1,7 +1,5 @@
 package okosama.app.state;
 
-import android.view.Menu;
-import android.view.MenuItem;
 import okosama.app.AppStatus;
 import okosama.app.ControlIDs;
 import okosama.app.OkosamaMediaPlayerActivity;
@@ -9,12 +7,14 @@ import okosama.app.R;
 import okosama.app.action.SearchPanelShowHideAction;
 import okosama.app.tab.Tab;
 import okosama.app.tab.TabPage;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class DisplayStateSong extends absDisplayStateMediaTab {
 
 	@Override
 	public int ChangeDisplayBasedOnThisState(Tab tab) {
-		// ‹È‘I‘ğ‰æ–Ê‚Ö‚ÌØ‚è‘Ö‚¦
+		// ï¿½È‘Iï¿½ï¿½ï¿½ï¿½Ê‚Ö‚ÌØ‚ï¿½Ö‚ï¿½
 		tab.setCurrentTab(TabPage.TABPAGE_ID_SONG, true);		
 //		IViewAction action = new TabSelectAction( tab, TabPage.TABPAGE_ID_SONG );
 //		action.doAction(null);
@@ -44,7 +44,7 @@ public class DisplayStateSong extends absDisplayStateMediaTab {
 		switch( item.getItemId() )
 		{
 		case MENU_UPDATE:
-			// Album‚ğÄ“x’[––‚©‚ç“Ç‚İ’¼‚·
+			// Albumï¿½ï¿½ï¿½Ä“xï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚İ’ï¿½ï¿½ï¿½
 			OkosamaMediaPlayerActivity.getResourceAccessor().getActivity().reScanMediaAndUpdateTabPage(
 				ControlIDs.TAB_ID_MEDIA,
 				true
